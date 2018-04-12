@@ -1,2 +1,2 @@
 console.log("Hello my name is Khachatur");
-consoel.log("Potential merge conflict");
+console.log("Hello my name is Rithu");
