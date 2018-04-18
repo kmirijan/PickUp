@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Example Site</title>
+</head>
+
+<body>
+
+<p>text</p>
+
+</body>
+
+
+<input id="sport" placeholder="Activity" size="30">
+<input id="name" placeholder="Name" size="30">
+<input id="location" placeholder="Location" size="50">
+
+<!-- Allows access to the Google Maps API, for the autocomplete feature -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-MytEgPxlDBu5tNOGdy3G5YdN-8-_kaE&libraries=places"></script>
+
+<script type="text/javascript">
+Autocomplete(document.getElementById("location"), NULL);
+</script>
+
+</html>
