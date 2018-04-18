@@ -1,0 +1,24 @@
+{
+  "name": "pickup",
+  "version": "1.0.0",
+  "description": "First scrum ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmirijan/PickUp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kmirijan/PickUp/issues"
+  },
+  "homepage": "https://github.com/kmirijan/PickUp#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "node": "^9.11.0",
+    "react": "^16.3.2"
+  }
+}
