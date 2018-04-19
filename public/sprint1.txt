@@ -1,0 +1,78 @@
+Sprint Plan
+PickUp, Team PickUp, 
+Sprint completion date: 4/24/2018
+Revision number: 0.3
+Revision date: 4/13/2018
+
+Goal: Set up the website on github and allow users to select games and locations.
+Task Listing:
+As a user, I want to have a working site so that I can use the service
+Task: Layout HTML pages and components
+Time estimate: 50 hours
+As a player, I want to able to select an activity and enter a location to play the game so that I can play the game.
+Task: Create database to hold games
+Time estimate: 10 hours
+Task: Create list of games on the site (frontend)
+Time estimate: 10 hours
+Task: Create system to allow user to add games
+Time estimate: 15 hours
+Task: Let the user select a valid location for their activity. 
+Time estimate: 15 hours
+Team roles:
+Khachatur Mirijanyan: Product Owner
+Rogelio Molina: Developer
+Rithu Simha: Scrum Master Sprint 1
+Alex Blumer: Developer
+Shini Zhang: Developer
+Initial Task Assignment:
+    **Everyone will be working on their part of the HTML/CSS for the first user story
+    *The following tasks correspond to the second user story
+Khachatur Mirijanyan: 
+Task: Connect user input to Google Maps API and verify location.
+Rogelio Molina: 
+Task: Create text boxes for entering in location and sport info
+Rithu Simha: 
+Task: Save location and sport into database
+Alex Blumer: 
+Task: Connect user input to Google Maps API and verify location
+Shini Zhang: 
+Task: Save location and sport into database
+
+
+
+
+
+Initial burnup Chart:
+
+Initial scrum board:
+
+Story
+To Do
+In Progress
+Done
+As a player, I want to able to select an activity and enter a location to play the game so that I can play the game.
+Learn HTML/CSS
+Learn Node.js
+Learn React.js/Redux
+Learn MongoDB
+
+Create entry box for user to select game
+
+Create entry box for user to select game location using Google Maps API
+
+Store game and location in database
+
+Verify location
+
+
+Learn tech stack
+Create an empty page
+
+
+
+
+
+Scrum times:
+Monday 6pm
+Tuesday 9am
+Thursday 6pm
