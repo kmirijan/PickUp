@@ -1,30 +1,36 @@
 var MongoClient = require('mongodb').MongoClient, 
 	assert = require('assert'),
-	app = require('express')
-	fs = require('fs');
+	express = require('express')
+	fs = require('fs')
+	parseurl = require('parseurl')
+	bodyParser = require('body-parser')
+	path = require('path'),
+	http = require('http'),
+	exp = express();
+
 
 var url = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
 
-app.get('/', function(req, res) {
+exp.get('/', function(req, res) {
 	MongoClient.connect(url, function (err, db) {
 		assert.equal(null, err);
 
 		// find all games
 		// return games
 	});
-})
+});
 
-app.post('/', function(req, res) {
+exp.post('/', function(req, res) {
 	var game = {name: req.body.name, 
 		activity: req.body.activity,
-		loc: req.body.loc;
+		loc: req.body.loc
 	};
 
 	res.json(game);
 });
 
-app.listen(3000);
+exp.listen(3000);
 
 
 // create a server using the http module
