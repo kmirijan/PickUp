@@ -5,10 +5,12 @@ var submit=()=>{
 
 	var response=document.getElementById("response");
 	response.textContent="You entered event:"+event+" location:"+location;
+
 };
 
 //main
 var b_submit=document.getElementById("submit");
 b_submit.addEventListener("click",submit);
+
 
 

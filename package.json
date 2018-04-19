@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/kmirijan/PickUp#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.3",
+    "mongodb": "^3.0.7",
     "node": "^9.11.0",
     "react": "^16.3.2"
   }
