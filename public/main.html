@@ -14,7 +14,9 @@
 				<form id="form" action="/search" method="post" name:"myform"="">
 					Game:<input id="event" type="text" name="event" value="">
 					Location:<input id="location" type="text" name="location" value="">
-					<button type="submit" id="submit" name="submit">submit</button>
+					<button type="submit" id="submit" name="submit">
+						 <img src="http://www.stickpng.com/assets/images/585e4ae1cb11b227491c3393.png" width="20" height="20" alt="submit" />
+					</button>
 				</form>
 			</div>
 		</div>
@@ -23,5 +25,12 @@
 
 		<script src="main.js"></script>
 		<script src="mainR.jsx" type="text/jsx"></script>
+		<div>
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-MytEgPxlDBu5tNOGdy3G5YdN-8-_kaE&libraries=places"></script>
+
+		<script type="text/javascript">
+			new google.maps.places.Autocomplete(document.getElementById('location'));
+		</script>
+	</div>
 	</body>
 </html>
