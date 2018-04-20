@@ -18,6 +18,9 @@ exp.get('/', function(req, res) {
 
 		// find all games
 		// return games
+
+
+		db.close();
 	});
 });
 
@@ -36,9 +39,16 @@ exp.listen(3000);
 // create a server using the http module
 
 http.createServer(function (req, res){
-	fs.readFile('home.html', function(err, data) {
-		res.write(data)
-		res.end();
+	fs.readFile('home.html', function(err, mainPage) {
+		fs.readFile('games.js', function(err, reactScript){
+		
+			res.write(mainPage);
+			res.write('<script>');
+			res.write(reactScript);
+			res.write('</script>')
+			res.end();
+
+		});
 	});
 }).listen(8080);
 
