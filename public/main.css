@@ -23,10 +23,12 @@ button:hover{
 	 background-color: yellow;
 	 color: white;
 }
+#panel{
+    margin: 0px 200px 0px 200px;
+}
 #banner{
 	text-align:center;
     padding: 10px 10px 10px 10px;
-    margin: 0px 200px 0px 200px;
     background-color:rgba(57, 46, 157, 0.4);
     border-radius:5px;
     font-size:xx-large;
@@ -38,7 +40,6 @@ button:hover{
 #page{
 	text-align:center;
     padding: 10px 10px 10px 10px;
-    margin: 0px 200px 0px 200px;
     background-color:rgba(0, 0, 0, 0.7);
     border-radius:5px;
     color:white;
@@ -51,8 +52,7 @@ button:hover{
 }
 #map{
         height: 70%;
-        width: 72%;
-        margin: 0px 200px 0px 200px;
+        width: 100%;
         background-color: grey;
 }
 body{
