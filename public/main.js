@@ -4,8 +4,7 @@ var submit=()=>{
 	const location=document.getElementById("location").value;
 
 	var response=document.getElementById("response");
-	response.textContent="You entered event:"+event+" location:"+location;
-
+	response.textContent="to be implemented";
 };
 
 //main
