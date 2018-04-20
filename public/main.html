@@ -1,16 +1,27 @@
 <!DOCTYPE=html><html>
 	<head>
+		<meta charset="UTF-8"/>
+		<link rel="stylesheet" type="text/css" href="main.css">
 		<title>Pickup</title>
 	</head>
 	<body>
-		<h1 id="head1" class="head1">PICKUP</h1>
-		<h2>Select event and location:</h2>
-		<form id="form" action="/search" method="post" name:"myform"="">
-			Event:<input id="event" type="text" name="event" value="">
-			Location:<input id="location" type="text" name="location" value="">
-			<button type="submit" id="submit" name="submit">submit</button>
-		</form>
+		<div id="main">
+			<div id="banner">
+				<h1 id="head1">PICKUP</h1>
+			</div>
+			<div id="page">
+				<h2>Select event and location:</h2>
+				<form id="form" action="/search" method="post" name:"myform"="">
+					Event:<input id="event" type="text" name="event" value="">
+					Location:<input id="location" type="text" name="location" value="">
+					<button type="submit" id="submit" name="submit">submit</button>
+				</form>
+			</div>
+		</div>
 		<p id="response"></p>
+		<h1 id="head2"></h1>
+
 		<script src="main.js"></script>
+		<script src="mainR.jsx" type="text/jsx"></script>
 	</body>
 </html>

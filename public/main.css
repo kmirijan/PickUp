@@ -1,0 +1,35 @@
+#head1{
+}
+input{
+	
+}
+button{
+	
+}
+#banner{
+	text-align:center;
+    padding: 10px 10px 10px 10px;
+    margin: 0px 200px 0px 200px;
+    background-color:rgba(0, 0, 0, 0.5);
+    border-radius:10px;
+    font-size:xx-large;
+	color:white;
+}
+#page{
+	text-align:center;
+    padding: 10px 10px 10px 10px;
+    margin: 0px 200px 0px 200px;
+    background-color:rgba(0, 0, 0, 1.0);
+    border-radius:10px;
+    color:white;
+}
+#main{
+	padding: 10px 10px 500px 10px;
+	margin: 0px 200px 10px 200px;
+	background-color:rgba(57, 46, 157, 0.3);
+	border-radius:10px;
+}
+body{
+	font-family:"Trebuchet MS", Helvetica, sans-serif;
+	background-image:url("http://www.intelligentelp.com/wp-content/uploads/2015/05/stadium.jpg");
+}
