@@ -40,7 +40,7 @@ exp.listen(3000);
 
 http.createServer(function (req, res){
 	fs.readFile('home.html', function(err, mainPage) {
-		fs.readFile('games.js', function(err, reactScript){
+		fs.readFile('games.build.js', function(err, reactScript){
 		
 			res.write(mainPage);
 			res.write('<script>');
