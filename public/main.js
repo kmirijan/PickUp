@@ -10,6 +10,9 @@ var submit=()=>{
 //main
 var b_submit=document.getElementById("submit");
 b_submit.addEventListener("click",submit);
+initAutocomplete();
+
+
 
 
 
