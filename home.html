@@ -10,16 +10,19 @@
 
 </body>
 
-
+<div id="GameInput">
+</div>
 <input id="sport" placeholder="Activity" size="30">
 <input id="name" placeholder="Name" size="30">
 <input id="location" placeholder="Location" size="50">
 
+<div id="GameTable">
+</div>
 <!-- Allows access to the Google Maps API, for the autocomplete feature -->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-MytEgPxlDBu5tNOGdy3G5YdN-8-_kaE&libraries=places"></script>
 
 <script type="text/javascript">
-Autocomplete(document.getElementById("location"), NULL);
+new google.maps.places.Autocomplete(document.getElementById('location'));
 </script>
 
 </html>
