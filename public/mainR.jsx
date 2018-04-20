@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Head from './components/Head.js'
-
+/*
 var Head=React.createClass({
 	render:()=>{
       return(
@@ -13,4 +13,12 @@ var Head=React.createClass({
 const head1=document.getElementById("head1");
 const head2=document.getElementById("head2");
 ReactDOM.render(<Head/>,head1);
-ReactDOM.render(<Head/>,head2);
+ReactDOM.render(<Head/>,head2);*/
+
+
+const title = 'My Minimal React Webpack Babel Setup';
+
+ReactDOM.render(
+  <div>{title}</div>,
+  document.getElementById('app')
+);
