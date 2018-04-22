@@ -1,7 +1,7 @@
+const webpack = require('webpack');
 module.exports = {
-  "target":"node",
   entry: [
-    './index.js'
+    './src/index.js'
   ],
   module: {
     rules: [
