@@ -22,7 +22,7 @@ main html <br />
 
 * __public__ <br />
 contains static js scripts <br />
-... * __map.js__ <br />
+  * __map.js__ <br />
   implements google maps <br />
 
 src
