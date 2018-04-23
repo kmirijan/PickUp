@@ -12,7 +12,7 @@ var MongoClient = require('mongodb').MongoClient,
 var url = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
 
-exp.get('/', function(req, res) {
+exp.get('/games', function(req, res) {
 	MongoClient.connect(url, function (err, db) {
 		assert.equal(null, err);
 
@@ -24,7 +24,7 @@ exp.get('/', function(req, res) {
 	});
 });
 
-exp.post('/', function(req, res) {
+exp.post('/games', function(req, res) {
 	var game = {name: req.body.name, 
 		activity: req.body.activity,
 		loc: req.body.loc
@@ -33,14 +33,14 @@ exp.post('/', function(req, res) {
 	res.json(game);
 });
 
-exp.listen(3000);
+exp.listen(process.env.PORT || 8080);
 
 
 // create a server using the http module
 
 http.createServer(function (req, res){
 	fs.readFile('home.html', function(err, mainPage) {
-		fs.readFile('games.build.js', function(err, reactScript){
+		fs.readFile('build/games.build.js', function(err, reactScript){
 		
 			res.write(mainPage);
 			res.write('<script>');
@@ -50,7 +50,7 @@ http.createServer(function (req, res){
 
 		});
 	});
-}).listen(8080);
+}).listen(process.env.PORT || 8080);
 
 
 // connects to the database, adds an object, and then prints the objects
