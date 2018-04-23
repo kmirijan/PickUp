@@ -35,12 +35,12 @@ inserts data into database. Will create duplicates elements if used more than on
 
 * __components__ <br />
 contains react components <br />
- * data.js <br />
- contains function for search
- * main.jsx <br/ >
- contains components "Main" and "Rest"
+  * data.js <br />
+  contains function for search
+  * main.jsx <br/ >
+  contains components "Main" and "Rest"
 
 * __css__ <br />
 contains stylesheets <br />
- * main.css <br />
- css stylesheet for main page
+  * main.css <br />
+  css stylesheet for main page
