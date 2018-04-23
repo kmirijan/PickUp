@@ -24,7 +24,6 @@ dist
   =>main html
   
   public
-  -----------------------------------------------------------------------------------------
   =>contains static js scripts
     map.js
     =>implements google maps
