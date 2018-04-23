@@ -1,43 +1,39 @@
 # PickUp
-PickUp Web App for CS 115
+PickUp Web App for CS 115 <br />
 Some Documentation:
 
-package.json:
------------------------------------------------------------------------------------------
+__package.json:__ <br />
 =>lists all dependencies. <br />
 
-webpack.config.js
------------------------------------------------------------------------------------------
+__webpack.config.js__ <br />
 =>bundles files and allows babel usage. Uses server.js for server. <br />
 
-server.js
------------------------------------------------------------------------------------------
+__server.js__ <br />
 =>simple server. Calls main html on path "/" and sets "dist" to serve static files. <br />
 
-dist
------------------------------------------------------------------------------------------
+### dist 
 =>serves static files <br />
-  bundle.js <br />
+  __bundle.js__ <br />
   =>output of webpack <br />
   
-  main.html <br />
+  __main.html__ <br />
   =>main html <br />
   
-  public <br />
+  ###### public <br />
   =>contains static js scripts <br />
-    map.js <br />
+    __map.js__ <br />
     =>implements google maps <br />
-src
------------------------------------------------------------------------------------------
+    
+### src
 =>serves sources to be bundled. <br />
-  components <br />
-  =>contains react components <br />
-  
-  css <br />
-  =>contains stylesheets <br />
-  
-  index.js <br />
+  __index.js__ <br />
   =>entry file for webpack, where the bundling begins <br />
   
-  initdata.js <br />
+  __initdata.js__ <br />
   =>inserts data into database. Will create duplicates elements if used more than once. <br />
+  
+  ###### components <br />
+  =>contains react components <br />
+  
+  ###### css <br />
+  =>contains stylesheets <br />
