@@ -1,4 +1,5 @@
-# PickUp
+PickUp
+---
 PickUp Web App for CS 115 <br />
 Some Documentation:
 
@@ -11,7 +12,8 @@ __webpack.config.js__ <br />
 __server.js__ <br />
 =>simple server. Calls main html on path "/" and sets "dist" to serve static files. <br />
 
-### dist 
+dist 
+---
 =>serves static files <br />
   __bundle.js__ <br />
   =>output of webpack <br />
@@ -23,8 +25,9 @@ __server.js__ <br />
   =>contains static js scripts <br />
     __map.js__ <br />
     =>implements google maps <br />
-    
-### src
+
+src
+---
 =>serves sources to be bundled. <br />
   __index.js__ <br />
   =>entry file for webpack, where the bundling begins <br />
