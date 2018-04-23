@@ -20,21 +20,21 @@ output of webpack <br />
 * __main.html__ <br />
 main html <br />
 
-###### public <br />
+* __public__ <br />
 contains static js scripts <br />
-  __map.js__ <br />
-  * implements google maps <br />
+  *__map.js__ <br />
+  implements google maps <br />
 
 src
 ---
-__index.js__ <br />
-* entry file for webpack, where the bundling begins <br />
+* __index.js__ <br />
+entry file for webpack, where the bundling begins <br />
 
-__initdata.js__ <br />
-* inserts data into database. Will create duplicates elements if used more than once. <br />
+* __initdata.js__ <br />
+inserts data into database. Will create duplicates elements if used more than once. <br />
 
-###### components <br />
-* contains react components <br />
+* __components__ <br />
+contains react components <br />
 
-###### css <br />
-* contains stylesheets <br />
+* __css__ <br />
+contains stylesheets <br />
