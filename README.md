@@ -14,7 +14,6 @@ __server.js__ <br />
 
 dist 
 ---
-=>serves static files <br />
   __bundle.js__ <br />
   =>output of webpack <br />
   
@@ -28,7 +27,6 @@ dist
 
 src
 ---
-=>serves sources to be bundled. <br />
   __index.js__ <br />
   =>entry file for webpack, where the bundling begins <br />
   
