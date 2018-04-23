@@ -26,6 +26,14 @@ button:hover{
 #panel{
     margin: 0px 200px 0px 200px;
 }
+#top{
+    text-align:center;
+    padding: 10px 0px 10px 0px;
+    margin: 0px 0px 0px 0px;
+    font-size:large;
+    background-color:black;
+    color:white;
+}
 #banner{
 	text-align:center;
     padding: 10px 10px 10px 10px;
@@ -33,6 +41,7 @@ button:hover{
     border-radius:5px;
     font-size:xx-large;
 	color:white;
+    margin: 0px 0px 0px 0px;
 }
 #banner:hover{
 	font-style: oblique;
@@ -58,4 +67,5 @@ button:hover{
 body{
 	font-family:"Trebuchet MS", Helvetica, sans-serif;
 	background-image:url("http://www.intelligentelp.com/wp-content/uploads/2015/05/stadium.jpg");
+    margin: 0px 0px 0px 0px;
 }

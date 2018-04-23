@@ -1,10 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+var React=require("react");
+var ReactDOM=require("react-dom");
+
+var {Main,Rest}=require("./components/main.jsx");
 
 const title = 'My Minimal React Webpack Babel Setup';
 
-console.log("this runs");
+class Everything extends React.Component{
+	render(){
+		return(
+			<div>
+				<Main />
+				<Rest />
+			</div>
+			);
+	}
+}; 
 ReactDOM.render(
-  <div>{title}</div>,
+  <Everything />,
   document.getElementById("body")
 );
+
+
