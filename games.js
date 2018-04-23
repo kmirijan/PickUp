@@ -2,6 +2,7 @@
 //	ReactDOM = require('react-dom');
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 class GameInput extends React.Component
 {
@@ -34,6 +35,7 @@ class GameInput extends React.Component
 		this.setState({activity: event.target.value});
 	}
 	
+	/*
 	addGame = event => 
 	{
 		event.preventDefault();
@@ -47,11 +49,12 @@ class GameInput extends React.Component
 		axios.post('localhost:3000', this.state)
 		this.setState({loc: "", activity: "", name: ""});
 	};
-
+	*/
 	render()
 	{
 		return 
 		(
+		<div>
 			<input
 				onChange={this.handleActivity}
 				name="activity"
@@ -67,7 +70,7 @@ class GameInput extends React.Component
 			<input
 				onChange={this.handleLocation}
 				name="loc"
-				id="loc"
+				id="location"
 				value={this.state.loc}
 				placeholder="Location"
 			/>
@@ -77,7 +80,7 @@ class GameInput extends React.Component
 			>
 			Add game
 			</button>
-		
+		</div>	
 		);
 	
 	}
@@ -100,7 +103,7 @@ class ActiveGames extends React.Component
 
 	componentDidMount()
 	{
-		fetch('pickupcs115.heroku.com').then(results => return results.json());
+		fetch('pickupcs115.heroku.com').then(results => {return results.json()});
 		/*
 		data.map ((msg) => 
 			return (
@@ -119,7 +122,7 @@ class ActiveGames extends React.Component
 					<th>Game Name</th>
 					<th>Location</th>
 				</tr>
-				{data.map((game) => return(<Game game={game}/>))}
+				{data.map((game) => {return(<Game game={game}/>)})}
 			</table>
 		)
 	}
@@ -147,7 +150,7 @@ ReactDOM.render(
 	document.getElementById('GameInput')
 );
 
-ReactDOM.render()
+ReactDOM.render(
 	<ActiveGames />,
 	document.getElementById('GameTable')
 );

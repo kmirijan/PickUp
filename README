@@ -1,0 +1,9 @@
+Requires:
+Nodejs
+	Required Libraries
+	react
+	react-dom
+	babel-core
+	babel-preset-react
+	babel-preset-env
+	mongodb

@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/kmirijan/PickUp#readme",
   "dependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
     "express": "^4.16.3",
     "mongodb": "^2.2.35"
   },
