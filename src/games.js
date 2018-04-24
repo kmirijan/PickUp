@@ -30,6 +30,7 @@ class GameInput extends React.Component
 		this.handleGameName = this.handleGameName.bind(this);
 		this.handleLocation = this.handleLocation.bind(this);
 		this.handleActivity = this.handleActivity.bind(this);
+		this.addGame = this.addGame.bind(this);
 
 		this.state =
 		{
@@ -42,19 +43,23 @@ class GameInput extends React.Component
 	handleGameName (event)
 	{
 		this.setState({name: event.target.value});
+		console.log("name changed");
 	}
 	handleLocation (event)
 	{
 		this.setState({loc: event.target.value});
+		console.log("location changed");
 	}
 	handleActivity (event)
 	{
 		this.setState({activity: event.target.value});
+		console.log("activity changed");
 	}
 
 	
 	addGame (event) 
 	{
+		console.log(this.state);
 		event.preventDefault();
 		this.setState(
 			{
@@ -63,8 +68,9 @@ class GameInput extends React.Component
 				name: event.target.value
 			});
 
-		axios.post('localhost:8080', this.state)
+		axios.post('/games', this.state)
 		this.setState({loc: "", activity: "", name: ""});
+		console.log("post sent");
 	};
 	
 	render()
@@ -86,7 +92,7 @@ class GameInput extends React.Component
 			<input
 				onChange={this.handleLocation}
 				name="loc"
-				id="location"
+				id='location'
 				value={this.state.loc}
 				placeholder="Location"
 			/>

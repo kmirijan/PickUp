@@ -11,25 +11,47 @@ var MongoClient = require('mongodb').MongoClient,
 
 var url = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
+exp.use(bodyParser.json());
 
 exp.get('/games', function(req, res) {
 	MongoClient.connect(url, function (err, db) {
 		if (err) throw err;
 		// find all games
 		// return games
-
-
-		db.close();
+		//req.body.
+		db.collection("games").find({}).then(function (result)
+			{
+				res.json(result);
+				res.end();
+				db.close();
+			}
+		);
+		
 	});
 });
 
 exp.post('/games', function(req, res) {
+	console.log("POST received");
+	console.log("body:", req.body);
 	var game = {name: req.body.name, 
 		activity: req.body.activity,
 		loc: req.body.loc
 	};
 
-	res.json(game);
+	MongoClient.connect(url, function (err, db)
+		{
+			if (err) throw err;
+			
+			game = 
+			{ 
+				name: req.body.name,
+				loc: req.body.loc,
+				activity: req.body.activity
+			};
+			db.collection("games").insertOne(game, () => {console.log("obj written: ", game);db.close()});
+
+		}
+	);
 });
 
 // trying to run server purely through express app
