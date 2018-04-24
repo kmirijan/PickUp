@@ -1,23 +1,8 @@
-var React=require("react");
-var ReactDOM=require("react-dom");
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './css/index.css';
+import {App} from './App.js';
+import {games} from './CurrentGames.js';
 
-var {Main,Rest}=require("./components/main.jsx");
-
-const title = 'My Minimal React Webpack Babel Setup';
-
-class Everything extends React.Component{
-	render(){
-		return(
-			<div>
-				<Main />
-				<Rest />
-			</div>
-			);
-	}
-}; 
-ReactDOM.render(
-  <Everything />,
-  document.getElementById("body")
-);
-
-
+console.log("this works");
+ReactDOM.render(<App games={games}/>, document.getElementById('root'));

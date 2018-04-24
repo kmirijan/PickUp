@@ -1,6 +1,7 @@
 {
   "name": "pickup",
   "version": "1.0.0",
+<<<<<<< HEAD
   "description": "First scrum ",
   "main": "index.js",
   "scripts": {
@@ -10,11 +11,19 @@
     "server": "nodemon index.js",
     "build": "webpack --config webpack.config.js",
     "watch": "webpack --watch"
+=======
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+>>>>>>> e5a2011e4a5dd7e95a2428b867e82b4b820b252d
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kmirijan/PickUp.git"
   },
+<<<<<<< HEAD
   "author": "",
   "license": "ISC",
   "babel": {
@@ -24,10 +33,18 @@
       "stage-2"
     ]
   },
+=======
+  "engines": {
+    "node": "9.7.1"
+  },
+  "author": "",
+  "license": "ISC",
+>>>>>>> e5a2011e4a5dd7e95a2428b867e82b4b820b252d
   "bugs": {
     "url": "https://github.com/kmirijan/PickUp/issues"
   },
   "homepage": "https://github.com/kmirijan/PickUp#readme",
+<<<<<<< HEAD
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
@@ -48,5 +65,12 @@
     "node": "^9.11.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2"
+=======
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "mongodb": "^3.0.7",
+    "mongoose": "^5.0.15"
+>>>>>>> e5a2011e4a5dd7e95a2428b867e82b4b820b252d
   }
 }
