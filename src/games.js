@@ -5,6 +5,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 
+class Test extends React.Component
+{
+	render()
+	{
+		const Element = this.props.element;
+		return(
+			<Element dangerouslySetInnerHTML={{__html: 'React test text'}} />
+		);
+	}
+}
+
+ReactDOM.render(<Test element='div' />, document.getElementById('GameInput'));
+
+/*
 class GameInput extends React.Component
 {
 	constructor(props)
@@ -36,7 +50,7 @@ class GameInput extends React.Component
 		this.setState({activity: event.target.value});
 	}
 
-	/*
+	
 	addGame = event =>
 	{
 		event.preventDefault();
@@ -50,7 +64,7 @@ class GameInput extends React.Component
 		axios.post('localhost:3000', this.state)
 		this.setState({loc: "", activity: "", name: ""});
 	};
-	*/
+	
 	render()
 	{
 		return
@@ -105,12 +119,12 @@ class ActiveGames extends React.Component
 	componentDidMount()
 	{
 		fetch('pickupcs115.heroku.com').then(results => {return results.json()});
-		/*
+		
 		data.map ((msg) =>
 			return (
 				<tr> key={msg.}
 			);
-		*/
+		
 	}
 
 	render()
@@ -154,4 +168,4 @@ ReactDOM.render(
 ReactDOM.render(
 	<ActiveGames />,
 	document.getElementById('GameTable')
-);
+);*/
