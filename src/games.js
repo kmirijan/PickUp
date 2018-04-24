@@ -5,20 +5,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 
-class Test extends React.Component
+class HTML extends React.Component
 {
 	render()
 	{
-		const Element = this.props.element;
+		const {element, inner} = this.props;
+		const Element = element;
 		return(
-			<Element dangerouslySetInnerHTML={{__html: 'React test text'}} />
+			<Element {...this.props} dangerouslySetInnerHTML={{__html: inner}} />
 		);
 	}
 }
 
-ReactDOM.render(<Test element='div' />, document.getElementById('GameInput'));
+// test
+ReactDOM.render(<HTML id='word' className='name' element='div' inner="test text" />, document.getElementById('GameInput'));
 
-/*
+
 class GameInput extends React.Component
 {
 	constructor(props)
@@ -51,7 +53,7 @@ class GameInput extends React.Component
 	}
 
 	
-	addGame = event =>
+	addGame (event) 
 	{
 		event.preventDefault();
 		this.setState(
@@ -61,14 +63,13 @@ class GameInput extends React.Component
 				name: event.target.value
 			});
 
-		axios.post('localhost:3000', this.state)
+		axios.post('localhost:8080', this.state)
 		this.setState({loc: "", activity: "", name: ""});
 	};
 	
 	render()
 	{
-		return
-		(
+		return(
 		<div>
 			<input
 				onChange={this.handleActivity}
@@ -102,7 +103,7 @@ class GameInput extends React.Component
 }
 
 
-
+/*
 class ActiveGames extends React.Component
 {
 	constructor(props)
@@ -133,9 +134,9 @@ class ActiveGames extends React.Component
 		(
 			<table style="width:100%">
 				<tr>
-					<th>Sport</th>
-					<th>Game Name</th>
-					<th>Location</th>
+					<HTML element='th' inner='Sport' />
+					<HTML element='th' inner='Game Name' />
+					<HTML element='th' inner='Location' />
 				</tr>
 				{data.map((game) => {return(<Game game={game}/>)})}
 			</table>
@@ -157,14 +158,14 @@ class Game extends React.Component
 			</tr>
 		)
 	}
-}
+}*/
 
 
 ReactDOM.render(
 	<GameInput />,
 	document.getElementById('GameInput')
 );
-
+/*
 ReactDOM.render(
 	<ActiveGames />,
 	document.getElementById('GameTable')
