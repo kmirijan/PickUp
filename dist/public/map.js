@@ -14,6 +14,7 @@ var initAutocomplete=()=>{
   });
 
   //create location picker
+  /*http://thisinterestsme.com/google-maps-api-location-picker-example/*/
   google.maps.event.addListener(map, 'click', function(event) {                
         //Get the location that the user clicked.
         var clickedLocation = event.latLng;
