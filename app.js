@@ -43,6 +43,18 @@ exp.get('/', function (req, res){
 	//});
 });
 
+exp.get('/games.build.js', function (req, res)
+	{
+		fs.readFile('build/games.build.js', function (err, script)
+			{	
+				console.log('[', (new Date()).toLocaleTimeString(), ']: games.build.js written');	
+				res.write(script);
+				res.end();
+			}
+		);
+	}
+);
+
 
 exp.listen(process.env.PORT || 8080);
 
