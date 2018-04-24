@@ -1,0 +1,74 @@
+#head1:hover{
+}
+input{
+	width:200px;
+    padding: 10px 40px;
+    margin: 10px 10px;
+    border: none;
+    border-radius: 5px;
+}
+input:active{
+	opacity:0.8;
+}
+button{
+    background-color: white;
+    color: black;
+    padding: 10px 10px 10px 10px;
+    margin: 10px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover{
+	 background-color: yellow;
+	 color: white;
+}
+#form{
+    padding:0px 0px 0px 0px;
+}
+#panel{
+    margin: 0px 200px 0px 200px;
+}
+#top{
+    text-align:center;
+    padding: 10px 0px 10px 0px;
+    margin: 0px 0px 0px 0px;
+    font-size:large;
+    background-color:black;
+    color:white;
+}
+#banner{
+	text-align:center;
+    padding: 5px 10px 5px 10px;
+    background-color:rgba(57, 46, 157, 0.4);
+    border-radius:5px;
+    font-size:x-large;
+	color:white;
+    margin: 0px 0px 0px 0px;
+}
+#banner:hover{
+	font-style: oblique;
+}
+#page{
+	text-align:center;
+    padding: 10px 10px 10px 10px;
+    background-color:rgba(0, 0, 0, 0.7);
+    border-radius:5px;
+    color:white;
+}
+#main{
+	padding: 10px 10px 10px 10px;
+	margin: 0px 200px 0px 200px;
+	background-color:rgba(57, 46, 157, 0.3);
+	border-radius:5px;
+}
+#map{
+    height: 70%;
+    width: 100%;
+    background-color: grey;
+}
+body{
+	font-family:"Trebuchet MS", Helvetica, sans-serif;
+	background-image:url("http://www.intelligentelp.com/wp-content/uploads/2015/05/stadium.jpg");
+    margin: 0px 0px 0px 0px;
+}
