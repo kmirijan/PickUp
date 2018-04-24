@@ -40,6 +40,3 @@ mongo.connect(url,(err,client)=>{
 	console.log("connected to mongodb");
 	client.close();
 });
-
-
-

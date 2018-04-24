@@ -23,6 +23,9 @@ button:hover{
 	 background-color: yellow;
 	 color: white;
 }
+#form{
+    padding:0px 0px 0px 0px;
+}
 #panel{
     margin: 0px 200px 0px 200px;
 }
@@ -36,10 +39,10 @@ button:hover{
 }
 #banner{
 	text-align:center;
-    padding: 10px 10px 10px 10px;
+    padding: 5px 10px 5px 10px;
     background-color:rgba(57, 46, 157, 0.4);
     border-radius:5px;
-    font-size:xx-large;
+    font-size:x-large;
 	color:white;
     margin: 0px 0px 0px 0px;
 }
@@ -60,9 +63,9 @@ button:hover{
 	border-radius:5px;
 }
 #map{
-        height: 70%;
-        width: 100%;
-        background-color: grey;
+    height: 70%;
+    width: 100%;
+    background-color: grey;
 }
 body{
 	font-family:"Trebuchet MS", Helvetica, sans-serif;

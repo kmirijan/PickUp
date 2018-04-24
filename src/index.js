@@ -19,5 +19,3 @@ ReactDOM.render(
   <Everything />,
   document.getElementById("body")
 );
-
-
