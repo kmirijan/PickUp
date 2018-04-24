@@ -35,7 +35,7 @@ exp.post('/games', function(req, res) {
 // trying to run server purely through express app
 exp.get('/', function (req, res){
 	fs.readFile('build/index.html', function(err, mainPage) {
-		
+			console.log('[', Date.toLocaleTimeString(), ']: Page written');	
 			res.write(mainPage);
 			res.end();
 
@@ -47,7 +47,7 @@ exp.get('/', function (req, res){
 exp.listen(process.env.PORT || 8080);
 
 
-
+console.log('[', Date.toLocaleTimeString(), ']: Server Opened');
 
 // create a server using the http module
 /*
