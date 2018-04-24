@@ -34,17 +34,13 @@ exp.post('/games', function(req, res) {
 
 // trying to run server purely through express app
 exp.get('/', function (req, res){
-	fs.readFile('home.html', function(err, mainPage) {
-		fs.readFile('build/games.build.js', function(err, reactScript){
+	fs.readFile('build/index.html', function(err, mainPage) {
 		
 			res.write(mainPage);
-			res.write('<script type="text/javascript">');
-			res.write(reactScript);
-			res.write('</script>')
 			res.end();
 
 		});
-	});
+	//});
 });
 
 

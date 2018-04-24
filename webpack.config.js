@@ -1,9 +1,10 @@
-const path = require('path');
+const path = require('path'),
+	HtmlPlugin = require('html-webpack-plugin');
 
 
 module.exports = 
 {
-	entry: path.join(path.resolve(__dirname, 'games.js')),
+	entry: path.join(path.resolve(__dirname, 'src\\games.js')),
 	output:
 	{
 		path: path.resolve(__dirname, 'build'),
@@ -31,4 +32,9 @@ module.exports =
 	{
 		extensions: ['.js', '.jsx'],
 	},
+
+	plugins:
+	[
+		new HtmlPlugin({ template:'src/home.html'}),
+	],
 };
