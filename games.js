@@ -3,19 +3,20 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 
 class GameInput extends React.Component
 {
 	constructor(props)
 	{
 		super(props);
-		
+
 		this.handleGameName = this.handleGameName.bind(this);
 		this.handleLocation = this.handleLocation.bind(this);
 		this.handleActivity = this.handleActivity.bind(this);
 
-		this.state = 
-		{	
+		this.state =
+		{
 			loc: "",
 			activity: "",
 			name: ""
@@ -34,9 +35,9 @@ class GameInput extends React.Component
 	{
 		this.setState({activity: event.target.value});
 	}
-	
+
 	/*
-	addGame = event => 
+	addGame = event =>
 	{
 		event.preventDefault();
 		this.setState(
@@ -45,14 +46,14 @@ class GameInput extends React.Component
 				activity: event.target.value,
 				name: event.target.value
 			});
-		
+
 		axios.post('localhost:3000', this.state)
 		this.setState({loc: "", activity: "", name: ""});
 	};
 	*/
 	render()
 	{
-		return 
+		return
 		(
 		<div>
 			<input
@@ -80,21 +81,21 @@ class GameInput extends React.Component
 			>
 			Add game
 			</button>
-		</div>	
+		</div>
 		);
-	
+
 	}
 }
 
 
 
-class ActiveGames extends React.Component 
+class ActiveGames extends React.Component
 {
 	constructor(props)
 	{
 		super(props);
 
-		this.state = 
+		this.state =
 		{
 			games: ""
 		};
@@ -105,9 +106,9 @@ class ActiveGames extends React.Component
 	{
 		fetch('pickupcs115.heroku.com').then(results => {return results.json()});
 		/*
-		data.map ((msg) => 
+		data.map ((msg) =>
 			return (
-				<tr> key={msg.}	
+				<tr> key={msg.}
 			);
 		*/
 	}
@@ -133,10 +134,10 @@ class Game extends React.Component
 {
 	render ()
 	{
-		return 
+		return
 		(
 			<tr>
-				<td>{this.props.game.activity}</td>				
+				<td>{this.props.game.activity}</td>
 				<td>{this.props.game.name}</td>
 				<td>{this.props.game.loc}</td>
 			</tr>
@@ -154,4 +155,3 @@ ReactDOM.render(
 	<ActiveGames />,
 	document.getElementById('GameTable')
 );
-

@@ -14,8 +14,7 @@ var url = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
 exp.get('/games', function(req, res) {
 	MongoClient.connect(url, function (err, db) {
-		assert.equal(null, err);
-
+		if (err) throw err;
 		// find all games
 		// return games
 
@@ -33,11 +32,29 @@ exp.post('/games', function(req, res) {
 	res.json(game);
 });
 
+// trying to run server purely through express app
+exp.get('/', function (req, res){
+	fs.readFile('home.html', function(err, mainPage) {
+		fs.readFile('build/games.build.js', function(err, reactScript){
+		
+			res.write(mainPage);
+			res.write('<script type="text/javascript">');
+			res.write(reactScript);
+			res.write('</script>')
+			res.end();
+
+		});
+	});
+});
+
+
 exp.listen(process.env.PORT || 8080);
 
 
-// create a server using the http module
 
+
+// create a server using the http module
+/*
 http.createServer(function (req, res){
 	fs.readFile('home.html', function(err, mainPage) {
 		fs.readFile('build/games.build.js', function(err, reactScript){
@@ -51,7 +68,7 @@ http.createServer(function (req, res){
 		});
 	});
 }).listen(process.env.PORT || 8080);
-
+*/
 
 // connects to the database, adds an object, and then prints the objects
 /*
