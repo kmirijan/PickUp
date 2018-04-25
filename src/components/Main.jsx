@@ -7,7 +7,7 @@ import("../css/main.css");
 var script=()=>{ 
 		return {__html: '<script type="text/javascript src="./test.js"></script>'}; 
 	};*/
-class Main extends React.Component{
+class Top extends React.Component{
 	render(){
 		return(
 			<div id="top">TOP BANNER</div>
@@ -64,7 +64,7 @@ class Rest extends React.Component{
 }
 
 module.exports={
-	Main,
+	Top,
 	Rest
 }
 

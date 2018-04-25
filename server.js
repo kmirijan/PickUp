@@ -12,12 +12,14 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.get("/",(req,res)=>{
-    res.sendFile(__dirname+"/dist/main.html");
+/*sends index.html to any link*/
+app.get("*",(req,res)=>{
+    res.sendFile(__dirname+"/dist/index.html");
 });
 app.post("/search",(req,res)=>{
 	data.valEL(res,req.body["event"],req.body["location"]);
 });
+
 
 /*deploy app*/
 const port=process.env.PORT||8000;

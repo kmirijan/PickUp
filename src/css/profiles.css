@@ -1,0 +1,53 @@
+#profile{
+	float:left;
+	width:30%;
+}
+#panel{
+	margin:20px auto 20px auto;
+	width:75%;
+	background-color:rgba(0, 0, 0, 0.7);
+	border-radius:5px;
+}
+#picture{
+	margin: 20px auto 0 auto;
+	width:200px;
+	height:200px;
+	background-color:gray;
+}
+#username{
+	margin:auto;
+	text-align:center;
+	color:yellow;
+	padding:10px;
+}
+#alias{
+	margin:auto;
+	text-align:center;
+	color:white;
+	font-size:x-large;
+}
+#bio{
+	margin:0 50px 0 50px;
+	text-align:center;
+	border-style:double;
+	background-color:white;
+	padding:20px;
+}
+#expand{
+	width:111px;
+	margin:auto;
+}
+
+#feed{
+	margin-top:100px;
+	width:70%;
+	height:100%;
+	float: left;
+}
+#fpanel{
+	margin:auto;
+	width:70%;
+	height:200px;
+	background-color:rgba(0, 0, 0, 0.7);
+	border-radius:5px;
+}
