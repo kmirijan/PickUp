@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --hot --inline",
     "start": "npm run build && NODE_ENV=production node server.js",
     "compile": "babel public --out-dir dist",
     "server": "nodemon index.js",
@@ -43,10 +44,12 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "cheerio": "^1.0.0-rc.2",
+    "css-loader": "^0.28.11",
     "express": "^4.16.3",
     "mongodb": "^3.0.7",
     "node": "^9.11.0",
     "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "react-dom": "^16.3.2",
+    "react-router": "^4.2.0"
   }
 }

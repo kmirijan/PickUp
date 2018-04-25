@@ -1,3 +1,5 @@
+
+/*https://github.com/alanbsmith/react-node-example*/
 const webpack = require('webpack');
 module.exports = {
   entry: [
@@ -26,6 +28,9 @@ module.exports = {
   },
   devServer: {
     contentBase: './dist'
-  }
+  },
+  plugins:[
+    new webpack.HotModuleReplacementPlugin()
+  ]
 
 };
