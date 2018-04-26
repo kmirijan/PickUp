@@ -1,0 +1,38 @@
+<!DOCTYPE=html><html>
+	<head>
+		<meta charset="UTF-8"/>
+		<link rel="stylesheet" type="text/css" href="main.css">
+		<title>Pickup</title>
+
+	</head>
+	<body id="body">
+		<div id="main">
+			<div id="panel">
+				<div id="banner">
+					<h1 id="head1">PICKUP</h1>
+				</div>
+				<div id="page">
+					<h2>Select game and location:</h2>
+					<form id="form" action="/search" method="post" name:"myform"="">
+						Game:<input id="event" type="text" name="event" value="" placeholder="Enter a game">
+						Location:<input id="location" type="text" name="location" value="" placeholder="Enter a location">
+						<button type="submit" id="submit" name="submit">
+							 <img src="http://www.stickpng.com/assets/images/585e4ae1cb11b227491c3393.png" width="20" height="20" alt="submit" />
+						</button>
+					</form>
+				</div>
+	    		<div id="map"></div>
+    		</div>
+		</div>
+		
+      
+		<p id="response"></p>
+		<h1 id="head2"></h1>
+		<script src="./bundle.js"></script>
+		
+		
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzH8NfF7PG5_BRVWMifBOy-TZlIF--0N8 &libraries=places&callback=initAutocomplete"
+         async defer></script>
+        
+	</body>
+</html>
