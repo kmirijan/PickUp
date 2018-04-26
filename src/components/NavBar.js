@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import '../css/App.css';
 
 
@@ -8,10 +8,10 @@ class NavBar extends React.Component {
     return (
       <div>
       <ul className="NavBar">
-       <li className="Nav"><Link className = 'active' to={'/'}>Home</Link></li>
-       <li className="Nav"><Link className = 'pages' to={'/app'}>Create Game</Link></li>
-       <li className="Nav"><Link className = 'pages' to={'/signin'}>Sign In</Link></li>
-       <li className="Nav"><Link className = 'pages' to={'/signup'}>Sign Up</Link></li>
+       <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/home'}>Home</NavLink></li>
+       <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/app'}>Create Game</NavLink></li>
+       <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/signin'}>Sign In</NavLink></li>
+       <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/signup'}>Sign Up</NavLink></li>
       </ul>
       </div>
     );

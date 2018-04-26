@@ -21,8 +21,9 @@ signUp(){
 
   render(){
     return(
-      <div className="form-inline" style={{margin:'5%'}}>
-        <NavBar/>
+    <div>
+      <NavBar/>
+        <div className="form-inline" style={{margin: '5%'}}>
         <h2>SignUp</h2>
         <div className="form-group">
         <input
@@ -50,6 +51,7 @@ signUp(){
       <div>{this.state.error.message}</div>
       <div><Link to={'/signin'}>Already a user? Sign in instead</Link></div>
     </div>
+  </div>
     );
   }
 }

@@ -121,6 +121,7 @@ _reactDom2.default.render(_react2.default.createElement(
     'div',
     null,
     _react2.default.createElement(_reactRouter.Route, { path: '/', component: _NavBar2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: '/home', component: _NavBar2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '/app', render: function render() {
         return _react2.default.createElement(_App2.default, { games: _CurrentGames.games });
       } }),
@@ -24797,8 +24798,8 @@ var NavBar = function (_React$Component) {
             'li',
             { className: 'Nav' },
             _react2.default.createElement(
-              _reactRouterDom.Link,
-              { className: 'active', to: '/' },
+              _reactRouterDom.NavLink,
+              { activeClassName: 'active', className: 'pages', to: '/home' },
               'Home'
             )
           ),
@@ -24806,8 +24807,8 @@ var NavBar = function (_React$Component) {
             'li',
             { className: 'Nav' },
             _react2.default.createElement(
-              _reactRouterDom.Link,
-              { className: 'pages', to: '/app' },
+              _reactRouterDom.NavLink,
+              { activeClassName: 'active', className: 'pages', to: '/app' },
               'Create Game'
             )
           ),
@@ -24815,17 +24816,17 @@ var NavBar = function (_React$Component) {
             'li',
             { className: 'Nav' },
             _react2.default.createElement(
-              _reactRouterDom.Link,
-              { className: 'pages', to: '/signin' },
-              'Login'
+              _reactRouterDom.NavLink,
+              { activeClassName: 'active', className: 'pages', to: '/signin' },
+              'Sign In'
             )
           ),
           _react2.default.createElement(
             'li',
             { className: 'Nav' },
             _react2.default.createElement(
-              _reactRouterDom.Link,
-              { className: 'pages', to: '/signup' },
+              _reactRouterDom.NavLink,
+              { activeClassName: 'active', className: 'pages', to: '/signup' },
               'Sign Up'
             )
           )
@@ -24873,7 +24874,7 @@ exports = module.exports = __webpack_require__(72)(false);
 
 
 // module
-exports.push([module.i, ".App {\r\n  text-align: center;\r\n}\r\n\r\n.App-logo {\r\n  float: left;\r\n  height: 150px;\r\n}\r\n\r\nbody {margin:0;}\r\n\r\n.NavBar{\r\n   list-style-type: none;\r\n   margin: 0;\r\n   padding: 0;\r\n   overflow: hidden;\r\n   background-color: #333;\r\n   position: fixed;\r\n   top: 0;\r\n   width: 100%;\r\n}\r\n\r\n.Nav {\r\n   float: right;\r\n}\r\n\r\n.Nav .pages {\r\n   display: block;\r\n   color: white;\r\n   text-align: center;\r\n   padding: 14px 16px;\r\n   text-decoration: none;\r\n}\r\n\r\n.Nav .pages:hover:not(.active) {\r\n    background-color: #111;\r\n}\r\n\r\n.active {\r\n  display: block;\r\n  color: white;\r\n  text-align: center;\r\n  padding: 14px 16px;\r\n  text-decoration: none;\r\n  background-color: orange;\r\n}\r\n\r\n.App-header {\r\n  margin-top: 45px;\r\n  padding: 20px;\r\n  background-color: rgba(135,206,350,0.4);\r\n  border-bottom: 1px solid black;\r\n}\r\n\r\n.App-title {\r\n  text-align: center;\r\n  font-family: 'Lato';\r\n  font-size: 70px;\r\n  margin: 5%;\r\n  font-weight: bold;\r\n  color: black;\r\n}\r\n\r\n.App-newGame {\r\n  font-family: 'Lato';\r\n}\r\n\r\n.App-currentGames {\r\n  font-family: 'Lato';\r\n}\r\n\r\n.Activity{\r\n  float:left;\r\n  display: inline-block;\r\n}\r\n.Name{\r\n  float:Center;\r\n  display: inline-block;\r\n}\r\n.Location{\r\n  float:right;\r\n  display: inline-block;\r\n  padding-right: 30px\r\n}\r\nbody {\r\n    background-image: url('/Sports.png');\r\n}\r\n\r\n.App-submitButton {\r\n  padding-top: 12px;\r\n  padding-bottom: 12px;\r\n}\r\n\r\n.gameDetails {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\n.searchBox {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\ninput[type=submit] {\r\n    background-color: #4CAF50;\r\n    color: white;\r\n    padding: 12px 20px;\r\n    border: none;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n    float: center;\r\n}\r\n\r\ninput[type=submit]:hover {\r\n    background-color: #45a049;\r\n}\r\n\r\n.GamesList{\r\n  position: center;\r\n  list-style: none;\r\n  font: 200 20px/1.5 Helvetica, Verdana, sans-serif;\r\n  border-bottom: 1px solid #ccc;\r\n}\r\n", ""]);
+exports.push([module.i, ".App {\r\n  text-align: center;\r\n}\r\n\r\n.App-logo {\r\n  float: left;\r\n  height: 150px;\r\n}\r\n\r\nbody {margin:0;}\r\n\r\n.NavBar{\r\n   list-style-type: none;\r\n   margin: 0;\r\n   padding: 0;\r\n   overflow: hidden;\r\n   background-color: #333;\r\n   position: fixed;\r\n   top: 0;\r\n   width: 100%;\r\n}\r\n\r\n.Nav {\r\n   float: right;\r\n}\r\n\r\n.Nav .pages {\r\n   display: block;\r\n   color: white;\r\n   text-align: center;\r\n   padding: 14px 16px;\r\n   text-decoration: none;\r\n}\r\n\r\n.Nav .pages:hover:not(.active) {\r\n    background-color: #111;\r\n}\r\n\r\n.Nav .active {\r\n  display: block;\r\n  color: white;\r\n  text-align: center;\r\n  padding: 14px 16px;\r\n  text-decoration: none;\r\n  background-color: orange;\r\n}\r\n\r\n.Nav .homeActive {\r\n  display: block;\r\n  color: white;\r\n  text-align: center;\r\n  padding: 14px 16px;\r\n  text-decoration: none;\r\n  background-color: lightblue;\r\n}\r\n.App-header {\r\n  margin-top: 45px;\r\n  padding: 20px;\r\n  background-color: rgba(135,206,350,0.4);\r\n  border-bottom: 1px solid black;\r\n}\r\n\r\n.App-title {\r\n  text-align: center;\r\n  font-family: 'Lato';\r\n  font-size: 70px;\r\n  margin: 5%;\r\n  font-weight: bold;\r\n  color: black;\r\n}\r\n\r\n.App-newGame {\r\n  font-family: 'Lato';\r\n}\r\n\r\n.App-currentGames {\r\n  font-family: 'Lato';\r\n}\r\n\r\n.Activity{\r\n  float:left;\r\n  display: inline-block;\r\n}\r\n.Name{\r\n  float:Center;\r\n  display: inline-block;\r\n}\r\n.Location{\r\n  float:right;\r\n  display: inline-block;\r\n  padding-right: 30px\r\n}\r\nbody {\r\n    background-image: url('/Sports.png');\r\n}\r\n\r\n.App-submitButton {\r\n  padding-top: 12px;\r\n  padding-bottom: 12px;\r\n}\r\n\r\n.gameDetails {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\n.searchBox {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\ninput[type=submit] {\r\n    background-color: #4CAF50;\r\n    color: white;\r\n    padding: 12px 20px;\r\n    border: none;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n    float: center;\r\n}\r\n\r\ninput[type=submit]:hover {\r\n    background-color: #45a049;\r\n}\r\n\r\n.GamesList{\r\n  position: center;\r\n  list-style: none;\r\n  font: 200 20px/1.5 Helvetica, Verdana, sans-serif;\r\n  border-bottom: 1px solid #ccc;\r\n}\r\n", ""]);
 
 // exports
 
@@ -25198,58 +25199,62 @@ var SignUp = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'form-inline', style: { margin: '5%' } },
+        null,
         _react2.default.createElement(_NavBar2.default, null),
         _react2.default.createElement(
-          'h2',
-          null,
-          'SignUp'
-        ),
-        _react2.default.createElement(
           'div',
-          { className: 'form-group' },
-          _react2.default.createElement('input', {
-            className: 'form-control',
-            type: 'text',
-            style: { marginRight: '5px' },
-            placeholder: 'email',
-            onChange: function onChange(event) {
-              return _this2.setState({ email: event.target.value });
-            }
-          }),
-          _react2.default.createElement('input', {
-            className: 'form-control',
-            type: 'password',
-            style: { marginRight: '5px' },
-            placeholder: 'password',
-            onChange: function onChange(event) {
-              return _this2.setState({ password: event.target.value });
-            }
-          }),
+          { className: 'form-inline', style: { margin: '5%' } },
           _react2.default.createElement(
-            'button',
-            {
-              className: 'btn btn-primary',
-              type: 'button',
-              onClick: function onClick() {
-                return _this2.SignUp();
+            'h2',
+            null,
+            'SignUp'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'form-group' },
+            _react2.default.createElement('input', {
+              className: 'form-control',
+              type: 'text',
+              style: { marginRight: '5px' },
+              placeholder: 'email',
+              onChange: function onChange(event) {
+                return _this2.setState({ email: event.target.value });
               }
-            },
-            'Sign Up'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          null,
-          this.state.error.message
-        ),
-        _react2.default.createElement(
-          'div',
-          null,
+            }),
+            _react2.default.createElement('input', {
+              className: 'form-control',
+              type: 'password',
+              style: { marginRight: '5px' },
+              placeholder: 'password',
+              onChange: function onChange(event) {
+                return _this2.setState({ password: event.target.value });
+              }
+            }),
+            _react2.default.createElement(
+              'button',
+              {
+                className: 'btn btn-primary',
+                type: 'button',
+                onClick: function onClick() {
+                  return _this2.SignUp();
+                }
+              },
+              'Sign Up'
+            )
+          ),
           _react2.default.createElement(
-            _reactRouterDom.Link,
-            { to: '/signin' },
-            'Already a user? Sign in instead'
+            'div',
+            null,
+            this.state.error.message
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/signin' },
+              'Already a user? Sign in instead'
+            )
           )
         )
       );
@@ -25325,58 +25330,62 @@ var SignIn = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'form-inline', style: { margin: '5%' } },
+        null,
         _react2.default.createElement(_NavBar2.default, null),
         _react2.default.createElement(
-          'h2',
-          null,
-          'SignIn'
-        ),
-        _react2.default.createElement(
           'div',
-          { className: 'form-group' },
-          _react2.default.createElement('input', {
-            className: 'form-control',
-            type: 'text',
-            style: { marginRight: '5px' },
-            placeholder: 'email',
-            onChange: function onChange(event) {
-              return _this2.setState({ email: event.target.value });
-            }
-          }),
-          _react2.default.createElement('input', {
-            className: 'form-control',
-            type: 'password',
-            style: { marginRight: '5px' },
-            placeholder: 'password',
-            onChange: function onChange(event) {
-              return _this2.setState({ password: event.target.value });
-            }
-          }),
+          { className: 'form-inline', style: { margin: '5%' } },
           _react2.default.createElement(
-            'button',
-            {
-              className: 'btn btn-primary',
-              type: 'button',
-              onClick: function onClick() {
-                return _this2.SignIn();
+            'h2',
+            null,
+            'SignIn'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'form-group' },
+            _react2.default.createElement('input', {
+              className: 'form-control',
+              type: 'text',
+              style: { marginRight: '5px' },
+              placeholder: 'email',
+              onChange: function onChange(event) {
+                return _this2.setState({ email: event.target.value });
               }
-            },
-            'Sign In'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          null,
-          this.state.error.message
-        ),
-        _react2.default.createElement(
-          'div',
-          null,
+            }),
+            _react2.default.createElement('input', {
+              className: 'form-control',
+              type: 'password',
+              style: { marginRight: '5px' },
+              placeholder: 'password',
+              onChange: function onChange(event) {
+                return _this2.setState({ password: event.target.value });
+              }
+            }),
+            _react2.default.createElement(
+              'button',
+              {
+                className: 'btn btn-primary',
+                type: 'button',
+                onClick: function onClick() {
+                  return _this2.SignIn();
+                }
+              },
+              'Sign In'
+            )
+          ),
           _react2.default.createElement(
-            _reactRouterDom.Link,
-            { to: '/signup' },
-            'Sign up instead'
+            'div',
+            null,
+            this.state.error.message
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/signup' },
+              'Sign up instead'
+            )
           )
         )
       );

@@ -14,6 +14,7 @@ ReactDOM.render(
   <HashRouter>
     <div>
     <Route path="/" component={NavBar}/>
+    <Route path="/home" component={NavBar}/>
     <Route path="/app" render={()=><App games={games}/>}/>
     <Route path="/signin" component={SignIn}/>
     <Route path="/signup" component={SignUp}/>
