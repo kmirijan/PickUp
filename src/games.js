@@ -71,6 +71,7 @@ class GameInput extends React.Component
 		axios.post('/games', this.state)
 		this.setState({loc: "", activity: "", name: ""});
 		console.log("post sent");
+		this.props.table.updateTable();
 	};
 	
 	render()
@@ -125,15 +126,18 @@ class ActiveGames extends React.Component
 
 	componentDidMount()
 	{
-		console.log('sending fetch');
-		axios.get('/games').then((results) => {console.log('fetch finished'); console.log(results.data);this.setState({games: results.data});});
-		console.log('fetch sent');
+		this.updateTable();
+	}
+	
+	updateTable()
+	{
+		axios.get('/games').then((results) => {this.setState({games: results.data});});
 	}
 
 	render()
 	{
 		console.log("rendering ActiveGames table");
-		console.log(this.state.games);
+		this.updateTable();
 		return (
 			<table >
 				<tr>
@@ -164,12 +168,13 @@ class Game extends React.Component
 }
 
 
-ReactDOM.render(
-	<GameInput />,
-	document.getElementById('GameInput')
-);
+let table = {};
 
 ReactDOM.render(
-	<ActiveGames />,
+	table = <ActiveGames />,
 	document.getElementById('GameTable')
+);
+ReactDOM.render(
+<GameInput table={table} />,
+document.getElementById('GameInput')
 );
