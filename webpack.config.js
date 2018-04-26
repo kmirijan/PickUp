@@ -1,10 +1,9 @@
 const webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
   mode: "none",
-  entry: [
-    './src/index.js'
-  ],
+  entry: './src/index.js',
   module: {
     rules: [
       {
@@ -22,12 +21,12 @@ module.exports = {
     extensions: ['*', '.js', '.jsx']
   },
   output: {
-    path: __dirname + '/dist',
-    publicPath: '/',
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/'
   },
   devServer: {
+    historyApiFallback: true,
     contentBase: './dist'
   }
-
 };

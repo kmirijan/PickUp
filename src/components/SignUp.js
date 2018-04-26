@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import NavBar from './NavBar';
 
 class SignUp extends React.Component{
   constructor(props){
@@ -21,6 +22,7 @@ signUp(){
   render(){
     return(
       <div className="form-inline" style={{margin:'5%'}}>
+        <NavBar/>
         <h2>SignUp</h2>
         <div className="form-group">
         <input
