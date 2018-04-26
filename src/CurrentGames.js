@@ -71,11 +71,11 @@ addGame(event) {
           <h1 className="App-currentGames">
             Below are the currently available games:
           </h1>
-      <ul>
+      <ol>
           {filteredGames.map((game)=>{
             return <Game game = {game} key={game.id}/>
           })}
-      </ul>
+      </ol>
     </div>
     );
   }
@@ -85,7 +85,7 @@ class Game extends React.Component{
   render(){
     return(
       <div>
-      <li>
+      <li className="GamesList">
       <h3 className= "Activity"> Activity: {this.props.game.sport} </h3>
       <h3 className= "Name"> Name: {this.props.game.name} </h3>
       <h3 className= "Location"> Location: {this.props.game.location} </h3>

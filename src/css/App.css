@@ -7,7 +7,41 @@
   height: 150px;
 }
 
+body {margin:0;}
+
+.NavBar{
+   list-style-type: none;
+   margin: 0;
+   padding: 0;
+   overflow: hidden;
+   background-color: #333;
+   position: fixed;
+   top: 0;
+   width: 100%;
+}
+
+.Nav {
+   float: right;
+}
+
+li a {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: none;
+}
+
+li a:hover:not(.active) {
+   background-color: #111;
+}
+
+.active {
+   background-color: orange;
+}
+
 .App-header {
+  margin-top: 45px;
   padding: 20px;
   background-color: rgba(135,206,350,0.4);
   border-bottom: 1px solid black;
@@ -74,7 +108,7 @@ input[type=submit]:hover {
     background-color: #45a049;
 }
 
-li {
+.GamesList{
   list-style: none;
   font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
   border-bottom: 1px solid #ccc;
