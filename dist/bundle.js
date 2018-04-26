@@ -115,7 +115,7 @@ var _registerServiceWorker2 = _interopRequireDefault(_registerServiceWorker);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _reactDom2.default.render(_react2.default.createElement(
-  _reactRouterDom.BrowserRouter,
+  _reactRouterDom.HashRouter,
   null,
   _react2.default.createElement(
     'div',

@@ -10,7 +10,7 @@ class NavBar extends React.Component {
       <ul className="NavBar">
        <li className="Nav"><Link className = 'active' to={'/'}>Home</Link></li>
        <li className="Nav"><Link className = 'pages' to={'/app'}>Create Game</Link></li>
-       <li className="Nav"><Link className = 'pages' to={'/signin'}>Login</Link></li>
+       <li className="Nav"><Link className = 'pages' to={'/signin'}>Sign In</Link></li>
        <li className="Nav"><Link className = 'pages' to={'/signup'}>Sign Up</Link></li>
       </ul>
       </div>
