@@ -14,13 +14,18 @@ var url = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 exp.use(bodyParser.json());
 
 exp.get('/games', function(req, res) {
+
+	console.log((new Date()).toLocaleTimeString(), "Games get request received");
+	
 	MongoClient.connect(url, function (err, db) {
 		if (err) throw err;
 		// find all games
 		// return games
 		//req.body.
-		db.collection("games").find({}).then(function (result)
+		db.collection("games").find({}).toArray( function (err, result)
 			{
+				if (err) throw err;
+				console.log(result);
 				res.json(result);
 				res.end();
 				db.close();
@@ -35,7 +40,9 @@ exp.post('/games', function(req, res) {
 	console.log("body:", req.body);
 	var game = {name: req.body.name, 
 		activity: req.body.activity,
-		loc: req.body.loc
+		loc: req.body.loc,
+		owner: req.body.owner,
+		players: [req.body.owner]
 	};
 
 	MongoClient.connect(url, function (err, db)

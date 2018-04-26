@@ -109,7 +109,7 @@ class GameInput extends React.Component
 }
 
 
-/*
+
 class ActiveGames extends React.Component
 {
 	constructor(props)
@@ -118,33 +118,30 @@ class ActiveGames extends React.Component
 
 		this.state =
 		{
-			games: ""
+			games: [{name: "dee", activity: "la", loc: "da"}]
 		};
 
 	}
 
 	componentDidMount()
 	{
-		fetch('pickupcs115.heroku.com').then(results => {return results.json()});
-		
-		data.map ((msg) =>
-			return (
-				<tr> key={msg.}
-			);
-		
+		console.log('sending fetch');
+		axios.get('/games').then((results) => {console.log('fetch finished'); console.log(results.data);this.setState({games: results.data});});
+		console.log('fetch sent');
 	}
 
 	render()
 	{
-		return
-		(
-			<table style="width:100%">
+		console.log("rendering ActiveGames table");
+		console.log(this.state.games);
+		return (
+			<table >
 				<tr>
-					<HTML element='th' inner='Sport' />
-					<HTML element='th' inner='Game Name' />
-					<HTML element='th' inner='Location' />
+					<th>Sport</th>
+					<th>Game Name</th>
+					<th>Location</th>
 				</tr>
-				{data.map((game) => {return(<Game game={game}/>)})}
+				{this.state.games.map((game) => {return <Game game={game}/>})}
 			</table>
 		)
 	}
@@ -155,8 +152,8 @@ class Game extends React.Component
 {
 	render ()
 	{
-		return
-		(
+		console.log("rendering Game");
+		return (
 			<tr>
 				<td>{this.props.game.activity}</td>
 				<td>{this.props.game.name}</td>
@@ -164,15 +161,15 @@ class Game extends React.Component
 			</tr>
 		)
 	}
-}*/
+}
 
 
 ReactDOM.render(
 	<GameInput />,
 	document.getElementById('GameInput')
 );
-/*
+
 ReactDOM.render(
 	<ActiveGames />,
 	document.getElementById('GameTable')
-);*/
+);
