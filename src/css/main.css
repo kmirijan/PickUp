@@ -1,5 +1,8 @@
 #head1:hover{
 }
+.link{
+    color:yellow;
+}
 input{
 	width:200px;
     padding: 10px 40px;

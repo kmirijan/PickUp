@@ -12,7 +12,7 @@ class Routes extends React.Component{
                 <Switch>
                     <Route exact path='/' component={Home} />
                     <Route exact path='/user' component={User} />
-                    <Route component={NotFound} />
+                    <Route component={_404} />
                 </Switch>
             </BrowserRouter>
         )
@@ -32,8 +32,8 @@ const User=()=>(
 		<Feed />
 	</div>
 );
-const NotFound=()=>(
-	<h1>404.. This page is not found!</h1>
+const _404=()=>(
+	<h1>404</h1>
 );
 
 module.exports={

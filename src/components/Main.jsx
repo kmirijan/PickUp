@@ -1,6 +1,6 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
-
+var {Link,Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 
 import("../css/main.css");
 /*
@@ -10,7 +10,10 @@ var script=()=>{
 class Top extends React.Component{
 	render(){
 		return(
-			<div id="top">TOP BANNER</div>
+			<div id="top">
+				<Link class="link" to="/">GO HOME</Link>{" "}
+				<Link class="link" to="/user">USER PAGE</Link>
+			</div>
 		);
 	}
 }

@@ -7,12 +7,35 @@
 	width:75%;
 	background-color:rgba(0, 0, 0, 0.7);
 	border-radius:5px;
+	padding:20px 0 0 0;
 }
 #picture{
 	margin: 20px auto 0 auto;
 	width:200px;
 	height:200px;
 	background-color:gray;
+}
+#mask{
+	width:200px;
+	height:200px;
+	position:relative;
+	top: -200px;
+	cursor: pointer;
+}
+#changeimg{
+	width:200px;
+	height:200px;
+	position:relative;
+	top: -200px;
+	color:white;
+	visibility:hidden;
+}
+#mask:hover{
+	background-color:rgba(0, 0, 0, 0.4);
+}
+#mask:hover #changeimg{
+	visibility:visible;
+	color:white;
 }
 #username{
 	margin:auto;
@@ -21,17 +44,17 @@
 	padding:10px;
 }
 #alias{
-	margin:auto;
+	margin:0, auto, 0, auto;
 	text-align:center;
 	color:white;
 	font-size:x-large;
+	padding:10px;
 }
 #bio{
-	margin:0 50px 0 50px;
+	margin:auto;
 	text-align:center;
-	border-style:double;
-	background-color:white;
-	padding:20px;
+	color:white;
+	padding:20px 50px 20px 50px;
 }
 #expand{
 	width:111px;

@@ -5,7 +5,7 @@ var {Top,Rest}=require("./Main.jsx");
 class ProfileP extends React.Component{
 	render(){
 		return(
-			<div id="profile">
+			<div id="profilep">
 				<div id="picture">
 				</div>
 				<div id="username">
@@ -21,7 +21,7 @@ class ProfileP extends React.Component{
 class FeedP extends React.Component{
 	render(){
 		return(
-			<div id="feed">
+			<div id="feedp">
 			</div>
 			);
 	};
