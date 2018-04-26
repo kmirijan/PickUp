@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/App.css';
+import '../css/App.css';
 
 export let games=[];
 
@@ -46,36 +46,44 @@ addGame(event) {
          onSubmit={this.addGame.bind(this)}
        >
             <input
+              className="gameDetails"
               type="text"
               ref="sport"
               placeholder="Activity"/>
             <input
+              className="gameDetails"
               type="text"
               ref="name"
               placeholder="Name"/>
            <input
+             className="gameDetails"
              id= 'location'
               type="text"
               ref="location"
               placeholder="Location"/>
 
             <div className="App-submitButton">
-              <input type="submit" value="Submit"/>
+              <input
+                type="submit"
+                value="Submit"/>
             </div>
 
           </form>
 
-        <input type="text" placeholder="Search"
+        <input
+          className="searchBox"
+          type="text"
+          placeholder="Search"
           value={this.state.search}
           onChange={this.updateSearch.bind(this)}/>
           <h1 className="App-currentGames">
             Below are the currently available games:
           </h1>
-      <ol>
+      <ul>
           {filteredGames.map((game)=>{
             return <Game game = {game} key={game.id}/>
           })}
-      </ol>
+      </ul>
     </div>
     );
   }

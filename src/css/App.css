@@ -24,7 +24,7 @@ body {margin:0;}
    float: right;
 }
 
-li a {
+.Nav .pages {
    display: block;
    color: white;
    text-align: center;
@@ -32,12 +32,17 @@ li a {
    text-decoration: none;
 }
 
-li a:hover:not(.active) {
-   background-color: #111;
+.Nav .pages:hover:not(.active) {
+    background-color: #111;
 }
 
 .active {
-   background-color: orange;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: orange;
 }
 
 .App-header {
@@ -86,7 +91,15 @@ body {
   padding-bottom: 12px;
 }
 
-input[type=text] {
+.gameDetails {
+    width: 30%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.searchBox {
     width: 30%;
     padding: 20px;
     border: 1px solid #ccc;
@@ -109,6 +122,7 @@ input[type=submit]:hover {
 }
 
 .GamesList{
+  position: center;
   list-style: none;
   font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
   border-bottom: 1px solid #ccc;

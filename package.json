@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && SET NODE_ENV=production && node server.js",
+    "start": "npm run build && set NODE_ENV=production && node server.js",
     "compile": "babel public --out-dir dist",
     "server": "nodemon index.js",
     "build": "webpack --config webpack.config.js",
@@ -48,6 +48,9 @@
     "mongodb": "^3.0.7",
     "node": "^9.11.0",
     "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "react-bootstrap": "^0.32.1",
+    "react-dom": "^16.3.2",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2"
   }
 }

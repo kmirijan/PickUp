@@ -1,16 +1,17 @@
 import React from 'react';
-import './css/App.css';
-import {CurrentGames} from './CurrentGames.js';
+import {Link} from 'react-router-dom';
+import '../css/App.css';
+import {CurrentGames} from './CurrentGames';
 
-export class App extends React.Component {
+class App extends React.Component {
   render() {
     return (
       <div className="App">
         <ul className="NavBar">
-         <li className="Nav"><a class="active" href="#home">Home</a></li>
-         <li className="Nav"><a href="#Create Game">Create Game</a></li>
-         <li className="Nav"><a href="#Login">Login</a></li>
-         <li className="Nav"><a href="#Sign Up">Sign Up</a></li>
+         <li className="Nav"><Link className = 'active' to={'/app'}>Home</Link></li>
+         <li className="Nav"><Link className = 'pages' to={'/app'}>Create Game</Link></li>
+         <li className="Nav"><Link className = 'pages' to={'/signin'}>Login</Link></li>
+         <li className="Nav"><Link className = 'pages' to={'/signup'}>Sign Up</Link></li>
         </ul>
 
         <header className="App-header">
@@ -28,3 +29,5 @@ export class App extends React.Component {
     );
   }
 }
+
+export default App;
