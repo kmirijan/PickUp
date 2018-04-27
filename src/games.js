@@ -71,7 +71,7 @@ class GameInput extends React.Component
 		axios.post('/games', this.state)
 		this.setState({loc: "", activity: "", name: ""});
 		console.log("post sent");
-		this.props.table.updateTable();
+		updateTable();
 	};
 	
 	render()
@@ -121,23 +121,18 @@ class ActiveGames extends React.Component
 		{
 			games: [{name: "dee", activity: "la", loc: "da"}]
 		};
-
+		updateTable = updateTable.bind(this);
 	}
 
 	componentDidMount()
 	{
-		this.updateTable();
+		updateTable();
 	}
 	
-	updateTable()
-	{
-		axios.get('/games').then((results) => {this.setState({games: results.data});});
-	}
 
 	render()
 	{
 		console.log("rendering ActiveGames table");
-		this.updateTable();
 		return (
 			<table >
 				<tr>
@@ -150,6 +145,11 @@ class ActiveGames extends React.Component
 		)
 	}
 
+}
+
+function updateTable()
+{
+	axios.get('/games').then((results) => {this.setState({games: results.data});});
 }
 
 class Game extends React.Component
@@ -171,10 +171,10 @@ class Game extends React.Component
 let table = {};
 
 ReactDOM.render(
-	table = <ActiveGames />,
+	<ActiveGames />,
 	document.getElementById('GameTable')
 );
 ReactDOM.render(
-<GameInput table={table} />,
+<GameInput />,
 document.getElementById('GameInput')
 );
