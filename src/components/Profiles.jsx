@@ -32,9 +32,11 @@ class Profile extends React.Component{
 		}
 	}
 	componentDidMount(){
+		var usrnm=this.props.username;
+		usrnm=usrnm.substring(1,usrnm.length)
 		axios.post("/user",{
 			params:{
-				name:"user1234"
+				name:usrnm
 			}
 		}).then((res)=>{
 			var userStates=res.data[0];
@@ -51,10 +53,11 @@ class Profile extends React.Component{
 	      	if(this.state.long.length>100){
 	      		this.setState({short:this.state.long.substring(0,100)});
 	      	}
-
+		
 		}).catch((error)=>{
          	console.log(error.response.data);
       	});
+      	
 	}
 	gamesList(){
 		const gamesList=this.state.games.map((games)=>

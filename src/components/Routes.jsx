@@ -11,13 +11,18 @@ class Routes extends React.Component{
             <BrowserRouter>
                 <Switch>
                     <Route exact path='/' component={Home} />
-                    <Route exact path='/user' component={User} />
+                    <Route path='/user:username' component={User}/> 	
                     <Route component={_404} />
+                    
                 </Switch>
             </BrowserRouter>
         )
     }
 }
+/*
+<Route path="/:id" render={({match}) => 
+<RunningProject getProjectById={this.getProject} match={match} />} />
+*/
 
 const Home=()=>(
 	<div>
@@ -25,13 +30,20 @@ const Home=()=>(
 		<Rest />
 	</div>
 );
-const User=()=>(
-	<div>
-		<Top />
-		<Profile />
-		<Feed />
-	</div>
-);
+class User extends React.Component{
+	constructor(props){
+		super(props);
+	}
+	render(){
+		return(
+			<div>
+			<Top />
+			<Profile username={this.props.match.params.username}/>
+			<Feed />
+		</div>
+	)};
+}
+	
 const _404=()=>(
 	<h1>404</h1>
 );
