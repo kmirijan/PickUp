@@ -45,14 +45,10 @@ body {margin:0;}
   background-color: orange;
 }
 
-.Nav .homeActive {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  background-color: lightblue;
+.form-inline{
+  padding-top: 45px;
 }
+
 .App-header {
   margin-top: 45px;
   padding: 20px;

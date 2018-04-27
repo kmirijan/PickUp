@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import '../css/App.css';
 import NavBar from './NavBar';
 
 class SignUp extends React.Component{
@@ -43,7 +44,7 @@ signUp(){
         <button
         className="btn btn-primary"
         type="button"
-        onClick={() => this.SignUp()}
+        onClick={() => this.signUp()}
         >
         Sign Up
         </button>
