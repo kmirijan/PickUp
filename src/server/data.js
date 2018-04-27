@@ -3,6 +3,21 @@ const express=require("express");
 const fs=require("fs");
 const cheerio=require("cheerio");
 const url="mongodb://localhost:27017";
+var getGames=()=>{
+		var mygames ="";
+		var tf=mongo.connect(url,(err,client)=>{
+			if(err)throw new Error(err);
+
+			var db=client.db("data")
+			db.collection("events").find().forEach((item)=>{
+				mygames+=String(item.name);
+			}).then((mygames)=>{
+				this.setState({games:mygames});
+			})
+
+		client.close();
+	});
+}
 
 var exist=(res,text,eve,loc)=>{
 	var tf=mongo.connect(url,(err,client)=>{

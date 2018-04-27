@@ -1,8 +1,9 @@
 const express=require("express");
 const mongo=require("mongodb").MongoClient;
 const bodyParser=require("body-parser");
-const data=require("./src/components/data.js");
+const data=require("./src/server/data.js");
 var mime = require('mime-types');
+const mkprofile=require("./src/server/mkprofile.js");
 
 const app=express();
 /*configurations*/
@@ -18,6 +19,9 @@ app.get("*",(req,res)=>{
 });
 app.post("/search",(req,res)=>{
 	data.valEL(res,req.body["event"],req.body["location"]);
+});
+app.post("/user",(req,res)=>{
+	mkprofile.getUsers(req.body.params.name,res);
 });
 
 

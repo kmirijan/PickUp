@@ -2,6 +2,8 @@ var React=require("react");
 var ReactDOM=require("react-dom");
 var {Top,Rest}=require("./Main.jsx");
 require("../css/profiles.css");
+var axios=require("axios");
+
 
 class Profile extends React.Component{
 	constructor(props){
@@ -10,31 +12,13 @@ class Profile extends React.Component{
 		this.state={
 			expname:"expand",
 			expanded:false,
-			pic:"https://images.yswcdn.com/546017470459747400-ql-85/200/200/ay/blaircandy/basketball-candy-42.jpg",
-			short:`This is a long paragraph.`,
-			long:`This is a long paragraph. 
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.
-				This is a long paragraph.`,
-			username:"helloworld",
-			alias:"Hello World"
+			pic:"",
+			short:"",
+			long:"",
+			username:"",
+			alias:"",
+			email:"",
+			games:[],
 		}
 	}
 	expandBio(){
@@ -46,6 +30,39 @@ class Profile extends React.Component{
 			this.setState({expanded:false});
 			this.setState({expname:"expand"});
 		}
+	}
+	componentDidMount(){
+		axios.post("/user",{
+			params:{
+				name:"user1234"
+			}
+		}).then((res)=>{
+			var userStates=res.data[0];
+			this.setState({
+				username:userStates["username"],
+				pic:userStates["pic"],
+				alias:userStates["alias"],
+				long:userStates["bio"],
+				short:userStates["bio"],
+				email:userStates["email"],
+				games:userStates["games"]
+			});
+			//make bio shorter
+	      	if(this.state.long.length>100){
+	      		this.setState({short:this.state.long.substring(0,100)});
+	      	}
+
+		}).catch((error)=>{
+         	console.log(error.response.data);
+      	});
+	}
+	gamesList(){
+		const gamesList=this.state.games.map((games)=>
+			<li key={games["game"]}>{games["game"]}</li>
+		)
+		return(
+			<u1 key="gamesList">{gamesList}</u1>
+		)
 	}
 	componentDidUpdate(prevProps,prevState){
 		if(this.state.expanded==true && this.state.expanded!=prevState.expanded)
@@ -66,6 +83,9 @@ class Profile extends React.Component{
 					<div id="username">
 						{this.state.username}
 					</div>
+					<div id="email">
+						{this.state.email}
+					</div>
 					<div id="alias">
 						{this.state.alias}
 					</div>
@@ -77,6 +97,10 @@ class Profile extends React.Component{
 							{this.state.expname}
 						</button>
 					</div>
+					<div id="gamesList">
+						Games created:<br></br>
+						{this.gamesList()}
+					</div>
 				</div>
 			</div>
 			);
@@ -85,11 +109,21 @@ class Profile extends React.Component{
 
 
 class Feed extends React.Component{
+	constructor(props){
+		super(props);
+
+		this.state={
+			games:"to be implemented",
+			expanded:false,
+			
+		}
+	}
 	render(){
 		return(
 			<div id="feed">
 				<div id="fpanel">
 					<h1>FEED</h1>
+					<p>{this.state.games}</p>
 				</div>
 			</div>
 			);
