@@ -30,6 +30,10 @@ addGame(event) {
   this.refs.location.value='';
 }
 
+componentDidMount(){
+    new google.maps.places.Autocomplete(document.getElementById('location'));
+}
+
   render(){
     let filteredGames = this.state.games.filter(
       (game) => {

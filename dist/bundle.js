@@ -114,6 +114,14 @@ var _registerServiceWorker2 = _interopRequireDefault(_registerServiceWorker);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function authentication() {
+  if (user) {
+    this.context.history.push('/app');
+  } else {
+    this.context.history.replace('/signin');
+  }
+}
+
 _reactDom2.default.render(_react2.default.createElement(
   _reactRouterDom.BrowserRouter,
   { basename: '/' },
@@ -25021,6 +25029,11 @@ var CurrentGames = exports.CurrentGames = function (_React$Component) {
       this.refs.sport.value = '';
       this.refs.name.value = '';
       this.refs.location.value = '';
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      new google.maps.places.Autocomplete(document.getElementById('location'));
     }
   }, {
     key: 'render',
