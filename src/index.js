@@ -10,8 +10,17 @@ import SignIn from './components/SignIn';
 import {games} from './components/CurrentGames';
 import registerServiceWorker from './registerServiceWorker';
 
+function authentication(){
+if(user){
+  this.context.history.push('/app');
+}else{
+  this.context.history.replace('/signin');
+}
+}
+
+
 ReactDOM.render(
-  <HashRouter>
+  <BrowserRouter basename="/">
     <div>
     <Route path="/" component={NavBar}/>
     <Route path="/home" component={NavBar}/>
@@ -19,6 +28,6 @@ ReactDOM.render(
     <Route path="/signin" component={SignIn}/>
     <Route path="/signup" component={SignUp}/>
     </div>
-  </HashRouter>, document.getElementById('root')
+  </BrowserRouter>, document.getElementById('root')
 );
 registerServiceWorker();
