@@ -17,7 +17,7 @@ dist
 * __bundle.js__ <br />
 output of webpack <br />
 
-* __main.html__ <br />
+* __index.html__ <br />
 main html <br />
 
 * __public__ <br />
@@ -39,6 +39,8 @@ contains react components <br />
   contains function for search
   * main.jsx <br/ >
   contains components "Main" and "Rest"
+
+* __server__ <br />
 
 * __css__ <br />
 contains stylesheets <br />
