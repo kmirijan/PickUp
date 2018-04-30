@@ -16,7 +16,7 @@ export class App extends React.Component {
         </h1>
 
       <section className="SubmissionHome">
-<CurrentGames games={this.props.games}/>
+<CurrentGames/>
         </section>
       </div>
     );

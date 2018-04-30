@@ -1,14 +1,14 @@
 import React from 'react';
 import './css/App.css';
 
-export let games=[];
+import axios from 'axios';
 
 export class CurrentGames extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
       search: '',
-      games: props.games
+      games: []
     };
   }
 
@@ -23,8 +23,9 @@ addGame(event) {
   let location = this.refs.location.value;
   let id = Math.floor((Math.random()*100)+1);
   this.setState({
-    games: this.state.games.concat({id, sport, name, location})
+    game: {id, sport, name, location}
   })
+  axios.post();
   this.refs.sport.value='';
   this.refs.name.value='';
   this.refs.location.value='';
