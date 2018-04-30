@@ -8,13 +8,23 @@ export class CurrentGames extends React.Component{
     super(props);
     this.state = {
       search: '',
-      games: []
+      games: [],
+      game: {},
     };
+    this.updateTable = this.updateTable.bind(this);
+    this.addGame = this.addGame.bind(this);
   }
 
 updateSearch(event){
   this.setState({search: event.target.value});
+  this.updateTable();
 }
+  
+ componentWillMount()
+ {
+   this.updateTable();
+ }
+
 
 addGame(event) {
   event.preventDefault();
@@ -22,14 +32,20 @@ addGame(event) {
   let name = this.refs.name.value;
   let location = this.refs.location.value;
   let id = Math.floor((Math.random()*100)+1);
-  this.setState({
-    game: {id, sport, name, location}
-  })
-  axios.post();
+  let user = 100; // TODO change this when users are implemented
+  let game = {gameId: id, sport: sport, name: name, location: location, user: user};
+  console.log(game);
+  axios.post('/games', game);
+  this.updateTable();
   this.refs.sport.value='';
   this.refs.name.value='';
   this.refs.location.value='';
-}
+  }
+  
+  updateTable()
+  {
+    axios.get('/games').then((results)=>{this.setState({games: results.data})});
+  }
 
   render(){
     let filteredGames = this.state.games.filter(

@@ -4,6 +4,7 @@ const bodyParser=require("body-parser");
 const data=require("./src/components/data.js");
 var mime = require('mime-types');
 
+const makeValid = (obj) => {return obj != null ? obj : "";};
 
 var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
@@ -11,9 +12,9 @@ const app=express();
 /*configurations*/
 app.use(express.static("./dist"));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
+/*app.use(bodyParser.urlencoded({
   extended: true
-}));
+}));*/
 
 app.get("/",(req,res)=>{
     res.sendFile(__dirname+"/dist/main.html");
@@ -23,25 +24,30 @@ app.post("/search",(req,res)=>{
 });
 
 
-app.post("/games", (req, res)
+app.post("/games", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
+  
+  console.log(req.body);
+
   var game = {
-    activity: req.body.game.sport,
-    name: req.body.game.name,
-    loc: req.body.game.location,
-    id: req.body.game.id
+    sport: makeValid(req.body.sport),
+    name: makeValid(req.body.name),
+    location: makeValid(req.body.location),
+    id: makeValid(req.body.gameId),
+    owner: makeValid(req.body.user),
+    players: [makeValid(req.body.user),],
   };
   
   mongo.connect(mongoUrl, (err, db) => {
     if (err) throw err;
 
-    db.collection("games").insertOne(game,() => {db.close()});
+    db.db("pickup").collection("games").insertOne(game,() => {db.close()});
   
   });
 });
 
-app.get("/games", (req, res)
+app.get("/games", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Games sending");
 
@@ -49,7 +55,7 @@ app.get("/games", (req, res)
 
   mongo.connect(mongoUrl, (err, db) => {
     if (err) throw err;
-    db.collection("games").find().toArray((err, result) => {
+    db.db("pickup").collection("games").find({}).toArray((err, result) => {
       if (err) throw err;
       res.json(result);
       res.end();
