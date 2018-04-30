@@ -33,7 +33,10 @@ class Profile extends React.Component{
 	}
 	componentDidMount(){
 		var usrnm=this.props.username;
-		usrnm=usrnm.substring(1,usrnm.length)
+		while(!(/[a-z]/i.test(usrnm[0]))){
+			usrnm=usrnm.substring(1,usrnm.length);
+		}
+		console.log(usrnm)
 		axios.post("/user",{
 			params:{
 				name:usrnm

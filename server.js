@@ -23,6 +23,9 @@ app.post("/search",(req,res)=>{
 app.post("/user",(req,res)=>{
 	mkprofile.getUsers(req.body.params.name,res);
 });
+app.post("/saveprofile",(req,res)=>{
+	mkprofile.saveProfile(req.body,res);
+});
 
 
 

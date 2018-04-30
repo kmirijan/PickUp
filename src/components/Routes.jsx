@@ -2,6 +2,8 @@ var React=require("react");
 var ReactDOM=require("react-dom");
 var {Top,Rest}=require("./Main.jsx");
 var {Profile,Feed}=require("./Profiles.jsx");
+var {ProfileP,FeedP}=require("./ProfilesP.jsx");
+var {ProfileEdit}=require("./ProfilesEdit.jsx");
 var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 
 
@@ -11,9 +13,9 @@ class Routes extends React.Component{
             <BrowserRouter>
                 <Switch>
                     <Route exact path='/' component={Home} />
-                    <Route path='/user:username' component={User}/> 	
-                    <Route component={_404} />
-                    
+                    <Route path='/user:username' component={User}/>
+                    <Route path="/edit:username" component={Edit}/>
+                    <Route component={_404} />            
                 </Switch>
             </BrowserRouter>
         )
@@ -38,12 +40,27 @@ class User extends React.Component{
 		return(
 			<div>
 			<Top />
-			<Profile username={this.props.match.params.username}/>
-			<Feed />
+			<ProfileP 
+				username={this.props.match.params.username}
+				history={this.props.history}
+			/>
+			<FeedP />
 		</div>
 	)};
-}
-	
+};
+class Edit extends React.Component{
+	render(){
+		return(
+			<div>
+				<Top />
+				<ProfileEdit 
+					username={this.props.match.params.username}
+					history={this.props.history}
+				/>
+			</div>
+		)
+	}
+}	
 const _404=()=>(
 	<h1>404</h1>
 );
