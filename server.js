@@ -27,6 +27,54 @@ app.post("/saveprofile",(req,res)=>{
 	mkprofile.saveProfile(req.body,res);
 });
 
+/*----------------------------------------------------------------------------------------*/
+const makeValid = (obj) => {return obj != null ? obj : "";};
+var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
+
+app.post("/postgames", (req, res) =>
+{
+  console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
+  
+  console.log(req.body);
+
+  var game = {
+    sport: makeValid(req.body.sport),
+    name: makeValid(req.body.name),
+    location: makeValid(req.body.location),
+    id: makeValid(req.body.gameId),
+    owner: makeValid(req.body.user),
+    players: [makeValid(req.body.user),],
+  };
+  
+  mongo.connect(mongoUrl, (err, db) => {
+    if (err) throw err;
+
+    db.db("pickup").collection("games").insertOne(game,() => {db.close()});
+  
+  });
+});
+
+app.post("/games", (req, res) =>
+{
+  console.log('[', (new Date()).toLocaleTimeString(), "] Games sending");
+
+  var search = req.body.filter;
+
+  mongo.connect(mongoUrl, (err, db) => {
+    if (err) throw err;
+    db.db("pickup").collection("games").find({}).toArray((err, result) => {
+      if (err) throw err;
+      res.json(result);
+      res.end();
+      db.close();
+
+
+    });
+
+  
+  });
+
+});
 
 
 /*deploy app*/

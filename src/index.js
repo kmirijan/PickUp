@@ -3,7 +3,7 @@ var ReactDOM=require("react-dom");
 
 var {Top,Rest}=require("./components/Main.jsx");
 var {Routes}=require("./components/Routes.jsx");
-const title = 'My Minimal React Webpack Babel Setup';
+import NavBar from './components/NavBar';
 
 
 
