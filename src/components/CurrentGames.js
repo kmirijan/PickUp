@@ -1,20 +1,30 @@
 import React from 'react';
 import '../css/App.css';
 
-export let games=[];
+import axios from 'axios';
 
 export class CurrentGames extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
       search: '',
-      games: props.games
+      games: [],
+      game: {},
     };
+    this.updateTable = this.updateTable.bind(this);
+    this.addGame = this.addGame.bind(this);
   }
 
 updateSearch(event){
   this.setState({search: event.target.value});
+  this.updateTable();
 }
+
+ componentWillMount()
+ {
+   this.updateTable();
+ }
+
 
 addGame(event) {
   event.preventDefault();
@@ -22,13 +32,20 @@ addGame(event) {
   let name = this.refs.name.value;
   let location = this.refs.location.value;
   let id = Math.floor((Math.random()*100)+1);
-  this.setState({
-    games: this.state.games.concat({id, sport, name, location})
-  })
+  let user = 100; // TODO change this when users are implemented
+  let game = {gameId: id, sport: sport, name: name, location: location, user: user};
+  console.log(game);
+  axios.post('/games', game);
+  this.updateTable();
   this.refs.sport.value='';
   this.refs.name.value='';
   this.refs.location.value='';
-}
+  }
+
+  updateTable()
+  {
+    axios.get('/games').then((results)=>{this.setState({games: results.data})});
+  }
 
 componentDidMount(){
     new google.maps.places.Autocomplete(document.getElementById('location'));
