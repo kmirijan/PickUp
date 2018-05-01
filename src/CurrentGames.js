@@ -88,11 +88,17 @@ addGame(event) {
           <h1 className="App-currentGames">
             Below are the currently available games:
           </h1>
-      <ul>
+      <table>
+        <tr>
+	  <th><h3>Activity</h3></th>
+	  <th><h3>Name</h3></th>
+	  <th><h3>Location</h3></th>
+	  <th><h3>Join</h3></th>
+	</tr>
           {filteredGames.map((game)=>{
             return <Game game = {game} user={this.props.user} key={game.id}/>
           })}
-      </ul>
+      </table>
     </div>
     );
   }
@@ -113,14 +119,12 @@ class Game extends React.Component{
   
   render(){
     return(
-      <div>
-      <li>
-      <h3 className= "Activity"> Activity: {this.props.game.sport} </h3>
-      <h3 className= "Name"> Name: {this.props.game.name} </h3>
-      <h3 className= "Location"> Location: {this.props.game.location} </h3>
-      <button onClick={this.joinGame}>Join</button>
-          </li>
-        </div>
+      <tr>
+      <td ><h3>{this.props.game.sport} </h3></td>
+      <td ><h3>{this.props.game.name} </h3></td>
+      <td > <h3>{this.props.game.location}</h3> </td>
+      <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
+      </tr>
     );
   }
 }
