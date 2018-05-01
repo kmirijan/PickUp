@@ -88,7 +88,6 @@ addGame(event) {
             <div className="App-submitButton">
               <input type="submit" value="Submit"/>
             </div>
-
           </form>
 
         <input className = "searchBox" type="text" placeholder="Search"
