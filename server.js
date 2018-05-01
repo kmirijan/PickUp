@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({
 
 /*sends index.html to any link*/
 app.get("*",(req,res)=>{
-    res.sendFile(__dirname+"/dist/index.html");
+  res.sendFile(__dirname+"/dist/index.html");
 });
 app.post("/search",(req,res)=>{
 	data.valEL(res,req.body["event"],req.body["location"]);
@@ -76,10 +76,25 @@ app.post("/games", (req, res) =>
       res.json(result);
       res.end();
       db.close();
-
-
     });
 
+  });
+});
+
+app.post("/join", (req, res) =>
+{
+  console.log('[', (new Date()).toLocaleTimeString(), "] Game joined");
+
+  mongo.connect(mongoUrl, (err, client) =>
+  {
+    var collection = client.db("pickup").collection("games");
+    var query = {id : req.body.gid};
+    var newPlayer = { $push: {players: req.body.uid} };
+    collection.update(query, newPlayer, (err) =>
+    {
+      if (err) throw err;
+      client.close();
+    });
   
   });
 

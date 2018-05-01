@@ -102,15 +102,26 @@ addGame(event) {
 }
 
 class Game extends React.Component{
+  
+  constructor(props)
+  {
+    super(props);
+    this.joinGame = this.joinGame.bind(this);
+  }
+
+  joinGame()
+  {
+    axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
+  }
+  
   render(){
     return(
-      <div>
-      <li>
-      <h3 className= "Activity"> Activity: {this.props.game.sport} </h3>
-      <h3 className= "Name"> Name: {this.props.game.name} </h3>
-      <h3 className= "Location"> Location: {this.props.game.location} </h3>
-          </li>
-        </div>
+      <tr>
+      <td ><h3>{this.props.game.sport} </h3></td>
+      <td ><h3>{this.props.game.name} </h3></td>
+      <td > <h3>{this.props.game.location}</h3> </td>
+      <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
+      </tr>
     );
   }
 }
