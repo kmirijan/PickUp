@@ -16,14 +16,39 @@
   },
   "author": "",
   "license": "ISC",
+  "babel": {
+    "presets": [
+      "env",
+      "react",
+      "stage-2"
+    ]
+  },
   "bugs": {
     "url": "https://github.com/kmirijan/PickUp/issues"
   },
   "homepage": "https://github.com/kmirijan/PickUp#readme",
   "dependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.26.0",
     "body-parser": "^1.18.2",
+    "create-react-class": "^15.6.3",
     "express": "^4.16.3",
     "mongodb": "^3.0.7",
-    "mongoose": "^5.0.15"
+    "mongoose": "^5.0.15",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.2.0"
+  },
+  "devDependencies": {
+    "style-loader": "^0.21.0",
+    "react-hot-loader": "^4.1.1",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.15"
   }
 }

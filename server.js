@@ -1,15 +1,17 @@
 const express = require('express');
 var bodyParser = require('body-parser');
-
 var {mongoose} = require('./db/mongoose');
 var {GameInfo} = require('./db/gameInfo');
 
+
 const port = process.env.PORT || 3000;
+
 var app = express();
 
 app.use(bodyParser.json());
+app.use(express.static('public'));
 
-app.post('/', (req, res) => {
+app.post('/api', (req, res) => {
 	var gI = new GameInfo({
 		game: req.body.game,
 		location: req.body.location
@@ -22,13 +24,17 @@ app.post('/', (req, res) => {
 	});
 });
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
 	GameInfo.find().then((gIs) => {
 		res.send({gIs});
 	}, (e) => {
 		res.staus(400).send();
 	});
 
+});
+
+app.get('/', (req, res) => {
+	res.sendFile(__dirname+"/public/main.html");
 });
 
 app.listen(port, () => {
