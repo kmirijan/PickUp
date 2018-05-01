@@ -31,10 +31,16 @@ signIn(){
         /*https://www.robinwieruch.de/local-storage-react/*/
         localStorage.setItem("loggedin",true);
         localStorage.setItem("user",res.data["user"]);
+        this.props.history.push("/");
       }
       else
       {
-        console.log("signed in failed");
+        console.log("sign in failed");
+        this.setState({
+          error:{
+            message:"sign in failed"
+          }
+        })
       }
       this.props.history.push("/");
     });

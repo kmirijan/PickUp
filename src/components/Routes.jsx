@@ -21,7 +21,7 @@ class Routes extends React.Component{
                     <Route exact path='/map' component={Map} />
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
-                    <Route path="/games" component={CurrentGames}/>
+                    <Route path="/app" component={App}/>
                     <Route path="/signin" component={SignIn}/>
 					<Route path="/signup" component={SignUp}/>
                     <Route component={_404} />            
@@ -30,13 +30,11 @@ class Routes extends React.Component{
         )
     }
 }
-/*
-<Route path="/:id" render={({match}) => 
-<RunningProject getProjectById={this.getProject} match={match} />} />
-*/
+
 
 const Map=()=>(
 	<div>
+		<NavBar />
 		<Rest />
 	</div>
 );
@@ -55,6 +53,7 @@ class User extends React.Component{
 			console.log("hello world");
 			return(
 				<div>
+				<NavBar />
 				<ProfileP 
 					username={usrnm}
 					history={this.props.history}
@@ -65,6 +64,7 @@ class User extends React.Component{
 		else{
 			return(
 				<div>
+				<NavBar />
 				<Profile
 					username={usrnm}
 					history={this.props.history}
@@ -84,6 +84,7 @@ class Edit extends React.Component{
 		{
 			return(
 				<div>
+					<NavBar />
 					<ProfileEdit 
 						username={usrnm}
 						history={this.props.history}

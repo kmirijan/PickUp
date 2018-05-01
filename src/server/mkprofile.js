@@ -41,6 +41,7 @@ exports.saveProfile=(data,res)=>{
 	});
 }
 
+/*http://codetheory.in/using-the-node-js-bcrypt-module-to-hash-and-safely-store-passwords/*/
 exports.signUp=(data,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
