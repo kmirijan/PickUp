@@ -25,6 +25,9 @@ updateSearch(event){
    this.updateTable();
  }
 
+componentDidMount(){
+  new google.maps.places.Autocomplete(document.getElementById('location'));
+}
 
 addGame(event) {
   event.preventDefault();

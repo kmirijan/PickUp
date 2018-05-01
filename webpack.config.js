@@ -2,6 +2,7 @@
 /*https://github.com/alanbsmith/react-node-example*/
 const webpack = require('webpack');
 module.exports = {
+  mode:'none',
   entry: [
     './src/index.js'
   ],
