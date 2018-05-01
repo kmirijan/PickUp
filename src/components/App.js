@@ -24,4 +24,8 @@ class App extends React.Component {
   }
 }
 
+<<<<<<< HEAD
 export default App;
+=======
+export default App;
+>>>>>>> rogelio

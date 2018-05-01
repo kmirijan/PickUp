@@ -2,6 +2,8 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import '../css/App.css';
 import NavBar from './NavBar';
+var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
+var axios=require("axios");
 
 class SignIn extends React.Component{
   constructor(props){
@@ -18,6 +20,32 @@ class SignIn extends React.Component{
 signIn(){
   console.log('this.state', this.state);
   const{email, password}=this.state;
+   axios({
+      url:"/signin",
+      method:"post",
+      data:{
+        "email":email,
+        "password":password
+      }
+    }).then((res)=>{
+      if(res.data["success"]==true){
+        /*https://www.robinwieruch.de/local-storage-react/*/
+        localStorage.setItem("loggedin",true);
+        localStorage.setItem("user",res.data["user"]);
+        this.props.history.push("/user="+res.data["user"]);
+      }
+      else
+      {
+        console.log("sign in failed");
+        this.setState({
+          error:{
+            message:"sign in failed"
+          }
+        })
+        this.props.history.push("/signin");
+      }
+
+    });
 }
 
   render(){

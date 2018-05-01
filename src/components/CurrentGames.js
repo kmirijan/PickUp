@@ -35,7 +35,7 @@ addGame(event) {
   let user = 100; // TODO change this when users are implemented
   let game = {gameId: id, sport: sport, name: name, location: location, user: user};
   console.log(game);
-  axios.post('/games', game);
+  axios.post('/postgames', game);
   this.updateTable();
   this.refs.sport.value='';
   this.refs.name.value='';
@@ -44,14 +44,13 @@ addGame(event) {
 
   updateTable()
   {
-    axios.get('/games').then((results)=>{this.setState({games: results.data})});
+    axios.post('/games').then((results)=>{
+      this.setState({games: results.data})
+    });
   }
 
-componentDidMount(){
-    new google.maps.places.Autocomplete(document.getElementById('location'));
-}
-
   render(){
+    console.log(this.state.games);
     let filteredGames = this.state.games.filter(
       (game) => {
         return ((game.sport.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1)||
@@ -67,34 +66,26 @@ componentDidMount(){
          onSubmit={this.addGame.bind(this)}
        >
             <input
-              className="gameDetails"
               type="text"
               ref="sport"
               placeholder="Activity"/>
             <input
-              className="gameDetails"
               type="text"
               ref="name"
               placeholder="Name"/>
            <input
-             className="gameDetails"
              id= 'location'
               type="text"
               ref="location"
               placeholder="Location"/>
 
             <div className="App-submitButton">
-              <input
-                type="submit"
-                value="Submit"/>
+              <input type="submit" value="Submit"/>
             </div>
 
           </form>
 
-        <input
-          className="searchBox"
-          type="text"
-          placeholder="Search"
+        <input type="text" placeholder="Search"
           value={this.state.search}
           onChange={this.updateSearch.bind(this)}/>
           <h1 className="App-currentGames">
@@ -111,15 +102,26 @@ componentDidMount(){
 }
 
 class Game extends React.Component{
+
+  constructor(props)
+  {
+    super(props);
+    this.joinGame = this.joinGame.bind(this);
+  }
+
+  joinGame()
+  {
+    axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
+  }
+
   render(){
     return(
-      <div>
-      <li className="GamesList">
-      <h3 className= "Activity"> Activity: {this.props.game.sport} </h3>
-      <h3 className= "Name"> Name: {this.props.game.name} </h3>
-      <h3 className= "Location"> Location: {this.props.game.location} </h3>
-          </li>
-        </div>
+      <tr>
+      <td ><h3>{this.props.game.sport} </h3></td>
+      <td ><h3>{this.props.game.name} </h3></td>
+      <td > <h3>{this.props.game.location}</h3> </td>
+      <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
+      </tr>
     );
   }
 }

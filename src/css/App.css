@@ -7,6 +7,9 @@
   height: 150px;
 }
 
+<<<<<<< HEAD
+.App-header {
+=======
 body {margin:0;}
 
 .NavBar{
@@ -51,6 +54,7 @@ body {margin:0;}
 
 .App-header {
   margin-top: 45px;
+>>>>>>> rogelio
   padding: 20px;
   background-color: rgba(135,206,350,0.4);
   border-bottom: 1px solid black;
@@ -95,6 +99,9 @@ body {
   padding-bottom: 12px;
 }
 
+<<<<<<< HEAD
+input[type=text] {
+=======
 .gameDetails {
     width: 30%;
     padding: 20px;
@@ -104,6 +111,7 @@ body {
 }
 
 .searchBox {
+>>>>>>> rogelio
     width: 30%;
     padding: 20px;
     border: 1px solid #ccc;
@@ -125,9 +133,42 @@ input[type=submit]:hover {
     background-color: #45a049;
 }
 
+<<<<<<< HEAD
+li {
+=======
 .GamesList{
   position: center;
+>>>>>>> rogelio
   list-style: none;
   font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
   border-bottom: 1px solid #ccc;
 }
+<<<<<<< HEAD
+
+
+/* templates based on w3schools tutorial */
+table {
+  border-collapse:collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.joinGame {
+  right: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.joinGame:hover {
+    background-color: #45a049;
+}
+=======
+>>>>>>> rogelio

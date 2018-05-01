@@ -1,12 +1,10 @@
-const webpack = require('webpack');
 
+/*https://github.com/alanbsmith/react-node-example*/
+const webpack = require('webpack');
 module.exports = {
-  mode: "none",
-  entry: './src/index.js',
-  output: {
-    path: __dirname + '/public',
-    filename: 'bundle.js',
-  },
+  entry: [
+    './src/index.js'
+  ],
   module: {
     rules: [
       {
@@ -23,8 +21,17 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx']
   },
+  output: {
+    path: __dirname + '/dist',
+    publicPath: '/',
+    filename: 'bundle.js'
+  },
   devServer: {
-    historyApiFallback: true,
-    contentBase: './dist'
-  }
+    contentBase: './dist',
+    historyApiFallback: true
+  },
+  plugins:[
+    new webpack.HotModuleReplacementPlugin()
+  ]
+
 };
