@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
     "cheerio": "^1.0.0-rc.2",
     "css-loader": "^0.28.11",

@@ -26,6 +26,12 @@ app.post("/user",(req,res)=>{
 app.post("/saveprofile",(req,res)=>{
 	mkprofile.saveProfile(req.body,res);
 });
+app.post("/signup",(req,res)=>{
+	mkprofile.signUp(req.body,res);
+});
+app.post("/signin",(req,res)=>{
+	mkprofile.signIn(req.body,res);
+})
 
 /*----------------------------------------------------------------------------------------*/
 const makeValid = (obj) => {return obj != null ? obj : "";};

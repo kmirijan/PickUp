@@ -45,26 +45,54 @@ class User extends React.Component{
 		super(props);
 	}
 	render(){
-		return(
-			<div>
-			<ProfileP 
-				username={this.props.match.params.username}
-				history={this.props.history}
-			/>
-			<FeedP />
-		</div>
-	)};
+		var usrnm=this.props.match.params.username;
+		while(!(/[a-z]/i.test(usrnm[0]))){
+			usrnm=usrnm.substring(1,usrnm.length);
+		}
+		
+		if(localStorage.getItem("loggedin")&&(localStorage.getItem("user")==usrnm))
+		{
+			console.log("hello world");
+			return(
+				<div>
+				<ProfileP 
+					username={usrnm}
+					history={this.props.history}
+				/>
+				<FeedP />
+				</div>
+		)}
+		else{
+			return(
+				<div>
+				<Profile
+					username={usrnm}
+					history={this.props.history}
+				/>
+				<Feed />
+				</div>
+		)}
+	};
 };
 class Edit extends React.Component{
 	render(){
-		return(
-			<div>
-				<ProfileEdit 
-					username={this.props.match.params.username}
-					history={this.props.history}
-				/>
-			</div>
-		)
+		var usrnm=this.props.match.params.username;
+		while(!(/[a-z]/i.test(usrnm[0]))){
+			usrnm=usrnm.substring(1,usrnm.length);
+		}
+		if(localStorage.getItem("loggedin")&&(localStorage.getItem("user")==usrnm))
+		{
+			return(
+				<div>
+					<ProfileEdit 
+						username={usrnm}
+						history={this.props.history}
+					/>
+				</div>
+			)}
+		else{
+			return(<_404/>)
+		}
 	}
 }
 	

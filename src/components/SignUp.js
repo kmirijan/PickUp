@@ -2,6 +2,8 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import '../css/App.css';
 import NavBar from './NavBar';
+var axios=require("axios");
+
 
 class SignUp extends React.Component{
   constructor(props){
@@ -9,6 +11,7 @@ class SignUp extends React.Component{
     this.state={
       email:'',
       password:'',
+      username:'',
       error: {
         message: ''
       }
@@ -17,7 +20,24 @@ class SignUp extends React.Component{
 
 signUp(){
   console.log('this.state', this.state);
-  const{email, password}=this.state;
+  const{email, password, username}=this.state;
+  /*http://codetheory.in/using-the-node-js-bcrypt-module-to-hash-and-safely-store-passwords/*/
+  axios({
+      url:"/signup",
+      method:"post",
+      data:{
+        "username":username,
+        "email":email,
+        "password":password,
+        "alias": username,
+        "bio":"",
+        "pic":"",
+        "games":[]
+      }
+    }).then(()=>{
+      console.log("signed up");
+      this.props.history.push("/");
+    });
 }
 
   render(){
@@ -40,6 +60,13 @@ signUp(){
         style={{marginRight:'5px'}}
         placeholder="password"
         onChange={event => this.setState({password: event.target.value})}
+        />
+        <input
+        className="form-control"
+        type="text"
+        style={{marginRight:'5px'}}
+        placeholder="username"
+        onChange={event => this.setState({username: event.target.value})}
         />
         <button
         className="btn btn-primary"
