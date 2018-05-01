@@ -20,7 +20,6 @@ class SignUp extends React.Component{
   }
 
 signUp(){
-  console.log('this.state', this.state);
   const{email, password, username}=this.state;
   /*http://codetheory.in/using-the-node-js-bcrypt-module-to-hash-and-safely-store-passwords/*/
   axios({
@@ -36,12 +35,14 @@ signUp(){
         "games":[]
       }
     }).then((res)=>{
-      if(res==true){
+      if(res.data==true){
         console.log("signed up");
-        this.props.history.push("/");
+        localStorage.setItem("loggedin",true);
+        localStorage.setItem("user",this.state.username);
+        this.props.history.push("/user="+this.state.username);
       }
       else{
-        console.log(res.data);
+        this.props.history.push("/signup");
       }
     });
 }

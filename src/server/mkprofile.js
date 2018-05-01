@@ -53,7 +53,7 @@ exports.signUp=(data,res)=>{
 		
 		db.collection("users").insertOne(data)
 		.then(()=>{
-			res.json();
+			res.json(true);
 			client.close();
 		});
 	});

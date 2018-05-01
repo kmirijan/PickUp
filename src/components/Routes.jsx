@@ -26,6 +26,7 @@ class Routes extends React.Component{
                     <Route path="/app" component={App}/>
                     <Route path="/signin" component={SignIn}/>
 					<Route path="/signup" component={SignUp}/>
+					<Route path="/logout" component={LogOut}/>
                     <Route component={_404} />            
                 </Switch>
             </BrowserRouter>
@@ -50,7 +51,7 @@ class User extends React.Component{
 			usrnm=usrnm.substring(1,usrnm.length);
 		}
 		
-		if(localStorage.getItem("loggedin")&&(localStorage.getItem("user")==usrnm))
+		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
 		{
 			console.log("hello world");
 			return(
@@ -82,7 +83,7 @@ class Edit extends React.Component{
 		while(!(/[a-z]/i.test(usrnm[0]))){
 			usrnm=usrnm.substring(1,usrnm.length);
 		}
-		if(localStorage.getItem("loggedin")&&(localStorage.getItem("user")==usrnm))
+		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
 		{
 			return(
 				<div>
@@ -98,7 +99,17 @@ class Edit extends React.Component{
 		}
 	}
 }
-	
+class LogOut extends React.Component{
+	componentDidMount(){
+		localStorage.setItem("loggedin",false);
+        localStorage.setItem("user","");
+        this.props.history.push("/signin");
+        window.location.reload();
+	}
+	render(){
+        return(<_404 />);
+	}
+}
 const _404=()=>(
 	<h1>404</h1>
 );
