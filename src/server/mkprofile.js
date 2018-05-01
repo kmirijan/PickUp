@@ -80,6 +80,19 @@ exports.signIn=(data,res)=>{
 	});
 }
 
+exports.getAllUsers=(res)=>{
+	var tf=mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
 
-
+		var db=client.db("data");
+		db.collection("users").find({}).toArray()
+		.then((arr)=>{
+			var usernames=[];
+			for(i=0; i<arr.length; i++){
+				usernames[i]=arr[i]["username"];
+			}
+			res.json(usernames);
+		})
+	})
+}
 

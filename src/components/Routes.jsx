@@ -5,6 +5,7 @@ var {Profile,Feed}=require("./Profiles.jsx");
 var {ProfileP,FeedP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
 var {CurrentGames}=require("./CurrentGames.js");
+var {Users}=require("../helpers/Users.jsx");
 import NavBar from './NavBar';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
@@ -19,6 +20,7 @@ class Routes extends React.Component{
                 <Switch>
                 	<Route exact path="/" component={NavBar} />
                     <Route exact path='/map' component={Map} />
+                    <Route path="/users" component={Users} />
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
                     <Route path="/app" component={App}/>

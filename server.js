@@ -31,7 +31,10 @@ app.post("/signup",(req,res)=>{
 });
 app.post("/signin",(req,res)=>{
 	mkprofile.signIn(req.body,res);
-})
+});
+app.post("/getallusers",(req,res)=>{
+  mkprofile.getAllUsers(res);
+});
 
 /*----------------------------------------------------------------------------------------*/
 const makeValid = (obj) => {return obj != null ? obj : "";};

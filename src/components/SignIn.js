@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import '../css/App.css';
 import NavBar from './NavBar';
+var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 var axios=require("axios");
 
 class SignIn extends React.Component{
@@ -31,7 +32,7 @@ signIn(){
         /*https://www.robinwieruch.de/local-storage-react/*/
         localStorage.setItem("loggedin",true);
         localStorage.setItem("user",res.data["user"]);
-        this.props.history.push("/");
+        this.props.history.push("/user="+res.data["user"]);
       }
       else
       {
@@ -41,8 +42,9 @@ signIn(){
             message:"sign in failed"
           }
         })
+        this.props.history.push("/signin");
       }
-      this.props.history.push("/");
+      
     });
 }
 

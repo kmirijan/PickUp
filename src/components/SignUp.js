@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import '../css/App.css';
 import NavBar from './NavBar';
+var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 var axios=require("axios");
 
 
@@ -34,9 +35,14 @@ signUp(){
         "pic":"",
         "games":[]
       }
-    }).then(()=>{
-      console.log("signed up");
-      this.props.history.push("/");
+    }).then((res)=>{
+      if(res==true){
+        console.log("signed up");
+        this.props.history.push("/");
+      }
+      else{
+        console.log(res.data);
+      }
     });
 }
 
