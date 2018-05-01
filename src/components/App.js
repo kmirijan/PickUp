@@ -7,11 +7,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-<NavBar/>
-      <header className="App-header">
-        <img src="/logo.png" className="App-logo" alt="logo" />
-        <h1 className="App-title">The Hub for Connecting Players</h1>
-      </header>
+          <NavBar/>
         <h1 className="App-newGame">
           To setup a pickup game please enter the required information below
         </h1>

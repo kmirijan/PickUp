@@ -69,14 +69,17 @@ addGame(event) {
          onSubmit={this.addGame.bind(this)}
        >
             <input
+              className='gameDetails'
               type="text"
               ref="sport"
               placeholder="Activity"/>
             <input
+              className='gameDetails'
               type="text"
               ref="name"
               placeholder="Name"/>
            <input
+             className='gameDetails'
              id= 'location'
               type="text"
               ref="location"
@@ -88,7 +91,7 @@ addGame(event) {
 
           </form>
 
-        <input type="text" placeholder="Search"
+        <input className = "searchBox" type="text" placeholder="Search"
           value={this.state.search}
           onChange={this.updateSearch.bind(this)}/>
           <h1 className="App-currentGames">

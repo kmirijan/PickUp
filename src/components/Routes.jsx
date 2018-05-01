@@ -1,6 +1,5 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
-var {Top,Rest}=require("./Main.jsx");
 var {Profile,Feed}=require("./Profiles.jsx");
 var {ProfileP,FeedP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
@@ -10,6 +9,7 @@ import NavBar from './NavBar';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
 import App from "./App";
+import Home from "./Home";
 var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 
 
@@ -19,14 +19,15 @@ class Routes extends React.Component{
             <BrowserRouter>
                 <Switch>
                 	<Route exact path="/" component={NavBar} />
+                    <Route exact path="/home" component={Home} />
                     <Route exact path='/map' component={Map} />
                     <Route path="/users" component={Users} />
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
                     <Route path="/app" component={App}/>
                     <Route path="/signin" component={SignIn}/>
-					<Route path="/signup" component={SignUp}/>
-                    <Route component={_404} />            
+					          <Route path="/signup" component={SignUp}/>
+                    <Route component={_404} />
                 </Switch>
             </BrowserRouter>
         )
@@ -37,7 +38,6 @@ class Routes extends React.Component{
 const Map=()=>(
 	<div>
 		<NavBar />
-		<Rest />
 	</div>
 );
 class User extends React.Component{
@@ -49,14 +49,14 @@ class User extends React.Component{
 		while(!(/[a-z]/i.test(usrnm[0]))){
 			usrnm=usrnm.substring(1,usrnm.length);
 		}
-		
+
 		if(localStorage.getItem("loggedin")&&(localStorage.getItem("user")==usrnm))
 		{
 			console.log("hello world");
 			return(
 				<div>
 				<NavBar />
-				<ProfileP 
+				<ProfileP
 					username={usrnm}
 					history={this.props.history}
 				/>
@@ -87,7 +87,7 @@ class Edit extends React.Component{
 			return(
 				<div>
 					<NavBar />
-					<ProfileEdit 
+					<ProfileEdit
 						username={usrnm}
 						history={this.props.history}
 					/>
@@ -98,7 +98,7 @@ class Edit extends React.Component{
 		}
 	}
 }
-	
+
 const _404=()=>(
 	<h1>404</h1>
 );
@@ -106,4 +106,3 @@ const _404=()=>(
 module.exports={
 	Routes
 }
-

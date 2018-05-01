@@ -14,8 +14,11 @@ class NavBar extends React.Component {
        <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/signup'}>Sign Up</NavLink></li>
        <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/users'}>Users</NavLink></li>
        <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/map'}>Map</NavLink></li>
-
       </ul>
+      <header className="App-header">
+        <img src="/logo.png" className="App-logo" alt="logo" />
+        <h1 className="App-title">The Hub for Connecting Players</h1>
+      </header>
       </div>
     );
   }

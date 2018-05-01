@@ -2,14 +2,12 @@
   text-align: center;
 }
 
-body {
-    background-image: url('/Sports.png');
-}
-
 .App-logo {
   float: left;
   height: 150px;
 }
+
+body {margin:0;}
 
 .NavBar{
    list-style-type: none;
@@ -45,10 +43,6 @@ body {
   padding: 14px 16px;
   text-decoration: none;
   background-color: orange;
-}
-
-.form-inline{
-  padding-top: 45px;
 }
 
 .App-header {
@@ -127,15 +121,12 @@ input[type=submit]:hover {
     background-color: #45a049;
 }
 
-
 .GamesList{
   position: center;
   list-style: none;
   font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
   border-bottom: 1px solid #ccc;
 }
-
-
 /* templates based on w3schools tutorial */
 table {
   border-collapse:collapse;
