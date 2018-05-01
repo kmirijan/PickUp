@@ -42,11 +42,39 @@ exports.saveProfile=(data,res)=>{
 }
 
 /*http://codetheory.in/using-the-node-js-bcrypt-module-to-hash-and-safely-store-passwords/*/
-exports.signUp=(data,res)=>{
-	var tf=mongo.connect(url,(err,client)=>{
+exports.signUp=async (data,res)=>{
+	var tf= mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
 
 		var db=client.db("pickup");
+
+		db.collection("users").count({"email":data["email"]})
+		.then((count)=>{
+			if(count>0){
+				res.json("email is already in use");
+			}
+			else
+			{
+				db.collection("users").count({"username":data["username"]})
+				.then((count)=>{
+					if(count>0){
+						res.json("username is already in use")
+					}
+					else{
+						var salt=bcrypt.genSaltSync(10);
+						var hash=bcrypt.hashSync(data["password"],salt);
+						data["password"]=hash;
+						
+						db.collection("users").insertOne(data)
+						.then(()=>{
+							res.json(true);
+							client.close();
+						});
+					}
+				})
+			}
+		})
+		/*
 		var salt=bcrypt.genSaltSync(10);
 		var hash=bcrypt.hashSync(data["password"],salt);
 		data["password"]=hash;
@@ -56,6 +84,7 @@ exports.signUp=(data,res)=>{
 			res.json(true);
 			client.close();
 		});
+		*/
 	});
 }
 

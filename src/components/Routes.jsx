@@ -115,6 +115,7 @@ const _404=()=>(
 );
 
 module.exports={
-	Routes
+	Routes,
+	_404
 }
 

@@ -1,7 +1,7 @@
 To do:
 ---
-1. -signup redirect-, confirmation display + username check, etc.
-2. stop displaying signup/signin after logging in.
+1. ++signup redirect, confirmation display ++ username check, etc.
+2. ++stop displaying signup/signin after logging in.
 3. friend requests
 4. combine stuff
 

@@ -22,29 +22,50 @@ class SignUp extends React.Component{
 signUp(){
   const{email, password, username}=this.state;
   /*http://codetheory.in/using-the-node-js-bcrypt-module-to-hash-and-safely-store-passwords/*/
-  axios({
-      url:"/signup",
-      method:"post",
-      data:{
-        "username":username,
-        "email":email,
-        "password":password,
-        "alias": username,
-        "bio":"",
-        "pic":"",
-        "games":[]
+  if(email.match(/.*@.*/)==null){
+    this.setState({
+      error:{
+        message:"invalid email"
       }
-    }).then((res)=>{
-      if(res.data==true){
-        console.log("signed up");
-        localStorage.setItem("loggedin",true);
-        localStorage.setItem("user",this.state.username);
-        this.props.history.push("/user="+this.state.username);
+    })
+  }
+  else if(password.length<8){
+    this.setState({
+      error:{
+        message:"password must be at least 8 characters long"
       }
-      else{
-        this.props.history.push("/signup");
-      }
-    });
+    })
+  }
+  else{
+    axios({
+        url:"/signup",
+        method:"post",
+        data:{
+          "username":username,
+          "email":email,
+          "password":password,
+          "alias": username,
+          "bio":"",
+          "pic":"",
+          "games":[]
+        }
+      }).then((res)=>{
+        if(res.data==true){
+          console.log("signed up");
+          localStorage.setItem("loggedin",true);
+          localStorage.setItem("user",this.state.username);
+          this.props.history.push("/user="+this.state.username);
+        }
+        else{
+          this.setState({
+            error:{
+              message:res.data
+            }
+          })
+        }
+      });
+      
+  }
 }
 
   render(){
