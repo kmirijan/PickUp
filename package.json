@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --hot --inline",
-    "start": "npm run build && NODE_ENV=production node server.js",
+    "start": "npm run build && NODE_ENV=production && node server.js",
     "compile": "babel public --out-dir dist",
     "server": "nodemon index.js",
     "build": "webpack --config webpack.config.js",
