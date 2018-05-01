@@ -19,7 +19,7 @@ updateSearch(event){
   this.setState({search: event.target.value});
   this.updateTable();
 }
-  
+
  componentWillMount()
  {
    this.updateTable();
@@ -41,7 +41,7 @@ addGame(event) {
   this.refs.name.value='';
   this.refs.location.value='';
   }
-  
+
   updateTable()
   {
     axios.post('/games').then((results)=>{
@@ -102,7 +102,7 @@ addGame(event) {
 }
 
 class Game extends React.Component{
-  
+
   constructor(props)
   {
     super(props);
@@ -113,7 +113,7 @@ class Game extends React.Component{
   {
     axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
   }
-  
+
   render(){
     return(
       <tr>

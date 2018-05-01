@@ -7,7 +7,54 @@
   height: 150px;
 }
 
+<<<<<<< HEAD
 .App-header {
+=======
+body {margin:0;}
+
+.NavBar{
+   list-style-type: none;
+   margin: 0;
+   padding: 0;
+   overflow: hidden;
+   background-color: #333;
+   position: fixed;
+   top: 0;
+   width: 100%;
+}
+
+.Nav {
+   float: right;
+}
+
+.Nav .pages {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: none;
+}
+
+.Nav .pages:hover:not(.active) {
+    background-color: #111;
+}
+
+.Nav .active {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: orange;
+}
+
+.form-inline{
+  padding-top: 45px;
+}
+
+.App-header {
+  margin-top: 45px;
+>>>>>>> rogelio
   padding: 20px;
   background-color: rgba(135,206,350,0.4);
   border-bottom: 1px solid black;
@@ -52,7 +99,19 @@ body {
   padding-bottom: 12px;
 }
 
+<<<<<<< HEAD
 input[type=text] {
+=======
+.gameDetails {
+    width: 30%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.searchBox {
+>>>>>>> rogelio
     width: 30%;
     padding: 20px;
     border: 1px solid #ccc;
@@ -74,11 +133,17 @@ input[type=submit]:hover {
     background-color: #45a049;
 }
 
+<<<<<<< HEAD
 li {
+=======
+.GamesList{
+  position: center;
+>>>>>>> rogelio
   list-style: none;
   font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
   border-bottom: 1px solid #ccc;
 }
+<<<<<<< HEAD
 
 
 /* templates based on w3schools tutorial */
@@ -105,3 +170,5 @@ td, th {
 .joinGame:hover {
     background-color: #45a049;
 }
+=======
+>>>>>>> rogelio
