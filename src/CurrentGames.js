@@ -90,7 +90,7 @@ addGame(event) {
           </h1>
       <ul>
           {filteredGames.map((game)=>{
-            return <Game game = {game} key={game.id}/>
+            return <Game game = {game} user={this.props.user} key={game.id}/>
           })}
       </ul>
     </div>
@@ -99,6 +99,18 @@ addGame(event) {
 }
 
 class Game extends React.Component{
+  
+  constructor(props)
+  {
+    super(props);
+    this.joinGame = this.joinGame.bind(this);
+  }
+
+  joinGame()
+  {
+    axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
+  }
+  
   render(){
     return(
       <div>
@@ -106,6 +118,7 @@ class Game extends React.Component{
       <h3 className= "Activity"> Activity: {this.props.game.sport} </h3>
       <h3 className= "Name"> Name: {this.props.game.name} </h3>
       <h3 className= "Location"> Location: {this.props.game.location} </h3>
+      <button onClick={this.joinGame}>Join</button>
           </li>
         </div>
     );

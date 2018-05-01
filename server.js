@@ -24,6 +24,25 @@ app.post("/search",(req,res)=>{
 });
 
 
+app.post("/join", (req, res) =>
+{
+  console.log('[', (new Date()).toLocaleTimeString(), "] Game joined");
+
+  mongo.connect(mongoUrl, (err, client) =>
+  {
+    var collection = client.db("pickup").collection("games");
+    var query = {id : req.body.gid};
+    var newPlayer = { $push: {players: req.body.uid} };
+    collection.update(query, newPlayer, (err) =>
+    {
+      if (err) throw err;
+      client.close();
+    });
+  
+  });
+
+});
+
 app.post("/games", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
