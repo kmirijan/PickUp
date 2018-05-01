@@ -14,7 +14,8 @@ app.use(express.static('public'));
 app.post('/api', (req, res) => {
 	var gI = new GameInfo({
 		game: req.body.game,
-		location: req.body.location
+		location: req.body.location,
+		user: req.body.user
 	});
 
 	gI.save().then((doc) => {

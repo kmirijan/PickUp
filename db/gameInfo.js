@@ -12,6 +12,12 @@ var GameInfo = mongoose.model('GameInfo', {
 		required: true,
 		minlength: 1,
 		trim: true
+	},
+	user: {
+		type: String,
+		required: true,
+		minlength: 1,
+		trim: true
 	}
 });
 

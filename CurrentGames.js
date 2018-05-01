@@ -1,4 +1,5 @@
 import React from 'react';
+import Axios from 'axios';
 import './css/App.css';
 
 export let games=[];
@@ -29,6 +30,14 @@ addGame(event) {
   this.refs.sport.value='';
   this.refs.name.value='';
   this.refs.location.value='';
+
+  Axios.post('/api', {
+    game: sport,
+    location: location,
+    user: name
+  }).then((res) =>{
+    console.log(res);
+  });
 }
 
   render(){

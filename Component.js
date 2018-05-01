@@ -39,7 +39,7 @@ export class Component extends React.Component{
 					<div>
 						<h1>Hello World!</h1>
 						<p>Isnt server side rendering remarkable?</p>
-						<form onSubmit = {this.handleSubmit}>
+						<form onSubmit = {this._handleClick}>
 							<input type="text" game = {this.state.game}/>
 						</form>
 					</div>
