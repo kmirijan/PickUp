@@ -21,14 +21,6 @@ h1{
 	height:200px;
 	background-color:gray;
 }
-#mask{
-	margin:auto;
-	width:200px;
-	height:200px;
-	position:relative;
-	top: -200px;
-	cursor: pointer;
-}
 #changeimg{
 	margin:auto;
 	width:200px;
@@ -82,5 +74,14 @@ h1{
 	text-align:center;
 }
 #feed{
+	text-align:center;
+}
+#save{
+	text-align:center;
+}
+#friendslist{
+	text-align:center;
+}
+#addfriend{
 	text-align:center;
 }

@@ -85,11 +85,14 @@ class ProfileP extends React.Component{
 	}
 	friendsList(){
 		if(this.state.friends==undefined){return}
-		const friendsList=this.state.friends.map((friends)=>
-			<li key={friends["user"]}>{friends["username"]}</li>
+		var friends=this.state.friends.filter(
+			friend=>friend["req"]=="accepted"
+		);
+		friends=friends.map((f)=>
+			<li key={f["username"]}>{f["username"]}</li>
 		)
 		return(
-			<u1 key="friendsList">{friendsList}</u1>
+			<u1 key="friends">{friends}</u1>
 		)
 	}
 	acceptFriendreq(friend){
@@ -106,8 +109,19 @@ class ProfileP extends React.Component{
 			this.refs.friendaccept.removeAttribute("disabled");
 		})
 	}
-	declineFriendreq(){
-
+	declineFriendreq(friend){
+		this.refs.frienddecline.setAttribute("disabled","disabled");
+		axios({
+			method:"post",
+			url:"/declinefriend",
+			data:{
+				"user":localStorage.getItem("user"),
+				"friend":friend,
+			}
+		}).then((res)=>{
+			this.setState(res.data);
+			this.refs.frienddecline.removeAttribute("disabled");
+		})
 	}
 	processFeed(f){
 		if(f["type"]=="friendreq"){

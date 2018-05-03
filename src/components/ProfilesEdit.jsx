@@ -1,7 +1,7 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
 var {Top,Rest}=require("./Main.jsx");
-//require("../css/profiles.css");
+require("../css/profiles.css");
 var {Switch,BrowserRouter,Route,browserHistory,Redirect}=require('react-router-dom');
 var axios=require("axios");
 
@@ -10,6 +10,9 @@ class ProfileEdit extends React.Component{
 	constructor(props){
 		super(props);
 		this.save=this.save.bind(this);
+		this.friendsList=this.friendsList.bind(this);
+		this.processFriends=this.processFriends.bind(this);
+		this.removeFriend=this.removeFriend.bind(this);
 		this.state={
 			pic:"",
 			long:"",
@@ -34,6 +37,52 @@ class ProfileEdit extends React.Component{
 			this.props.history.push("/user"+this.props.username);
 		});
 	}
+	removeFriend(friend){
+		this.refs.removefriend.setAttribute("disabled","disabled");
+		if(confirm("remove "+friend+" ?")){
+			axios({
+				method:"post",
+				url:"/removefriend",
+				data:{
+					"user":localStorage.getItem("user"),
+					"friend":friend,
+				}
+			}).then((res)=>{
+				this.setState(res.data);
+				this.refs.removefriend.removeAttribute("disabled");
+			})
+		}
+		else{
+			this.refs.removefriend.removeAttribute("disabled");
+			return;
+		}
+	}
+	processFriends(f){
+		return(
+			<div>
+				<p>
+					{f["username"]}
+				</p>
+				<button ref="removefriend" onClick={()=>{this.removeFriend(f["username"])}}>
+					remove
+				</button>
+			</div>
+		)
+	}
+	friendsList(){
+		if(this.state.friends==undefined){return}
+		var friends=this.state.friends.filter(
+			friend=>{
+				return (friend["req"]=="accepted")
+			}
+		);
+		friends=friends.map((f)=>
+			<li key={f["username"]}>{this.processFriends(f)}</li>
+		)
+		return(
+			<u1 key="friends">{friends}</u1>
+		)
+	}
 	componentDidMount(){
 		var usrnm=this.props.username;
 		while(!(/[a-z]/i.test(usrnm[0]))){
@@ -52,7 +101,9 @@ class ProfileEdit extends React.Component{
 				alias:userStates["alias"],
 				long:userStates["bio"],
 				email:userStates["email"],
-				games:userStates["games"]
+				games:userStates["games"],
+				friends:userStates["friends"],
+				feed:userStates["feed"]
 			});
 		
 		}).catch((error)=>{
@@ -101,6 +152,10 @@ class ProfileEdit extends React.Component{
 						<button onClick={this.save}>
 							save
 						</button>
+					</div>
+					<div id="friendslist">
+						friends:
+						{this.friendsList()}
 					</div>
 				</div>
 			</div>

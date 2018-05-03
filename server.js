@@ -45,6 +45,12 @@ app.post("/acceptfriend",(req,res)=>{
 app.post("/isfriend",(req,res)=>{
   friends.isFriend(req.body["user"],req.body["friend"],res);
 })
+app.post("/declinefriend",(req,res)=>{
+  friends.declineFriend(req.body["user"],req.body["friend"],res);
+})
+app.post("/removefriend",(req,res)=>{
+  friends.removeFriend(req.body["user"],req.body["friend"],res);
+})
 
 /*----------------------------------------------------------------------------------------*/
 const makeValid = (obj) => {return obj != null ? obj : "";};

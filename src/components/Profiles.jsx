@@ -121,11 +121,14 @@ class Profile extends React.Component{
 	}
 	friendsList(){
 		if(this.state.friends==undefined){return}
-		const friendsList=this.state.friends.map((friends)=>
-			<li key={friends["username"]}>{friends["username"]}</li>
+		var friends=this.state.friends.filter(
+			friend=>friend["req"]=="accepted"
+		);
+		friends=friends.map((f)=>
+			<li key={f["username"]}>{f["username"]}</li>
 		)
 		return(
-			<u1 key="friendsList">{friendsList}</u1>
+			<u1 key="friends">{friends}</u1>
 		)
 	}
 	feed(){
