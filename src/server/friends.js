@@ -56,30 +56,7 @@ exports.reqFriend=(user,friend,res)=>{
 				});
 			}
 		}))
-		/*
-		db.collection("users").find({"username":user}).toArray()
-		.then((arr)=>{
-			var friends=arr[0]["friends"];
-			friends.push({"username":friend,"req":"pending"});
-			db.collection("users").updateOne({"username":user},{
-				$set:{
-					"friends":friends
-				}
-			})
-			.then(db.collection("users").find({"username":friend}).toArray()
-			.then((arr)=>{
-				var feed=arr[0]["feed"];
-				feed.push({"type":"friendreq","sender":user});
-				db.collection("users").updateOne({"username":friend},{
-					$set:{
-						"feed":feed
-					}
-				})
-			}))
-		}).catch((err)=>{
-			console.log(err);
-			res.json(false);
-		});*/
+		
 	});
 }
 exports.acceptFriend=(user,friend,res)=>{
@@ -126,49 +103,10 @@ exports.acceptFriend=(user,friend,res)=>{
 	});
 }
 exports.declineFriend=(user,friend,res)=>{
-	var tf=mongo.connect(url,(err,client)=>{
-		if(err)throw new Error(err);
-
-		var db=client.db("pickup");
-		db.collection("users").find({"username":user}).toArray()
-		.then((arr)=>{
-			var friends=arr[0]["friends"];
-			friends.push({"username":friend,"req":"pending"});
-			db.collection("users").updateOne({"username":user},{
-				$set:{
-					"friends":friends
-				}
-			})
-			.then(db.collection("users").find({"username":friend}).toArray()
-			.then((arr)=>{
-				var feed=arr[0]["feed"];
-				feed.push({"type":"friendreq","sender":user});
-				db.collection("users").updateOne({"username":friend},{
-					$set:{
-						"feed":feed
-					}
-				})
-			}))
-		}).catch((err)=>{
-			console.log(err);
-			res.json(false);
-		});
-	});
+	
 }
-exports.removeFriend=(user,res)=>{
-	var myUsers ={};
-	var tf=mongo.connect(url,(err,client)=>{
-		if(err)throw new Error(err);
-
-		var db=client.db("pickup");
-		db.collection("users").find({"username":user}).toArray()
-		.then((arr)=>{
-			res.json(arr);
-			client.close();
-		}).catch((err)=>{
-			res.json(false);
-		});
-	});
+exports.removeFriend=(user,friend,res)=>{
+	
 }
 exports.isFriend=(user,friend,res)=>{
 	var myUsers ={};
