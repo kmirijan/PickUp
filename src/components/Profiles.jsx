@@ -155,11 +155,11 @@ class Profile extends React.Component{
 						Friends:<br></br>
 						{this.friendsList()}
 					</div>
-					<div id="fpanel">
-						<h1>FEED</h1>
-						<div id="feed">
-							{this.feed()}
-						</div>
+				</div>
+				<div id="fpanel">
+					<h1>FEED</h1>
+					<div id="feed">
+						{this.feed()}
 					</div>
 				</div>
 			</div>

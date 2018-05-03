@@ -1,7 +1,7 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
 var {Top,Rest}=require("./Main.jsx");
-//require("../css/profiles.css");
+require("../css/profiles.css");
 var {Switch,BrowserRouter,Route,browserHistory,Redirect}=require('react-router-dom');
 var axios=require("axios");
 
@@ -92,8 +92,15 @@ class ProfileP extends React.Component{
 			<u1 key="friendsList">{friendsList}</u1>
 		)
 	}
-	acceptFriendreq(){
-
+	acceptFriendreq(friend){
+		axios({
+			method:"post",
+			url:"/acceptfriend",
+			data:{
+				"user":localStorage.getItem("user"),
+				"friend":friend,
+			}
+		})
 	}
 	declineFriendreq(){
 
@@ -105,8 +112,8 @@ class ProfileP extends React.Component{
 					<p>
 						{f["sender"]} sent you a friend request!
 					</p>
-					<button onClick={this.acceptFriendreq}>accept</button>
-					<button onClick={this.declineFriendreq}>decline</button>
+					<button onClick={()=>this.acceptFriendreq(f["sender"])}>accept</button>
+					<button onClick={()=>this.declineFriendreq(f["sender"])}>decline</button>
 				</div>
 			)
 		}
@@ -167,11 +174,11 @@ class ProfileP extends React.Component{
 						Friends:<br></br>
 						{this.friendsList()}
 					</div>
-					<div id="fpanel">
-						<h1>FEED</h1>
-						<div id="feed">
-							{this.feed()}
-						</div>
+				</div>
+				<div id="fpanel">
+					<h1>FEED</h1>
+					<div id="feed">
+						{this.feed()}
 					</div>
 				</div>
 			</div>

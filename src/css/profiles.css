@@ -1,25 +1,28 @@
 #profile{
+	width:100%;
+	display:table;
+	clear:both;
+	content:"";
+}
+#panel{
+	width:50%;
 	float:left;
-	width:30%;
+}
+#fpanel{
+	width:50%;
+	float:left;
 }
 h1{
 	text-align:center;
-	color:white;
-}
-#panel{
-	margin:20px auto 20px auto;
-	width:75%;
-	background-color:rgba(0, 0, 0, 0.7);
-	border-radius:5px;
-	padding:20px 0 0 0;
 }
 #picture{
-	margin: 20px auto 0 auto;
+	margin:auto;
 	width:200px;
 	height:200px;
 	background-color:gray;
 }
 #mask{
+	margin:auto;
 	width:200px;
 	height:200px;
 	position:relative;
@@ -27,6 +30,7 @@ h1{
 	cursor: pointer;
 }
 #changeimg{
+	margin:auto;
 	width:200px;
 	height:200px;
 	position:relative;
@@ -41,10 +45,13 @@ h1{
 	visibility:visible;
 	color:white;
 }
+#edit{
+	text-align:center;
+}
 #username{
 	margin:auto;
 	text-align:center;
-	color:yellow;
+	color:blue;
 	padding:5px;
 }
 #email{
@@ -56,14 +63,12 @@ h1{
 #alias{
 	margin:0, auto, 0, auto;
 	text-align:center;
-	color:white;
 	font-size:x-large;
 	padding:10px;
 }
 #bio{
 	margin:auto;
 	text-align:center;
-	color:white;
 	padding:20px 50px 20px 50px;
 }
 #expand{
@@ -71,20 +76,11 @@ h1{
 	margin:auto;
 }
 #gamesList{
-	color:white;
 	text-align:center;
 }
-
-#feed{
-	margin-top:100px;
-	width:70%;
-	height:100%;
-	float: left;
+#friendsList{
+	text-align:center;
 }
-#fpanel{
-	margin:auto;
-	width:70%;
-	height:200px;
-	background-color:rgba(0, 0, 0, 0.7);
-	border-radius:5px;
+#feed{
+	text-align:center;
 }

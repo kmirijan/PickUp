@@ -39,6 +39,9 @@ app.post("/getallusers",(req,res)=>{
 app.post("/reqfriend",(req,res)=>{
   friends.reqFriend(req.body["user"],req.body["friend"],res);
 })
+app.post("/acceptfriend",(req,res)=>{
+  friends.acceptFriend(req.body["user"],req.body["friend"],res);
+})
 
 /*----------------------------------------------------------------------------------------*/
 const makeValid = (obj) => {return obj != null ? obj : "";};
