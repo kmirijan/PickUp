@@ -62,7 +62,7 @@
 /******/ 	}
 /******/
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "ecdc2784c5ea529a8d79"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "9529dc8c1fa5f733bfb7"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -870,74 +870,78 @@ var NavBar = function (_React$Component) {
         'div',
         null,
         _react2.default.createElement(
-          'ul',
-          { className: 'NavBar' },
-          _react2.default.createElement(
-            'li',
-            { className: 'Nav' },
-            _react2.default.createElement(
-              _reactRouterDom.NavLink,
-              { activeClassName: 'active', className: 'pages', to: '/home' },
-              'Home'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            { className: 'Nav' },
-            _react2.default.createElement(
-              _reactRouterDom.NavLink,
-              { activeClassName: 'active', className: 'pages', to: '/app' },
-              'Create Game'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            { className: 'Nav' },
-            _react2.default.createElement(
-              _reactRouterDom.NavLink,
-              { activeClassName: 'active', className: 'pages', to: '/users' },
-              'Users'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            { className: 'Nav' },
-            _react2.default.createElement(
-              _reactRouterDom.NavLink,
-              { activeClassName: 'active', className: 'pages', to: '/map' },
-              'Map'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            { className: 'Nav' },
-            _react2.default.createElement(
-              _reactRouterDom.NavLink,
-              { activeClassName: 'active', className: 'pages', to: '/users' },
-              'Account'
-            )
-          ),
+          'nav',
+          { 'class': 'navbar navbar-default' },
           _react2.default.createElement(
             'ul',
-            { 'class': 'nav navbar-nav navbar-right' },
+            { className: 'NavBar' },
             _react2.default.createElement(
               'li',
-              null,
+              { className: 'Nav' },
               _react2.default.createElement(
                 _reactRouterDom.NavLink,
-                { to: '/signup', style: { color: 'white' }, activeClassName: 'active', className: 'pages' },
-                _react2.default.createElement('span', { 'class': 'glyphicon glyphicon-user', style: { color: 'white' } }),
-                ' Sign Up'
+                { activeClassName: 'active', className: 'pages', to: '/home' },
+                'Home'
               )
             ),
             _react2.default.createElement(
               'li',
-              null,
+              { className: 'Nav' },
               _react2.default.createElement(
                 _reactRouterDom.NavLink,
-                { to: '/signin', style: { color: 'white' }, activeClassName: 'active', className: 'pages' },
-                _react2.default.createElement('span', { 'class': 'glyphicon glyphicon-log-in', style: { color: 'white' } }),
-                ' Login'
+                { activeClassName: 'active', className: 'pages', to: '/app' },
+                'Create Game'
+              )
+            ),
+            _react2.default.createElement(
+              'li',
+              { className: 'Nav' },
+              _react2.default.createElement(
+                _reactRouterDom.NavLink,
+                { activeClassName: 'active', className: 'pages', to: '/users' },
+                'Users'
+              )
+            ),
+            _react2.default.createElement(
+              'li',
+              { className: 'Nav' },
+              _react2.default.createElement(
+                _reactRouterDom.NavLink,
+                { activeClassName: 'active', className: 'pages', to: '/map' },
+                'Map'
+              )
+            ),
+            _react2.default.createElement(
+              'li',
+              { className: 'Nav' },
+              _react2.default.createElement(
+                _reactRouterDom.NavLink,
+                { activeClassName: 'active', className: 'pages', to: '/users' },
+                'Account'
+              )
+            ),
+            _react2.default.createElement(
+              'ul',
+              null,
+              _react2.default.createElement(
+                'li',
+                { className: 'NavIcons' },
+                _react2.default.createElement(
+                  _reactRouterDom.NavLink,
+                  { to: '/signin', style: { color: 'white' }, activeClassName: 'active', className: 'pages' },
+                  _react2.default.createElement('span', { 'class': 'glyphicon glyphicon-log-in', style: { color: 'white' } }),
+                  ' Login'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                { className: 'NavIcons' },
+                _react2.default.createElement(
+                  _reactRouterDom.NavLink,
+                  { to: '/signup', style: { color: 'white' }, activeClassName: 'active', className: 'pages' },
+                  _react2.default.createElement('span', { 'class': 'glyphicon glyphicon-user', style: { color: 'white' } }),
+                  ' Sign Up'
+                )
               )
             )
           )
@@ -7874,7 +7878,7 @@ exports = module.exports = __webpack_require__(61)(false);
 
 
 // module
-exports.push([module.i, ".App {\r\n  text-align: center;\r\n}\r\n\r\n.App-logo {\r\n  float: left;\r\n  height: 150px;\r\n}\r\n\r\nbody {margin:0;}\r\n\r\n.NavBar{\r\n   list-style-type: none;\r\n   margin: 0;\r\n   padding: 0;\r\n   overflow: hidden;\r\n   background-color: #333;\r\n   position: fixed;\r\n   top: 0;\r\n   width: 100%;\r\n}\r\n\r\n.Nav {\r\n   float: left;\r\n}\r\n\r\n.Nav .pages {\r\n   display: block;\r\n   color: white;\r\n   text-align: center;\r\n   padding: 14px 16px;\r\n   text-decoration: none;\r\n}\r\n\r\n.Nav .pages:hover:not(.active) {\r\n    background-color: #111;\r\n}\r\n.Nav.pages:hover(.active){\r\n  background-color: orange;\r\n}\r\n.Nav .active {\r\n  display: block;\r\n  color: white;\r\n  text-align: center;\r\n  padding: 14px 16px;\r\n  text-decoration: none;\r\n  background-color: orange;\r\n}\r\n\r\n.App-header {\r\n  margin-top: 45px;\r\n  padding: 20px;\r\n  background-color: rgba(135,206,350,0.4);\r\n  border-bottom: 1px solid black;\r\n}\r\n\r\n.App-title {\r\n  text-align: center;\r\n  font-family: 'Lato';\r\n  font-size: 70px;\r\n  margin: 5%;\r\n  font-weight: bold;\r\n  color: black;\r\n}\r\n\r\n.Activity{\r\n  float:left;\r\n  display: inline-block;\r\n}\r\n.Name{\r\n  display: inline-block;\r\n}\r\n.Location{\r\n  float:right;\r\n  display: inline-block;\r\n  padding-right: 30px\r\n}\r\nbody {\r\n    background-image: url('/Sports.png');\r\n}\r\n\r\n.App-submitButton {\r\n  padding-top: 12px;\r\n}\r\n\r\n.gameDetails {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\n.searchBox {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\ninput[type=submit] {\r\n    background-color: #4CAF50;\r\n    color: white;\r\n    padding: 12px 20px;\r\n    border: none;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n    float: center;\r\n}\r\n\r\ninput[type=submit]:hover {\r\n    background-color: #45a049;\r\n}\r\n\r\n.joinGame {\r\n  right: 10px;\r\n  background-color: #4CAF50;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 4px;\r\n  cursor: pointer;\r\n}\r\n\r\n.joinGame:hover {\r\n    background-color: #45a049;\r\n}\r\n\r\ntable {\r\n  border-collapse:collapse;\r\n  width: 100%;\r\n}\r\n\r\ntd, th {\r\n  border: 1px solid #dddddd;\r\n  text-align: center;\r\n  padding: 8px;\r\n}\r\n", ""]);
+exports.push([module.i, ".App {\r\n  text-align: center;\r\n}\r\n\r\n.App-logo {\r\n  float: left;\r\n  height: 150px;\r\n}\r\n\r\nbody {margin:0;}\r\n\r\n.NavBar{\r\n   list-style-type: none;\r\n   margin: 0;\r\n   padding: 0;\r\n   overflow: hidden;\r\n   background-color: #333;\r\n   position: fixed;\r\n   top: 0;\r\n   width: 100%;\r\n}\r\n\r\n.Nav {\r\n   float: left;\r\n}\r\n\r\n.NavIcons {\r\n   float: right;\r\n}\r\n\r\n.Nav .pages {\r\n   display: block;\r\n   color: white;\r\n   text-align: center;\r\n   padding: 14px 16px;\r\n   text-decoration: none;\r\n}\r\n\r\n.Nav .pages:hover:not(.active) {\r\n    background-color: #111;\r\n}\r\n\r\n\r\n.Nav .active {\r\n  display: block;\r\n  color: white;\r\n  text-align: center;\r\n  padding: 14px 16px;\r\n  text-decoration: none;\r\n  background-color: orange;\r\n}\r\n\r\n.NavIcons .pages {\r\n   display: block;\r\n   color: white;\r\n   text-align: center;\r\n   padding: 14px 16px;\r\n   text-decoration: none;\r\n}\r\n\r\n.NavIcons .pages:hover:not(.active) {\r\n    background-color: #111;\r\n}\r\n\r\n\r\n.NavIcons .active {\r\n  display: block;\r\n  color: white;\r\n  text-align: center;\r\n  padding: 14px 16px;\r\n  text-decoration: none;\r\n  background-color: orange;\r\n}\r\n\r\n.App-header {\r\n  margin-top: 45px;\r\n  padding: 20px;\r\n  background-color: rgba(135,206,350,0.4);\r\n  border-bottom: 1px solid black;\r\n}\r\n\r\n.App-title {\r\n  text-align: center;\r\n  font-family: 'Lato';\r\n  font-size: 70px;\r\n  margin: 5%;\r\n  font-weight: bold;\r\n  color: black;\r\n}\r\n\r\n.Activity{\r\n  float:left;\r\n  display: inline-block;\r\n}\r\n.Name{\r\n  display: inline-block;\r\n}\r\n.Location{\r\n  float:right;\r\n  display: inline-block;\r\n  padding-right: 30px\r\n}\r\nbody {\r\n    background-image: url('/Sports.png');\r\n}\r\n\r\n.App-submitButton {\r\n  padding-top: 12px;\r\n}\r\n\r\n.gameDetails {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\n.searchBox {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\ninput[type=submit] {\r\n    background-color: #4CAF50;\r\n    color: white;\r\n    padding: 12px 20px;\r\n    border: none;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n    float: center;\r\n}\r\n\r\ninput[type=submit]:hover {\r\n    background-color: #45a049;\r\n}\r\n\r\n.joinGame {\r\n  right: 10px;\r\n  background-color: #4CAF50;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 4px;\r\n  cursor: pointer;\r\n}\r\n\r\n.joinGame:hover {\r\n    background-color: #45a049;\r\n}\r\n\r\ntable {\r\n  border-collapse:collapse;\r\n  width: 100%;\r\n}\r\n\r\ntd, th {\r\n  border: 1px solid #dddddd;\r\n  text-align: center;\r\n  padding: 8px;\r\n}\r\n", ""]);
 
 // exports
 

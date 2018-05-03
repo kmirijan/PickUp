@@ -24,6 +24,10 @@ body {margin:0;}
    float: left;
 }
 
+.NavIcons {
+   float: right;
+}
+
 .Nav .pages {
    display: block;
    color: white;
@@ -38,6 +42,28 @@ body {margin:0;}
 
 
 .Nav .active {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: orange;
+}
+
+.NavIcons .pages {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: none;
+}
+
+.NavIcons .pages:hover:not(.active) {
+    background-color: #111;
+}
+
+
+.NavIcons .active {
   display: block;
   color: white;
   text-align: center;
