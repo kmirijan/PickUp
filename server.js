@@ -5,6 +5,7 @@ const data=require("./src/components/data.js");
 var mime = require('mime-types');
 
 const makeValid = (obj) => {return obj != null ? obj : "";};
+const GUEST = "guest";
 
 var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
@@ -31,8 +32,17 @@ app.post("/join", (req, res) =>
   mongo.connect(mongoUrl, (err, client) =>
   {
     var collection = client.db("pickup").collection("games");
-    var query = {id : req.body.gid};
+    var query = {id: req.body.gid};
     var newPlayer = { $push: {players: req.body.uid} };
+	
+	if (req.body.uid != GUEST)
+	{
+	  console.log("user: ", req.body.uid);
+	  var userQuery = {username: req.body.uid};
+	  var joinedGame = {$push: {games: req.body.gid}}; 
+	  client.db("pickup").collection("users").update(userQuery, joinedGame);
+	}
+
     collection.update(query, newPlayer, (err) =>
     {
       if (err) throw err;

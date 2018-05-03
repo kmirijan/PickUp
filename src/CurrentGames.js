@@ -35,7 +35,7 @@ addGame(event) {
   let sport = this.refs.sport.value;
   let name = this.refs.name.value;
   let location = this.refs.location.value;
-  let id = Math.floor((Math.random()*100)+1);
+  let id = Math.floor((Math.random()*(1 << 30))+1);
   let user = 100; // TODO change this when users are implemented
   let game = {gameId: id, sport: sport, name: name, location: location, user: user};
   console.log(game);
@@ -83,7 +83,7 @@ addGame(event) {
           <h1 className="App-currentGames">
             Below are the currently available games:
           </h1>
-          <GameTable user="guest"/> 
+          <GameTable user={this.props.user}/> 
     </div>
     );
   }
