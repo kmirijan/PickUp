@@ -1,7 +1,7 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
 var {Top,Rest}=require("./Main.jsx");
-require("../css/profiles.css");
+//require("../css/profiles.css");
 var {Switch,BrowserRouter,Route,browserHistory,Redirect}=require('react-router-dom');
 var axios=require("axios");
 
@@ -17,6 +17,7 @@ class ProfileEdit extends React.Component{
 			alias:"",
 			email:"",
 			games:[],
+			friends:[]
 		}
 	}
 	save(){

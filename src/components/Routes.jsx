@@ -1,8 +1,8 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
 var {Top,Rest}=require("./Main.jsx");
-var {Profile,Feed}=require("./Profiles.jsx");
-var {ProfileP,FeedP}=require("./ProfilesP.jsx");
+var {Profile}=require("./Profiles.jsx");
+var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
 var {CurrentGames}=require("./CurrentGames.js");
 var {Users}=require("../helpers/Users.jsx");
@@ -45,6 +45,12 @@ class User extends React.Component{
 	constructor(props){
 		super(props);
 	}
+	componentWillMount(){
+		if(!(localStorage.getItem("loggedin")=="true")){
+			alert("Must be logged in to find users")
+			this.props.history.push("/signin");
+		}
+	}
 	render(){
 		var usrnm=this.props.match.params.username;
 		while(!(/[a-z]/i.test(usrnm[0]))){
@@ -61,10 +67,9 @@ class User extends React.Component{
 					username={usrnm}
 					history={this.props.history}
 				/>
-				<FeedP />
 				</div>
 		)}
-		else{
+		else if(localStorage.getItem("loggedin")=="true"){
 			return(
 				<div>
 				<NavBar />
@@ -72,9 +77,11 @@ class User extends React.Component{
 					username={usrnm}
 					history={this.props.history}
 				/>
-				<Feed />
 				</div>
 		)}
+		else{
+			return(<_404/>)
+		}
 	};
 };
 class Edit extends React.Component{

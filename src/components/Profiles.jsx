@@ -1,7 +1,7 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
 var {Top,Rest}=require("./Main.jsx");
-require("../css/profiles.css");
+//require("../css/profiles.css");
 var axios=require("axios");
 
 
@@ -9,8 +9,10 @@ class Profile extends React.Component{
 	constructor(props){
 		super(props);
 		this.expandBio=this.expandBio.bind(this);
+		this.addFriend=this.addFriend.bind(this);
 		this.state={
 			expname:"expand",
+			frname:"",
 			expanded:false,
 			pic:"",
 			short:"",
@@ -19,6 +21,8 @@ class Profile extends React.Component{
 			alias:"",
 			email:"",
 			games:[],
+			friends:[],
+			feed:[]
 		}
 	}
 	expandBio(){
@@ -30,6 +34,16 @@ class Profile extends React.Component{
 			this.setState({expanded:false});
 			this.setState({expname:"expand"});
 		}
+	}
+	addFriend(){
+		axios({
+			method:"post",
+			url:"/reqfriend",
+			data:{
+				"user":localStorage.getItem("user"),
+				"friend":this.state.username,
+			}
+		})
 	}
 	componentDidMount(){
 		var usrnm=this.props.username;
@@ -50,12 +64,18 @@ class Profile extends React.Component{
 				long:userStates["bio"],
 				short:userStates["bio"],
 				email:userStates["email"],
-				games:userStates["games"]
+				games:userStates["games"],
+				friends:userStates["friends"],
+				feed:userStates["feed"]
 			});
 			//make bio shorter
 	      	if(this.state.long.length>100){
 	      		this.setState({short:this.state.long.substring(0,100)});
 	      	}
+	      	//if not friend, frname = add friend
+	      	//if is friend, frname = friends
+	      	//if pending friend req, frname = pending req
+
 		
 		}).catch((error)=>{
          	console.log(error.response.data);
@@ -63,11 +83,30 @@ class Profile extends React.Component{
       	
 	}
 	gamesList(){
+		if(this.state.games==undefined){return}
 		const gamesList=this.state.games.map((games)=>
 			<li key={games["game"]}>{games["game"]}</li>
 		)
 		return(
 			<u1 key="gamesList">{gamesList}</u1>
+		)
+	}
+	friendsList(){
+		if(this.state.friends==undefined){return}
+		const friendsList=this.state.friends.map((friends)=>
+			<li key={friends["username"]}>{friends["username"]}</li>
+		)
+		return(
+			<u1 key="friendsList">{friendsList}</u1>
+		)
+	}
+	feed(){
+		if(this.state.feed==undefined){return}
+		const feed=this.state.feed.map((f)=>
+			<li key={f["type"]}>{f["type"]}</li>
+		)
+		return(
+			<u1 key="feed">{feed}</u1>
 		)
 	}
 	componentDidUpdate(prevProps,prevState){
@@ -81,6 +120,11 @@ class Profile extends React.Component{
 		return(
 			<div id="profile">
 				<div id="panel">
+					<div id="addfriend">
+						<button onClick={this.addFriend}>
+							{this.state.frname}
+						</button>
+					</div>
 					<div id="picture">
 						<img src={this.state.pic}></img>
 						<div id="mask"></div>
@@ -107,6 +151,16 @@ class Profile extends React.Component{
 						Games created:<br></br>
 						{this.gamesList()}
 					</div>
+					<div id="friendsList">
+						Friends:<br></br>
+						{this.friendsList()}
+					</div>
+					<div id="fpanel">
+						<h1>FEED</h1>
+						<div id="feed">
+							{this.feed()}
+						</div>
+					</div>
 				</div>
 			</div>
 			);
@@ -114,28 +168,6 @@ class Profile extends React.Component{
 };
 
 
-class Feed extends React.Component{
-	constructor(props){
-		super(props);
-
-		this.state={
-			games:"to be implemented",
-			expanded:false,
-			
-		}
-	}
-	render(){
-		return(
-			<div id="feed">
-				<div id="fpanel">
-					<h1>FEED</h1>
-					<p>{this.state.games}</p>
-				</div>
-			</div>
-			);
-	};
-};
 module.exports={
-	Profile,
-	Feed
+	Profile
 }

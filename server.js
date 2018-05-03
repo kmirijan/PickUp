@@ -4,6 +4,7 @@ const bodyParser=require("body-parser");
 const data=require("./src/server/data.js");
 var mime = require('mime-types');
 const mkprofile=require("./src/server/mkprofile.js");
+const friends=require("./src/server/friends.js");
 
 const app=express();
 /*configurations*/
@@ -35,6 +36,9 @@ app.post("/signin",(req,res)=>{
 app.post("/getallusers",(req,res)=>{
   mkprofile.getAllUsers(res);
 });
+app.post("/reqfriend",(req,res)=>{
+  friends.reqFriend(req.body["user"],req.body["friend"],res);
+})
 
 /*----------------------------------------------------------------------------------------*/
 const makeValid = (obj) => {return obj != null ? obj : "";};

@@ -47,7 +47,9 @@ signUp(){
           "alias": username,
           "bio":"",
           "pic":"",
-          "games":[]
+          "games":[],
+          "friends":[],
+          "feed":[]
         }
       }).then((res)=>{
         if(res.data==true){

@@ -1,8 +1,8 @@
 To do:
 ---
-1. ++signup redirect, confirmation display ++ username check, etc.
+1. ++signup redirect, ++confirmation display ++username check, etc.
 2. ++stop displaying signup/signin after logging in.
-3. friend requests
+3. friend requests, make account page more detailed, prettier
 4. combine stuff
 
 PickUp

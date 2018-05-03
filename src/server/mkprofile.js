@@ -74,17 +74,6 @@ exports.signUp=async (data,res)=>{
 				})
 			}
 		})
-		/*
-		var salt=bcrypt.genSaltSync(10);
-		var hash=bcrypt.hashSync(data["password"],salt);
-		data["password"]=hash;
-		
-		db.collection("users").insertOne(data)
-		.then(()=>{
-			res.json(true);
-			client.close();
-		});
-		*/
 	});
 }
 
