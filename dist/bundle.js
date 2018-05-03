@@ -62,7 +62,7 @@
 /******/ 	}
 /******/
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "7252ffd8cefcd9e30bf7"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "ecdc2784c5ea529a8d79"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -895,24 +895,6 @@ var NavBar = function (_React$Component) {
             { className: 'Nav' },
             _react2.default.createElement(
               _reactRouterDom.NavLink,
-              { activeClassName: 'active', className: 'pages', to: '/signin' },
-              'Sign In'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            { className: 'Nav' },
-            _react2.default.createElement(
-              _reactRouterDom.NavLink,
-              { activeClassName: 'active', className: 'pages', to: '/signup' },
-              'Sign Up'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            { className: 'Nav' },
-            _react2.default.createElement(
-              _reactRouterDom.NavLink,
               { activeClassName: 'active', className: 'pages', to: '/users' },
               'Users'
             )
@@ -924,6 +906,39 @@ var NavBar = function (_React$Component) {
               _reactRouterDom.NavLink,
               { activeClassName: 'active', className: 'pages', to: '/map' },
               'Map'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            { className: 'Nav' },
+            _react2.default.createElement(
+              _reactRouterDom.NavLink,
+              { activeClassName: 'active', className: 'pages', to: '/users' },
+              'Account'
+            )
+          ),
+          _react2.default.createElement(
+            'ul',
+            { 'class': 'nav navbar-nav navbar-right' },
+            _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement(
+                _reactRouterDom.NavLink,
+                { to: '/signup', style: { color: 'white' }, activeClassName: 'active', className: 'pages' },
+                _react2.default.createElement('span', { 'class': 'glyphicon glyphicon-user', style: { color: 'white' } }),
+                ' Sign Up'
+              )
+            ),
+            _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement(
+                _reactRouterDom.NavLink,
+                { to: '/signin', style: { color: 'white' }, activeClassName: 'active', className: 'pages' },
+                _react2.default.createElement('span', { 'class': 'glyphicon glyphicon-log-in', style: { color: 'white' } }),
+                ' Login'
+              )
             )
           )
         ),
@@ -7859,7 +7874,7 @@ exports = module.exports = __webpack_require__(61)(false);
 
 
 // module
-exports.push([module.i, ".App {\r\n  text-align: center;\r\n}\r\n\r\n.App-logo {\r\n  float: left;\r\n  height: 150px;\r\n}\r\n\r\nbody {margin:0;}\r\n\r\n.NavBar{\r\n   list-style-type: none;\r\n   margin: 0;\r\n   padding: 0;\r\n   overflow: hidden;\r\n   background-color: #333;\r\n   position: fixed;\r\n   top: 0;\r\n   width: 100%;\r\n}\r\n\r\n.Nav {\r\n   float: left;\r\n}\r\n\r\n.Nav .pages {\r\n   display: block;\r\n   color: white;\r\n   text-align: center;\r\n   padding: 14px 16px;\r\n   text-decoration: none;\r\n}\r\n\r\n.Nav .pages:hover:not(.active) {\r\n    background-color: #111;\r\n}\r\n\r\n.Nav .active {\r\n  display: block;\r\n  color: white;\r\n  text-align: center;\r\n  padding: 14px 16px;\r\n  text-decoration: none;\r\n  background-color: orange;\r\n}\r\n\r\n.App-header {\r\n  margin-top: 45px;\r\n  padding: 20px;\r\n  background-color: rgba(135,206,350,0.4);\r\n  border-bottom: 1px solid black;\r\n}\r\n\r\n.App-title {\r\n  text-align: center;\r\n  font-family: 'Lato';\r\n  font-size: 70px;\r\n  margin: 5%;\r\n  font-weight: bold;\r\n  color: black;\r\n}\r\n\r\n.App-newGame {\r\n  font-family: 'Lato';\r\n}\r\n\r\n.App-currentGames {\r\n  font-family: 'Lato';\r\n}\r\n\r\n.Activity{\r\n  float:left;\r\n  display: inline-block;\r\n}\r\n.Name{\r\n  float:Center;\r\n  display: inline-block;\r\n}\r\n.Location{\r\n  float:right;\r\n  display: inline-block;\r\n  padding-right: 30px\r\n}\r\nbody {\r\n    background-image: url('/Sports.png');\r\n}\r\n\r\n.App-submitButton {\r\n  padding-top: 12px;\r\n  padding-bottom: 12px;\r\n}\r\n\r\n.gameDetails {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\n.searchBox {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\ninput[type=submit] {\r\n    background-color: #4CAF50;\r\n    color: white;\r\n    padding: 12px 20px;\r\n    border: none;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n    float: center;\r\n}\r\n\r\ninput[type=submit]:hover {\r\n    background-color: #45a049;\r\n}\r\n\r\n.GamesList{\r\n  position: center;\r\n  list-style: none;\r\n  font: 200 20px/1.5 Helvetica, Verdana, sans-serif;\r\n  border-bottom: 1px solid #ccc;\r\n}\r\n/* templates based on w3schools tutorial */\r\ntable {\r\n  border-collapse:collapse;\r\n  width: 100%;\r\n}\r\n\r\ntd, th {\r\n  border: 1px solid #dddddd;\r\n  text-align: left;\r\n  padding: 8px;\r\n}\r\n\r\n.joinGame {\r\n  right: 10px;\r\n  background-color: #4CAF50;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 4px;\r\n  cursor: pointer;\r\n}\r\n\r\n.joinGame:hover {\r\n    background-color: #45a049;\r\n}\r\n", ""]);
+exports.push([module.i, ".App {\r\n  text-align: center;\r\n}\r\n\r\n.App-logo {\r\n  float: left;\r\n  height: 150px;\r\n}\r\n\r\nbody {margin:0;}\r\n\r\n.NavBar{\r\n   list-style-type: none;\r\n   margin: 0;\r\n   padding: 0;\r\n   overflow: hidden;\r\n   background-color: #333;\r\n   position: fixed;\r\n   top: 0;\r\n   width: 100%;\r\n}\r\n\r\n.Nav {\r\n   float: left;\r\n}\r\n\r\n.Nav .pages {\r\n   display: block;\r\n   color: white;\r\n   text-align: center;\r\n   padding: 14px 16px;\r\n   text-decoration: none;\r\n}\r\n\r\n.Nav .pages:hover:not(.active) {\r\n    background-color: #111;\r\n}\r\n.Nav.pages:hover(.active){\r\n  background-color: orange;\r\n}\r\n.Nav .active {\r\n  display: block;\r\n  color: white;\r\n  text-align: center;\r\n  padding: 14px 16px;\r\n  text-decoration: none;\r\n  background-color: orange;\r\n}\r\n\r\n.App-header {\r\n  margin-top: 45px;\r\n  padding: 20px;\r\n  background-color: rgba(135,206,350,0.4);\r\n  border-bottom: 1px solid black;\r\n}\r\n\r\n.App-title {\r\n  text-align: center;\r\n  font-family: 'Lato';\r\n  font-size: 70px;\r\n  margin: 5%;\r\n  font-weight: bold;\r\n  color: black;\r\n}\r\n\r\n.Activity{\r\n  float:left;\r\n  display: inline-block;\r\n}\r\n.Name{\r\n  display: inline-block;\r\n}\r\n.Location{\r\n  float:right;\r\n  display: inline-block;\r\n  padding-right: 30px\r\n}\r\nbody {\r\n    background-image: url('/Sports.png');\r\n}\r\n\r\n.App-submitButton {\r\n  padding-top: 12px;\r\n}\r\n\r\n.gameDetails {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\n.searchBox {\r\n    width: 30%;\r\n    padding: 20px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 4px;\r\n    resize: vertical;\r\n}\r\n\r\ninput[type=submit] {\r\n    background-color: #4CAF50;\r\n    color: white;\r\n    padding: 12px 20px;\r\n    border: none;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n    float: center;\r\n}\r\n\r\ninput[type=submit]:hover {\r\n    background-color: #45a049;\r\n}\r\n\r\n.joinGame {\r\n  right: 10px;\r\n  background-color: #4CAF50;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 4px;\r\n  cursor: pointer;\r\n}\r\n\r\n.joinGame:hover {\r\n    background-color: #45a049;\r\n}\r\n\r\ntable {\r\n  border-collapse:collapse;\r\n  width: 100%;\r\n}\r\n\r\ntd, th {\r\n  border: 1px solid #dddddd;\r\n  text-align: center;\r\n  padding: 8px;\r\n}\r\n", ""]);
 
 // exports
 
@@ -27887,18 +27902,22 @@ var App = function (_React$Component) {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        'div',
-        { className: 'App' },
-        _react2.default.createElement(_NavBar2.default, null),
+        'body',
+        null,
         _react2.default.createElement(
-          'h1',
-          { className: 'App-newGame' },
-          'To setup a pickup game please enter the required information below'
-        ),
-        _react2.default.createElement(
-          'section',
-          { className: 'SubmissionHome' },
-          _react2.default.createElement(_CurrentGames.CurrentGames, { games: this.props.games })
+          'div',
+          { className: 'App' },
+          _react2.default.createElement(_NavBar2.default, null),
+          _react2.default.createElement(
+            'h2',
+            null,
+            'To setup a pickup game please enter the required information below'
+          ),
+          _react2.default.createElement(
+            'section',
+            { className: 'SubmissionHome' },
+            _react2.default.createElement(_CurrentGames.CurrentGames, { games: this.props.games })
+          )
         )
       );
     }
@@ -28045,16 +28064,20 @@ var CurrentGames = exports.CurrentGames = function (_React$Component) {
           value: this.state.search,
           onChange: this.updateSearch.bind(this) }),
         _react2.default.createElement(
-          'h1',
-          { className: 'App-currentGames' },
+          'h2',
+          null,
           'Below are the currently available games:'
         ),
         _react2.default.createElement(
-          'ul',
-          null,
-          filteredGames.map(function (game) {
-            return _react2.default.createElement(Game, { game: game, key: game.id });
-          })
+          'div',
+          { 'class': 'container' },
+          _react2.default.createElement(
+            'ul',
+            null,
+            filteredGames.map(function (game) {
+              return _react2.default.createElement(Game, { game: game, key: game.id });
+            })
+          )
         )
       );
     }
@@ -28476,7 +28499,7 @@ exports = module.exports = __webpack_require__(61)(false);
 
 
 // module
-exports.push([module.i, "#profile{\r\n\tfloat:left;\r\n\twidth:30%;\r\n}\r\nh1{\r\n\ttext-align:center;\r\n\tcolor:white;\r\n}\r\n#panel{\r\n\tmargin:20px auto 20px auto;\r\n\twidth:75%;\r\n\tbackground-color:rgba(0, 0, 0, 0.7);\r\n\tborder-radius:5px;\r\n\tpadding:20px 0 0 0;\r\n}\r\n#picture{\r\n\tmargin: 20px auto 0 auto;\r\n\twidth:200px;\r\n\theight:200px;\r\n\tbackground-color:gray;\r\n}\r\n#mask{\r\n\twidth:200px;\r\n\theight:200px;\r\n\tposition:relative;\r\n\ttop: -200px;\r\n\tcursor: pointer;\r\n}\r\n#changeimg{\r\n\twidth:200px;\r\n\theight:200px;\r\n\tposition:relative;\r\n\ttop: -200px;\r\n\tcolor:white;\r\n\tvisibility:hidden;\r\n}\r\n#mask:hover{\r\n\tbackground-color:rgba(0, 0, 0, 0.4);\r\n}\r\n#mask:hover #changeimg{\r\n\tvisibility:visible;\r\n\tcolor:white;\r\n}\r\n#username{\r\n\tmargin:auto;\r\n\ttext-align:center;\r\n\tcolor:yellow;\r\n\tpadding:5px;\r\n}\r\n#email{\r\n\tmargin:auto;\r\n\ttext-align:center;\r\n\tcolor:red;\r\n\tpadding:0px;\r\n}\r\n#alias{\r\n\tmargin:0, auto, 0, auto;\r\n\ttext-align:center;\r\n\tcolor:white;\r\n\tfont-size:x-large;\r\n\tpadding:10px;\r\n}\r\n#bio{\r\n\tmargin:auto;\r\n\ttext-align:center;\r\n\tcolor:white;\r\n\tpadding:20px 50px 20px 50px;\r\n}\r\n#expand{\r\n\twidth:111px;\r\n\tmargin:auto;\r\n}\r\n#gamesList{\r\n\tcolor:white;\r\n\ttext-align:center;\r\n}\r\n\r\n#feed{\r\n\tmargin-top:100px;\r\n\twidth:70%;\r\n\theight:100%;\r\n\tfloat: left;\r\n}\r\n#fpanel{\r\n\tmargin:auto;\r\n\twidth:70%;\r\n\theight:200px;\r\n\tbackground-color:rgba(0, 0, 0, 0.7);\r\n\tborder-radius:5px;\r\n}", ""]);
+exports.push([module.i, "#profile{\r\n\tfloat:left;\r\n\twidth:30%;\r\n}\r\n#panel{\r\n\tmargin:20px auto 20px auto;\r\n\twidth:75%;\r\n\tbackground-color:rgba(0, 0, 0, 0.7);\r\n\tborder-radius:5px;\r\n\tpadding:20px 0 0 0;\r\n}\r\n#picture{\r\n\tmargin: 20px auto 0 auto;\r\n\twidth:200px;\r\n\theight:200px;\r\n\tbackground-color:gray;\r\n}\r\n#mask{\r\n\twidth:200px;\r\n\theight:200px;\r\n\tposition:relative;\r\n\ttop: -200px;\r\n\tcursor: pointer;\r\n}\r\n#changeimg{\r\n\twidth:200px;\r\n\theight:200px;\r\n\tposition:relative;\r\n\ttop: -200px;\r\n\tcolor:white;\r\n\tvisibility:hidden;\r\n}\r\n#mask:hover{\r\n\tbackground-color:rgba(0, 0, 0, 0.4);\r\n}\r\n#mask:hover #changeimg{\r\n\tvisibility:visible;\r\n\tcolor:white;\r\n}\r\n#username{\r\n\tmargin:auto;\r\n\ttext-align:center;\r\n\tcolor:yellow;\r\n\tpadding:5px;\r\n}\r\n#email{\r\n\tmargin:auto;\r\n\ttext-align:center;\r\n\tcolor:red;\r\n\tpadding:0px;\r\n}\r\n#alias{\r\n\tmargin:0, auto, 0, auto;\r\n\ttext-align:center;\r\n\tcolor:white;\r\n\tfont-size:x-large;\r\n\tpadding:10px;\r\n}\r\n#bio{\r\n\tmargin:auto;\r\n\ttext-align:center;\r\n\tcolor:white;\r\n\tpadding:20px 50px 20px 50px;\r\n}\r\n#expand{\r\n\twidth:111px;\r\n\tmargin:auto;\r\n}\r\n#gamesList{\r\n\tcolor:white;\r\n\ttext-align:center;\r\n}\r\n\r\n#feed{\r\n\tmargin-top:100px;\r\n\twidth:70%;\r\n\theight:100%;\r\n\tfloat: left;\r\n}\r\n#fpanel{\r\n\tmargin:auto;\r\n\twidth:70%;\r\n\theight:200px;\r\n\tbackground-color:rgba(0, 0, 0, 0.7);\r\n\tborder-radius:5px;\r\n}\r\n", ""]);
 
 // exports
 

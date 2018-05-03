@@ -93,14 +93,14 @@ addGame(event) {
         <input className = "searchBox" type="text" placeholder="Search"
           value={this.state.search}
           onChange={this.updateSearch.bind(this)}/>
-          <h1 className="App-currentGames">
-            Below are the currently available games:
-          </h1>
+        <h2>Below are the currently available games:</h2>
+        <div class="container">
       <ul>
           {filteredGames.map((game)=>{
             return <Game game = {game} key={game.id}/>
           })}
       </ul>
+      </div>
     </div>
     );
   }
@@ -121,12 +121,12 @@ class Game extends React.Component{
 
   render(){
     return(
-      <tr>
-      <td ><h3>{this.props.game.sport} </h3></td>
-      <td ><h3>{this.props.game.name} </h3></td>
-      <td > <h3>{this.props.game.location}</h3> </td>
-      <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
-      </tr>
+        <tr>
+          <td ><h3>{this.props.game.sport} </h3></td>
+          <td ><h3>{this.props.game.name} </h3></td>
+          <td > <h3>{this.props.game.location}</h3> </td>
+          <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
+        </tr>
     );
   }
 }

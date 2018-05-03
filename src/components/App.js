@@ -6,16 +6,17 @@ import NavBar from './NavBar';
 class App extends React.Component {
   render() {
     return (
+      <body>
       <div className="App">
           <NavBar/>
-        <h1 className="App-newGame">
+        <h2>
           To setup a pickup game please enter the required information below
-        </h1>
-
-      <section className="SubmissionHome">
-<CurrentGames games={this.props.games}/>
+        </h2>
+        <section className="SubmissionHome">
+          <CurrentGames games={this.props.games}/>
         </section>
       </div>
+    </body>
     );
   }
 }

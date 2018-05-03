@@ -36,6 +36,7 @@ body {margin:0;}
     background-color: #111;
 }
 
+
 .Nav .active {
   display: block;
   color: white;
@@ -61,20 +62,11 @@ body {margin:0;}
   color: black;
 }
 
-.App-newGame {
-  font-family: 'Lato';
-}
-
-.App-currentGames {
-  font-family: 'Lato';
-}
-
 .Activity{
   float:left;
   display: inline-block;
 }
 .Name{
-  float:Center;
   display: inline-block;
 }
 .Location{
@@ -88,7 +80,6 @@ body {
 
 .App-submitButton {
   padding-top: 12px;
-  padding-bottom: 12px;
 }
 
 .gameDetails {
@@ -121,24 +112,6 @@ input[type=submit]:hover {
     background-color: #45a049;
 }
 
-.GamesList{
-  position: center;
-  list-style: none;
-  font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
-  border-bottom: 1px solid #ccc;
-}
-/* templates based on w3schools tutorial */
-table {
-  border-collapse:collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
 .joinGame {
   right: 10px;
   background-color: #4CAF50;
@@ -150,4 +123,15 @@ td, th {
 
 .joinGame:hover {
     background-color: #45a049;
+}
+
+table {
+  border-collapse:collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 8px;
 }
