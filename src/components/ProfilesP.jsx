@@ -93,6 +93,7 @@ class ProfileP extends React.Component{
 		)
 	}
 	acceptFriendreq(friend){
+		this.refs.friendaccept.setAttribute("disabled","disabled");
 		axios({
 			method:"post",
 			url:"/acceptfriend",
@@ -100,6 +101,9 @@ class ProfileP extends React.Component{
 				"user":localStorage.getItem("user"),
 				"friend":friend,
 			}
+		}).then((res)=>{
+			this.setState(res.data);
+			this.refs.friendaccept.removeAttribute("disabled");
 		})
 	}
 	declineFriendreq(){
@@ -112,8 +116,16 @@ class ProfileP extends React.Component{
 					<p>
 						{f["sender"]} sent you a friend request!
 					</p>
-					<button onClick={()=>this.acceptFriendreq(f["sender"])}>accept</button>
-					<button onClick={()=>this.declineFriendreq(f["sender"])}>decline</button>
+					<button 
+						ref="friendaccept"
+						onClick={()=>this.acceptFriendreq(f["sender"])}>
+						accept
+					</button>
+					<button 
+						ref="frienddecline"
+						onClick={()=>this.declineFriendreq(f["sender"])}>
+						decline
+					</button>
 				</div>
 			)
 		}

@@ -36,14 +36,25 @@ class Profile extends React.Component{
 		}
 	}
 	addFriend(){
-		axios({
-			method:"post",
-			url:"/reqfriend",
-			data:{
-				"user":localStorage.getItem("user"),
-				"friend":this.state.username,
-			}
-		})
+		if(this.state.frname=="pending request"||this.state.frname=="friends"){
+			alert("you already sent a friend request");
+		}
+		else{
+			/*https://stackoverflow.com/questions/35315872/reactjs-prevent-multiple-times-
+			button-press?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa*/
+			this.refs.addfriend.setAttribute("disabled","disabled");
+			axios({
+				method:"post",
+				url:"/reqfriend",
+				data:{
+					"user":localStorage.getItem("user"),
+					"friend":this.state.username,
+				}
+			}).then(()=>{
+				this.setState({frname:"pending request"});
+				this.refs.addfriend.removeAttribute("disabled");
+			})
+		}
 	}
 	componentDidMount(){
 		var usrnm=this.props.username;
@@ -75,7 +86,24 @@ class Profile extends React.Component{
 	      	//if not friend, frname = add friend
 	      	//if is friend, frname = friends
 	      	//if pending friend req, frname = pending req
-
+	      	axios({
+	      		method:"post",
+	      		url:"/isfriend",
+	      		data:{
+	      			"user":localStorage.getItem("user"),
+	      			"friend":this.state.username
+	      		}
+	      	}).then((res)=>{
+	      		if(res.data=="pending"){
+	      			this.setState({frname:"pending request"});
+	      		}
+	      		else if(res.data=="accepted"){
+	      			this.setState({frname:"friends"});
+	      		}
+	      		else{
+	      			this.setState({frname:"add friend"});
+	      		}
+	      	})
 		
 		}).catch((error)=>{
          	console.log(error.response.data);
@@ -121,7 +149,7 @@ class Profile extends React.Component{
 			<div id="profile">
 				<div id="panel">
 					<div id="addfriend">
-						<button onClick={this.addFriend}>
+						<button ref="addfriend" onClick={this.addFriend}>
 							{this.state.frname}
 						</button>
 					</div>
