@@ -88,6 +88,14 @@ body {margin:0;}
   color: black;
 }
 
+.App-newGame {
+  font-family: 'Lato';
+}
+
+.App-currentGames {
+  font-family: 'Lato';
+}
+
 .Activity{
   float:left;
   display: inline-block;
@@ -151,6 +159,8 @@ input[type=submit]:hover {
     background-color: #45a049;
 }
 
+
+/* templates based on w3schools tutorial */
 table {
   border-collapse:collapse;
   width: 100%;

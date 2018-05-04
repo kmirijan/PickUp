@@ -29,6 +29,9 @@ button:hover{
 #form{
     padding:0px 0px 0px 0px;
 }
+#panel{
+    margin: 0px 200px 0px 200px;
+}
 
 #top{
     text-align:center;
