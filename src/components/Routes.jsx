@@ -1,6 +1,5 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
-var {Top,Rest}=require("./Main.jsx");
 var {Profile}=require("./Profiles.jsx");
 var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
