@@ -5,6 +5,8 @@ var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
 var {CurrentGames}=require("./CurrentGames.jsx");
 var {Users}=require("../helpers/Users.jsx");
+require("../css/App.css");
+require("../css/font.css");
 import NavBar from './NavBar';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
