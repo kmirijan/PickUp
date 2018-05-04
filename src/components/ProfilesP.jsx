@@ -10,6 +10,9 @@ class ProfileP extends React.Component{
 		super(props);
 		this.expandBio=this.expandBio.bind(this);
 		this.edit=this.edit.bind(this);
+		this.processFeed=this.processFeed.bind(this);
+		this.acceptFriendreq=this.acceptFriendreq.bind(this);
+		this.declineFriendreq=this.declineFriendreq.bind(this);
 		this.state={
 			expname:"expand",
 			expanded:false,
@@ -20,6 +23,8 @@ class ProfileP extends React.Component{
 			alias:"",
 			email:"",
 			games:[],
+			friends:[],
+			feed:[]
 		}
 	}
 	edit(){
@@ -54,7 +59,9 @@ class ProfileP extends React.Component{
 				long:userStates["bio"],
 				short:userStates["bio"],
 				email:userStates["email"],
-				games:userStates["games"]
+				games:userStates["games"],
+				friends:userStates["friends"],
+				feed:userStates["feed"]
 			});
 			//make bio shorter
 	      	if(this.state.long.length>100){
@@ -67,11 +74,83 @@ class ProfileP extends React.Component{
 
 	}
 	gamesList(){
+		if(this.state.games==undefined){return}
 		const gamesList=this.state.games.map((games)=>
 			<li key={games["game"]}>{games["game"]}</li>
 		)
 		return(
 			<u1 key="gamesList">{gamesList}</u1>
+		)
+	}
+	friendsList(){
+		if(this.state.friends==undefined){return}
+		var friends=this.state.friends.filter(
+			friend=>friend["req"]=="accepted"
+		);
+		friends=friends.map((f)=>
+			<li key={f["username"]}>{f["username"]}</li>
+		)
+		return(
+			<u1 key="friends">{friends}</u1>
+		)
+	}
+	acceptFriendreq(friend){
+		this.refs.friendaccept.setAttribute("disabled","disabled");
+		axios({
+			method:"post",
+			url:"/acceptfriend",
+			data:{
+				"user":localStorage.getItem("user"),
+				"friend":friend,
+			}
+		}).then((res)=>{
+			this.setState(res.data);
+			this.refs.friendaccept.removeAttribute("disabled");
+		})
+	}
+	declineFriendreq(friend){
+		this.refs.frienddecline.setAttribute("disabled","disabled");
+		axios({
+			method:"post",
+			url:"/declinefriend",
+			data:{
+				"user":localStorage.getItem("user"),
+				"friend":friend,
+			}
+		}).then((res)=>{
+			this.setState(res.data);
+			this.refs.frienddecline.removeAttribute("disabled");
+		})
+	}
+	processFeed(f){
+		if(f["type"]=="friendreq"){
+			return(
+				<div>
+					<p>
+						{f["sender"]} sent you a friend request!
+					</p>
+					<button
+						ref="friendaccept"
+						onClick={()=>this.acceptFriendreq(f["sender"])}>
+						accept
+					</button>
+					<button
+						ref="frienddecline"
+						onClick={()=>this.declineFriendreq(f["sender"])}>
+						decline
+					</button>
+				</div>
+			)
+		}
+		else{return}
+	}
+	feed(){
+		if(this.state.feed==undefined){return}
+		const feed=this.state.feed.map((f)=>
+			<li key={f["type"]}>{this.processFeed(f)}</li>
+		)
+		return(
+			<u1 key="feed">{feed}</u1>
 		)
 	}
 	componentDidUpdate(prevProps,prevState){
@@ -116,35 +195,23 @@ class ProfileP extends React.Component{
 						Games created:<br></br>
 						{this.gamesList()}
 					</div>
+					<div id="friendsList">
+						Friends:<br></br>
+						{this.friendsList()}
+					</div>
 				</div>
-			</div>
-			);
-	}
-};
-
-
-class FeedP extends React.Component{
-	constructor(props){
-		super(props);
-
-		this.state={
-			games:"to be implemented",
-			expanded:false,
-
-		}
-	}
-	render(){
-		return(
-			<div id="feed">
 				<div id="fpanel">
 					<h1>FEED</h1>
-					<p>{this.state.games}</p>
+					<div id="feed">
+						{this.feed()}
+					</div>
 				</div>
 			</div>
 			);
-	};
+	}
 };
+
+
 module.exports={
-	ProfileP,
-	FeedP
+	ProfileP
 }
