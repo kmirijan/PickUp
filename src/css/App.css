@@ -7,9 +7,6 @@
   height: 150px;
 }
 
-<<<<<<< HEAD
-.App-header {
-=======
 body {margin:0;}
 
 .NavBar{
@@ -24,6 +21,10 @@ body {margin:0;}
 }
 
 .Nav {
+   float: left;
+}
+
+.NavIcons {
    float: right;
 }
 
@@ -39,6 +40,7 @@ body {margin:0;}
     background-color: #111;
 }
 
+
 .Nav .active {
   display: block;
   color: white;
@@ -48,13 +50,30 @@ body {margin:0;}
   background-color: orange;
 }
 
-.form-inline{
-  padding-top: 45px;
+.NavIcons .pages {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: none;
+}
+
+.NavIcons .pages:hover:not(.active) {
+    background-color: #111;
+}
+
+
+.NavIcons .active {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: orange;
 }
 
 .App-header {
   margin-top: 45px;
->>>>>>> rogelio
   padding: 20px;
   background-color: rgba(135,206,350,0.4);
   border-bottom: 1px solid black;
@@ -69,20 +88,11 @@ body {margin:0;}
   color: black;
 }
 
-.App-newGame {
-  font-family: 'Lato';
-}
-
-.App-currentGames {
-  font-family: 'Lato';
-}
-
 .Activity{
   float:left;
   display: inline-block;
 }
 .Name{
-  float:Center;
   display: inline-block;
 }
 .Location{
@@ -96,12 +106,8 @@ body {
 
 .App-submitButton {
   padding-top: 12px;
-  padding-bottom: 12px;
 }
 
-<<<<<<< HEAD
-input[type=text] {
-=======
 .gameDetails {
     width: 30%;
     padding: 20px;
@@ -111,7 +117,6 @@ input[type=text] {
 }
 
 .searchBox {
->>>>>>> rogelio
     width: 30%;
     padding: 20px;
     border: 1px solid #ccc;
@@ -133,31 +138,6 @@ input[type=submit]:hover {
     background-color: #45a049;
 }
 
-<<<<<<< HEAD
-li {
-=======
-.GamesList{
-  position: center;
->>>>>>> rogelio
-  list-style: none;
-  font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
-  border-bottom: 1px solid #ccc;
-}
-<<<<<<< HEAD
-
-
-/* templates based on w3schools tutorial */
-table {
-  border-collapse:collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
 .joinGame {
   right: 10px;
   background-color: #4CAF50;
@@ -170,5 +150,14 @@ td, th {
 .joinGame:hover {
     background-color: #45a049;
 }
-=======
->>>>>>> rogelio
+
+table {
+  border-collapse:collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 8px;
+}

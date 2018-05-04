@@ -25,6 +25,9 @@ updateSearch(event){
    this.updateTable();
  }
 
+componentDidMount(){
+  new google.maps.places.Autocomplete(document.getElementById('location'));
+}
 
 addGame(event) {
   event.preventDefault();
@@ -66,14 +69,17 @@ addGame(event) {
          onSubmit={this.addGame.bind(this)}
        >
             <input
+              className='gameDetails'
               type="text"
               ref="sport"
               placeholder="Activity"/>
             <input
+              className='gameDetails'
               type="text"
               ref="name"
               placeholder="Name"/>
            <input
+             className='gameDetails'
              id= 'location'
               type="text"
               ref="location"
@@ -82,20 +88,19 @@ addGame(event) {
             <div className="App-submitButton">
               <input type="submit" value="Submit"/>
             </div>
-
           </form>
 
-        <input type="text" placeholder="Search"
+        <input className = "searchBox" type="text" placeholder="Search"
           value={this.state.search}
           onChange={this.updateSearch.bind(this)}/>
-          <h1 className="App-currentGames">
-            Below are the currently available games:
-          </h1>
+        <h2>Below are the currently available games:</h2>
+        <div class="container">
       <ul>
           {filteredGames.map((game)=>{
             return <Game game = {game} key={game.id}/>
           })}
       </ul>
+      </div>
     </div>
     );
   }
@@ -116,12 +121,12 @@ class Game extends React.Component{
 
   render(){
     return(
-      <tr>
-      <td ><h3>{this.props.game.sport} </h3></td>
-      <td ><h3>{this.props.game.name} </h3></td>
-      <td > <h3>{this.props.game.location}</h3> </td>
-      <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
-      </tr>
+        <tr>
+          <td ><h3>{this.props.game.sport} </h3></td>
+          <td ><h3>{this.props.game.name} </h3></td>
+          <td > <h3>{this.props.game.location}</h3> </td>
+          <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
+        </tr>
     );
   }
 }

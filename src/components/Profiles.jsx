@@ -1,6 +1,5 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
-var {Top,Rest}=require("./Main.jsx");
 require("../css/profiles.css");
 var axios=require("axios");
 
@@ -56,11 +55,11 @@ class Profile extends React.Component{
 	      	if(this.state.long.length>100){
 	      		this.setState({short:this.state.long.substring(0,100)});
 	      	}
-		
+
 		}).catch((error)=>{
          	console.log(error.response.data);
       	});
-      	
+
 	}
 	gamesList(){
 		const gamesList=this.state.games.map((games)=>
@@ -121,7 +120,7 @@ class Feed extends React.Component{
 		this.state={
 			games:"to be implemented",
 			expanded:false,
-			
+
 		}
 	}
 	render(){
