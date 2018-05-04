@@ -4,12 +4,13 @@ var {Top,Rest}=require("./Main.jsx");
 var {Profile}=require("./Profiles.jsx");
 var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
-var {CurrentGames}=require("./CurrentGames.js");
+var {CurrentGames}=require("./CurrentGames.jsx");
 var {Users}=require("../helpers/Users.jsx");
 import NavBar from './NavBar';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
 import App from "./App";
+import Home from "./Home";
 var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 
 
@@ -19,7 +20,7 @@ class Routes extends React.Component{
             <BrowserRouter>
                 <Switch>
                 	<Route exact path="/" component={NavBar} />
-                    <Route exact path='/map' component={Map} />
+                	<Route exact path="/home" component={Home} />
                     <Route path="/users" component={Users} />
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
@@ -111,7 +112,6 @@ class LogOut extends React.Component{
 		localStorage.setItem("loggedin",false);
         localStorage.setItem("user","");
         this.props.history.push("/signin");
-        window.location.reload();
 	}
 	render(){
         return(<_404 />);

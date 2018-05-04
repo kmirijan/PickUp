@@ -7,7 +7,73 @@
   height: 150px;
 }
 
+body {margin:0;}
+
+.NavBar{
+   list-style-type: none;
+   margin: 0;
+   padding: 0;
+   overflow: hidden;
+   background-color: #333;
+   position: fixed;
+   top: 0;
+   width: 100%;
+}
+
+.Nav {
+   float: left;
+}
+
+.NavIcons {
+   float: right;
+}
+
+.Nav .pages {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: none;
+}
+
+.Nav .pages:hover:not(.active) {
+    background-color: #111;
+}
+
+
+.Nav .active {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: orange;
+}
+
+.NavIcons .pages {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: none;
+}
+
+.NavIcons .pages:hover:not(.active) {
+    background-color: #111;
+}
+
+
+.NavIcons .active {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: orange;
+}
+
 .App-header {
+  margin-top: 45px;
   padding: 20px;
   background-color: rgba(135,206,350,0.4);
   border-bottom: 1px solid black;
@@ -22,20 +88,11 @@
   color: black;
 }
 
-.App-newGame {
-  font-family: 'Lato';
-}
-
-.App-currentGames {
-  font-family: 'Lato';
-}
-
 .Activity{
   float:left;
   display: inline-block;
 }
 .Name{
-  float:Center;
   display: inline-block;
 }
 .Location{
@@ -49,10 +106,17 @@ body {
 
 .App-submitButton {
   padding-top: 12px;
-  padding-bottom: 12px;
 }
 
-input[type=text] {
+.gameDetails {
+    width: 30%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.searchBox {
     width: 30%;
     padding: 20px;
     border: 1px solid #ccc;
@@ -74,25 +138,6 @@ input[type=submit]:hover {
     background-color: #45a049;
 }
 
-li {
-  list-style: none;
-  font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
-  border-bottom: 1px solid #ccc;
-}
-
-
-/* templates based on w3schools tutorial */
-table {
-  border-collapse:collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
 .joinGame {
   right: 10px;
   background-color: #4CAF50;
@@ -104,4 +149,15 @@ td, th {
 
 .joinGame:hover {
     background-color: #45a049;
+}
+
+table {
+  border-collapse:collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 8px;
 }
