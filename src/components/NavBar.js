@@ -2,7 +2,6 @@ import React from 'react';
 import {NavLink} from 'react-router-dom';
 import '../css/App.css';
 
-
 class NavBar extends React.Component {
   render() {
     if(localStorage.getItem("loggedin")=="true"){

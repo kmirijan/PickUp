@@ -40,7 +40,6 @@ class Routes extends React.Component{
 const Map=()=>(
 	<div>
 		<NavBar />
-		<Rest />
 	</div>
 );
 class User extends React.Component{

@@ -29,7 +29,7 @@ export class CurrentGames extends React.Component{
 updateSearch(event){
   updateTable(event.target.value);
 }
-  
+
 
 addGame(event) {
   event.preventDefault();
@@ -45,11 +45,11 @@ addGame(event) {
   this.refs.name.value='';
   this.refs.location.value='';
   }
-  
-  
+
+
 
   render(){
-    
+
     return(
       <div>
 
@@ -58,14 +58,17 @@ addGame(event) {
          onSubmit={this.addGame.bind(this)}
        >
             <input
+              className='gameDetails'
               type="text"
               ref="sport"
               placeholder="Activity"/>
             <input
+              className='gameDetails'
               type="text"
               ref="name"
               placeholder="Name"/>
            <input
+             className='gameDetails'
              id= 'location'
               type="text"
               ref="location"
@@ -74,7 +77,6 @@ addGame(event) {
             <div className="App-submitButton">
               <input type="submit" value="Submit"/>
             </div>
-
           </form>
 
         <input type="text" placeholder="Search"
@@ -83,7 +85,7 @@ addGame(event) {
           <h1 className="App-currentGames">
             Below are the currently available games:
           </h1>
-          <GameTable user={this.props.user}/> 
+          <GameTable user={this.props.user}/>
     </div>
     );
   }
@@ -96,13 +98,13 @@ class GameTable extends React.Component{
     super(props);
 	updateTable = updateTable.bind(this);
 
-	this.state = 
+	this.state =
 	{
       games: [],
 	  filteredGames: [],
 	}
   }
-  
+
   componentWillMount()
   {
     updateTable("");
@@ -126,13 +128,13 @@ class GameTable extends React.Component{
 	  </tbody>
       </table>
 	);
-  
+
   }
 
 }
 
 class Game extends React.Component{
-  
+
   constructor(props)
   {
     super(props);
@@ -143,15 +145,15 @@ class Game extends React.Component{
   {
     axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
   }
-  
+
   render(){
     return(
-      <tr>
-      <td ><h3>{this.props.game.sport} </h3></td>
-      <td ><h3>{this.props.game.name} </h3></td>
-      <td > <h3>{this.props.game.location}</h3> </td>
-      <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
-      </tr>
+        <tr>
+          <td ><h3>{this.props.game.sport} </h3></td>
+          <td ><h3>{this.props.game.name} </h3></td>
+          <td > <h3>{this.props.game.location}</h3> </td>
+          <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
+        </tr>
     );
   }
 }
