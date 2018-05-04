@@ -16,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/kmirijan/PickUp.git"
   },
-  "author": "",
+  "author": "me",
   "license": "ISC",
   "babel": {
     "presets": [
