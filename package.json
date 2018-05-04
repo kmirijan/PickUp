@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --hot --inline",
-    "start": "npm run build && SET NODE_ENV=production && node server.js",
+    "start": "npm run build && node server.js",
     "compile": "babel public --out-dir dist",
     "server": "nodemon index.js",
     "build": "webpack --config webpack.config.js",
@@ -16,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/kmirijan/PickUp.git"
   },
-  "author": "",
+  "author": "me",
   "license": "ISC",
   "babel": {
     "presets": [
@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/kmirijan/PickUp#readme",
   "devDependencies": {
+    "axios": "^0.18.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",

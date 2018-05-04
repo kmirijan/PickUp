@@ -1,29 +1,24 @@
 import React from 'react';
 import '../css/App.css';
-import {CurrentGames} from './CurrentGames';
-var {Routes,_404}=require("./Routes.jsx");
+import {CurrentGames} from './CurrentGames.js';
 import NavBar from './NavBar';
 
+
 class App extends React.Component {
-  componentWillMount(){
-    if(!(localStorage.getItem("loggedin")=="true")){
-     this.props.history.push("/signin");
-     alert("Must be logged in to play");
-    }
-  }
   render() {
+    console.log("Rendering App"); // DEBUG
     return (
-      <body>
       <div className="App">
-          <NavBar/>
-        <h2>
+        <NavBar/>
+
+        <h1 className="App-newGame">
           To setup a pickup game please enter the required information below
-        </h2>
-        <section className="SubmissionHome">
-          <CurrentGames games={this.props.games}/>
+        </h1>
+
+      <section className="SubmissionHome">
+        <CurrentGames user={this.props.match.params.username}/>
         </section>
       </div>
-    </body>
     );
   }
 }

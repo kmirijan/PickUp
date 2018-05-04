@@ -9,6 +9,7 @@ var axios=require("axios");
 class SignUp extends React.Component{
   constructor(props){
     super(props);
+    this.signUp=this.signUp.bind(this);
     this.state={
       email:'',
       password:'',
@@ -20,21 +21,27 @@ class SignUp extends React.Component{
   }
 
 signUp(){
+  this.refs.signup.setAttribute("disabled","disabled");
   const{email, password, username}=this.state;
+  this.refs.signup.setAttribute("disabled","disabled");
   /*http://codetheory.in/using-the-node-js-bcrypt-module-to-hash-and-safely-store-passwords/*/
   if(email.match(/.*@.*/)==null){
+    this.refs.signup.removeAttribute("disabled");
     this.setState({
       error:{
         message:"invalid email"
       }
     })
+    this.refs.signup.removeAttribute("disabled");
   }
   else if(password.length<8){
+    this.refs.signup.removeAttribute("disabled");
     this.setState({
       error:{
         message:"password must be at least 8 characters long"
       }
     })
+    this.refs.signup.removeAttribute("disabled");
   }
   else{
     axios({
@@ -65,8 +72,9 @@ signUp(){
             }
           })
         }
+        this.refs.signup.removeAttribute("disabled");
       });
-      
+
   }
 }
 
@@ -99,6 +107,7 @@ signUp(){
         onChange={event => this.setState({username: event.target.value})}
         />
         <button
+        ref="signup"
         className="btn btn-primary"
         type="button"
         onClick={() => this.signUp()}

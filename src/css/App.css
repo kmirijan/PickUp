@@ -151,6 +151,10 @@ input[type=submit]:hover {
     background-color: #45a049;
 }
 
+.joinGame:hover {
+    background-color: #45a049;
+}
+
 table {
   border-collapse:collapse;
   width: 100%;
