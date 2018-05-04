@@ -1,11 +1,12 @@
 import React from 'react';
-import './css/App.css';
-import {CurrentGames} from './CurrentGames.js';
+import '../css/App.css';
+var {Top, Rest} =require("./Main.jsx");
+import {CurrentGames} from './CurrentGames.jsx';
 
 
-export class App extends React.Component {
+class App extends React.Component {
   render() {
-    console.log(this.props);
+    console.log("Rendering App"); // DEBUG
     return (
       <div className="App">
         <header className="App-header">
@@ -17,9 +18,11 @@ export class App extends React.Component {
         </h1>
 
       <section className="SubmissionHome">
-      <CurrentGames games={this.props.games}/>
+        <CurrentGames user={this.props.match.params.username}/>
         </section>
       </div>
     );
   }
 }
+
+export default App;

@@ -1,0 +1,87 @@
+#profile{
+	width:100%;
+	display:table;
+	clear:both;
+	content:"";
+}
+#panel{
+	width:50%;
+	float:left;
+}
+#fpanel{
+	width:50%;
+	float:left;
+}
+h1{
+	text-align:center;
+}
+#picture{
+	margin:auto;
+	width:200px;
+	height:200px;
+	background-color:gray;
+}
+#changeimg{
+	margin:auto;
+	width:200px;
+	height:200px;
+	position:relative;
+	top: -200px;
+	color:white;
+	visibility:hidden;
+}
+#mask:hover{
+	background-color:rgba(0, 0, 0, 0.4);
+}
+#mask:hover #changeimg{
+	visibility:visible;
+	color:white;
+}
+#edit{
+	text-align:center;
+}
+#username{
+	margin:auto;
+	text-align:center;
+	color:blue;
+	padding:5px;
+}
+#email{
+	margin:auto;
+	text-align:center;
+	color:red;
+	padding:0px;
+}
+#alias{
+	margin:0, auto, 0, auto;
+	text-align:center;
+	font-size:x-large;
+	padding:10px;
+}
+#bio{
+	margin:auto;
+	text-align:center;
+	padding:20px 50px 20px 50px;
+}
+#expand{
+	width:111px;
+	margin:auto;
+}
+#gamesList{
+	text-align:center;
+}
+#friendsList{
+	text-align:center;
+}
+#feed{
+	text-align:center;
+}
+#save{
+	text-align:center;
+}
+#friendslist{
+	text-align:center;
+}
+#addfriend{
+	text-align:center;
+}

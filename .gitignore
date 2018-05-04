@@ -1,2 +1,3 @@
 node_modules/
-.teamhello.js.swp
+*bundle.js
+*.swp
