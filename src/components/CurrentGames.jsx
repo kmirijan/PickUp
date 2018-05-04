@@ -5,7 +5,7 @@ import axios from 'axios';
 
 function updateTable(search)
 {
-  axios.post('/games').then((results)=>{
+  axios.get('/games').then((results)=>{
     this.setState({games: results.data});
     this.setState({filteredGames : this.state.games.filter(
       (game) => {
@@ -39,7 +39,7 @@ addGame(event) {
   let user = 100; // TODO change this when users are implemented
   let game = {gameId: id, sport: sport, name: name, location: location, user: user};
   console.log(game);
-  axios.post('/postgames', game);
+  axios.post('/games', game);
   updateTable(this.refs.search.value);
   this.refs.sport.value='';
   this.refs.name.value='';
@@ -78,7 +78,7 @@ addGame(event) {
           </form>
 
         <input type="text" placeholder="Search"
-      ref="search"
+		  ref="search"
           onChange={this.updateSearch.bind(this)}/>
           <h1 className="App-currentGames">
             Below are the currently available games:
@@ -94,13 +94,13 @@ class GameTable extends React.Component{
   constructor(props)
   {
     super(props);
-  updateTable = updateTable.bind(this);
+	updateTable = updateTable.bind(this);
 
-  this.state = 
-  {
+	this.state = 
+	{
       games: [],
-    filteredGames: [],
-  }
+	  filteredGames: [],
+	}
   }
   
   componentWillMount()
@@ -110,22 +110,22 @@ class GameTable extends React.Component{
 
   render() {
     return (
-     <table>
-     <thead>
+	   <table>
+	   <thead>
        <tr>
-    <th><h3>Activity</h3></th>
-    <th><h3>Name</h3></th>
-    <th><h3>Location</h3></th>
-    <th><h3>Join</h3></th>
-  </tr>
+	  <th><h3>Activity</h3></th>
+	  <th><h3>Name</h3></th>
+	  <th><h3>Location</h3></th>
+	  <th><h3>Join</h3></th>
+	</tr>
       </thead>
       <tbody>
-        {this.state.filteredGames.map((game)=>{
+	      {this.state.filteredGames.map((game)=>{
             return <Game game = {game} user={this.props.user} key={game.id}/>
           })}
-    </tbody>
+	  </tbody>
       </table>
-  );
+	);
   
   }
 
