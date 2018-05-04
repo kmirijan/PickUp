@@ -3,7 +3,7 @@ var ReactDOM=require("react-dom");
 var {Profile}=require("./Profiles.jsx");
 var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
-var {CurrentGames}=require("./CurrentGames.jsx");
+var {CurrentGames}=require("./CurrentGames.js");
 var {Users}=require("../helpers/Users.jsx");
 require("../css/App.css");
 require("../css/font.css");
