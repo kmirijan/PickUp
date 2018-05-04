@@ -1,10 +1,12 @@
 import React from 'react';
 import '../css/App.css';
+var {Top, Rest} =require("./Main.jsx");
 import {CurrentGames} from './CurrentGames.jsx';
 
 
-export class App extends React.Component {
+class App extends React.Component {
   render() {
+    console.log("Rendering App"); // DEBUG
     return (
       <div className="App">
         <header className="App-header">
@@ -16,9 +18,11 @@ export class App extends React.Component {
         </h1>
 
       <section className="SubmissionHome">
-        <CurrentGames user={this.props.username}/>
+        <CurrentGames user={this.props.match.params.username}/>
         </section>
       </div>
     );
   }
 }
+
+export default App;

@@ -5,9 +5,10 @@ import axios from 'axios';
 
 function updateTable(search)
 {
-  axios.get('/games').then((results)=>{
+  axios.post('/retrievegames').then((results)=>{
+    console.log(results.data);
     this.setState({games: results.data});
-    this.setState({filteredGames : this.state.games.filter(
+    this.setState({filteredGames : results.data.filter(
       (game) => {
         return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
           (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
@@ -36,8 +37,7 @@ addGame(event) {
   let name = this.refs.name.value;
   let location = this.refs.location.value;
   let id = Math.floor((Math.random()*(1 << 30))+1);
-  let user = 100; // TODO change this when users are implemented
-  let game = {gameId: id, sport: sport, name: name, location: location, user: user};
+  let game = {gameId: id, sport: sport, name: name, location: location, user: this.props.user};
   console.log(game);
   axios.post('/games', game);
   updateTable(this.refs.search.value);

@@ -106,11 +106,9 @@ app.post("/postgames", (req, res) =>
   });
 });
 
-app.post("/games", (req, res) =>
+app.post("/retrievegames", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Games sending");
-
-  var search = req.body.filter;
 
   mongo.connect(mongoUrl, (err, db) => {
     if (err) throw err;
@@ -179,28 +177,6 @@ app.post("/games", (req, res) =>
     db.db("pickup").collection("games").insertOne(game,() => {db.close()});
   
   });
-});
-
-app.get("/games", (req, res) =>
-{
-  console.log('[', (new Date()).toLocaleTimeString(), "] Games sending");
-
-  var search = req.body.filter;
-
-  mongo.connect(mongoUrl, (err, db) => {
-    if (err) throw err;
-    db.db("pickup").collection("games").find({}).toArray((err, result) => {
-      if (err) throw err;
-      res.json(result);
-      res.end();
-      db.close();
-
-
-    });
-
-  
-  });
-
 });
 
 
