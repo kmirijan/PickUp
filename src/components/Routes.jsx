@@ -1,6 +1,5 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
-var {Top,Rest}=require("./Main.jsx");
 var {Profile}=require("./Profiles.jsx");
 var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
@@ -28,7 +27,7 @@ class Routes extends React.Component{
                     <Route path="/signin" component={SignIn}/>
 					<Route path="/signup" component={SignUp}/>
 					<Route path="/logout" component={LogOut}/>
-                    <Route component={_404} />            
+                    <Route component={_404} />
                 </Switch>
             </BrowserRouter>
         )
@@ -57,14 +56,14 @@ class User extends React.Component{
 		while(!(/[a-z]/i.test(usrnm[0]))){
 			usrnm=usrnm.substring(1,usrnm.length);
 		}
-		
+
 		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
 		{
 			console.log("hello world");
 			return(
 				<div>
 				<NavBar />
-				<ProfileP 
+				<ProfileP
 					username={usrnm}
 					history={this.props.history}
 				/>
@@ -96,7 +95,7 @@ class Edit extends React.Component{
 			return(
 				<div>
 					<NavBar />
-					<ProfileEdit 
+					<ProfileEdit
 						username={usrnm}
 						history={this.props.history}
 					/>
@@ -125,4 +124,3 @@ module.exports={
 	Routes,
 	_404
 }
-

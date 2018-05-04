@@ -1,7 +1,6 @@
 const express=require("express");
 const mongo=require("mongodb").MongoClient;
 const bodyParser=require("body-parser");
-const data=require("./src/server/data.js");
 var mime = require('mime-types');
 const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
@@ -19,9 +18,6 @@ app.use(bodyParser.json());
 /*sends index.html to any link*/
 app.get("*",(req,res)=>{
   res.sendFile(__dirname+"/dist/index.html");
-});
-app.post("/search",(req,res)=>{
-	data.valEL(res,req.body["event"],req.body["location"]);
 });
 app.post("/user",(req,res)=>{
 	mkprofile.getUsers(req.body.params.name,res);
@@ -67,10 +63,10 @@ app.post("/join", (req, res) =>
     var collection = client.db("pickup").collection("games");
     var query = {id: req.body.gid};
     var newPlayer = { $push: {players: req.body.uid} };
-  
+
     console.log("user: ", req.body.uid);
     var userQuery = {username: req.body.uid};
-    var joinedGame = {$push: {games: req.body.gid}}; 
+    var joinedGame = {$push: {games: req.body.gid}};
     client.db("pickup").collection("users").update(userQuery, joinedGame);
 
     collection.update(query, newPlayer, (err) =>
@@ -78,7 +74,7 @@ app.post("/join", (req, res) =>
       if (err) throw err;
       client.close();
     });
-  
+
   });
 
 });
@@ -86,7 +82,7 @@ app.post("/join", (req, res) =>
 app.post("/postgames", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
-  
+
   console.log(req.body);
 
   var game = {
@@ -97,12 +93,12 @@ app.post("/postgames", (req, res) =>
     owner: makeValid(req.body.user),
     players: [makeValid(req.body.user),],
   };
-  
+
   mongo.connect(mongoUrl, (err, db) => {
     if (err) throw err;
 
     db.db("pickup").collection("games").insertOne(game,() => {db.close()});
-  
+
   });
 });
 
@@ -121,7 +117,7 @@ app.post("/retrievegames", (req, res) =>
 
     });
 
-  
+
   });
 
 });
@@ -137,12 +133,12 @@ app.post("/join", (req, res) =>
     var collection = client.db("pickup").collection("games");
     var query = {id: req.body.gid};
     var newPlayer = { $push: {players: req.body.uid} };
-	
+
 	if (req.body.uid != GUEST)
 	{
 	  console.log("user: ", req.body.uid);
 	  var userQuery = {username: req.body.uid};
-	  var joinedGame = {$push: {games: req.body.gid}}; 
+	  var joinedGame = {$push: {games: req.body.gid}};
 	  client.db("pickup").collection("users").update(userQuery, joinedGame);
 	}
 
@@ -151,7 +147,7 @@ app.post("/join", (req, res) =>
       if (err) throw err;
       client.close();
     });
-  
+
   });
 
 });
@@ -159,7 +155,7 @@ app.post("/join", (req, res) =>
 app.post("/games", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
-  
+
   console.log(req.body);
 
   var game = {
@@ -170,12 +166,12 @@ app.post("/games", (req, res) =>
     owner: makeValid(req.body.user),
     players: [makeValid(req.body.user),],
   };
-  
+
   mongo.connect(mongoUrl, (err, db) => {
     if (err) throw err;
 
     db.db("pickup").collection("games").insertOne(game,() => {db.close()});
-  
+
   });
 });
 
@@ -185,7 +181,3 @@ const port=process.env.PORT||8000;
 app.listen(port,()=>{
     console.log(port);
 });
-
-
-
-

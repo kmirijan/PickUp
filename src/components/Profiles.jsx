@@ -1,7 +1,6 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
-var {Top,Rest}=require("./Main.jsx");
-//require("../css/profiles.css");
+require("../css/profiles.css");
 var axios=require("axios");
 
 
@@ -104,11 +103,11 @@ class Profile extends React.Component{
 	      			this.setState({frname:"add friend"});
 	      		}
 	      	})
-		
+
 		}).catch((error)=>{
          	console.log(error.response.data);
       	});
-      	
+
 	}
 	gamesList(){
 		if(this.state.games==undefined){return}

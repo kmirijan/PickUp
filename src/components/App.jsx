@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/App.css';
-var {Top, Rest} =require("./Main.jsx");
 import {CurrentGames} from './CurrentGames.jsx';
+import NavBar from './NavBar';
 
 
 class App extends React.Component {
@@ -9,10 +9,8 @@ class App extends React.Component {
     console.log("Rendering App"); // DEBUG
     return (
       <div className="App">
-        <header className="App-header">
-          <img src="/logo.png" className="App-logo" alt="logo" />
-          <h1 className="App-title">The Hub for Connecting Players</h1>
-        </header>
+        <NavBar/>
+
         <h1 className="App-newGame">
           To setup a pickup game please enter the required information below
         </h1>

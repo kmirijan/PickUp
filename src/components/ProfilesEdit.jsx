@@ -1,6 +1,5 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
-var {Top,Rest}=require("./Main.jsx");
 require("../css/profiles.css");
 var {Switch,BrowserRouter,Route,browserHistory,Redirect}=require('react-router-dom');
 var axios=require("axios");
@@ -105,11 +104,11 @@ class ProfileEdit extends React.Component{
 				friends:userStates["friends"],
 				feed:userStates["feed"]
 			});
-		
+
 		}).catch((error)=>{
          	console.log(error.response.data);
       	});
-      	
+
 	}
 	componentDidUpdate(prevProps,prevState){
 	}
@@ -139,7 +138,7 @@ class ProfileEdit extends React.Component{
 						</textarea>
 					</div>
 					<div id="bio" ref="bio">
-						<textarea 
+						<textarea
 							rows="10"
 							cols="40"
 							maxlength="500"

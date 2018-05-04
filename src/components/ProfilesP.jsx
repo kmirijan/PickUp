@@ -1,6 +1,5 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
-var {Top,Rest}=require("./Main.jsx");
 require("../css/profiles.css");
 var {Switch,BrowserRouter,Route,browserHistory,Redirect}=require('react-router-dom');
 var axios=require("axios");
@@ -68,11 +67,11 @@ class ProfileP extends React.Component{
 	      	if(this.state.long.length>100){
 	      		this.setState({short:this.state.long.substring(0,100)});
 	      	}
-		
+
 		}).catch((error)=>{
          	console.log(error.response.data);
       	});
-      	
+
 	}
 	gamesList(){
 		if(this.state.games==undefined){return}
@@ -130,12 +129,12 @@ class ProfileP extends React.Component{
 					<p>
 						{f["sender"]} sent you a friend request!
 					</p>
-					<button 
+					<button
 						ref="friendaccept"
 						onClick={()=>this.acceptFriendreq(f["sender"])}>
 						accept
 					</button>
-					<button 
+					<button
 						ref="frienddecline"
 						onClick={()=>this.declineFriendreq(f["sender"])}>
 						decline
