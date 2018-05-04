@@ -4,6 +4,7 @@ const bodyParser=require("body-parser");
 const data=require("./src/server/data.js");
 var mime = require('mime-types');
 const mkprofile=require("./src/server/mkprofile.js");
+const friends=require("./src/server/friends.js");
 
 const app=express();
 /*configurations*/
@@ -35,6 +36,21 @@ app.post("/signin",(req,res)=>{
 app.post("/getallusers",(req,res)=>{
   mkprofile.getAllUsers(res);
 });
+app.post("/reqfriend",(req,res)=>{
+  friends.reqFriend(req.body["user"],req.body["friend"],res);
+})
+app.post("/acceptfriend",(req,res)=>{
+  friends.acceptFriend(req.body["user"],req.body["friend"],res);
+})
+app.post("/isfriend",(req,res)=>{
+  friends.isFriend(req.body["user"],req.body["friend"],res);
+})
+app.post("/declinefriend",(req,res)=>{
+  friends.declineFriend(req.body["user"],req.body["friend"],res);
+})
+app.post("/removefriend",(req,res)=>{
+  friends.removeFriend(req.body["user"],req.body["friend"],res);
+})
 
 /*----------------------------------------------------------------------------------------*/
 const makeValid = (obj) => {return obj != null ? obj : "";};

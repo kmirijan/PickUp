@@ -1,7 +1,8 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
-var {Profile,Feed}=require("./Profiles.jsx");
-var {ProfileP,FeedP}=require("./ProfilesP.jsx");
+var {Top,Rest}=require("./Main.jsx");
+var {Profile}=require("./Profiles.jsx");
+var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
 var {CurrentGames}=require("./CurrentGames.js");
 var {Users}=require("../helpers/Users.jsx");
@@ -26,7 +27,8 @@ class Routes extends React.Component{
                     <Route path="/edit:username" component={Edit}/>
                     <Route path="/app" component={App}/>
                     <Route path="/signin" component={SignIn}/>
-					          <Route path="/signup" component={SignUp}/>
+					<Route path="/signup" component={SignUp}/>
+					<Route path="/logout" component={LogOut}/>
                     <Route component={_404} />
                 </Switch>
             </BrowserRouter>
@@ -44,13 +46,19 @@ class User extends React.Component{
 	constructor(props){
 		super(props);
 	}
+	componentWillMount(){
+		if(!(localStorage.getItem("loggedin")=="true")){
+			alert("Must be logged in to find users")
+			this.props.history.push("/signin");
+		}
+	}
 	render(){
 		var usrnm=this.props.match.params.username;
 		while(!(/[a-z]/i.test(usrnm[0]))){
 			usrnm=usrnm.substring(1,usrnm.length);
 		}
 
-		if(localStorage.getItem("loggedin")&&(localStorage.getItem("user")==usrnm))
+		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
 		{
 			console.log("hello world");
 			return(
@@ -60,10 +68,9 @@ class User extends React.Component{
 					username={usrnm}
 					history={this.props.history}
 				/>
-				<FeedP />
 				</div>
 		)}
-		else{
+		else if(localStorage.getItem("loggedin")=="true"){
 			return(
 				<div>
 				<NavBar />
@@ -71,9 +78,11 @@ class User extends React.Component{
 					username={usrnm}
 					history={this.props.history}
 				/>
-				<Feed />
 				</div>
 		)}
+		else{
+			return(<_404/>)
+		}
 	};
 };
 class Edit extends React.Component{
@@ -82,7 +91,7 @@ class Edit extends React.Component{
 		while(!(/[a-z]/i.test(usrnm[0]))){
 			usrnm=usrnm.substring(1,usrnm.length);
 		}
-		if(localStorage.getItem("loggedin")&&(localStorage.getItem("user")==usrnm))
+		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
 		{
 			return(
 				<div>
@@ -98,11 +107,22 @@ class Edit extends React.Component{
 		}
 	}
 }
-
+class LogOut extends React.Component{
+	componentDidMount(){
+		localStorage.setItem("loggedin",false);
+        localStorage.setItem("user","");
+        this.props.history.push("/signin");
+        window.location.reload();
+	}
+	render(){
+        return(<_404 />);
+	}
+}
 const _404=()=>(
 	<h1>404</h1>
 );
 
 module.exports={
-	Routes
+	Routes,
+	_404
 }
