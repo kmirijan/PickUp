@@ -25,7 +25,8 @@ class Routes extends React.Component{
                     <Route path="/users" component={Users} />
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
-                    <Route path="/app" component={App}/>
+                    <Route path="/app" 
+                        render={(props) => <App user = {getCurrentUser()}/>}/>
                     <Route path="/signin" component={SignIn}/>
 					<Route path="/signup" component={SignUp}/>
 					<Route path="/logout" component={LogOut}/>
@@ -33,6 +34,20 @@ class Routes extends React.Component{
                 </Switch>
             </BrowserRouter>
         )
+    }
+}
+
+function getCurrentUser()
+{
+    let user = localStorage.getItem("user");
+    console.log("user: ", user);
+    if (user != "")
+    {
+        return user;
+    }
+    else
+    {
+        return "guest";
     }
 }
 

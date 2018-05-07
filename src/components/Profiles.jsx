@@ -109,7 +109,15 @@ class Profile extends React.Component{
       	});
 
 	}
+
+    componentWillMount() {
+        axios.post("/usergames", {user:this.props.username}, (results) => {
+            this.state.games = results.data;
+        });
+    }
+
 	gamesList(){
+        
 		if(this.state.games==undefined){return}
 		const gamesList=this.state.games.map((games)=>
 			<li key={games["game"]}>{games["game"]}</li>

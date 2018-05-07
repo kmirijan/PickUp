@@ -18,6 +18,8 @@ function updateTable(search)
 }
 
 export class CurrentGames extends React.Component{
+    
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -36,6 +38,7 @@ export class CurrentGames extends React.Component{
         let sport = this.refs.sport.value;
         let name = this.refs.name.value;
         let location = this.refs.location.value;
+        let coords = this.autocomplete.getPlace().geometry.location;
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let game = {
             gameId: id, 
@@ -44,7 +47,8 @@ export class CurrentGames extends React.Component{
             location: location, 
             user: this.props.user,
             coords: {
-                lat: 
+                lat: coords.lat(),
+                lng: coords.lng()
             },
         };
         console.log(game);
@@ -97,6 +101,12 @@ export class CurrentGames extends React.Component{
             <GameTable user={this.props.user}/>
             </div>
         );
+    
+    }
+
+    componentDidMount() {
+        let input = document.getElementById('location');
+        this.autocomplete = new google.maps.places.Autocomplete(input);
     }
 }
 

@@ -13,18 +13,27 @@ class ProfileP extends React.Component{
 		this.processFeed=this.processFeed.bind(this);
 		this.acceptFriendreq=this.acceptFriendreq.bind(this);
 		this.declineFriendreq=this.declineFriendreq.bind(this);
+
+
+        var usrnm=this.props.username;
+		while(!(/[a-z]/i.test(usrnm[0]))){
+			usrnm=usrnm.substring(1,usrnm.length);
+		}
+
 		this.state={
 			expname:"expand",
 			expanded:false,
 			pic:"",
 			short:"",
 			long:"",
-			username:"",
+			username:usrnm,
 			alias:"",
 			email:"",
 			games:[],
 			friends:[],
-			feed:[]
+			feed:[],
+            myGames:[]
+
 		}
 	}
 	edit(){
@@ -41,14 +50,11 @@ class ProfileP extends React.Component{
 		}
 	}
 	componentDidMount(){
-		var usrnm=this.props.username;
-		while(!(/[a-z]/i.test(usrnm[0]))){
-			usrnm=usrnm.substring(1,usrnm.length);
-		}
-		console.log(usrnm)
+		
+		console.log('"',this.state.username,'"')
 		axios.post("/user",{
 			params:{
-				name:usrnm
+				name:this.state.username
 			}
 		}).then((res)=>{
 			var userStates=res.data[0];
@@ -61,7 +67,7 @@ class ProfileP extends React.Component{
 				email:userStates["email"],
 				games:userStates["games"],
 				friends:userStates["friends"],
-				feed:userStates["feed"]
+				feed:userStates["feed"],
 			});
 			//make bio shorter
 	      	if(this.state.long.length>100){
@@ -73,16 +79,15 @@ class ProfileP extends React.Component{
       	});
 
 	}
-	gamesList(){
-		if(this.state.games==undefined){return}
-		const gamesList=this.state.games.map((games)=>
-			<li key={games["game"]}>{games["game"]}</li>
-		)
-		return(
-			<u1 key="gamesList">{gamesList}</u1>
-		)
-	}
-	friendsList(){
+
+    componentWillMount() {
+        axios.post("/usergames", {user:this.state.username}).then( (results) => {
+            console.log(results);
+            this.setState({myGames : results.data});
+        });
+    }
+
+    	friendsList(){
 		if(this.state.friends==undefined){return}
 		var friends=this.state.friends.filter(
 			friend=>friend["req"]=="accepted"
@@ -91,7 +96,7 @@ class ProfileP extends React.Component{
 			<li key={f["username"]}>{f["username"]}</li>
 		)
 		return(
-			<u1 key="friends">{friends}</u1>
+			<ul key="friends">{friends}</ul>
 		)
 	}
 	acceptFriendreq(friend){
@@ -150,7 +155,7 @@ class ProfileP extends React.Component{
 			<li key={f["type"]}>{this.processFeed(f)}</li>
 		)
 		return(
-			<u1 key="feed">{feed}</u1>
+			<ul key="feed">{feed}</ul>
 		)
 	}
 	componentDidUpdate(prevProps,prevState){
@@ -191,10 +196,7 @@ class ProfileP extends React.Component{
 							{this.state.expname}
 						</button>
 					</div>
-					<div id="gamesList">
-						Games created:<br></br>
-						{this.gamesList()}
-					</div>
+					<GamesList games={this.state.myGames}/>
 					<div id="friendsList">
 						Friends:<br></br>
 						{this.friendsList()}
@@ -209,7 +211,37 @@ class ProfileP extends React.Component{
 			</div>
 			);
 	}
-};
+}
+
+class GamesList extends React.Component
+{
+    displayGame(game)
+    {
+        return (
+            <li key={game.id}>
+                <div>Sport {game.sport}</div>
+                <div>Location {game.location}</div>
+                <div>Name {game.name}</div>
+            </li>
+        );
+    }
+
+    render()
+    {
+        if(this.props.games==[]){return}
+   		const gamesList=this.props.games.map((game)=>
+    		{return this.displayGame(game)}
+	    );
+
+        return(
+            <div>
+                <h1>Games Played</h1>
+        		<ul key="gamesList">{gamesList}</ul>
+            </div>
+	    );
+    }
+
+}
 
 
 module.exports={
