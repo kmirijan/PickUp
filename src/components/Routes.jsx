@@ -13,6 +13,7 @@ import SignUp from './SignUp';
 import SignIn from './SignIn';
 import App from "./App";
 import Home from "./Home";
+import Map from "./Map";
 var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 
 
@@ -27,6 +28,7 @@ class Routes extends React.Component{
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
                     <Route path="/settings:username" component={Settings}/>
+                    <Route path="/map" component={Map}/>
                     <Route path="/app" 
                         render={(props) => <App user = {getCurrentUser()}/>}/>
                     <Route path="/signin" component={SignIn}/>

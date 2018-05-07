@@ -18,6 +18,7 @@ app.use(bodyParser.json());
 /*sends index.html to any link*/
 app.get("*",(req,res)=>{
   res.sendFile(__dirname+"/dist/index.html");
+  console.log('[', (new Date()).toLocaleTimeString(), "] Main file sending");
 });
 app.post("/user",(req,res)=>{
 	mkprofile.getUsers(req.body.params.name,res);
