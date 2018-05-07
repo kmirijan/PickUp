@@ -11,7 +11,7 @@ class Map extends React.Component {
     {
         super(props);
         this.state = {
-            userPosition : {lat: 36.99147, lng: -122.06049}, // UCSC as default
+            userPosition : {lat: 37.758, lng: -122.473}, // San Francisco as default
             map : {},
             games : [],
             nearbyGames: [],
@@ -33,13 +33,18 @@ class Map extends React.Component {
 
     componentDidMount()
     {
-        // create a google map centered at the user's location
-        let center = new google.maps.LatLng(this.state.userPosition.lat,
-                this.state.userPosition.lng);
-        this.setState({map : new google.maps.Map(this.refs.map,
-                            {center: center, zoom: this.DEFAULT_ZOOM})
-        });
+        
+        if (navigator.geolocation)
+        {
+            // create a google map centered at the user's location
 
+            let center = new google.maps.LatLng(this.state.userPosition.lat,
+                    this.state.userPosition.lng);
+            this.setState({map : new google.maps.Map(this.refs.map,
+                            {center: center, zoom: this.DEFAULT_ZOOM})
+        
+            });
+        }
 
 
 
@@ -52,6 +57,13 @@ class Map extends React.Component {
             lng: position.coords.longitude
             }
         });
+        
+        if (this.state.map != {})
+        {
+            let center = new google.maps.LatLng(this.state.userPosition.lat,
+                    this.state.userPosition.lng);
+            this.state.map.panTo(center);
+        }
 
         // get nearby games
         this.retrieveNearbyGames();
