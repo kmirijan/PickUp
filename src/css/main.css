@@ -3,29 +3,7 @@
 .link{
     color:yellow;
 }
-input{
-	width:200px;
-    padding: 10px 40px;
-    margin: 10px 10px;
-    border: none;
-    border-radius: 5px;
-}
-input:active{
-	opacity:0.8;
-}
-button{
-    background-color: white;
-    color: black;
-    padding: 10px 10px 10px 10px;
-    margin: 10px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-button:hover{
-	 background-color: yellow;
-	 color: white;
-}
+
 #form{
     padding:0px 0px 0px 0px;
 }
@@ -70,8 +48,4 @@ button:hover{
     height: 70%;
     width: 100%;
     background-color: grey;
-}
-body{
-	font-family:"Trebuchet MS", Helvetica, sans-serif;
-    margin: 0px 0px 0px 0px;
 }

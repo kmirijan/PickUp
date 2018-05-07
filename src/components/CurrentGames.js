@@ -46,6 +46,9 @@ addGame(event) {
   this.refs.location.value='';
   }
 
+  componentDidMount(){
+  new google.maps.places.Autocomplete(document.getElementById('location'));
+}
 
 
   render(){
@@ -80,7 +83,7 @@ addGame(event) {
           </form>
 
         <input type="text" placeholder="Search"
-		  ref="search"
+		  className = "searchBox"
           onChange={this.updateSearch.bind(this)}/>
           <h1 className="App-currentGames">
             Below are the currently available games:

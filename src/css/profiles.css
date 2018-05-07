@@ -18,15 +18,7 @@
 	height:200px;
 	background-color:gray;
 }
-#changeimg{
-	margin:auto;
-	width:200px;
-	height:200px;
-	position:relative;
-	top: -200px;
-	color:white;
-	visibility:hidden;
-}
+
 #mask:hover{
 	background-color:rgba(0, 0, 0, 0.4);
 }

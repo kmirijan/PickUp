@@ -1,8 +1,7 @@
-var React=require("react");
-var ReactDOM=require("react-dom");
-require("../css/profiles.css");
-var {Switch,BrowserRouter,Route,browserHistory,Redirect}=require('react-router-dom');
-var axios=require("axios");
+import React from 'react';
+import '../css/profilesEdit.css';
+import {Switch,BrowserRouter,Route,browserHistory,Redirect} from 'react-router-dom';
+import axios from "axios";
 
 
 class ProfileEdit extends React.Component{
@@ -62,7 +61,7 @@ class ProfileEdit extends React.Component{
 				<p>
 					{f["username"]}
 				</p>
-				<button ref="removefriend" onClick={()=>{this.removeFriend(f["username"])}}>
+				<button type="button" className="btn btn-danger" onClick={()=>{this.removeFriend(f["username"])}}>
 					remove
 				</button>
 			</div>
@@ -114,20 +113,20 @@ class ProfileEdit extends React.Component{
 	}
 	render(){
 		return(
-			<div id="profile">
-				<div id="panel">
-					<div id="picture">
+			<div className = "EditProfile">
+				<div>
+					<div className="pictureEdit">
 						<img src={this.state.pic}></img>
-						<div id="mask"></div>
-						<p id="changeimg">change picture</p>
+						<div></div>
+						<p className="editImg">change picture</p>
 					</div>
-					<div id="username">
+					<div className="usernameInEdit">
 						{this.state.username}
 					</div>
-					<div id="email">
+					<div className="emailInEdit">
 						{this.state.email}
 					</div>
-					<div id="alias" ref="alias">
+					<div className="editUsername">
 						<textarea
 							rows="1"
 							cols="40"
@@ -137,7 +136,7 @@ class ProfileEdit extends React.Component{
 						>
 						</textarea>
 					</div>
-					<div id="bio" ref="bio">
+					<div className="bioEdit">
 						<textarea
 							rows="10"
 							cols="40"
@@ -147,12 +146,12 @@ class ProfileEdit extends React.Component{
 						>
 						</textarea>
 					</div>
-					<div id="save">
-						<button onClick={this.save}>
+					<div className="saveEdit">
+						<button type="button" className="btn btn-success" onClick={this.save}>
 							save
 						</button>
 					</div>
-					<div id="friendslist">
+					<div className="friendslistEdit">
 						friends:
 						{this.friendsList()}
 					</div>
@@ -165,5 +164,5 @@ class ProfileEdit extends React.Component{
 
 
 module.exports={
-	ProfileEdit,
+	ProfileEdit
 }
