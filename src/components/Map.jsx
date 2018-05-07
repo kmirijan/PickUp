@@ -76,17 +76,20 @@ class Map extends React.Component {
 
     updateMap() {
         console.log("adding markers");
-        
-        for (game in this.state.nearbyGames)
+        console.log(this.state.nearbyGames);
+        this.state.nearbyGames.map((game) =>
+        //for (var game in this.state.nearbyGames)
         {
-            console.log("Marker added");
+            console.log(game);
             // add games as markers
             let position = new google.maps.LatLng(game.coords.lat, game.coords.lng);
 
             var marker = new google.maps.Marker({position:position});
 
-            markers.push(this.state.map);
-        }
+            this.markers.push(marker);
+            marker.setMap(this.state.map);
+            console.log("Marker added");
+        });
     }
 
     render() {

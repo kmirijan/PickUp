@@ -101,14 +101,13 @@ app.post("/nearbygames", (req, res) => {
         
         let collection = client.db("pickup").collection("games");
         
-        let query = {coords: {
-                lat: {$and: [{$gt: center.lat - range.lat}, {$lt: center.lat + range.lat}] },
-                lng: {$and: [{$gt: center.lng - range.lng}, {$lt: center.lng + range.lng}] }
-            }
+        let query = {"coords.lat": {$gt: center.lat - range.lat, $lt: center.lat + range.lat},
+                "coords.lng": {$gt: center.lng - range.lng, $lt: center.lng + range.lng }
+            
         };
-
         collection.find(query).toArray((err, result) => {
             if (err) throw err;
+            console.log(result);
             res.json(result);
             res.end();
             client.close();
