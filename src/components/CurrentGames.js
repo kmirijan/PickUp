@@ -52,7 +52,7 @@ export class CurrentGames extends React.Component{
             },
         };
         console.log(game);
-        axios.post('/games', game);
+        axios.post('/postgames', game);
         updateTable(this.refs.search.value);
         this.refs.sport.value='';
         this.refs.name.value='';

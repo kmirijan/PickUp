@@ -144,7 +144,6 @@ app.post("/postgames", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
 
-  console.log(req.body);
 
   var game = {
     sport: makeValid(req.body.sport),
@@ -155,6 +154,7 @@ app.post("/postgames", (req, res) =>
     players: [makeValid(req.body.user),],
     coords: req.body.coords,
   };
+    
 
   mongo.connect(mongoUrl, (err, db) => {
     if (err) throw err;
@@ -214,28 +214,6 @@ app.post("/join", (req, res) =>
 
 });
 
-app.post("/games", (req, res) =>
-{
-  console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
-
-  console.log(req.body);
-
-  var game = {
-    sport: makeValid(req.body.sport),
-    name: makeValid(req.body.name),
-    location: makeValid(req.body.location),
-    id: makeValid(req.body.gameId),
-    owner: makeValid(req.body.user),
-    players: [makeValid(req.body.user),],
-  };
-
-  mongo.connect(mongoUrl, (err, db) => {
-    if (err) throw err;
-
-    db.db("pickup").collection("games").insertOne(game,() => {db.close()});
-
-  });
-});
 
 
 /*deploy app*/
