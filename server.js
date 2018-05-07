@@ -34,6 +34,15 @@ app.post("/signin",(req,res)=>{
 app.post("/getallusers",(req,res)=>{
   mkprofile.getAllUsers(res);
 });
+app.post("/getemail",(req,res)=>{
+  mkprofile.getEmail(req.body["user"],res);
+});
+app.post("/setemail",(req,res)=>{
+  mkprofile.setEmail(req.body["user"],req.body["email"],res);
+});
+app.post("/setpassword",(req,res)=>{
+  mkprofile.setPassword(req.body["user"],req.body["oldPassword"],req.body["newPassword"],res);
+});
 app.post("/reqfriend",(req,res)=>{
   friends.reqFriend(req.body["user"],req.body["friend"],res);
 })

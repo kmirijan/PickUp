@@ -8,6 +8,8 @@ class ProfileEdit extends React.Component{
 	constructor(props){
 		super(props);
 		this.save=this.save.bind(this);
+		this.profile=this.profile.bind(this);
+    this.settings=this.settings.bind(this);
 		this.friendsList=this.friendsList.bind(this);
 		this.processFriends=this.processFriends.bind(this);
 		this.removeFriend=this.removeFriend.bind(this);
@@ -20,6 +22,12 @@ class ProfileEdit extends React.Component{
 			games:[],
 			friends:[]
 		}
+	}
+	profile(){
+		this.props.history.push("/user:"+this.props.username);
+	}
+	settings(){
+		this.props.history.push("/settings:"+this.props.username);
 	}
 	save(){
 		axios({
@@ -113,9 +121,19 @@ class ProfileEdit extends React.Component{
 	}
 	render(){
 		return(
-			<div className = "EditProfile">
-				<div>
-					<div className="pictureEdit">
+			<div id="profile">
+				<div id="panel">
+					<div id="profile">
+						<button onClick={this.profile}>
+						  profile
+						</button>
+					</div>
+					<div id="settings">
+						<button onClick={this.settings}>
+							settings
+						</button>
+					</div>
+					<div id="picture">
 						<img src={this.state.pic}></img>
 						<div></div>
 						<p className="editImg">change picture</p>

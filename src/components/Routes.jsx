@@ -5,6 +5,7 @@ var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
 var {CurrentGames}=require("./CurrentGames.js");
 var {Users}=require("../helpers/Users.jsx");
+var{ProfileSettings}=require("./ProfilesSettings.jsx");
 require("../css/App.css");
 require("../css/font.css");
 import NavBar from './NavBar';
@@ -25,6 +26,7 @@ class Routes extends React.Component{
                     <Route path="/users" component={Users} />
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
+                    <Route path="/settings:username" component={Settings}/>
                     <Route path="/app" component={App}/>
                     <Route path="/signin" component={SignIn}/>
 					<Route path="/signup" component={SignUp}/>
@@ -37,11 +39,6 @@ class Routes extends React.Component{
 }
 
 
-const Map=()=>(
-	<div>
-		<NavBar />
-	</div>
-);
 class User extends React.Component{
 	constructor(props){
 		super(props);
@@ -103,6 +100,28 @@ class Edit extends React.Component{
               />
           </div>
         </div>
+			)}
+		else{
+			return(<_404/>)
+		}
+	}
+}
+class Settings extends React.Component{
+	render(){
+		var usrnm=this.props.match.params.username;
+		while(!(/[a-z]/i.test(usrnm[0]))){
+			usrnm=usrnm.substring(1,usrnm.length);
+		}
+		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
+		{
+			return(
+				<div>
+					<NavBar />
+					<ProfileSettings
+						username={usrnm}
+						history={this.props.history}
+					/>
+				</div>
 			)}
 		else{
 			return(<_404/>)
