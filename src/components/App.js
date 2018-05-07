@@ -10,7 +10,6 @@ class App extends React.Component {
     return (
       <div className="App">
         <NavBar/>
-
         <h1 className="App-newGame">
           To setup a pickup game please enter the required information below
         </h1>

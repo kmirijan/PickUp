@@ -10,6 +10,7 @@ class ProfileP extends React.Component{
 		super(props);
 		this.expandBio=this.expandBio.bind(this);
 		this.edit=this.edit.bind(this);
+		this.settings=this.settings.bind(this);
 		this.processFeed=this.processFeed.bind(this);
 		this.acceptFriendreq=this.acceptFriendreq.bind(this);
 		this.declineFriendreq=this.declineFriendreq.bind(this);
@@ -28,7 +29,10 @@ class ProfileP extends React.Component{
 		}
 	}
 	edit(){
-		this.props.history.push("/edit"+this.props.username);
+		this.props.history.push("/edit:"+this.props.username);
+	}
+	settings(){
+		this.props.history.push("/settings:"+this.props.username);
 	}
 	expandBio(){
 		if(this.state.expanded==false){
@@ -167,6 +171,11 @@ class ProfileP extends React.Component{
 					<div id="edit">
 						<button onClick={this.edit}>
 							edit
+						</button>
+					</div>
+					<div id="settings">
+						<button onClick={this.settings}>
+							settings
 						</button>
 					</div>
 					<div id="picture">
