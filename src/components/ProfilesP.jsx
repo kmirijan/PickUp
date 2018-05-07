@@ -82,7 +82,6 @@ class ProfileP extends React.Component{
 
     componentWillMount() {
         axios.post("/usergames", {user:this.state.username}).then( (results) => {
-            console.log(results);
             this.setState({myGames : results.data});
         });
     }
@@ -235,7 +234,7 @@ class GamesList extends React.Component
 
         return(
             <div>
-                <h1>Games Played</h1>
+                <h2>Games Played</h2>
         		<ul key="gamesList">{gamesList}</ul>
             </div>
 	    );
