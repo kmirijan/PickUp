@@ -91,15 +91,15 @@ app.post("/join", (req, res) =>
 
 app.post("/nearbygames", (req, res) => {
     console.log('[', (new Date()).toLocaleTimeString(), "] Nearby games sending");
-    
+
     let range = req.body.range;
     let center = req.body.center;
 
     mongo.connect(mongoUrl, (err, client) =>{
         if (err) throw err;
-        
+
         let collection = client.db("pickup").collection("games");
-        
+
         let query = {coords: {
                 lat: {$and: [{$gt: center.lat - range.lat}, {$lt: center.lat + range.lat}] },
                 lng: {$and: [{$gt: center.lng - range.lng}, {$lt: center.lng + range.lng}] }
@@ -120,7 +120,7 @@ app.post("/nearbygames", (req, res) => {
 // return the games that the user has played
 app.post("/usergames", (req, res) => {
     console.log('[', (new Date()).toLocaleTimeString(), "] Sending ", req.body.user.trim(), "'s games");
-    
+
     mongo.connect(mongoUrl, (err, client) => {
         if (err) throw err;
         let username = {username: req.body.user.trim()};
@@ -135,7 +135,7 @@ app.post("/usergames", (req, res) => {
                 client.close();
             });
         });
-    
+
     });
 });
 
@@ -224,6 +224,7 @@ app.post("/games", (req, res) =>
     sport: makeValid(req.body.sport),
     name: makeValid(req.body.name),
     location: makeValid(req.body.location),
+    isprivate: makeValid(req.body.isprivate),
     id: makeValid(req.body.gameId),
     owner: makeValid(req.body.user),
     players: [makeValid(req.body.user),],
