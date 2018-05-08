@@ -12,6 +12,7 @@ class NavBar extends React.Component {
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/home'}>Home</NavLink></li>
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/app'}>Create Game</NavLink></li>
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/users'}>Users</NavLink></li>
+              <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/map'}>Map</NavLink></li>
               <ul>
                 <li className="NavIcons"><NavLink to={'/logout'} style={{color:'white'}} activeClassName='active' className = 'pages'>
                   <span className="glyphicon glyphicon-log-in" style={{color:'white'}}></span> Logout</NavLink></li>
@@ -30,11 +31,13 @@ class NavBar extends React.Component {
     else{
       return (
         <div>
-          <nav activeClassName="navbar navbar-default">
+
+          <nav className="navbar navbar-default">
             <ul className="NavBar">
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/home'}>Home</NavLink></li>
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/app'}>Create Game</NavLink></li>
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/users'}>Users</NavLink></li>
+              <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/map'}>Map</NavLink></li>
               <ul>
                 <li className="NavIcons"><NavLink to={'/signin'} style={{color:'white'}} activeClassName='active' className = 'pages'>
                   <span className="glyphicon glyphicon-log-in" style={{color:'white'}}></span> Signin</NavLink></li>

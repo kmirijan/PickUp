@@ -18,80 +18,97 @@ function updateTable(search)
 }
 
 export class CurrentGames extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state = {
-      game: {},
-    };
-    this.addGame = this.addGame.bind(this);
-  }
 
-updateSearch(event){
-  updateTable(event.target.value);
-}
+    
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            game: {},
+        };
+        this.addGame = this.addGame.bind(this);
+    }
 
-
-addGame(event) {
-  event.preventDefault();
-  let sport = this.refs.sport.value;
-  let name = this.refs.name.value;
-  let location = this.refs.location.value;
-  let id = Math.floor((Math.random()*(1 << 30))+1);
-  let game = {gameId: id, sport: sport, name: name, location: location, user: this.props.user};
-  console.log(game);
-  axios.post('/games', game);
-  updateTable(this.refs.search.value);
-  this.refs.sport.value='';
-  this.refs.name.value='';
-  this.refs.location.value='';
-  }
-
-  componentDidMount(){
-  new google.maps.places.Autocomplete(document.getElementById('location'));
-}
+    updateSearch(event){
+      updateTable(event.target.value);
+    }
 
 
-  render(){
+    addGame(event) {
+        event.preventDefault();
+        let sport = this.refs.sport.value;
+        let name = this.refs.name.value;
+        let location = this.refs.location.value;
+        let coords = this.autocomplete.getPlace().geometry.location;
+        let id = Math.floor((Math.random()*(1 << 30))+1);
+        let game = {
+            gameId: id, 
+            sport: sport, 
+            name: name, 
+            location: location, 
+            user: this.props.user,
+            coords: {
+                lat: coords.lat(),
+                lng: coords.lng()
+            },
+        };
+        console.log(game);
+        axios.post('/postgames', game);
+        updateTable(this.refs.search.value);
+        this.refs.sport.value='';
+        this.refs.name.value='';
+        this.refs.location.value='';
+    }
 
-    return(
-      <div>
 
-        <form
-         className="form-inline"
-         onSubmit={this.addGame.bind(this)}
-       >
-            <input
-              className='gameDetails'
-              type="text"
-              ref="sport"
-              placeholder="Activity"/>
-            <input
-              className='gameDetails'
-              type="text"
-              ref="name"
-              placeholder="Name"/>
-           <input
-             className='gameDetails'
-             id= 'location'
-              type="text"
-              ref="location"
-              placeholder="Location"/>
 
-            <div className="App-submitButton">
-              <input type="submit" value="Submit"/>
+    render(){
+
+        return(
+            <div>
+
+                <form
+                className="form-inline"
+                onSubmit={this.addGame.bind(this)}
+                >
+                    <input
+                    className='gameDetails'
+                    type="text"
+                    ref="sport"
+                    placeholder="Activity"/>
+                    <input
+                    className='gameDetails'
+                    type="text"
+                    ref="name"
+                    placeholder="Name"/>
+                    <input
+                    className='gameDetails'
+                    id= 'location'
+                    type="text"
+                    ref="location"
+                    placeholder="Location"/>
+
+                    <div className="App-submitButton">
+                        <input type="submit" value="Submit"/>
+                    </div>
+                </form>
+
+                <input type="text" placeholder="Search"
+		            ref="search"
+                    onChange={this.updateSearch.bind(this)}/>
+                <h1 className="App-currentGames">
+                Below are the currently available games:
+                </h1>
+            <GameTable user={this.props.user}/>
             </div>
-          </form>
+        );
+    
+    }
 
-        <input type="text" placeholder="Search"
-		  className = "searchBox"
-          onChange={this.updateSearch.bind(this)}/>
-          <h1 className="App-currentGames">
-            Below are the currently available games:
-          </h1>
-          <GameTable user={this.props.user}/>
-    </div>
-    );
-  }
+    componentDidMount() {
+        let input = document.getElementById('location');
+        this.autocomplete = new google.maps.places.Autocomplete(input);
+    }
 }
 
 class GameTable extends React.Component{
