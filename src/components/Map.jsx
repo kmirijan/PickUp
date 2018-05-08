@@ -90,18 +90,38 @@ class Map extends React.Component {
         console.log("adding markers");
         console.log(this.state.nearbyGames);
         this.state.nearbyGames.map((game) =>
-        //for (var game in this.state.nearbyGames)
         {
             console.log(game);
             // add games as markers
             let position = new google.maps.LatLng(game.coords.lat, game.coords.lng);
 
-            var marker = new google.maps.Marker({position:position});
-
+            var marker = new google.maps.Marker({position:position, title:game.sport});
+            let content = this.createInfoWindowContent(game);
+            var infoWindow = new google.maps.InfoWindow({
+                content: content
+            });
             this.markers.push(marker);
             marker.setMap(this.state.map);
+            marker.addListener('click', () => {infoWindow.open(this.state.map, marker)});
             console.log("Marker added");
         });
+    }
+
+    createInfoWindowContent(game)
+    {
+        return (
+            '<div id="content">' +
+                '<div id="siteNotice" />' +
+                '<h1 id="firstHeading" class="firstHeading">' + game.sport + '</h1>' +
+                '<div id="bodyContent">' +
+                    '<div>Name: ' + game.name + '</div>' +
+                    '<div>Location: ' + game.location + '</div>' + 
+                '</div>' +
+            '</div>'
+
+        );
+
+
     }
 
     render() {
