@@ -31,6 +31,7 @@ class NavBar extends React.Component {
     else{
       return (
         <div>
+
           <nav className="navbar navbar-default">
             <ul className="NavBar">
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/home'}>Home</NavLink></li>

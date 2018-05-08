@@ -108,13 +108,15 @@ class Edit extends React.Component{
 		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
 		{
 			return(
-				<div>
-					<NavBar />
-					<ProfileEdit
-						username={usrnm}
-						history={this.props.history}
-					/>
-				</div>
+        <div>
+          <NavBar />
+          <div className = "editPage">
+            <ProfileEdit
+              username={usrnm}
+              history={this.props.history}
+              />
+          </div>
+        </div>
 			)}
 		else{
 			return(<_404/>)

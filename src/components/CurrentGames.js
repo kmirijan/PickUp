@@ -18,6 +18,7 @@ function updateTable(search)
 }
 
 export class CurrentGames extends React.Component{
+
     
     
     constructor(props) {

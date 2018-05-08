@@ -29,12 +29,14 @@ class ProfileSettings extends React.Component{
   componentDidMount(){
     this.setState({
       showEmailBox:[
-        <button key="changeEmailPrompt" onClick={this.changeEmailPrompt}>
+        <button type="button" className="btn btn-success" key="changeEmailPrompt" onClick={this.changeEmailPrompt}
+					style = {{margin: '20px'}}>
           change email
         </button>
       ],
       showPasswordBox:[
-        <button key="changePasswordPrompt" onClick={this.changePasswordPrompt}>
+        <button type="button" className="btn btn-success" key="changePasswordPrompt" onClick={this.changePasswordPrompt}
+					style = {{margin: '20px'}}>
         change password
         </button>
       ]
@@ -66,6 +68,8 @@ class ProfileSettings extends React.Component{
               onChange={event => this.setState({newEmail: event.target.value})}>
             </input>
             <button
+							type="button" className="btn btn-success"
+							style = {{margin: '20px'}}
               key="changeEmailButton"
               onClick={()=>this.changeEmail(this.state.newEmail)}>
               save
@@ -94,7 +98,9 @@ class ProfileSettings extends React.Component{
             onChange={event => this.setState({newPassword: event.target.value})}>
           </input>
           <button
+						type="button" className="btn btn-success"
             key="changePasswordButton"
+						style = {{margin: '20px'}}
             onClick={()=>this.changePassword(this.state.oldPassword,this.state.newPassword)}>
             save
           </button>
@@ -122,7 +128,9 @@ class ProfileSettings extends React.Component{
           emailPrompt:[],
           newEmail:"",
           showEmailBox:[
-            <button key="changeEmailPrompt" onClick={this.changeEmailPrompt}>
+            <button type="button" className="btn btn-success" key="changeEmailPrompt"
+							style = {{margin: '20px'}}
+							onClick={this.changeEmailPrompt}>
               change email
             </button>
           ]
@@ -152,7 +160,9 @@ class ProfileSettings extends React.Component{
           oldPassword:"",
           newPassword:"",
           showPasswordBox:[
-            <button key="changePasswordPrompt" onClick={this.changePasswordPrompt}>
+            <button type="button" className="btn btn-success"
+							style = {{margin: '20px'}}
+							key="changePasswordPrompt" onClick={this.changePasswordPrompt}>
             change password
             </button>
           ]
@@ -167,25 +177,29 @@ class ProfileSettings extends React.Component{
 			<div id="profile">
 				<div id="panel">
           <div id="profile">
-            <button onClick={this.profile}>
+            <button type="button" className="btn btn-success"
+							style = {{margin: '20px'}}
+							onClick={this.profile}>
               profile
             </button>
           </div>
           <div id="edit">
-            <button onClick={this.edit}>
+            <button type="button" className="btn btn-success"
+							style = {{margin: '20px'}}
+							onClick={this.edit}>
               edit
             </button>
           </div>
           <div id="changeemailbox">
             {this.state.showEmailBox}
-            <div id="emailbox" ref="emailbox">
+            <div id="emailbox" ref="emailbox" style = {{margin: '20px'}}>
               {this.state.emailPrompt}
               {this.state.emailError}
             </div>
           </div>
           <div id="changepasswordbox">
             {this.state.showPasswordBox}
-            <div id="passwordbox" ref="passwordbox">
+            <div id="passwordbox" ref="passwordbox" style = {{margin: '20px'}}>
               {this.state.passwordPrompt}
               {this.state.passwordError}
             </div>
