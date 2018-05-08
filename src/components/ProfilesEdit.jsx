@@ -9,7 +9,7 @@ class ProfileEdit extends React.Component{
 		super(props);
 		this.save=this.save.bind(this);
 		this.profile=this.profile.bind(this);
-    this.settings=this.settings.bind(this);
+		this.settings=this.settings.bind(this);
 		this.friendsList=this.friendsList.bind(this);
 		this.processFriends=this.processFriends.bind(this);
 		this.removeFriend=this.removeFriend.bind(this);
@@ -66,12 +66,16 @@ class ProfileEdit extends React.Component{
 	processFriends(f){
 		return(
 			<div>
-				<p>
 					{f["username"]}
-				</p>
-				<button type="button" className="btn btn-danger" onClick={()=>{this.removeFriend(f["username"])}}>
-					remove
-				</button>
+					<span>
+						<button
+							type="button"
+							className="btn btn-danger"
+							style = {{margin: '10px'}}
+							onClick={()=>{this.removeFriend(f["username"])}}>
+							Remove
+						</button>
+					</span>
 			</div>
 		)
 	}
@@ -83,104 +87,147 @@ class ProfileEdit extends React.Component{
 			}
 		);
 		friends=friends.map((f)=>
-			<li key={f["username"]}>{this.processFriends(f)}</li>
-		)
-		return(
-			<u1 key="friends">{friends}</u1>
-		)
-	}
-	componentDidMount(){
-		var usrnm=this.props.username;
-		while(!(/[a-z]/i.test(usrnm[0]))){
-			usrnm=usrnm.substring(1,usrnm.length);
-		}
-		console.log(usrnm)
-		axios.post("/user",{
-			params:{
-				name:usrnm
-			}
-		}).then((res)=>{
-			var userStates=res.data[0];
-			this.setState({
-				username:userStates["username"],
-				pic:userStates["pic"],
-				alias:userStates["alias"],
-				long:userStates["bio"],
-				email:userStates["email"],
-				games:userStates["games"],
-				friends:userStates["friends"],
-				feed:userStates["feed"]
-			});
-
-		}).catch((error)=>{
-         	console.log(error.response.data);
-      	});
-
-	}
-	componentDidUpdate(prevProps,prevState){
-	}
-	render(){
-		return(
-			<div id="profile">
-				<div id="panel">
-					<div id="profile">
-						<button onClick={this.profile}>
-						  profile
-						</button>
-					</div>
-					<div id="settings">
-						<button onClick={this.settings}>
-							settings
-						</button>
-					</div>
-					<div id="picture">
-						<img src={this.state.pic}></img>
-						<div></div>
-						<p className="editImg">change picture</p>
-					</div>
-					<div className="usernameInEdit">
-						{this.state.username}
-					</div>
-					<div className="emailInEdit">
-						{this.state.email}
-					</div>
-					<div className="editUsername">
-						<textarea
-							rows="1"
-							cols="40"
-							maxlength="30"
-							value={this.state.alias}
-							onChange={e=>this.setState({alias:e.target.value})}
-						>
-						</textarea>
-					</div>
-					<div className="bioEdit">
-						<textarea
-							rows="10"
-							cols="40"
-							maxlength="500"
-							value={this.state.long}
-							onChange={e=>this.setState({long:e.target.value})}
-						>
-						</textarea>
-					</div>
-					<div className="saveEdit">
-						<button type="button" className="btn btn-success" onClick={this.save}>
-							save
-						</button>
-					</div>
-					<div className="friendslistEdit">
-						friends:
-						{this.friendsList()}
-					</div>
-				</div>
-			</div>
-			);
-	}
-};
-
-
-
-module.exports={
-	ProfileEdit
+		<li key={f["username"]}>
+			{this.processFriends(f)}
+		</li>
+	)
+	return(
+		<ul key="friends">
+			{friends}
+		</ul>
+	)
 }
+componentDidMount(){
+	var usrnm=this.props.username;
+	while(!(/[a-z]/i.test(usrnm[0]))){
+		usrnm=usrnm.substring(1,usrnm.length);
+	}
+	console.log(usrnm)
+	axios.post("/user",{
+		params:{
+			name:usrnm
+		}
+	}).then((res)=>{
+		var userStates=res.data[0];
+		this.setState({
+			username:userStates["username"],
+			pic:userStates["pic"],
+			alias:userStates["alias"],
+			long:userStates["bio"],
+			email:userStates["email"],
+			games:userStates["games"],
+			friends:userStates["friends"],
+			feed:userStates["feed"]
+		});
+
+	}).catch((error)=>{
+		console.log(error.response.data);
+	});
+
+}
+componentDidUpdate(prevProps,prevState){
+}
+render(){
+	return(
+		<body className="profileEdit">
+
+			<div>
+					<button
+						type="button"
+						className="btn btn-info"
+						style={{margin:'10px',
+							float:'right'}}
+							onClick={this.profile}>
+							Profile
+						</button>
+
+
+							<button
+								type="button"
+								className="btn btn-info"
+								style={{margin:'10px',
+									float:'right'}}
+									onClick={this.settings}>
+									Settings
+								</button>
+							</div>
+
+						<div className="pictureEdit">
+							<img src={this.state.pic}>
+							</img>
+							<p className="editImg">
+								Change Picture
+							</p>
+						</div>
+
+
+						<div className="usernameInEdit">
+								{this.state.username}
+						</div>
+
+
+						<div className="emailInEdit">
+							{this.state.email}
+						</div>
+
+						<div className="container">
+						<div className="editUsername">
+							<form>
+								<div>
+							<label>Update username:</label>
+							<textarea
+								className = "form-control"
+								rows="1"
+								cols="40"
+								maxlength="30"
+								value={this.state.alias}
+								onChange={e=>this.setState({alias:e.target.value})}
+								>
+							</textarea>
+						</div>
+						</form>
+						</div>
+
+							<form>
+								<div className="bioEdit">
+							<label>Update your bio:</label>
+							<textarea
+								className = "form-control"
+								rows="10"
+								cols="40"
+								maxlength="500"
+								value={this.state.long}
+								onChange={e=>this.setState({long:e.target.value})}
+								>
+							</textarea>
+							</div>
+							</form>
+
+
+								<button
+									style = {{float:'right'}}
+									type="button"
+									className="btn btn-success btn-lg"
+									onClick={this.save}>
+									Save
+								</button>
+							</div>
+
+
+
+						<div className="friendslistEdit">
+							<h2>Friends:</h2>
+							<ul>{this.friendsList()}</ul>
+						</div>
+
+
+					</body>
+			);
+		}
+	};
+
+
+
+	module.exports={
+		ProfileEdit
+	}

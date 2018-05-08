@@ -3,20 +3,22 @@
 	display:table;
 	clear:both;
 	content:"";
+	margin: auto;
+	text-align:center;
 }
 #panel{
-	width:50%;
-	float:left;
+	width:100%;
 }
 #fpanel{
 	width:50%;
 	float:left;
 }
 #picture{
-	margin:auto;
+	margin:20px;
 	width:200px;
 	height:200px;
 	background-color:gray;
+	float: left;
 }
 
 #mask:hover{
@@ -27,9 +29,6 @@
 	color:white;
 }
 #edit{
-	text-align:center;
-}
-#profile{
 	text-align:center;
 }
 #settings{

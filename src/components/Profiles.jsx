@@ -115,7 +115,7 @@ class Profile extends React.Component{
 			<li key={games["game"]}>{games["game"]}</li>
 		)
 		return(
-			<u1 key="gamesList">{gamesList}</u1>
+			<ul key="gamesList">{gamesList}</ul>
 		)
 	}
 	friendsList(){
@@ -127,7 +127,7 @@ class Profile extends React.Component{
 			<li key={f["username"]}>{f["username"]}</li>
 		)
 		return(
-			<u1 key="friends">{friends}</u1>
+			<ul key="friends">{friends}</ul>
 		)
 	}
 	feed(){
@@ -136,7 +136,7 @@ class Profile extends React.Component{
 			<li key={f["type"]}>{f["type"]}</li>
 		)
 		return(
-			<u1 key="feed">{feed}</u1>
+			<ul key="feed">{feed}</ul>
 		)
 	}
 	componentDidUpdate(prevProps,prevState){
