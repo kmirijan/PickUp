@@ -54,7 +54,7 @@ class ProfileP extends React.Component{
 		}
 	}
 	componentDidMount(){
-		
+
 		console.log('"',this.state.username,'"')
 		axios.post("/user",{
 			params:{
@@ -172,38 +172,42 @@ class ProfileP extends React.Component{
 		return(
 			<div id="profile">
 				<div id="panel">
-					<div id="edit">
-						<button onClick={this.edit}>
-							edit
-						</button>
+				<div id = "card">
+						<div id="picture">
+							<img src={this.state.pic}></img>
+							<div id="mask"></div>
+							<p id="changeimg">change picture</p>
+						</div>
+
+						<div id="alias">
+							{this.state.alias}
+						</div>
+
+						<div id="username">
+							{this.state.username}
+						</div>
+
+						<div id="email">
+							{this.state.email}
+						</div>
+
+						<div id="bio" ref="bio">
+							{this.state.short}
+						</div>
+
+						<div id="edit">
+							<button onClick={this.edit}>
+								edit
+							</button>
+							<button onClick={this.settings}>
+								settings
+							</button>
+							<button onClick={this.expandBio}>
+								{this.state.expname}
+							</button>
+						</div>
 					</div>
-					<div id="settings">
-						<button onClick={this.settings}>
-							settings
-						</button>
-					</div>
-					<div id="picture">
-						<img src={this.state.pic}></img>
-						<div id="mask"></div>
-						<p id="changeimg">change picture</p>
-					</div>
-					<div id="username">
-						{this.state.username}
-					</div>
-					<div id="email">
-						{this.state.email}
-					</div>
-					<div id="alias">
-						{this.state.alias}
-					</div>
-					<div id="bio" ref="bio">
-						{this.state.short}
-					</div>
-					<div id="expand">
-						<button onClick={this.expandBio}>
-							{this.state.expname}
-						</button>
-					</div>
+
 					<GamesList games={this.state.myGames}/>
 					<div id="friendsList">
 						Friends:<br></br>

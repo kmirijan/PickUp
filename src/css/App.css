@@ -72,6 +72,10 @@ body {margin:auto;}
   background-color: orange;
 }
 
+.signup{
+	text-align:center;
+}
+
 .App-header {
   margin-top: 45px;
   padding: 20px;
@@ -81,10 +85,30 @@ body {margin:auto;}
 
 .App-title {
   text-align: center;
-  font-family: 'Lato';
+  font-family: 'Helvetica Neue';
   font-size: 70px;
   margin: 5%;
   font-weight: bold;
+  color: black;
+}
+
+.texts{
+  text-align: center;
+}
+
+.HomepageText {
+  text-align: center;
+  font-family: 'Helvetica Neue';
+  font-size: 50px;
+  margin: 5%;
+  color: black;
+}
+
+.HomepageSubtext {
+  text-align: center;
+  font-family: 'Helvetica Neue';
+  font-size: 30px;
+  margin: 5%;
   color: black;
 }
 
