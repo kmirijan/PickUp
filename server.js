@@ -233,9 +233,13 @@ app.post("/games", (req, res) =>
   mongo.connect(mongoUrl, (err, db) => {
     if (err) throw err;
 
-    db.db("pickup").collection("games").insertOne(game,() => {db.close()});
+    db.db("pickup").collection("games").insertOne(game,() => {
+      res.json();
+      db.close()
+    });
 
   });
+
 });
 
 

@@ -47,9 +47,17 @@ addGame(event) {
   console.log(game);
   if(isprivate){
     axios.post('/games', game)
+    .then(()=>{
+      console.log("hello")
+      axios.post('/join', {uid:this.props.user, gid:id});
+    })
   }
   else{
     axios.post('/games', game)
+    .then(()=>{
+      console.log("hello")
+      axios.post('/join', {uid:this.props.user, gid:id});
+    })
   }
 
   updateTable(this.refs.search.value);
