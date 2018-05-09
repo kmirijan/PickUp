@@ -19,8 +19,8 @@ function updateTable(search)
 
 export class CurrentGames extends React.Component{
 
-    
-    
+
+
     constructor(props) {
         super(props);
         this.state = {
@@ -42,10 +42,10 @@ export class CurrentGames extends React.Component{
         let coords = this.autocomplete.getPlace().geometry.location;
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let game = {
-            gameId: id, 
-            sport: sport, 
-            name: name, 
-            location: location, 
+            gameId: id,
+            sport: sport,
+            name: name,
+            location: location,
             user: this.props.user,
             coords: {
                 lat: coords.lat(),
@@ -93,7 +93,8 @@ export class CurrentGames extends React.Component{
                     </div>
                 </form>
 
-                <input type="text" placeholder="Search"
+                <input className = "searchBox"
+                  type="text" placeholder="Search"
 		            ref="search"
                     onChange={this.updateSearch.bind(this)}/>
                 <h1 className="App-currentGames">
@@ -102,7 +103,7 @@ export class CurrentGames extends React.Component{
             <GameTable user={this.props.user}/>
             </div>
         );
-    
+
     }
 
     componentDidMount() {
