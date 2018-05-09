@@ -159,11 +159,11 @@ app.post("/postgames", (req, res) =>
     coords: req.body.coords,
   };
 
-  
+
   mongo.connect(mongoUrl, (err, db) => {
     if (err) throw err;
 
-    db.db("pickup").collection("games").insertOne(game,() => {res,json(); db.close()});
+    db.db("pickup").collection("games").insertOne(game,() => {res.json(); db.close()});
 
    });
 
