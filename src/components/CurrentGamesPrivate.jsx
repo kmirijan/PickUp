@@ -66,7 +66,7 @@ class GameTable extends React.Component{
 	}
   }
 
-  componentWillMount()
+  componentDidMount()
   {
     updateTable("",this.props.friend);
   }

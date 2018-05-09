@@ -139,7 +139,7 @@ class GameTable extends React.Component{
 	}
   }
 
-  componentWillMount()
+  componentDidMount()
   {
     updateTable("");
   }
