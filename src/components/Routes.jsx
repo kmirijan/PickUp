@@ -5,6 +5,7 @@ var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
 var {CurrentGames}=require("./CurrentGames.js");
 var {Users}=require("../helpers/Users.jsx");
+var{ProfileSettings}=require("./ProfilesSettings.jsx");
 require("../css/App.css");
 require("../css/font.css");
 import NavBar from './NavBar';
@@ -12,6 +13,7 @@ import SignUp from './SignUp';
 import SignIn from './SignIn';
 import App from "./App";
 import Home from "./Home";
+import Map from "./Map";
 var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 
 
@@ -25,7 +27,10 @@ class Routes extends React.Component{
                     <Route path="/users" component={Users} />
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
-                    <Route path="/app" component={App}/>
+                    <Route path="/settings:username" component={Settings}/>
+                    <Route path="/map" component={Map}/>
+                    <Route path="/app" 
+                        render={(props) => <App user = {getCurrentUser()}/>}/>
                     <Route path="/signin" component={SignIn}/>
 					<Route path="/signup" component={SignUp}/>
 					<Route path="/logout" component={LogOut}/>
@@ -36,12 +41,21 @@ class Routes extends React.Component{
     }
 }
 
+function getCurrentUser()
+{
+    let user = localStorage.getItem("user");
+    console.log("user: ", user);
+    if (user != "")
+    {
+        return user;
+    }
+    else
+    {
+        return "guest";
+    }
+}
 
-const Map=()=>(
-	<div>
-		<NavBar />
-	</div>
-);
+
 class User extends React.Component{
 	constructor(props){
 		super(props);
@@ -94,9 +108,33 @@ class Edit extends React.Component{
 		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
 		{
 			return(
+        <div>
+          <NavBar />
+          <div className = "editPage">
+            <ProfileEdit
+              username={usrnm}
+              history={this.props.history}
+              />
+          </div>
+        </div>
+			)}
+		else{
+			return(<_404/>)
+		}
+	}
+}
+class Settings extends React.Component{
+	render(){
+		var usrnm=this.props.match.params.username;
+		while(!(/[a-z]/i.test(usrnm[0]))){
+			usrnm=usrnm.substring(1,usrnm.length);
+		}
+		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
+		{
+			return(
 				<div>
 					<NavBar />
-					<ProfileEdit
+					<ProfileSettings
 						username={usrnm}
 						history={this.props.history}
 					/>

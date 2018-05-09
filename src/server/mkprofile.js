@@ -114,3 +114,59 @@ exports.getAllUsers=(res)=>{
 		})
 	})
 }
+exports.getEmail=(user,res)=>{
+	var tf=mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
+
+		var db=client.db("pickup");
+		db.collection("users").find({"username":user}).toArray()
+		.then((arr)=>{
+			res.json(arr[0]["email"]);
+		})
+	})
+}
+exports.setEmail=(user,email,res)=>{
+	var tf=mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
+
+		var db=client.db("pickup");
+		db.collection("users").count({"email":email})
+		.then((count)=>{
+			if(count>0){
+				res.json("email is already in use");
+			}
+			else{
+				db.collection("users").updateOne({"username":user},{
+					$set:{"email":email}
+				})
+				.then((arr)=>{
+					res.json();
+				})
+			}
+		})
+	})
+}
+exports.setPassword=(user,oldPassword,newPassword,res)=>{
+	var tf=mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
+
+		var db=client.db("pickup");
+		db.collection("users").find({"username":user}).toArray()
+		.then((arr)=>{
+			const hash=arr[0]["password"];
+			if(bcrypt.compareSync(oldPassword,hash)){
+				var salt=bcrypt.genSaltSync(10);
+				db.collection("users").updateOne({"username":user},{
+					$set:{
+						"password":bcrypt.hashSync(newPassword,salt)
+					}
+				}).then(()=>{
+					res.json();
+				})
+			}
+			else{
+				res.json("the password you entered is incorrect");
+			}
+		})
+	})
+}

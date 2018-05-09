@@ -3,30 +3,24 @@
 	display:table;
 	clear:both;
 	content:"";
+	margin: auto;
+	text-align:center;
 }
 #panel{
-	width:50%;
-	float:left;
+	width:100%;
 }
 #fpanel{
 	width:50%;
 	float:left;
 }
 #picture{
-	margin:auto;
+	margin:20px;
 	width:200px;
 	height:200px;
 	background-color:gray;
+	float: left;
 }
-#changeimg{
-	margin:auto;
-	width:200px;
-	height:200px;
-	position:relative;
-	top: -200px;
-	color:white;
-	visibility:hidden;
-}
+
 #mask:hover{
 	background-color:rgba(0, 0, 0, 0.4);
 }
@@ -35,6 +29,9 @@
 	color:white;
 }
 #edit{
+	text-align:center;
+}
+#settings{
 	text-align:center;
 }
 #username{

@@ -28,7 +28,7 @@ class Users extends React.Component{
 			</li>
 		)
 		return(
-			<u1 key="usersList">{usersList}</u1>
+			<ul key="usersList">{usersList}</ul>
 		)
 	}
 	render(){
