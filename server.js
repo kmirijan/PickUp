@@ -1,11 +1,14 @@
+require('./config/config.js');
 const express=require("express");
 const mongo=require("mongodb").MongoClient;
+var {mongoose} = require('./db/mongoose.js');
 const bodyParser=require("body-parser");
-var mime = require('mime-types');
 const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
 
-var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
+var {Game} = require('./db/game.js');
+
+//var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
 const app=express();
 /*configurations*/
@@ -94,12 +97,17 @@ app.post("/postgames", (req, res) =>
     players: [makeValid(req.body.user),],
   };
 
-  mongo.connect(mongoUrl, (err, db) => {
-    if (err) throw err;
-
-    db.db("pickup").collection("games").insertOne(game,() => {db.close()});
-
-  });
+  // mongo.connect(mongoUrl, (err, db) => {
+  //   if (err) throw err;
+  //
+  //   db.db("pickup").collection("games").insertOne(game,() => {db.close()});
+  //
+  // });
+  game.save().then((doc) => {
+    res.send(doc);
+  }, (e) => {
+    res.status(400).send(e);
+  })
 });
 
 app.post("/retrievegames", (req, res) =>
@@ -152,32 +160,40 @@ app.post("/join", (req, res) =>
 
 });
 
-app.post("/games", (req, res) =>
-{
+app.post("/games", (req, res) => {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
 
   console.log(req.body);
 
-  var game = {
+  var game = new Game({
     sport: makeValid(req.body.sport),
     name: makeValid(req.body.name),
     location: makeValid(req.body.location),
     id: makeValid(req.body.gameId),
-    owner: makeValid(req.body.user),
-    players: [makeValid(req.body.user),],
-  };
-
-  mongo.connect(mongoUrl, (err, db) => {
-    if (err) throw err;
-
-    db.db("pickup").collection("games").insertOne(game,() => {db.close()});
-
+    owner: makeValid(req.body.name),
+    players: [makeValid(req.body.name)],
   });
+
+  // mongo.connect(mongoUrl, (err, db) => {
+  //   if (err) throw err;
+  //
+  //   db.db("pickup").collection("games").insertOne(game,() => {db.close()});
+  //
+  // });
+  game.save().then((game) => {
+    res.send(game);
+  }, (e) => {
+    res.status(400).send(e);
+  })
 });
 
 
 /*deploy app*/
-const port=process.env.PORT||8000;
+const port=process.env.PORT;
 app.listen(port,()=>{
     console.log(port);
+    console.log(process.env.NODE_ENV);
+    console.log(process.env.MONGODB_URI);
 });
+
+module.exports = {app};
