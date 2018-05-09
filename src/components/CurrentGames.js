@@ -112,17 +112,18 @@ export class CurrentGames extends React.Component{
                 </form>
 
 
+                <input className = "searchBox"
+                  type="text" placeholder="Search"
+		            ref="search"
+                    onChange={this.updateSearch.bind(this)}/>
+                <h1 className="App-currentGames">
+                Below are the currently available games:
+                </h1>
+            <GameTable user={this.props.user}/>
+            </div>
+        );
 
-        <input type="text" placeholder="Search"
-		  ref="search"
-          onChange={this.updateSearch.bind(this)}/>
-          <h1 className="App-currentGames">
-            Below are the currently available games:
-          </h1>
-          <GameTable user={this.props.user}/>
-    </div>
-    );
-  }
+    }
 }
 
 class GameTable extends React.Component{
