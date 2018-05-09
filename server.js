@@ -152,24 +152,28 @@ app.post("/postgames", (req, res) =>
     sport: makeValid(req.body.sport),
     name: makeValid(req.body.name),
     location: makeValid(req.body.location),
+    isprivate:makeValid(req.body.isprivate),
     id: makeValid(req.body.gameId),
     owner: makeValid(req.body.user),
     players: [makeValid(req.body.user),],
     coords: req.body.coords,
   };
 
+  
+  mongo.connect(mongoUrl, (err, db) => {
+    if (err) throw err;
 
-  // mongo.connect(mongoUrl, (err, db) => {
-  //   if (err) throw err;
-  //
-  //   db.db("pickup").collection("games").insertOne(game,() => {db.close()});
-  //
-  // });
+    db.db("pickup").collection("games").insertOne(game,() => {res,json(); db.close()});
+
+   });
+
+  /*
   game.save().then((doc) => {
-    res.send(doc);
-  }, (e) => {
-    res.status(400).send(e);
+      res.send(doc);
+    }, (e) => {
+      res.status(400).send(e);
   })
+  */
 });
 
 app.post("/retrievegames", (req, res) =>
@@ -222,32 +226,7 @@ app.post("/join", (req, res) =>
 
 });
 
-app.post("/games", (req, res) => {
-  console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
 
-  console.log(req.body);
-
-  var game = new Game({
-    sport: makeValid(req.body.sport),
-    name: makeValid(req.body.name),
-    location: makeValid(req.body.location),
-    id: makeValid(req.body.gameId),
-    owner: makeValid(req.body.name),
-    players: [makeValid(req.body.name)],
-  });
-
-  // mongo.connect(mongoUrl, (err, db) => {
-  //   if (err) throw err;
-  //
-  //   db.db("pickup").collection("games").insertOne(game,() => {db.close()});
-  //
-  // });
-  game.save().then((game) => {
-    res.send(game);
-  }, (e) => {
-    res.status(400).send(e);
-  })
-});
 
 
 /*deploy app*/

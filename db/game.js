@@ -31,7 +31,11 @@ var Game = mongoose.model('Game', {
 		type: String,
 		minlength: 1,
 		trim: true
-	}]
+	}],
+	isprivate:{
+		type: Boolean,
+		required:true
+	}
 });
 
 module.exports = {Game};
