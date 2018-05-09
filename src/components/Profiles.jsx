@@ -1,6 +1,7 @@
 var React=require("react");
 var ReactDOM=require("react-dom");
 require("../css/profiles.css");
+import {CurrentGamesPrivate} from './CurrentGamesPrivate.jsx';
 var axios=require("axios");
 
 
@@ -9,6 +10,7 @@ class Profile extends React.Component{
 		super(props);
 		this.expandBio=this.expandBio.bind(this);
 		this.addFriend=this.addFriend.bind(this);
+		this.privateGames=this.privateGames.bind(this);
 
         var usrnm=this.props.username;
 		while(!(/[a-z]/i.test(usrnm[0]))){
@@ -62,8 +64,21 @@ class Profile extends React.Component{
 			})
 		}
 	}
+	privateGames(){
+		if(this.state.frname=="friends"){
+			var usrnm=this.props.username;
+			while(!(/[a-z]/i.test(usrnm[0]))){
+				usrnm=usrnm.substring(1,usrnm.length);
+			}
+			return (
+				<div id="gamesmade">
+					<CurrentGamesPrivate user={localStorage.getItem("user")} friend={usrnm}/>
+				</div>
+			)
+		}
+	}
 	componentDidMount(){
-		
+
 		console.log(this.state.username);
 		axios.post("/user",{
 			params:{
@@ -202,6 +217,7 @@ class Profile extends React.Component{
 						{this.feed()}
 					</div>
 				</div>
+				{this.privateGames()}
 			</div>
 			);
 	}
@@ -235,7 +251,7 @@ class GamesList extends React.Component
                 <ul key="gamesList">{gamesList}</ul>
             </div>
         );
-    
+
     }
 
 }

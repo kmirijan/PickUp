@@ -7,11 +7,19 @@
 	text-align:center;
 }
 #panel{
-	width:100%;
+	width:50%;
+	float: left;
 }
 #fpanel{
 	width:50%;
-	float:left;
+	float:right;
+}
+
+#card{
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+    position: left;
 }
 #picture{
 	margin:20px;
@@ -78,4 +86,7 @@
 }
 #addfriend{
 	text-align:center;
+}
+#gamesmade{
+	width:100%;
 }

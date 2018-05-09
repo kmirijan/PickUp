@@ -8,12 +8,17 @@ function updateTable(search)
   axios.post('/retrievegames').then((results)=>{
     console.log(results.data);
     this.setState({games: results.data});
-    this.setState({filteredGames : results.data.filter(
+
+    var data = results.data.filter(game=>{
+      return !game.isprivate
+    })
+    this.setState({filteredGames : data.filter(
       (game) => {
         return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
           (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
           (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1));
     })});
+
   });
 }
 
@@ -28,7 +33,10 @@ export class CurrentGames extends React.Component{
         };
         this.addGame = this.addGame.bind(this);
     }
-
+    componentDidMount() {
+           let input = document.getElementById('location');
+           this.autocomplete = new google.maps.places.Autocomplete(input);
+   }
     updateSearch(event){
       updateTable(event.target.value);
     }
@@ -39,6 +47,7 @@ export class CurrentGames extends React.Component{
         let sport = this.refs.sport.value;
         let name = this.refs.name.value;
         let location = this.refs.location.value;
+        let isprivate = this.refs.isprivate.checked;
         let coords = this.autocomplete.getPlace().geometry.location;
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let game = {
@@ -53,7 +62,10 @@ export class CurrentGames extends React.Component{
             },
         };
         console.log(game);
-        axios.post('/postgames', game);
+        axios.post('/postgames', game).then(()=>{
+          console.log("hello")
+          axios.post('/join', {uid:this.props.user, gid:id});
+        });
         updateTable(this.refs.search.value);
         this.refs.sport.value='';
         this.refs.name.value='';
@@ -87,11 +99,18 @@ export class CurrentGames extends React.Component{
                     type="text"
                     ref="location"
                     placeholder="Location"/>
+                    <p>Private</p>
+                    <input
+                      className='gameDetails'
+                      id= 'isprivate'
+                     type="checkbox"
+                     ref="isprivate"/>
 
                     <div className="App-submitButton">
                         <input type="submit" value="Submit"/>
                     </div>
                 </form>
+
 
                 <input className = "searchBox"
                   type="text" placeholder="Search"
@@ -104,11 +123,6 @@ export class CurrentGames extends React.Component{
             </div>
         );
 
-    }
-
-    componentDidMount() {
-        let input = document.getElementById('location');
-        this.autocomplete = new google.maps.places.Autocomplete(input);
     }
 }
 
@@ -143,7 +157,8 @@ class GameTable extends React.Component{
 	</tr>
       </thead>
       <tbody>
-	      {this.state.filteredGames.map((game)=>{
+	      {
+          this.state.filteredGames.map((game)=>{
             return <Game game = {game} user={this.props.user} key={game.id}/>
           })}
 	  </tbody>

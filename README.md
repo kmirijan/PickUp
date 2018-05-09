@@ -1,9 +1,7 @@
 To do:
 ---
-1. ++signup redirect, ++confirmation display ++username check, etc.
-2. ++stop displaying signup/signin after logging in.
-3. friend requests, make account page more detailed, prettier
-4. combine stuff
+1. Profile picture implement. Crop,zoom image
+2. Private game requests
 
 PickUp
 ---
@@ -19,7 +17,7 @@ bundles files and allows babel usage. Uses server.js for server. <br />
 __server.js__ <br />
 simple server. Calls main html on path "/" and sets "dist" to serve static files. <br />
 
-dist 
+dist
 ---
 * __bundle.js__ <br />
 output of webpack <br />

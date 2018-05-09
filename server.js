@@ -1,11 +1,14 @@
+require('./config/config.js');
 const express=require("express");
 const mongo=require("mongodb").MongoClient;
+var {mongoose} = require('./db/mongoose.js');
 const bodyParser=require("body-parser");
-var mime = require('mime-types');
 const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
 
-var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
+var {Game} = require('./db/game.js');
+
+//var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
 const app=express();
 /*configurations*/
@@ -92,18 +95,18 @@ app.post("/join", (req, res) =>
 
 app.post("/nearbygames", (req, res) => {
     console.log('[', (new Date()).toLocaleTimeString(), "] Nearby games sending");
-    
+
     let range = req.body.range;
     let center = req.body.center;
 
     mongo.connect(mongoUrl, (err, client) =>{
         if (err) throw err;
-        
+
         let collection = client.db("pickup").collection("games");
-        
+
         let query = {"coords.lat": {$gt: center.lat - range.lat, $lt: center.lat + range.lat},
                 "coords.lng": {$gt: center.lng - range.lng, $lt: center.lng + range.lng }
-            
+
         };
         collection.find(query).toArray((err, result) => {
             if (err) throw err;
@@ -120,7 +123,7 @@ app.post("/nearbygames", (req, res) => {
 // return the games that the user has played
 app.post("/usergames", (req, res) => {
     console.log('[', (new Date()).toLocaleTimeString(), "] Sending ", req.body.user.trim(), "'s games");
-    
+
     mongo.connect(mongoUrl, (err, client) => {
         if (err) throw err;
         let username = {username: req.body.user.trim()};
@@ -135,7 +138,7 @@ app.post("/usergames", (req, res) => {
                 client.close();
             });
         });
-    
+
     });
 });
 
@@ -149,19 +152,28 @@ app.post("/postgames", (req, res) =>
     sport: makeValid(req.body.sport),
     name: makeValid(req.body.name),
     location: makeValid(req.body.location),
+    isprivate:makeValid(req.body.isprivate),
     id: makeValid(req.body.gameId),
     owner: makeValid(req.body.user),
     players: [makeValid(req.body.user),],
     coords: req.body.coords,
   };
-    
+
 
   mongo.connect(mongoUrl, (err, db) => {
     if (err) throw err;
 
-    db.db("pickup").collection("games").insertOne(game,() => {db.close()});
+    db.db("pickup").collection("games").insertOne(game,() => {res.json(); db.close()});
 
-  });
+   });
+
+  /*
+  game.save().then((doc) => {
+      res.send(doc);
+    }, (e) => {
+      res.status(400).send(e);
+  })
+  */
 });
 
 app.post("/retrievegames", (req, res) =>
@@ -216,8 +228,13 @@ app.post("/join", (req, res) =>
 
 
 
+
 /*deploy app*/
-const port=process.env.PORT||8000;
+const port=process.env.PORT;
 app.listen(port,()=>{
     console.log(port);
+    console.log(process.env.NODE_ENV);
+    console.log(process.env.MONGODB_URI);
 });
+
+module.exports = {app};
