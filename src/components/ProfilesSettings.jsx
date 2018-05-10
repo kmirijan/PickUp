@@ -26,28 +26,7 @@ class ProfileSettings extends React.Component{
       showPasswordBox:[]
     }
 	}
-  componentDidMount(){
-    this.setState({
-      showEmailBox:[
-        <button type="button" className="btn btn-success" key="changeEmailPrompt" onClick={this.changeEmailPrompt}
-					style = {{margin: '20px'}}>
-          change email
-        </button>
-      ],
-      showPasswordBox:[
-        <button type="button" className="btn btn-success" key="changePasswordPrompt" onClick={this.changePasswordPrompt}
-					style = {{margin: '20px'}}>
-        change password
-        </button>
-      ]
-    })
-  }
-  profile(){
-    this.props.history.push("/user:"+this.props.username);
-  }
-  edit(){
-    this.props.history.push("/edit:"+this.props.username);
-  }
+  
   changeEmailPrompt(){
   //  this.refs.changeemail.setAttribute("disabled","disabled");
     this.setState({showEmailBox:[]});
@@ -176,29 +155,21 @@ class ProfileSettings extends React.Component{
 		return(
 			<div id="profile">
 				<div id="panel">
-          <div id="profile">
-            <button type="button" className="btn btn-success"
-							style = {{margin: '20px'}}
-							onClick={this.profile}>
-              profile
-            </button>
-          </div>
-          <div id="edit">
-            <button type="button" className="btn btn-success"
-							style = {{margin: '20px'}}
-							onClick={this.edit}>
-              edit
-            </button>
-          </div>
           <div id="changeemailbox">
-            {this.state.showEmailBox}
+						<button type="button" className="btn btn-success" key="changeEmailPrompt" onClick={this.changeEmailPrompt}
+							style = {{margin: '20px'}}>
+		          change email
+		        </button>
             <div id="emailbox" ref="emailbox" style = {{margin: '20px'}}>
               {this.state.emailPrompt}
               {this.state.emailError}
             </div>
           </div>
           <div id="changepasswordbox">
-            {this.state.showPasswordBox}
+						<button type="button" className="btn btn-success" key="changePasswordPrompt" onClick={this.changePasswordPrompt}
+							style = {{margin: '20px'}}>
+						change password
+						</button>
             <div id="passwordbox" ref="passwordbox" style = {{margin: '20px'}}>
               {this.state.passwordPrompt}
               {this.state.passwordError}

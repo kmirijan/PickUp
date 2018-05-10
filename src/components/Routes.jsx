@@ -22,14 +22,14 @@ class Routes extends React.Component{
         return(
             <BrowserRouter>
                 <Switch>
-                	<Route exact path="/" component={NavBar} />
+                	<Route exact path="/" component={Home} />
                 	<Route exact path="/home" component={Home} />
                     <Route path="/users" component={Users} />
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
                     <Route path="/settings:username" component={Settings}/>
                     <Route path="/map" component={Map}/>
-                    <Route path="/app" 
+                    <Route path="/app"
                         render={(props) => <App user = {getCurrentUser()}/>}/>
                     <Route path="/signin" component={SignIn}/>
 					<Route path="/signup" component={SignUp}/>

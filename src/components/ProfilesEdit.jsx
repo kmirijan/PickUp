@@ -8,11 +8,14 @@ class ProfileEdit extends React.Component{
 	constructor(props){
 		super(props);
 		this.save=this.save.bind(this);
-		this.profile=this.profile.bind(this);
 		this.settings=this.settings.bind(this);
 		this.friendsList=this.friendsList.bind(this);
 		this.processFriends=this.processFriends.bind(this);
 		this.removeFriend=this.removeFriend.bind(this);
+		this.changeEmailPrompt=this.changeEmailPrompt.bind(this);
+		this.changePasswordPrompt=this.changePasswordPrompt.bind(this);
+		this.changeEmail=this.changeEmail.bind(this);
+		this.changePassword=this.changePassword.bind(this);
 		this.state={
 			pic:"",
 			long:"",
@@ -20,12 +23,144 @@ class ProfileEdit extends React.Component{
 			alias:"",
 			email:"",
 			games:[],
-			friends:[]
+			friends:[],
+			emailPrompt:[],
+			passwordPrompt:[],
+			emailError:"",
+			passwordError:"",
+			newEmail:"",
+			oldPassword:"",
+			newPassword:"",
+			showEmailBox:[],
+			showPasswordBox:[]
 		}
 	}
-	profile(){
-		this.props.history.push("/user:"+this.props.username);
+
+	changeEmailPrompt(){
+	//  this.refs.changeemail.setAttribute("disabled","disabled");
+		this.setState({showEmailBox:[]});
+		axios({
+			method:"post",
+			url:"/getemail",
+			data:{
+				user:localStorage.getItem("user")
+			}
+		}).then((res)=>{
+			this.setState({
+				emailPrompt:[
+					<div id="emailprompt" key="emailprompt">
+						Your current email:{res.data}<br></br>
+						New email:
+						<input
+							id="setemail"
+							onChange={event => this.setState({newEmail: event.target.value})}>
+						</input>
+						<button
+							type="button" className="btn btn-success"
+							style = {{margin: '20px'}}
+							key="changeEmailButton"
+							onClick={()=>this.changeEmail(this.state.newEmail)}>
+							save
+						</button>
+					</div>
+				]
+			})
+		//  this.refs.changeemail.removeAttribute("disabled");
+		})
 	}
+	changePasswordPrompt(){
+	//  this.refs.changepassword.setAttribute("disabled","disabled");
+		this.setState({
+			showPasswordPrompt:[],
+			passwordPrompt:[
+				<div id="passwordprompt" key="passwordprompt">
+					Current password:
+					<input type="password"
+						id="oldpassword"
+						onChange={event => this.setState({oldPassword: event.target.value})}>
+					</input>
+					<br></br>
+					New password:
+					<input type="password"
+						id="newpassword"
+						onChange={event => this.setState({newPassword: event.target.value})}>
+					</input>
+					<button
+						type="button" className="btn btn-success"
+						key="changePasswordButton"
+						style = {{margin: '20px'}}
+						onClick={()=>this.changePassword(this.state.oldPassword,this.state.newPassword)}>
+						save
+					</button>
+				</div>
+			]
+		})
+	//  this.refs.changepassword.removeAttribute("disabled");
+	}
+	changeEmail(newemail){
+		//this.refs.changeEmailButton.setAttribute("disabled","disabled");
+		if(newemail.match(/.*@.*/)==null){
+			this.setState({emailError:"invalid email"})
+		}
+		else{
+			axios({
+				method:"post",
+				url:"/setemail",
+				data:{
+					user:localStorage.getItem("user"),
+					email:newemail
+				}
+			}).then((res)=>{
+				this.setState({
+					emailError:res.data,
+					emailPrompt:[],
+					newEmail:"",
+					showEmailBox:[
+						<button type="button" className="btn btn-success" key="changeEmailPrompt"
+							style = {{margin: '20px'}}
+							onClick={this.changeEmailPrompt}>
+							change email
+						</button>
+					]
+				})
+
+				//this.refs.changeEmailButton.removeAttribute("disabled");
+			})
+		}
+	}
+	changePassword(oldPassword,newPassword){
+		if(newPassword.length<8){
+			this.setState({passwordError:"password must be 8 characters long"})
+		}
+		else{
+			axios({
+				method:"post",
+				url:"/setpassword",
+				data:{
+					user:localStorage.getItem("user"),
+					oldPassword:oldPassword,
+					newPassword:newPassword
+				}
+			}).then((res)=>{
+				this.setState({
+					passwordError:res.data,
+					passwordPrompt:[],
+					oldPassword:"",
+					newPassword:"",
+					showPasswordBox:[
+						<button type="button" className="btn btn-success"
+							style = {{margin: '20px'}}
+							key="changePasswordPrompt" onClick={this.changePasswordPrompt}>
+						change password
+						</button>
+					]
+				})
+				//this.refs.changeEmailButton.removeAttribute("disabled");
+			})
+		}
+
+	}
+
 	settings(){
 		this.props.history.push("/settings:"+this.props.username);
 	}
@@ -129,19 +264,8 @@ componentDidUpdate(prevProps,prevState){
 }
 render(){
 	return(
-		<body className="profileEdit">
-
+		<div class="container">
 			<div>
-					<button
-						type="button"
-						className="btn btn-info"
-						style={{margin:'10px',
-							float:'right'}}
-							onClick={this.profile}>
-							Profile
-						</button>
-
-
 							<button
 								type="button"
 								className="btn btn-info"
@@ -152,76 +276,104 @@ render(){
 								</button>
 							</div>
 
-						<div className="pictureEdit">
-							<img src={this.state.pic}>
-							</img>
-							<p className="editImg">
-								Change Picture
-							</p>
-						</div>
+	    <h1>Edit Profile</h1>
+		<div class="row">
+	      <div class="col-md-3">
+	        <div class="text-center">
+	          <img src= "//placehold.it/100" class="avatar img-circle" alt="avatar"/>
+	          <h6>Upload a different photo...</h6>
 
+	          <input type="file" class="form-control"/>
 
-						<div className="usernameInEdit">
-								{this.state.username}
-						</div>
+	        </div>
+	      </div>
 
+	      <div class="col-md-9 personal-info">
+	        <h3>Personal info</h3>
 
-						<div className="emailInEdit">
-							{this.state.email}
-						</div>
-
-						<div className="container">
-						<div className="editUsername">
-							<form>
-								<div>
-							<label>Update username:</label>
-							<textarea
-								className = "form-control"
-								rows="1"
-								cols="40"
-								maxlength="30"
-								value={this.state.alias}
-								onChange={e=>this.setState({alias:e.target.value})}
-								>
-							</textarea>
-						</div>
-						</form>
-						</div>
-
-							<form>
-								<div className="bioEdit">
-							<label>Update your bio:</label>
-							<textarea
-								className = "form-control"
-								rows="10"
-								cols="40"
-								maxlength="500"
-								value={this.state.long}
-								onChange={e=>this.setState({long:e.target.value})}
-								>
-							</textarea>
-							</div>
-							</form>
-
-
-								<button
-									style = {{float:'right'}}
-									type="button"
-									className="btn btn-success btn-lg"
-									onClick={this.save}>
-									Save
-								</button>
-							</div>
-
-
-
-						<div className="friendslistEdit">
+	        <form class="form-horizontal" role="form">
+						<div class="form-group">
+	            <label class="col-lg-3 control-label">Name:</label>
+	            <div class="col-lg-8">
+	              <input class="form-control" type="text" value={this.state.username}
+									/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label class="col-lg-3 control-label">Username:</label>
+	            <div class="col-lg-8">
+	              <input class="form-control" type="text" value={this.state.alias}
+									onChange={e=>this.setState({alias:e.target.value})}/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label class="col-lg-3 control-label">email:</label>
+	            <div class="col-lg-8">
+	              <input class="form-control" type="text" value={this.state.email}
+									/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label class="col-lg-3 control-label">Bio:</label>
+	            <div class="col-lg-8">
+	              <textarea class="form-control" type="text"
+									rows="10"
+									cols="40"
+									maxlength="500"
+									value={this.state.long}
+									onChange={e=>this.setState({long:e.target.value})}>
+								</textarea>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label class="col-md-3 control-label">Password:</label>
+	            <div class="col-md-8">
+	              <input class="form-control" type="password" value="11111122333"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label class="col-md-3 control-label">Confirm password:</label>
+	            <div class="col-md-8">
+	              <input class="form-control" type="password" value="11111122333"/>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label class="col-md-3 control-label"></label>
+	            <div class="col-md-8">
+	              <input type="button" class="btn btn-primary" value="Save Changes" onClick={this.save}/>
+	              <span></span>
+	              <input type="reset" class="btn btn-default" value="Cancel"/>
+	            </div>
+	          </div>
+	        </form>
+	      </div>
+	  </div>
+		<div className="friendslistEdit">
 							<h2>Friends:</h2>
 							<ul>{this.friendsList()}</ul>
 						</div>
 
-
-					</body>
+						<div id="changeemailbox">
+							<button type="button" className="btn btn-success" key="changeEmailPrompt" onClick={this.changeEmailPrompt}
+								style = {{margin: '20px'}}>
+								change email
+							</button>
+							<div id="emailbox" ref="emailbox" style = {{margin: '20px'}}>
+								{this.state.emailPrompt}
+								{this.state.emailError}
+							</div>
+						</div>
+						<div id="changepasswordbox">
+							<button type="button" className="btn btn-success" key="changePasswordPrompt" onClick={this.changePasswordPrompt}
+								style = {{margin: '20px'}}>
+							change password
+							</button>
+							<div id="passwordbox" ref="passwordbox" style = {{margin: '20px'}}>
+								{this.state.passwordPrompt}
+								{this.state.passwordError}
+							</div>
+						</div>
+	</div>
 			);
 		}
 	};
