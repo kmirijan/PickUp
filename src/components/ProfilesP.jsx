@@ -227,23 +227,74 @@ class ProfileP extends React.Component{
 
 class GamesList extends React.Component
 {
+		constructor(props){
+			super(props);
+			this.deleteGame=this.deleteGame.bind(this);
+			this.displayGame=this.displayGame.bind(this);
+			this.state={
+				games:[],
+				deleteGameClicked:false
+			}
+		}
+		deleteGame(gameId){
+			axios({
+				method:"post",
+				url:"/deletegame",
+				data:{
+					gameId:gameId
+				}
+			}).then(()=>{
+				console.log("game deleted");
+				this.setState({
+					deleteGameClicked:true
+				})
+			})
+		}
+		componentDidUpdate(){
+			if(this.state.deleteGameClicked==true){
+				axios.post("/usergames", {user:localStorage.getItem("user")}).then( (results) => {
+						this.setState({games : results.data});
+				});
+				this.setState({deleteGameClicked:false});
+			}
+		}
+		componentWillMount(){
+				axios.post("/usergames", {user:localStorage.getItem("user")}).then( (results) => {
+						this.setState({games : results.data});
+				});
+		}
     displayGame(game)
     {
+			if(game.owner==localStorage.getItem("user")){
         return (
             <li key={game.id}>
                 <div>Sport {game.sport}</div>
                 <div>Location {game.location}</div>
                 <div>Name {game.name}</div>
+								<button
+									onClick={()=>this.deleteGame(game.id)}
+								>
+									Delete
+								</button>
             </li>
-        );
+        )
+			}
+			else{
+				return (
+            <li key={game.id}>
+                <div>Sport {game.sport}</div>
+                <div>Location {game.location}</div>
+                <div>Name {game.name}</div>
+            </li>
+        )
+			}
     }
-
     render()
     {
-        if(this.props.games==[]){return}
-   		const gamesList=this.props.games.map((game)=>
-    		{return this.displayGame(game)}
-	    );
+				if(this.state.games==[]){return}
+				const gamesList=this.state.games.map((game)=>
+					{return this.displayGame(game)}
+				);
 
         return(
             <div>

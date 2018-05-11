@@ -225,6 +225,21 @@ app.post("/join", (req, res) =>
   });
 
 });
+app.post("/deletegame",(req,res)=>
+{
+  mongo.connect(mongoUrl,(err,client)=>{
+    if(err)throw new Error(err);
+
+    var db=client.db("pickup");
+    db.collection("games").remove({"id":req.body.gameId})
+    .then((arr)=>{
+      console.log(req.body.gameId, "deleted");
+      res.json();
+      client.close();
+    })
+  });
+
+});
 
 
 
