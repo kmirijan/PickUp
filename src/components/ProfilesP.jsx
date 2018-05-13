@@ -57,9 +57,7 @@ class ProfileP extends React.Component{
 
 		console.log('"',this.state.username,'"')
 		axios.post("/user",{
-			params:{
-				name:this.state.username
-			}
+				user:this.state.username
 		}).then((res)=>{
 			var userStates=res.data[0];
 			this.setState({
@@ -237,18 +235,20 @@ class GamesList extends React.Component
 			}
 		}
 		deleteGame(gameId){
-			axios({
-				method:"post",
-				url:"/deletegame",
-				data:{
-					gameId:gameId
-				}
-			}).then(()=>{
-				console.log("game deleted");
-				this.setState({
-					deleteGameClicked:true
+			if(confirm("delete game?")){
+				axios({
+					method:"post",
+					url:"/deletegame",
+					data:{
+						gameId:gameId
+					}
+				}).then(()=>{
+					console.log("game deleted");
+					this.setState({
+						deleteGameClicked:true
+					})
 				})
-			})
+			}
 		}
 		componentDidUpdate(){
 			if(this.state.deleteGameClicked==true){

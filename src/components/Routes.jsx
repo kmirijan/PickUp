@@ -6,6 +6,7 @@ var {ProfileEdit}=require("./ProfilesEdit.jsx");
 var {CurrentGames}=require("./CurrentGames.js");
 var {Users}=require("../helpers/Users.jsx");
 var{ProfileSettings}=require("./ProfilesSettings.jsx");
+var axios=require("axios");
 require("../css/App.css");
 require("../css/font.css");
 import NavBar from './NavBar';
@@ -29,7 +30,7 @@ class Routes extends React.Component{
                     <Route path="/edit:username" component={Edit}/>
                     <Route path="/settings:username" component={Settings}/>
                     <Route path="/map" component={Map}/>
-                    <Route path="/app" 
+                    <Route path="/app"
                         render={(props) => <App user = {getCurrentUser()}/>}/>
                     <Route path="/signin" component={SignIn}/>
 					<Route path="/signup" component={SignUp}/>
@@ -59,43 +60,66 @@ function getCurrentUser()
 class User extends React.Component{
 	constructor(props){
 		super(props);
+    var usrnm=this.props.match.params.username;
+		while(!(/[a-z]/i.test(usrnm[0]))){
+			usrnm=usrnm.substring(1,usrnm.length);
+		}
+    this.usrnm=usrnm;
+    this.isValidUser=false;
 	}
 	componentWillMount(){
 		if(!(localStorage.getItem("loggedin")=="true")){
 			alert("Must be logged in to find users")
 			this.props.history.push("/signin");
 		}
+    axios({
+      method:"post",
+      url:"/isuser",
+      data:{
+        "user":this.usrnm
+      }
+    })
+    .then((isUser)=>{
+      console.log(isUser.data)
+      this.isValidUser=isUser.data;
+      this.forceUpdate();
+    })
 	}
+  componentWillReceiveProps(props){
+    console.log(props);
+    var usrnm=props.match.params.username;
+     while(!(/[a-z]/i.test(usrnm[0]))){
+       usrnm=usrnm.substring(1,usrnm.length);
+     }
+      this.usrnm=usrnm;
+      this.forceUpdate();
+  }
 	render(){
-		var usrnm=this.props.match.params.username;
-		while(!(/[a-z]/i.test(usrnm[0]))){
-			usrnm=usrnm.substring(1,usrnm.length);
-		}
-
-		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
+		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==this.usrnm))
 		{
 			console.log("hello world");
 			return(
 				<div>
 				<NavBar />
 				<ProfileP
-					username={usrnm}
+					username={this.usrnm}
 					history={this.props.history}
 				/>
 				</div>
 		)}
-		else if(localStorage.getItem("loggedin")=="true"){
-			return(
-				<div>
-				<NavBar />
-				<Profile
-					username={usrnm}
-					history={this.props.history}
-				/>
-				</div>
-		)}
+    else if(localStorage.getItem("loggedin")=="true" && this.isValidUser==true){
+  			return(
+  				<div>
+  				<NavBar />
+  				<Profile
+  					username={this.usrnm}
+  					history={this.props.history}
+  				/>
+  				</div>
+  		)}
 		else{
-			return(<_404/>)
+      console.log(this.isValidUser);
+			return(<_404/>);
 		}
 	};
 };

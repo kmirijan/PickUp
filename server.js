@@ -24,8 +24,11 @@ app.get("*",(req,res)=>{
   console.log('[', (new Date()).toLocaleTimeString(), "] Main file sending");
 });
 app.post("/user",(req,res)=>{
-	mkprofile.getUsers(req.body.params.name,res);
+	mkprofile.getUsers(req.body.user,res);
 });
+app.post("/isuser",(req,res)=>{
+  mkprofile.isUser(req.body.user,res);
+})
 app.post("/saveprofile",(req,res)=>{
 	mkprofile.saveProfile(req.body,res);
 });

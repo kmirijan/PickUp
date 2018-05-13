@@ -41,7 +41,6 @@ export class CurrentGames extends React.Component{
       updateTable(event.target.value);
     }
 
-
     addGame(event) {
         event.preventDefault();
         let sport = this.refs.sport.value;
@@ -183,6 +182,7 @@ class Game extends React.Component{
   }
 
   render(){
+    console.log("hello world")
     return(
         <tr>
           <td ><h3>{this.props.game.sport} </h3></td>

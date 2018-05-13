@@ -104,9 +104,7 @@ componentDidMount(){
 	}
 	console.log(usrnm)
 	axios.post("/user",{
-		params:{
-			name:usrnm
-		}
+			user:usrnm
 	}).then((res)=>{
 		var userStates=res.data[0];
 		this.setState({

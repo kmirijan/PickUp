@@ -81,9 +81,7 @@ class Profile extends React.Component{
 
 		console.log(this.state.username);
 		axios.post("/user",{
-			params:{
-				name:this.state.username
-			}
+				user:this.state.username
 		}).then((res)=>{
 			var userStates=res.data[0];
 			this.setState({

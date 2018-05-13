@@ -24,6 +24,22 @@ exports.getUsers=(user,res)=>{
 	});
 }
 
+exports.isUser=(user,res)=>{
+	mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
+		var db=client.db("pickup");
+		db.collection("users").count({"username":user}).then((count)=>{
+			if(count<1){
+				res.json(false);
+			}
+			else{
+				res.json(true);
+			}
+			client.close();
+		})
+	})
+}
+
 exports.saveProfile=(data,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
