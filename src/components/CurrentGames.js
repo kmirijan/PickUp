@@ -1,5 +1,7 @@
 import React from 'react';
 import '../css/App.css';
+var {Link}=require('react-router-dom');
+
 
 import axios from 'axios';
 
@@ -118,7 +120,7 @@ export class CurrentGames extends React.Component{
                 <h1 className="App-currentGames">
                 Below are the currently available games:
                 </h1>
-            <GameTable user={this.props.user}/>
+            <GameTable user={this.props.user} />
             </div>
         );
 
@@ -158,7 +160,7 @@ class GameTable extends React.Component{
       <tbody>
 	      {
           this.state.filteredGames.map((game)=>{
-            return <Game game = {game} user={this.props.user} key={game.id}/>
+            return <Game game = {game} user={this.props.user} key={game.id} />
           })}
 	  </tbody>
       </table>
@@ -181,6 +183,7 @@ class Game extends React.Component{
     axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
   }
 
+
   render(){
     console.log("hello world")
     return(
@@ -189,6 +192,7 @@ class Game extends React.Component{
           <td ><h3>{this.props.game.name} </h3></td>
           <td > <h3>{this.props.game.location}</h3> </td>
           <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
+          <td><Link to={"/game:"+this.props.game.id}><h3>Details</h3></Link></td>
         </tr>
     );
   }

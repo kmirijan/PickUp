@@ -5,6 +5,7 @@ var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
 var {CurrentGames}=require("./CurrentGames.js");
 var {Users}=require("../helpers/Users.jsx");
+var{GamePage}=require("./GamePage.jsx");
 var{ProfileSettings}=require("./ProfilesSettings.jsx");
 var axios=require("axios");
 require("../css/App.css");
@@ -29,6 +30,7 @@ class Routes extends React.Component{
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
                     <Route path="/settings:username" component={Settings}/>
+                    <Route path="/game:id" component={RenderGamePage}/>
                     <Route path="/map" component={Map}/>
                     <Route path="/app"
                         render={(props) => <App user = {getCurrentUser()}/>}/>
@@ -169,6 +171,39 @@ class Settings extends React.Component{
 		}
 	}
 }
+
+class RenderGamePage extends React.Component{
+  constructor(props){
+    super(props);
+    this.id=this.props.match.params.id;
+    while(!(/[0-9]|[a-z]/i.test(this.id[0]))){
+			this.id=this.id.substring(1,this.id.length);
+		}
+    this.isGame=false;
+  }
+  componentWillMount(){
+    axios({
+      method:"post",
+      url:"/isgame",
+      data:{
+        id:this.id
+      }
+    }).then((isGame)=>{
+      this.isGame=isGame.data;
+      this.forceUpdate();
+    })
+  }
+  render(){
+    console.log(this.isGame);
+    if(this.isGame==true){
+      return(<GamePage id={this.id}/>)
+    }
+    else{
+      return(<_404/>)
+    }
+  }
+}
+
 class LogOut extends React.Component{
 	componentDidMount(){
 		localStorage.setItem("loggedin",false);
@@ -182,6 +217,8 @@ class LogOut extends React.Component{
 const _404=()=>(
 	<h1>404</h1>
 );
+
+
 
 module.exports={
 	Routes,

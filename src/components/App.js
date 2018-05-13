@@ -24,7 +24,7 @@ class App extends React.Component {
         </h1>
 
       <section className="SubmissionHome">
-        <CurrentGames user={this.props.user}/>
+        <CurrentGames user={this.props.user} />
         </section>
       </div>
     );

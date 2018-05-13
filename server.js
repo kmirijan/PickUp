@@ -5,6 +5,7 @@ var {mongoose} = require('./db/mongoose.js');
 const bodyParser=require("body-parser");
 const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
+const gamepage=require("./src/server/gamepage.js");
 
 var {Game} = require('./db/game.js');
 
@@ -64,6 +65,9 @@ app.post("/declinefriend",(req,res)=>{
 })
 app.post("/removefriend",(req,res)=>{
   friends.removeFriend(req.body["user"],req.body["friend"],res);
+})
+app.post("/isgame",(req,res)=>{
+  gamepage.isGame(req.body["id"],res);
 })
 
 /*----------------------------------------------------------------------------------------*/

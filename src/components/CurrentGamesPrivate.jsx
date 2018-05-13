@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/App.css';
+var {Link}=require('react-router-dom');
 
 import axios from 'axios';
 
@@ -115,6 +116,7 @@ class Game extends React.Component{
           <td ><h3>{this.props.game.name} </h3></td>
           <td > <h3>{this.props.game.location}</h3> </td>
           <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
+            <td><Link to={"/game:"+this.props.game.id}><h3>Details</h3></Link></td>
         </tr>
     );
   }
