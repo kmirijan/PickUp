@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import '../css/profilesEdit.css';
 import {Switch,BrowserRouter,Route,browserHistory,Redirect} from 'react-router-dom';
+import NavBar from './NavBar';
 import axios from 'axios';
 
 
@@ -265,6 +266,8 @@ componentDidUpdate(prevProps,prevState){
 }
 render(){
 	return(
+		<div>
+		<NavBar/>
 		<div className="container">
 			<div>
 							<button
@@ -375,6 +378,7 @@ render(){
 						</div>
 
 	</div>
+</div>
 			);
 		}
 	};

@@ -17,7 +17,7 @@ import Map from "./Map";
 import {Switch,BrowserRouter,Route,browserHistory} from 'react-router-dom';
 
 
-export class Routes extends React.Component{
+class Routes extends React.Component{
     render(){
         return(
             <BrowserRouter>
@@ -155,6 +155,11 @@ class LogOut extends React.Component{
         return(<_404 />);
 	}
 }
-export const _404=()=>(
+const _404=()=>(
 	<h1>404</h1>
 );
+
+module.exports={
+	Routes,
+	_404
+}

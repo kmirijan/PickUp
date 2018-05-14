@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import '../css/profiles.css';
 import {CurrentGamesPrivate} from './CurrentGamesPrivate.jsx';
+import NavBar from './NavBar';
 import axios from 'axios';
 
 
@@ -176,6 +177,8 @@ class Profile extends React.Component{
 	}
 	render(){
 		return(
+			<div>
+			<NavBar/>
 			<div id="profile">
 				<div id="panel">
 					<div id="addfriend">
@@ -219,6 +222,7 @@ class Profile extends React.Component{
 				</div>
 				{this.privateGames()}
 			</div>
+		</div>
 			);
 	}
 };
