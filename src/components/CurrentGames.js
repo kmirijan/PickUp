@@ -5,12 +5,10 @@ import axios from 'axios';
 
 const GUEST = "guest";
 
-function updateTable(search)
+function updateTableUnbound(search)
 {
-    if (this.mounted == false) return;
-    console.log("Updating table");
+    if (this.mounted != true) return;
   axios.post('/retrievegames').then((results)=>{
-    console.log(results.data);
     this.setState({games: results.data});
 
     var data = results.data.filter(game=>{
@@ -25,6 +23,8 @@ function updateTable(search)
 
   });
 }
+
+var updateTable = updateTableUnbound;
 
 export class CurrentGames extends React.Component{
 
@@ -78,9 +78,7 @@ export class CurrentGames extends React.Component{
                 lng: coords.lng()
             },
         };
-        console.log(game);
         axios.post('/postgames', game).then(()=>{
-          console.log("hello")
           axios.post('/join', {uid:this.props.user, gid:id});
         });
         updateTable(this.refs.search.value);
@@ -95,12 +93,10 @@ export class CurrentGames extends React.Component{
     {
         if (this.props.user != GUEST)
         {
-            console.log("User detected, no name input field required");
             return null;
         }
         else 
         {
-            console.log("Guest detected, displaying name input field");
             return (
                 <input
                 className='gameDetails'
@@ -166,7 +162,7 @@ class GameTable extends React.Component{
   constructor(props)
   {
     super(props);
-
+    this.mounted = false;
 	this.state =
 	{
       games: [],
@@ -177,13 +173,14 @@ class GameTable extends React.Component{
   componentDidMount()
   {
     this.mounted = true;
-	updateTable = updateTable.bind(this);
+	updateTable = updateTableUnbound.bind(this);
     updateTable("");
   }
 
   componentWillUnmount()
   {
     this.mounted = false;
+
   }
 
   render() {
