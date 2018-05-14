@@ -83,9 +83,7 @@ export class CurrentGames extends React.Component{
                 lng: coords.lng()
             },
         };
-        axios.post('/postgames', game).then(()=>{
-          axios.post('/join', {uid:this.props.user, gid:id});
-        });
+        axios.post('/postgames', game);
         updateTable(this.refs.search.value);
         this.refs.sport.value='';
         this.refs.name.value='';
@@ -111,7 +109,7 @@ export class CurrentGames extends React.Component{
         {
             return null;
         }
-        else 
+        else
         {
             return (
                 <input

@@ -173,7 +173,14 @@ app.post("/postgames", (req, res) =>
   mongo.connect(mongoUrl, (err, db) => {
     if (err) throw err;
 
-    db.db("pickup").collection("games").insertOne(game,() => {res.json(); db.close()});
+    db.db("pickup").collection("games").insertOne(game,() => {
+      db.db("pickup").collection("users").update({"username":game["owner"]},{
+        $push: {games: game["id"]}
+      }).then(()=>{
+        res.json();
+        db.close();
+      })
+    });
 
    });
 
