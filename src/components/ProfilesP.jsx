@@ -3,6 +3,7 @@ var ReactDOM=require("react-dom");
 require("../css/profiles.css");
 var {Switch,BrowserRouter,Route,browserHistory,Redirect}=require('react-router-dom');
 var axios=require("axios");
+var {Link}=require('react-router-dom');
 
 
 class ProfileP extends React.Component{
@@ -235,26 +236,28 @@ class GamesList extends React.Component
 			}
 		}
 		deleteGame(gameId){
-			if(confirm("delete game?")){
-				axios({
-					method:"post",
-					url:"/deletegame",
-					data:{
-						gameId:gameId
-					}
-				}).then(()=>{
-					console.log("game deleted");
-					this.setState({
-						deleteGameClicked:true
+			if(this.state.deleteGameClicked==false){
+				if(confirm("delete game?")){
+					axios({
+						method:"post",
+						url:"/deletegame",
+						data:{
+							gameId:gameId
+						}
+					}).then(()=>{
+						console.log("game deleted");
+						this.setState({
+							deleteGameClicked:true
+						})
 					})
-				})
+				}
 			}
 		}
 		componentDidUpdate(){
 			if(this.state.deleteGameClicked==true){
 				axios.post("/usergames", {user:localStorage.getItem("user")}).then( (results) => {
 						this.setState({games : results.data});
-				});
+				})
 				this.setState({deleteGameClicked:false});
 			}
 		}
@@ -265,42 +268,49 @@ class GamesList extends React.Component
 		}
     displayGame(game)
     {
-			if(game.owner==localStorage.getItem("user")){
         return (
-            <li key={game.id}>
-                <div>Sport {game.sport}</div>
-                <div>Location {game.location}</div>
-                <div>Name {game.name}</div>
-								<button
-									onClick={()=>this.deleteGame(game.id)}
-								>
-									Delete
-								</button>
-            </li>
+					<tr key={game.id}>
+						<td ><h3>{game.sport} </h3></td>
+						<td ><h3>{game.name} </h3></td>
+						<td><Link to={"/game:"+game.id}><h3>Details</h3></Link></td>
+					</tr>
         )
-			}
-			else{
-				return (
-            <li key={game.id}>
-                <div>Sport {game.sport}</div>
-                <div>Location {game.location}</div>
-                <div>Name {game.name}</div>
-            </li>
-        )
-			}
     }
+		displayGamesMade(game){
+			return (
+				<tr key={game.id}>
+					<td ><h3>{game.sport} </h3></td>
+					<td ><h3>{game.name} </h3></td>
+					<td><Link to={"/game:"+game.id}><h3>Details</h3></Link></td>
+					<td><button onClick={()=>{this.deleteGame(game.id)}}>
+						<h3>delete</h3>
+					</button></td>
+				</tr>
+			)
+		}
     render()
     {
-				if(this.state.games==[]){return}
-				const gamesList=this.state.games.map((game)=>
+			if (this.props.games==[]) return;
+			var gamesList = this.state.games.filter((game)=>{
+				{return game["owner"]!=localStorage.getItem("user")}
+			})
+			gamesList = gamesList.map((game) =>
 					{return this.displayGame(game)}
-				);
+			);
+			var gamesMade = this.state.games.filter((game)=>{
+				{return game["owner"]==localStorage.getItem("user")}
+			})
+			gamesMade = gamesMade.map((game) =>
+					{return this.displayGamesMade(game)}
+			);
 
         return(
-            <div>
-                <h2>Games Played</h2>
-        		<ul key="gamesList">{gamesList}</ul>
-            </div>
+					<div>
+						<h2>Games Played</h2>
+						<table><tbody key="gamesList">{gamesList}</tbody></table>
+						<h2>Games Made</h2>
+						<table><tbody key="gamesMadeList">{gamesMade}</tbody></table>
+					</div>
 	    );
     }
 

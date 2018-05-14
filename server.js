@@ -154,7 +154,6 @@ app.post("/postgames", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
 
-
   var game = {
     sport: makeValid(req.body.sport),
     name: makeValid(req.body.name),

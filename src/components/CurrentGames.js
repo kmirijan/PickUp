@@ -32,8 +32,10 @@ export class CurrentGames extends React.Component{
         super(props);
         this.state = {
             game: {},
+            isprivate:false
         };
         this.addGame = this.addGame.bind(this);
+        this.togglePrivate=this.togglePrivate.bind(this);
     }
     componentDidMount() {
            let input = document.getElementById('location');
@@ -48,13 +50,14 @@ export class CurrentGames extends React.Component{
         let sport = this.refs.sport.value;
         let name = this.refs.name.value;
         let location = this.refs.location.value;
-        let isprivate = this.refs.isprivate.checked;
+        let isprivate = this.state.isprivate;
         let coords = this.autocomplete.getPlace().geometry.location;
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let game = {
             gameId: id,
             sport: sport,
             name: name,
+            isprivate:isprivate,
             location: location,
             user: this.props.user,
             coords: {
@@ -72,7 +75,18 @@ export class CurrentGames extends React.Component{
         this.refs.name.value='';
         this.refs.location.value='';
     }
-
+    togglePrivate(){
+      if(this.state.isprivate==false){
+        this.setState({
+          isprivate:true
+        })
+      }
+      else{
+        this.setState({
+          isprivate:false
+        })
+      }
+    }
 
 
     render(){
@@ -105,7 +119,8 @@ export class CurrentGames extends React.Component{
                       className='gameDetails'
                       id= 'isprivate'
                      type="checkbox"
-                     ref="isprivate"/>
+                     ref="isprivate"
+                     onChange={this.togglePrivate}/>
 
                     <div className="App-submitButton">
                         <input type="submit" value="Submit"/>
@@ -132,7 +147,7 @@ class GameTable extends React.Component{
   constructor(props)
   {
     super(props);
-	updateTable = updateTable.bind(this);
+	   this.updateTable = updateTable.bind(this);
 
 	this.state =
 	{
@@ -143,7 +158,7 @@ class GameTable extends React.Component{
 
   componentDidMount()
   {
-    updateTable("");
+    this.updateTable("");
   }
 
   render() {
@@ -185,7 +200,6 @@ class Game extends React.Component{
 
 
   render(){
-    console.log("hello world")
     return(
         <tr>
           <td ><h3>{this.props.game.sport} </h3></td>
