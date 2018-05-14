@@ -5,10 +5,12 @@ var {Link}=require('react-router-dom');
 
 import axios from 'axios';
 
-function updateTable(search)
+const GUEST = "guest";
+
+function updateTableUnbound(search)
 {
+    if (this.mounted != true) return;
   axios.post('/retrievegames').then((results)=>{
-    console.log(results.data);
     this.setState({games: results.data});
 
     var data = results.data.filter(game=>{
@@ -23,6 +25,8 @@ function updateTable(search)
 
   });
 }
+
+var updateTable = updateTableUnbound;
 
 export class CurrentGames extends React.Component{
 
@@ -41,14 +45,28 @@ export class CurrentGames extends React.Component{
            let input = document.getElementById('location');
            this.autocomplete = new google.maps.places.Autocomplete(input);
    }
+
     updateSearch(event){
       updateTable(event.target.value);
+    }
+
+
+    getName()
+    {
+        if (this.props.user != GUEST)
+        {
+            return this.props.user;
+        }
+        else
+        {
+            return this.refs.name.value;
+        }
     }
 
     addGame(event) {
         event.preventDefault();
         let sport = this.refs.sport.value;
-        let name = this.refs.name.value;
+        let name = this.getName();
         let location = this.refs.location.value;
         let isprivate = this.state.isprivate;
         let coords = this.autocomplete.getPlace().geometry.location;
@@ -65,9 +83,7 @@ export class CurrentGames extends React.Component{
                 lng: coords.lng()
             },
         };
-        console.log(game);
         axios.post('/postgames', game).then(()=>{
-          console.log("hello")
           axios.post('/join', {uid:this.props.user, gid:id});
         });
         updateTable(this.refs.search.value);
@@ -89,6 +105,26 @@ export class CurrentGames extends React.Component{
     }
 
 
+    displayNameInput()
+    {
+        if (this.props.user != GUEST)
+        {
+            return null;
+        }
+        else 
+        {
+            return (
+                <input
+                className='gameDetails'
+                type="text"
+                ref="name"
+                placeholder="Name"
+                />
+
+            );
+        }
+    }
+
     render(){
 
         return(
@@ -98,16 +134,12 @@ export class CurrentGames extends React.Component{
                 className="form-inline"
                 onSubmit={this.addGame.bind(this)}
                 >
+                    {this.displayNameInput()}
                     <input
                     className='gameDetails'
                     type="text"
                     ref="sport"
                     placeholder="Activity"/>
-                    <input
-                    className='gameDetails'
-                    type="text"
-                    ref="name"
-                    placeholder="Name"/>
                     <input
                     className='gameDetails'
                     id= 'location'
@@ -147,8 +179,7 @@ class GameTable extends React.Component{
   constructor(props)
   {
     super(props);
-	   this.updateTable = updateTable.bind(this);
-
+    this.mounted = false;
 	this.state =
 	{
       games: [],
@@ -158,7 +189,15 @@ class GameTable extends React.Component{
 
   componentDidMount()
   {
-    this.updateTable("");
+    this.mounted = true;
+	updateTable = updateTableUnbound.bind(this);
+    updateTable("");
+  }
+
+  componentWillUnmount()
+  {
+    this.mounted = false;
+
   }
 
   render() {
