@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-
+import ReactDOM from 'react-dom';
 import axios from 'axios';
 
 function updateTable(search)

@@ -1,8 +1,8 @@
-var React=require("react");
-var ReactDOM=require("react-dom");
-require("../css/profiles.css");
-var {Switch,BrowserRouter,Route,browserHistory,Redirect}=require('react-router-dom');
-var axios=require("axios");
+import React from 'react';
+import ReactDOM from 'react-dom';
+import '../css/profiles.css';
+import {Switch,BrowserRouter,Route,browserHistory,Redirect} from 'react-router-dom';
+import axios from 'axios';
 
 
 class ProfileP extends React.Component{
@@ -256,6 +256,4 @@ class GamesList extends React.Component
 }
 
 
-module.exports={
-	ProfileP
-}
+export default ProfileP;

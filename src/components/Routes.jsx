@@ -1,23 +1,23 @@
-var React=require("react");
-var ReactDOM=require("react-dom");
-var {Profile}=require("./Profiles.jsx");
-var {ProfileP}=require("./ProfilesP.jsx");
-var {ProfileEdit}=require("./ProfilesEdit.jsx");
-var {CurrentGames}=require("./CurrentGames.js");
-var {Users}=require("../helpers/Users.jsx");
-var{ProfileSettings}=require("./ProfilesSettings.jsx");
-require("../css/App.css");
-require("../css/font.css");
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Profile} from './Profiles.jsx';
+import {ProfileP} from './ProfilesP.jsx';
+import {ProfileEdit} from './ProfilesEdit.jsx';
+import {CurrentGames} from './CurrentGames.js';
+import {Users} from '../helpers/Users.jsx';
+import {ProfileSettings} from './ProfilesSettings.jsx';
+import '../css/App.css';
+import '../css/font.css';
 import NavBar from './NavBar';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
 import App from "./App";
 import Home from "./Home";
 import Map from "./Map";
-var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
+import {Switch,BrowserRouter,Route,browserHistory} from 'react-router-dom';
 
 
-class Routes extends React.Component{
+export class Routes extends React.Component{
     render(){
         return(
             <BrowserRouter>
@@ -155,11 +155,6 @@ class LogOut extends React.Component{
         return(<_404 />);
 	}
 }
-const _404=()=>(
+export const _404=()=>(
 	<h1>404</h1>
 );
-
-module.exports={
-	Routes,
-	_404
-}

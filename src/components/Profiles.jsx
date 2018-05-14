@@ -1,8 +1,8 @@
-var React=require("react");
-var ReactDOM=require("react-dom");
-require("../css/profiles.css");
+import React from 'react';
+import ReactDOM from 'react-dom';
+import '../css/profiles.css';
 import {CurrentGamesPrivate} from './CurrentGamesPrivate.jsx';
-var axios=require("axios");
+import axios from 'axios';
 
 
 class Profile extends React.Component{
@@ -257,6 +257,4 @@ class GamesList extends React.Component
 }
 
 
-module.exports={
-	Profile
-}
+export default Profile;

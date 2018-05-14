@@ -1,8 +1,8 @@
-var React=require("react");
-var ReactDOM=require("react-dom");
-var {Routes}=require("./components/Routes.jsx");
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Routes} from './components/Routes.jsx';
 import NavBar from './components/NavBar';
-
+import registerServiceWorker from './registerServiceWorker';
 
 
 class Everything extends React.Component{
@@ -20,3 +20,5 @@ ReactDOM.render(
   <Everything />,
   document.getElementById("body")
 );
+
+registerServiceWorker();

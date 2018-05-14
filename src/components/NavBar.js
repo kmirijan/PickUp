@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {NavLink} from 'react-router-dom';
 import '../css/App.css';
 
@@ -6,7 +7,6 @@ class NavBar extends React.Component {
   render() {
     if(localStorage.getItem("loggedin")=="true"){
       return (
-        <div>
           <nav className="navbar navbar-default">
             <ul className="NavBar">
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/home'}>Home</NavLink></li>
@@ -21,17 +21,10 @@ class NavBar extends React.Component {
               </ul>
             </ul>
           </nav>
-          <header className="App-header">
-            <img src="/logo.png" className="App-logo" alt="logo" />
-            <h1 className="App-title">The Hub for Connecting Players</h1>
-          </header>
-        </div>
       )
     }
     else{
       return (
-        <div>
-
           <nav className="navbar navbar-default">
             <ul className="NavBar">
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/home'}>Home</NavLink></li>
@@ -46,11 +39,6 @@ class NavBar extends React.Component {
               </ul>
             </ul>
           </nav>
-          <header className="App-header">
-            <img src="/logo.png" className="App-logo" alt="logo" />
-            <h1 className="App-title">The Hub for Connecting Players</h1>
-          </header>
-        </div>
       )
     }
   }

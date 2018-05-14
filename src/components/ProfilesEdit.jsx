@@ -1,7 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import '../css/profilesEdit.css';
 import {Switch,BrowserRouter,Route,browserHistory,Redirect} from 'react-router-dom';
-import axios from "axios";
+import axios from 'axios';
 
 
 class ProfileEdit extends React.Component{
@@ -264,7 +265,7 @@ componentDidUpdate(prevProps,prevState){
 }
 render(){
 	return(
-		<div class="container">
+		<div className="container">
 			<div>
 							<button
 								type="button"
@@ -277,46 +278,46 @@ render(){
 							</div>
 
 	    <h1>Edit Profile</h1>
-		<div class="row">
-	      <div class="col-md-3">
-	        <div class="text-center">
-	          <img src= "//placehold.it/100" class="avatar img-circle" alt="avatar"/>
+		<div className="row">
+	      <div className="col-md-3">
+	        <div className="text-center">
+	          <img src= "//placehold.it/100" className="avatar img-circle" alt="avatar"/>
 	          <h6>Upload a different photo...</h6>
 
-	          <input type="file" class="form-control"/>
+	          <input type="file" className="form-control"/>
 
 	        </div>
 	      </div>
 
-	      <div class="col-md-9 personal-info">
+	      <div className="col-md-9 personal-info">
 	        <h3>Personal info</h3>
 
-	        <form class="form-horizontal" role="form">
-						<div class="form-group">
-	            <label class="col-lg-3 control-label">Name:</label>
-	            <div class="col-lg-8">
-	              <input class="form-control" type="text" value={this.state.username}
+	        <form className="form-horizontal" role="form">
+						<div className="form-group">
+	            <label className="col-lg-3 control-label">Name:</label>
+	            <div className="col-lg-8">
+	              <input className="form-control" type="text" value={this.state.username}
 									/>
 	            </div>
 	          </div>
-	          <div class="form-group">
-	            <label class="col-lg-3 control-label">Username:</label>
-	            <div class="col-lg-8">
-	              <input class="form-control" type="text" value={this.state.alias}
+	          <div className="form-group">
+	            <label className="col-lg-3 control-label">Username:</label>
+	            <div className="col-lg-8">
+	              <input className="form-control" type="text" value={this.state.alias}
 									onChange={e=>this.setState({alias:e.target.value})}/>
 	            </div>
 	          </div>
-	          <div class="form-group">
-	            <label class="col-lg-3 control-label">email:</label>
-	            <div class="col-lg-8">
-	              <input class="form-control" type="text" value={this.state.email}
+	          <div className="form-group">
+	            <label className="col-lg-3 control-label">email:</label>
+	            <div className="col-lg-8">
+	              <input className="form-control" type="text" value={this.state.email}
 									/>
 	            </div>
 	          </div>
-	          <div class="form-group">
-	            <label class="col-lg-3 control-label">Bio:</label>
-	            <div class="col-lg-8">
-	              <textarea class="form-control" type="text"
+	          <div className="form-group">
+	            <label className="col-lg-3 control-label">Bio:</label>
+	            <div className="col-lg-8">
+	              <textarea className="form-control" type="text"
 									rows="10"
 									cols="40"
 									maxlength="500"
@@ -325,34 +326,26 @@ render(){
 								</textarea>
 	            </div>
 	          </div>
-	          <div class="form-group">
-	            <label class="col-md-3 control-label">Password:</label>
-	            <div class="col-md-8">
-	              <input class="form-control" type="password" value="11111122333"/>
+	          <div className="form-group">
+	            <label className="col-md-3 control-label">Password:</label>
+	            <div className="col-md-8">
+	              <input className="form-control" type="password" value="11111122333"/>
 	            </div>
 	          </div>
-	          <div class="form-group">
-	            <label class="col-md-3 control-label">Confirm password:</label>
-	            <div class="col-md-8">
-	              <input class="form-control" type="password" value="11111122333"/>
+	          <div className="form-group">
+	            <label className="col-md-3 control-label">Confirm password:</label>
+	            <div className="col-md-8">
+	              <input className="form-control" type="password" value="11111122333"/>
 	            </div>
 	          </div>
-	          <div class="form-group">
-	            <label class="col-md-3 control-label"></label>
-	            <div class="col-md-8">
-	              <input type="button" class="btn btn-primary" value="Save Changes" onClick={this.save}/>
+	          <div className="form-group">
+	            <label className="col-md-3 control-label"></label>
+	            <div className="col-md-8">
+	              <input type="button" className="btn btn-primary" value="Save Changes" onClick={this.save}/>
 	              <span></span>
-	              <input type="reset" class="btn btn-default" value="Cancel"/>
+	              <input type="reset" className="btn btn-default" value="Cancel"/>
 	            </div>
 	          </div>
-	        </form>
-	      </div>
-	  </div>
-		<div className="friendslistEdit">
-							<h2>Friends:</h2>
-							<ul>{this.friendsList()}</ul>
-						</div>
-
 						<div id="changeemailbox">
 							<button type="button" className="btn btn-success" key="changeEmailPrompt" onClick={this.changeEmailPrompt}
 								style = {{margin: '20px'}}>
@@ -373,6 +366,14 @@ render(){
 								{this.state.passwordError}
 							</div>
 						</div>
+	        </form>
+	      </div>
+	  </div>
+		<div className="friendslistEdit">
+							<h2>Friends:</h2>
+							<ul>{this.friendsList()}</ul>
+						</div>
+
 	</div>
 			);
 		}
@@ -380,6 +381,4 @@ render(){
 
 
 
-	module.exports={
-		ProfileEdit
-	}
+	export default ProfileEdit;

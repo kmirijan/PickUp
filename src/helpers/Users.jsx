@@ -1,6 +1,6 @@
-var React=require("react");
-var ReactDOM=require("react-dom");
-var axios=require("axios");
+import React from 'react';
+import ReactDOM from 'react-dom';
+import axios from 'axios';
 import NavBar from '../components/NavBar';
 import {NavLink} from 'react-router-dom';
 
@@ -43,6 +43,4 @@ class Users extends React.Component{
 		)
 	}
 }
-module.exports={
-	Users
-}
+export default Users;
