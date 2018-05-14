@@ -3,8 +3,12 @@ import '../css/App.css';
 
 import axios from 'axios';
 
+const GUEST = "guest";
+
 function updateTable(search)
 {
+    if (this.mounted == false) return;
+    console.log("Updating table");
   axios.post('/retrievegames').then((results)=>{
     console.log(results.data);
     this.setState({games: results.data});
@@ -37,15 +41,28 @@ export class CurrentGames extends React.Component{
            let input = document.getElementById('location');
            this.autocomplete = new google.maps.places.Autocomplete(input);
    }
+
     updateSearch(event){
       updateTable(event.target.value);
     }
 
 
+    getName()
+    {
+        if (this.props.user != GUEST)
+        {
+            return this.props.user;
+        }
+        else
+        {
+            return this.refs.name.value;
+        }
+    }
+
     addGame(event) {
         event.preventDefault();
         let sport = this.refs.sport.value;
-        let name = this.refs.name.value;
+        let name = this.getName();
         let location = this.refs.location.value;
         let isprivate = this.refs.isprivate.checked;
         let coords = this.autocomplete.getPlace().geometry.location;
@@ -74,6 +91,28 @@ export class CurrentGames extends React.Component{
 
 
 
+    displayNameInput()
+    {
+        if (this.props.user != GUEST)
+        {
+            console.log("User detected, no name input field required");
+            return null;
+        }
+        else 
+        {
+            console.log("Guest detected, displaying name input field");
+            return (
+                <input
+                className='gameDetails'
+                type="text"
+                ref="name"
+                placeholder="Name"
+                />
+
+            );
+        }
+    }
+
     render(){
 
         return(
@@ -83,16 +122,12 @@ export class CurrentGames extends React.Component{
                 className="form-inline"
                 onSubmit={this.addGame.bind(this)}
                 >
+                    {this.displayNameInput()}
                     <input
                     className='gameDetails'
                     type="text"
                     ref="sport"
                     placeholder="Activity"/>
-                    <input
-                    className='gameDetails'
-                    type="text"
-                    ref="name"
-                    placeholder="Name"/>
                     <input
                     className='gameDetails'
                     id= 'location'
@@ -131,7 +166,6 @@ class GameTable extends React.Component{
   constructor(props)
   {
     super(props);
-	updateTable = updateTable.bind(this);
 
 	this.state =
 	{
@@ -142,7 +176,14 @@ class GameTable extends React.Component{
 
   componentDidMount()
   {
+    this.mounted = true;
+	updateTable = updateTable.bind(this);
     updateTable("");
+  }
+
+  componentWillUnmount()
+  {
+    this.mounted = false;
   }
 
   render() {
