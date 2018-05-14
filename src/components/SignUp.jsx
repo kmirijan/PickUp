@@ -43,6 +43,13 @@ signUp(){
     })
     this.refs.signup.removeAttribute("disabled");
   }
+  else if(username[0].match(/[a-z]/i)==null){
+    this.setState({
+      error:{
+        message:"username must begin with a letter"
+      }
+    })
+  }
   else{
     axios({
         url:"/signup",

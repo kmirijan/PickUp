@@ -272,6 +272,7 @@ class GamesList extends React.Component
 					<tr key={game.id}>
 						<td ><h3>{game.sport} </h3></td>
 						<td ><h3>{game.name} </h3></td>
+						<td > <h3>{game.location}</h3> </td>
 						<td><Link to={"/game:"+game.id}><h3>Details</h3></Link></td>
 					</tr>
         )
@@ -281,6 +282,7 @@ class GamesList extends React.Component
 				<tr key={game.id}>
 					<td ><h3>{game.sport} </h3></td>
 					<td ><h3>{game.name} </h3></td>
+					<td > <h3>{game.location}</h3> </td>
 					<td><Link to={"/game:"+game.id}><h3>Details</h3></Link></td>
 					<td><button onClick={()=>{this.deleteGame(game.id)}}>
 						<h3>delete</h3>
