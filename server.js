@@ -51,6 +51,9 @@ app.post("/setemail",(req,res)=>{
 app.post("/setpassword",(req,res)=>{
   mkprofile.setPassword(req.body["user"],req.body["oldPassword"],req.body["newPassword"],res);
 });
+app.post("/uploadprofilepicture",(req,res)=>{
+  mkprofile.uploadProfilePicture(req.body["image"],req.body["user"],req.body["filetype"],res);
+})
 app.post("/reqfriend",(req,res)=>{
   friends.reqFriend(req.body["user"],req.body["friend"],res);
 })
@@ -69,6 +72,7 @@ app.post("/removefriend",(req,res)=>{
 app.post("/isgame",(req,res)=>{
   gamepage.isGame(req.body["id"],res);
 })
+
 
 /*----------------------------------------------------------------------------------------*/
 const makeValid = (obj) => {return obj != null ? obj : "";};

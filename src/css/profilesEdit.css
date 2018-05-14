@@ -9,6 +9,9 @@
 	background-color:gray;
 	float: left;
 }
+.pictureEdit:hover{
+	cursor:pointer;
+}
 
 .editImg{
   text-align: center;

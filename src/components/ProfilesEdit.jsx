@@ -13,6 +13,7 @@ class ProfileEdit extends React.Component{
 		this.friendsList=this.friendsList.bind(this);
 		this.processFriends=this.processFriends.bind(this);
 		this.removeFriend=this.removeFriend.bind(this);
+		this.changePicture=this.changePicture.bind(this);
 		this.state={
 			pic:"",
 			long:"",
@@ -36,7 +37,8 @@ class ProfileEdit extends React.Component{
 			data:{
 				"username":this.state.username,
 				"alias":this.state.alias,
-				"bio":this.state.long
+				"bio":this.state.long,
+				"pic":this.state.pic
 			}
 		}).then(()=>{
 			console.log("saved");
@@ -125,9 +127,38 @@ componentDidMount(){
 }
 componentDidUpdate(prevProps,prevState){
 }
+changePicture(e){
+	const img=e.target.files[0];
+	var type =""
+	if(img.name.match(/.*\.jpg/)){
+		type=".jpg";
+		console.log("jpg")
+	}
+	else if(img.name.match(/.*\.png/)){
+		type=".png";
+		console.log("png")
+	}
+	else{
+		console.log("err")
+	}
+	if(img){
+		var image=new FormData();
+		image.append("file",img)
+	}
+	console.log(image)
+	axios({
+		method:"post",
+		url:"/uploadprofilepicture",
+		data:{
+			image:image,
+			user:localStorage.getItem("user"),
+			filetype:type
+		}
+	})
+}
 render(){
 	return(
-		<body className="profileEdit">
+		<div className="profileEdit">
 
 			<div>
 					<button
@@ -150,12 +181,13 @@ render(){
 								</button>
 							</div>
 
-						<div className="pictureEdit">
+						<div className="pictureEdit" >
 							<img src={this.state.pic}>
 							</img>
-							<p className="editImg">
-								Change Picture
-							</p>
+
+						</div>
+						<div className="editImg" ref="editImg">
+							<input type="file" accept=".jpg, .png" onChange={(e)=>{this.changePicture(e)}}></input>
 						</div>
 
 
@@ -177,7 +209,7 @@ render(){
 								className = "form-control"
 								rows="1"
 								cols="40"
-								maxlength="30"
+								maxLength="30"
 								value={this.state.alias}
 								onChange={e=>this.setState({alias:e.target.value})}
 								>
@@ -193,7 +225,7 @@ render(){
 								className = "form-control"
 								rows="10"
 								cols="40"
-								maxlength="500"
+								maxLength="500"
 								value={this.state.long}
 								onChange={e=>this.setState({long:e.target.value})}
 								>
@@ -219,7 +251,7 @@ render(){
 						</div>
 
 
-					</body>
+					</div>
 			);
 		}
 	};
