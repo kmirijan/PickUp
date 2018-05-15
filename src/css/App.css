@@ -1,0 +1,196 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  float: left;
+  height: 150px;
+}
+
+body {margin:auto;}
+
+.NavBar{
+   list-style-type: none;
+   margin: 0;
+   padding: 0;
+   overflow: hidden;
+   background-color: #333;
+   position: fixed;
+   top: 0;
+   width: 100%;
+}
+
+.Nav {
+   float: left;
+}
+
+.NavIcons {
+   float: right;
+}
+
+.Nav .pages {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: none;
+}
+
+.Nav .pages:hover:not(.active) {
+    background-color: #111;
+}
+
+
+.Nav .active {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: orange;
+}
+
+.NavIcons .pages {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: none;
+}
+
+.NavIcons .pages:hover:not(.active) {
+    background-color: #111;
+}
+
+
+.NavIcons .active {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: orange;
+}
+
+.signup{
+	text-align:center;
+}
+
+.App-header {
+  margin-top: 45px;
+  padding: 20px;
+  background-color: rgba(135,206,350,0.4);
+  border-bottom: 1px solid black;
+}
+
+.App-title {
+  text-align: center;
+  font-family: 'Helvetica Neue';
+  font-size: 70px;
+  margin: 5%;
+  font-weight: bold;
+  color: black;
+}
+
+.texts{
+  text-align: center;
+}
+
+.HomepageText {
+  text-align: center;
+  font-family: 'Helvetica Neue';
+  font-size: 50px;
+  margin: 5%;
+  color: black;
+}
+
+.HomepageSubtext {
+  text-align: center;
+  font-family: 'Helvetica Neue';
+  font-size: 30px;
+  margin: 5%;
+  color: black;
+}
+
+.Activity{
+  float:left;
+  display: inline-block;
+}
+.Name{
+  display: inline-block;
+}
+.Location{
+  float:right;
+  display: inline-block;
+  padding-right: 30px
+}
+body {
+    background-image: url('/Sports.png');
+}
+
+.App-submitButton {
+  padding-top: 12px;
+}
+
+.gameDetails {
+    width: 30%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.searchBox {
+    width: 30%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: center;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+.joinGame {
+  right: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.joinGame:hover {
+    background-color: #45a049;
+}
+
+.joinGame:hover {
+    background-color: #45a049;
+}
+
+table {
+  border-collapse:collapse;
+  width: 75%;
+  margin:auto;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 8px;
+}
+
+.editPage{
+  margin:auto;
+}
