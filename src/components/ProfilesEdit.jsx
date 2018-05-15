@@ -168,100 +168,87 @@ render(){
 		"maxHeight":"200px"
 	}
 	return(
-		<div className="profileEdit">
+		<div className="container">
+			<h1>Edit Profile</h1>
+		<div className="row">
+				<div className="col-md-3">
+					<div className="text-center">
+						<img src= "//placehold.it/100" className="avatar img-circle" alt="avatar"/>
+						<h6>Upload a different photo...</h6>
 
-			<div>
-					<button
-						type="button"
-						className="btn btn-info"
-						style={{margin:'10px',
-							float:'right'}}
-							onClick={this.profile}>
-							Profile
-						</button>
+						<input type="file" className="form-control"/>
 
+					</div>
+				</div>
 
-							<button
-								type="button"
-								className="btn btn-info"
-								style={{margin:'10px',
-									float:'right'}}
-									onClick={this.settings}>
-									Settings
-								</button>
+				<div className="col-md-9 personal-info">
+					<h3>Personal info</h3>
+
+					<form className="form-horizontal" role="form">
+						<div className="form-group">
+							<label className="col-lg-3 control-label">Name:</label>
+							<div className="col-lg-8">
+								<input className="form-control" type="text" value={this.state.username}
+									/>
 							</div>
-
-						<div className="pictureEdit" >
-							<img src={this.state.pic} style={picStyle}>
-							</img>
-
 						</div>
-						<div className="editImg" ref="editImg">
-							<input type="file" accept=".jpg, .png" onChange={(e)=>{this.changePicture(e)}}></input>
+						<div className="form-group">
+							<label className="col-lg-3 control-label">Username:</label>
+							<div className="col-lg-8">
+								<input className="form-control" type="text" defaultValue={this.state.alias}
+									onChange={e=>this.setState({alias:e.target.value})}/>
+							</div>
+						</div>
+						<div className="form-group">
+							<label className="col-lg-3 control-label">email:</label>
+							<div className="col-lg-8">
+								<input className="form-control" type="text" value={this.state.email}
+									onChange={event => this.setState({newEmail: event.target.value})}
+									/>
+							</div>
+						</div>
+						<div className="form-group">
+							<label className="col-lg-3 control-label">Bio:</label>
+							<div className="col-lg-8">
+								<textarea className="form-control" type="text"
+									rows="10"
+									cols="40"
+									maxlength="500"
+									defaultValue={this.state.long}
+									onChange={e=>this.setState({long:e.target.value})}>
+								</textarea>
+							</div>
+						</div>
+						<div className="form-group">
+							<label className="col-md-3 control-label">Password:</label>
+							<div className="col-md-8">
+								<input className="form-control" type="password" value="11111122333"/>
+							</div>
 						</div>
 
-
-						<div className="usernameInEdit">
-								{this.state.username}
+						<div className="form-group">
+							<label className="col-md-3 control-label">Confirm password:</label>
+							<div className="col-md-8">
+								<input className="form-control" type="password" value="11111122333"/>
+							</div>
 						</div>
-
-
-						<div className="emailInEdit">
-							{this.state.email}
-						</div>
-
-						<div className="container">
-						<div className="editUsername">
-							<form>
-								<div>
-							<label>Update username:</label>
-							<textarea
-								className = "form-control"
-								rows="1"
-								cols="40"
-								maxLength="30"
-								value={this.state.alias}
-								onChange={e=>this.setState({alias:e.target.value})}
-								>
-							</textarea>
+						<div className="form-group">
+							<label className="col-md-3 control-label"></label>
+							<div className="col-md-8">
+								<input type="button" className="btn btn-primary" value="Save Changes" onClick={this.save}/>
+								<span></span>
+								<input type="reset" className="btn btn-default" value="Cancel"/>
+							</div>
 						</div>
 						</form>
-						</div>
-
-							<form>
-								<div className="bioEdit">
-							<label>Update your bio:</label>
-							<textarea
-								className = "form-control"
-								rows="10"
-								cols="40"
-								maxLength="500"
-								value={this.state.long}
-								onChange={e=>this.setState({long:e.target.value})}
-								>
-							</textarea>
-							</div>
-							</form>
-
-
-								<button
-									style = {{float:'right'}}
-									type="button"
-									className="btn btn-success btn-lg"
-									onClick={this.save}>
-									Save
-								</button>
-							</div>
-
-
-
-						<div className="friendslistEdit">
+				</div>
+		</div>
+		<div className="friendslistEdit">
 							<h2>Friends:</h2>
 							<ul>{this.friendsList()}</ul>
 						</div>
 
-
-					</div>
+	</div>
 			);
 		}
 	};

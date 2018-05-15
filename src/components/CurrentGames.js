@@ -8,6 +8,8 @@ import axios from 'axios';
 const GUEST = "guest";
 
 
+var updateTable = updateTableUnbound;
+
 export class CurrentGames extends React.Component{
 
 
@@ -28,6 +30,18 @@ export class CurrentGames extends React.Component{
 
     
 
+
+    getName()
+    {
+        if (this.props.user != GUEST)
+        {
+            return this.props.user;
+        }
+        else
+        {
+            return this.refs.name.value;
+        }
+    }
 
     getName()
     {
@@ -192,7 +206,6 @@ class GameTable extends React.Component{
 
     
     }
-
 
 
   render() {

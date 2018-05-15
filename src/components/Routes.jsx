@@ -197,6 +197,7 @@ class RenderGamePage extends React.Component{
     console.log("gametrue",this.isGame);
     console.log("loggedin",localStorage.getItem("loggedin"))
     if(this.isGame==true&&localStorage.getItem("loggedin")=="true"){
+
       return(<GamePage id={this.id}/>)
     }
     else{
