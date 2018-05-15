@@ -168,12 +168,16 @@ class ProfileP extends React.Component{
 
 	}
 	render(){
+		const picStyle={
+			"maxWidth":"200px",
+			"maxHeight":"200px"
+		}
 		return(
 			<div id="profile">
 				<div id="panel">
 				<div id = "card">
 						<div id="picture">
-							<img src={this.state.pic}></img>
+							<img src={this.state.pic} style={picStyle}></img>
 							<div id="mask"></div>
 							<p id="changeimg">change picture</p>
 						</div>
