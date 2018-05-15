@@ -162,8 +162,8 @@ class Profile extends React.Component{
 	}
 	render(){
 		const picStyle={
-			"max-width":"200px",
-			"max-height":"200px"
+			"maxWidth":"200px",
+			"maxHeight":"200px"
 		}
 		return(
 			<div id="profile">

@@ -21,7 +21,7 @@ class ProfileEdit extends React.Component{
 			alias:"",
 			email:"",
 			games:[],
-			friends:[]
+			friends:[],
 		}
 	}
 	profile(){
@@ -156,10 +156,17 @@ changePicture(e){
 		headers:{
       'Content-Type':'multipart/form-data'
     }
+	}).then(()=>{
+		this.props.history.push("/user"+this.props.username);
+		window.location.reload();
 	})
 }
 
 render(){
+	const picStyle={
+		"maxWidth":"200px",
+		"maxHeight":"200px"
+	}
 	return(
 		<div className="profileEdit">
 
@@ -185,7 +192,7 @@ render(){
 							</div>
 
 						<div className="pictureEdit" >
-							<img src={this.state.pic}>
+							<img src={this.state.pic} style={picStyle}>
 							</img>
 
 						</div>
