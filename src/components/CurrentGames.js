@@ -7,26 +7,6 @@ import axios from 'axios';
 
 const GUEST = "guest";
 
-function updateTableUnbound(search)
-{
-    if (this.mounted != true) return;
-  axios.post('/retrievegames').then((results)=>{
-    this.setState({games: results.data});
-
-    var data = results.data.filter(game=>{
-      return !game.isprivate
-    })
-    this.setState({filteredGames : data.filter(
-      (game) => {
-        return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
-          (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
-          (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1));
-    })});
-
-  });
-}
-
-var updateTable = updateTableUnbound;
 
 export class CurrentGames extends React.Component{
 
@@ -44,11 +24,9 @@ export class CurrentGames extends React.Component{
     componentDidMount() {
            let input = document.getElementById('location');
            this.autocomplete = new google.maps.places.Autocomplete(input);
-   }
-
-    updateSearch(event){
-      updateTable(event.target.value);
     }
+
+    
 
 
     getName()
@@ -83,8 +61,8 @@ export class CurrentGames extends React.Component{
                 lng: coords.lng()
             },
         };
-        axios.post('/postgames', game);
-        updateTable(this.refs.search.value);
+        axios.post('/postgames', game).then( () => 
+                {alert("Game added. It will appear upon refreshing the games table")});
         this.refs.sport.value='';
         this.refs.name.value='';
         this.refs.location.value='';
@@ -98,7 +76,7 @@ export class CurrentGames extends React.Component{
       else{
         this.setState({
           isprivate:false
-        })
+        });
       }
     }
 
@@ -158,10 +136,6 @@ export class CurrentGames extends React.Component{
                 </form>
 
 
-                <input className = "searchBox"
-                  type="text" placeholder="Search"
-		            ref="search"
-                    onChange={this.updateSearch.bind(this)}/>
                 <h1 className="App-currentGames">
                 Below are the currently available games:
                 </h1>
@@ -177,29 +151,64 @@ class GameTable extends React.Component{
   constructor(props)
   {
     super(props);
-    this.mounted = false;
 	this.state =
 	{
       games: [],
 	  filteredGames: [],
+      retrieving: false,
 	}
   }
 
   componentDidMount()
   {
-    this.mounted = true;
-	updateTable = updateTableUnbound.bind(this);
-    updateTable("");
+    this.retrieveGames();
   }
 
-  componentWillUnmount()
-  {
-    this.mounted = false;
 
-  }
+    updateSearch(event){
+      this.updateTable(event.target.value);
+    }
+
+    updateTable(search) {
+        this.setState({filteredGames : this.state.games.filter(
+            (game) => { return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
+            (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
+            (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1));
+            })
+        }); 
+    }
+
+    retrieveGames() {
+        this.setState({retrieving: true});
+        axios.post('/retrievegames').then((results)=>{
+           let data = results.data.filter(game=>{
+                return !game.isprivate
+            });
+            this.setState({games: data, retrieving: false});
+            this.updateTable(this.refs.search.value);
+            
+
+        });
+
+    
+    }
+
+
 
   render() {
-    return (
+    if (this.state.retrieving == true)
+    {
+        return (<h2 className="retrieving">Retrieving Games...</h2>);
+    }
+    else return (
+      <div>
+        <input className = "searchBox"
+        type="text" placeholder="Search"
+		ref="search"
+        onChange={this.updateSearch.bind(this)}/>
+        
+
+        <input type="button" value="Refresh" onClick={this.retrieveGames.bind(this)} />
 	   <table>
 	   <thead>
        <tr>
@@ -211,24 +220,20 @@ class GameTable extends React.Component{
       </thead>
       <tbody>
 	      {
-          this.state.filteredGames.map((game)=>{
-            return <Game game = {game} user={this.props.user} key={game.id} />
-          })}
+            this.state.filteredGames.map((game)=>{
+                return (<Game game = {game} user={this.props.user} key={game.id} />);
+            })
+         }
 	  </tbody>
       </table>
+      </div>
 	);
 
   }
 
 }
 
-class Game extends React.Component{
-
-  constructor(props)
-  {
-    super(props);
-    this.joinGame = this.joinGame.bind(this);
-  }
+class Game extends React.Component {
 
   joinGame()
   {
@@ -242,9 +247,10 @@ class Game extends React.Component{
           <td ><h3>{this.props.game.sport} </h3></td>
           <td ><h3>{this.props.game.name} </h3></td>
           <td > <h3>{this.props.game.location}</h3> </td>
-          <td><button className="joinGame" onClick={this.joinGame}><h3>Join</h3></button></td>
+          <td><button className="joinGame" onClick={this.joinGame.bind(this)}><h3>Join</h3></button></td>
           <td><Link to={"/game:"+this.props.game.id}><h3>Details</h3></Link></td>
         </tr>
     );
   }
 }
+

@@ -177,7 +177,7 @@ app.post("/postgames", (req, res) =>
       db.db("pickup").collection("users").update({"username":game["owner"]},{
         $push: {games: game["id"]}
       }).then(()=>{
-        res.json();
+        res.sendStatus(200);
         db.close();
       })
     });
