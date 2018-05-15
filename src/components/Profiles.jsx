@@ -161,6 +161,10 @@ class Profile extends React.Component{
 
 	}
 	render(){
+		const picStyle={
+			"max-width":"200px",
+			"max-height":"200px"
+		}
 		return(
 			<div id="profile">
 				<div id="panel">
@@ -169,8 +173,8 @@ class Profile extends React.Component{
 							{this.state.frname}
 						</button>
 					</div>
-					<div id="picture">
-						<img src={this.state.pic}></img>
+					<div id="picture" >
+						<img src={this.state.pic} style={picStyle}></img>
 						<div id="mask"></div>
 						<p id="changeimg">change picture</p>
 					</div>

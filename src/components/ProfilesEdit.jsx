@@ -141,21 +141,24 @@ changePicture(e){
 	else{
 		console.log("err")
 	}
-	if(img){
-		var image=new FormData();
-		image.append("file",img)
-	}
-	console.log(image)
+	var data=new FormData();
+	data.append("image",img);
+	data.append("user",localStorage.getItem("user"));
+	data.append("filetype",type);
+
+	/*https://stackoverflow.com/questions/43013858/ajax-post-a-f
+	ile-from-a-form-with-axios?utm_medium=organic&utm_source
+	=google_rich_qa&utm_campaign=google_rich_qa*/
 	axios({
 		method:"post",
 		url:"/uploadprofilepicture",
-		data:{
-			image:image,
-			user:localStorage.getItem("user"),
-			filetype:type
-		}
+		data:data,
+		headers:{
+      'Content-Type':'multipart/form-data'
+    }
 	})
 }
+
 render(){
 	return(
 		<div className="profileEdit">
