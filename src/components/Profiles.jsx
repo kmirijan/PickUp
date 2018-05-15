@@ -1,9 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import '../css/profiles.css';
-import {CurrentGamesPrivate} from './CurrentGamesPrivate.jsx';
-import NavBar from './NavBar';
-import axios from 'axios';
+var React=require("react");
+var ReactDOM=require("react-dom");
+require("../css/profiles.css");
+var axios=require("axios");
+var {Link}=require('react-router-dom');
 
 
 class Profile extends React.Component{
@@ -11,7 +10,7 @@ class Profile extends React.Component{
 		super(props);
 		this.expandBio=this.expandBio.bind(this);
 		this.addFriend=this.addFriend.bind(this);
-		this.privateGames=this.privateGames.bind(this);
+
 
         var usrnm=this.props.username;
 		while(!(/[a-z]/i.test(usrnm[0]))){
@@ -65,26 +64,12 @@ class Profile extends React.Component{
 			})
 		}
 	}
-	privateGames(){
-		if(this.state.frname=="friends"){
-			var usrnm=this.props.username;
-			while(!(/[a-z]/i.test(usrnm[0]))){
-				usrnm=usrnm.substring(1,usrnm.length);
-			}
-			return (
-				<div id="gamesmade">
-					<CurrentGamesPrivate user={localStorage.getItem("user")} friend={usrnm}/>
-				</div>
-			)
-		}
-	}
+
 	componentDidMount(){
 
 		console.log(this.state.username);
 		axios.post("/user",{
-			params:{
-				name:this.state.username
-			}
+				user:this.state.username
 		}).then((res)=>{
 			var userStates=res.data[0];
 			this.setState({
@@ -177,8 +162,6 @@ class Profile extends React.Component{
 	}
 	render(){
 		return(
-			<div>
-			<NavBar/>
 			<div id="profile">
 				<div id="panel">
 					<div id="addfriend">
@@ -208,7 +191,7 @@ class Profile extends React.Component{
 							{this.state.expname}
 						</button>
 					</div>
-                    <GamesList games={this.state.myGames}/>
+                    <GamesList games={this.state.myGames} username={this.state.username} frname={this.state.frname}/>
 					<div id="friendsList">
 						Friends:<br></br>
 						{this.friendsList()}
@@ -220,39 +203,105 @@ class Profile extends React.Component{
 						{this.feed()}
 					</div>
 				</div>
-				{this.privateGames()}
 			</div>
-		</div>
 			);
 	}
 };
 
 class GamesList extends React.Component
 {
-
+		constructor(props){
+			super(props);
+			this.joinGame=this.joinGame.bind(this);
+		}
+		joinGame(game)
+		{
+		  axios.post('/join', {uid:localStorage.getItem("user"), gid:game.id});
+		}
     displayGame(game)
     {
+			if(game["isprivate"]==false){
         return(
-            <li key={game.id}>
-                <div>Sport {game.sport}</div>
-                <div>Location {game.location}</div>
-                <div>Name {game.name}</div>
-            </li>
+					<tr key={game.id}>
+	          <td ><h3>{game.sport} </h3></td>
+	          <td ><h3>{game.name} </h3></td>
+	          <td > <h3>{game.location}</h3> </td>
+	          <td><Link to={"/game:"+game.id}><h3>Details</h3></Link></td>
+	        </tr>
         );
+			}
+			else{
+				return(
+					<tr key={"p"+game.id}>
+	          <td ><h3>{game.sport} </h3></td>
+	          <td ><h3>{game.name} </h3></td>
+	          <td >private game, cannot view location</td>
+	          <td>private game, cannot view details</td>
+	        </tr>
+        );
+			}
+    }
+		displayGamesMade(game)
+    {
+			if(game["isprivate"]==false){
+        return(
+					<tr key={game.id}>
+	          <td ><h3>{game.sport} </h3></td>
+	          <td ><h3>{game.name} </h3></td>
+	          <td > <h3>{game.location}</h3> </td>
+						<td><button className="joinGame" onClick={()=>{this.joinGame(game)}}><h3>Join</h3></button></td>
+	          <td><Link to={"/game:"+game.id}><h3>Details</h3></Link></td>
+	        </tr>
+        );
+			}
+			else if(game["isprivate"]==true&&this.props.frname=="friends"){
+				return(
+					<tr key={"p"+game.id}>
+						<td ><h3>{game.sport} </h3></td>
+						<td ><h3>{game.name} </h3></td>
+						<td > <h3>{game.location}</h3> </td>
+						<td><button className="joinGame" onClick={()=>{this.joinGame(game)}}><h3>Join</h3></button></td>
+	          <td><Link to={"/game:"+game.id}><h3>Details</h3></Link></td>
+					</tr>
+				);
+			}
+			else{
+				return(
+					<tr key={"p"+game.id}>
+	          <td ><h3>{game.sport} </h3></td>
+	          <td ><h3>{game.name} </h3></td>
+						<td>private game, cannot join</td>
+	          <td >private game, cannot view location</td>
+	          <td>private game, cannot view details</td>
+	        </tr>
+        );
+			}
     }
 
 
     render()
     {
         if (this.props.games==[]) return;
-        const gamesList = this.props.games.map((game) =>
+				var gamesList = this.props.games.filter((game)=>{
+					{return game["owner"]!=this.props.username}
+				})
+        gamesList = gamesList.map((game) =>
             {return this.displayGame(game)}
+        );
+				var gamesMade = this.props.games.filter((game)=>{
+					{return game["owner"]==this.props.username}
+				})
+				gamesMade = gamesMade.map((game) =>
+            {return this.displayGamesMade(game)}
         );
 
         return (
             <div>
                 <h2>Games Played</h2>
-                <ul key="gamesList">{gamesList}</ul>
+                <table><tbody key="gamesList">{gamesList}</tbody></table>
+								<h2>Games Made</h2>
+								<table><tbody key="gamesMadeList">{gamesMade}</tbody></table>
+
             </div>
         );
 
@@ -261,4 +310,6 @@ class GamesList extends React.Component
 }
 
 
-export default Profile;
+module.exports={
+	Profile
+}

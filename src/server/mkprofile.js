@@ -24,6 +24,22 @@ exports.getUsers=(user,res)=>{
 	});
 }
 
+exports.isUser=(user,res)=>{
+	mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
+		var db=client.db("pickup");
+		db.collection("users").count({"username":user}).then((count)=>{
+			if(count<1){
+				res.json(false);
+			}
+			else{
+				res.json(true);
+			}
+			client.close();
+		})
+	})
+}
+
 exports.saveProfile=(data,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -32,7 +48,8 @@ exports.saveProfile=(data,res)=>{
 		db.collection("users").updateMany({"username":data["username"]},{
 			$set:{
 				"alias":data["alias"],
-				"bio":data["bio"]
+				"bio":data["bio"],
+				"pic":data["pic"]
 			}
 		})
 		.then(()=>{
@@ -168,5 +185,19 @@ exports.setPassword=(user,oldPassword,newPassword,res)=>{
 				res.json("the password you entered is incorrect");
 			}
 		})
+	})
+}
+exports.uploadProfilePicture=(image,user,filetype,res)=>{
+	mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
+		var db=client.db("pickup");
+		//https://stackoverflow.com/questions/2496710/writing-files-in-node-js
+		const filePath="./dist/profilePictures/"+user+filetype;
+		var sImage= JSON.stringify(image);
+		fs.writeFileSync(filePath,sImage,(err)=>{
+			if(err)throw new Error(err);
+		})
+		console.log("file uploaded");
+
 	})
 }

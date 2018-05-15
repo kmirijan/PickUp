@@ -1,20 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {Profile} from './Profiles.jsx';
-import {ProfileP} from './ProfilesP.jsx';
-import {ProfileEdit} from './ProfilesEdit.jsx';
-import {CurrentGames} from './CurrentGames.js';
-import {Users} from '../helpers/Users.jsx';
-import {ProfileSettings} from './ProfilesSettings.jsx';
-import '../css/App.css';
-import '../css/font.css';
+var React=require("react");
+var ReactDOM=require("react-dom");
+var {Profile}=require("./Profiles.jsx");
+var {ProfileP}=require("./ProfilesP.jsx");
+var {ProfileEdit}=require("./ProfilesEdit.jsx");
+var {CurrentGames}=require("./CurrentGames.js");
+var {Users}=require("../helpers/Users.jsx");
+var{GamePage}=require("./GamePage.jsx");
+var{ProfileSettings}=require("./ProfilesSettings.jsx");
+var axios=require("axios");
+require("../css/App.css");
+require("../css/font.css");
 import NavBar from './NavBar';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
 import App from "./App";
 import Home from "./Home";
 import Map from "./Map";
-import {Switch,BrowserRouter,Route,browserHistory} from 'react-router-dom';
+var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 
 
 class Routes extends React.Component{
@@ -22,12 +24,13 @@ class Routes extends React.Component{
         return(
             <BrowserRouter>
                 <Switch>
-                	<Route exact path="/" component={Home} />
+                	<Route exact path="/" component={NavBar} />
                 	<Route exact path="/home" component={Home} />
                     <Route path="/users" component={Users} />
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
                     <Route path="/settings:username" component={Settings}/>
+                    <Route path="/game:id" component={RenderGamePage}/>
                     <Route path="/map" component={Map}/>
                     <Route path="/app"
                         render={(props) => <App user = {getCurrentUser()}/>}/>
@@ -59,43 +62,66 @@ function getCurrentUser()
 class User extends React.Component{
 	constructor(props){
 		super(props);
+    var usrnm=this.props.match.params.username;
+		while(!(/[a-z]/i.test(usrnm[0]))){
+			usrnm=usrnm.substring(1,usrnm.length);
+		}
+    this.usrnm=usrnm;
+    this.isValidUser=false;
 	}
 	componentWillMount(){
 		if(!(localStorage.getItem("loggedin")=="true")){
 			alert("Must be logged in to find users")
 			this.props.history.push("/signin");
 		}
+    axios({
+      method:"post",
+      url:"/isuser",
+      data:{
+        "user":this.usrnm
+      }
+    })
+    .then((isUser)=>{
+      console.log(isUser.data)
+      this.isValidUser=isUser.data;
+      this.forceUpdate();
+    })
 	}
+  componentWillReceiveProps(props){
+    console.log(props);
+    var usrnm=props.match.params.username;
+     while(!(/[a-z]/i.test(usrnm[0]))){
+       usrnm=usrnm.substring(1,usrnm.length);
+     }
+      this.usrnm=usrnm;
+      this.forceUpdate();
+  }
 	render(){
-		var usrnm=this.props.match.params.username;
-		while(!(/[a-z]/i.test(usrnm[0]))){
-			usrnm=usrnm.substring(1,usrnm.length);
-		}
-
-		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
+		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==this.usrnm))
 		{
 			console.log("hello world");
 			return(
 				<div>
 				<NavBar />
 				<ProfileP
-					username={usrnm}
+					username={this.usrnm}
 					history={this.props.history}
 				/>
 				</div>
 		)}
-		else if(localStorage.getItem("loggedin")=="true"){
-			return(
-				<div>
-				<NavBar />
-				<Profile
-					username={usrnm}
-					history={this.props.history}
-				/>
-				</div>
-		)}
+    else if(localStorage.getItem("loggedin")=="true" && this.isValidUser==true){
+  			return(
+  				<div>
+  				<NavBar />
+  				<Profile
+  					username={this.usrnm}
+  					history={this.props.history}
+  				/>
+  				</div>
+  		)}
 		else{
-			return(<_404/>)
+      console.log(this.isValidUser);
+			return(<_404/>);
 		}
 	};
 };
@@ -145,6 +171,39 @@ class Settings extends React.Component{
 		}
 	}
 }
+
+class RenderGamePage extends React.Component{
+  constructor(props){
+    super(props);
+    this.id=this.props.match.params.id;
+    while(!(/[0-9]|[a-z]/i.test(this.id[0]))){
+			this.id=this.id.substring(1,this.id.length);
+		}
+    this.isGame=false;
+  }
+  componentWillMount(){
+    axios({
+      method:"post",
+      url:"/isgame",
+      data:{
+        id:this.id
+      }
+    }).then((isGame)=>{
+      this.isGame=isGame.data;
+      this.forceUpdate();
+    })
+  }
+  render(){
+    console.log(this.isGame);
+    if(this.isGame==true){
+      return(<GamePage id={this.id}/>)
+    }
+    else{
+      return(<_404/>)
+    }
+  }
+}
+
 class LogOut extends React.Component{
 	componentDidMount(){
 		localStorage.setItem("loggedin",false);
@@ -158,6 +217,8 @@ class LogOut extends React.Component{
 const _404=()=>(
 	<h1>404</h1>
 );
+
+
 
 module.exports={
 	Routes,

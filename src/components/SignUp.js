@@ -1,9 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {Link} from 'react-router-dom';
 import '../css/App.css';
 import NavBar from './NavBar';
-import {Switch,BrowserRouter,Route,browserHistory,Link} from 'react-router-dom';
-import axios from 'axios';
+var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
+var axios=require("axios");
 
 
 class SignUp extends React.Component{
@@ -33,6 +33,13 @@ signUp(){
     this.setState({
       error:{
         message:"password must be at least 8 characters long"
+      }
+    })
+  }
+  else if(username[0].match(/[a-z]/i)==null){
+    this.setState({
+      error:{
+        message:"username must begin with a letter"
       }
     })
   }

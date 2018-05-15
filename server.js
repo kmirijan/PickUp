@@ -5,6 +5,7 @@ var {mongoose} = require('./db/mongoose.js');
 const bodyParser=require("body-parser");
 const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
+const gamepage=require("./src/server/gamepage.js");
 
 var {Game} = require('./db/game.js');
 
@@ -24,8 +25,11 @@ app.get("*",(req,res)=>{
   console.log('[', (new Date()).toLocaleTimeString(), "] Main file sending");
 });
 app.post("/user",(req,res)=>{
-	mkprofile.getUsers(req.body.params.name,res);
+	mkprofile.getUsers(req.body.user,res);
 });
+app.post("/isuser",(req,res)=>{
+  mkprofile.isUser(req.body.user,res);
+})
 app.post("/saveprofile",(req,res)=>{
 	mkprofile.saveProfile(req.body,res);
 });
@@ -47,6 +51,9 @@ app.post("/setemail",(req,res)=>{
 app.post("/setpassword",(req,res)=>{
   mkprofile.setPassword(req.body["user"],req.body["oldPassword"],req.body["newPassword"],res);
 });
+app.post("/uploadprofilepicture",(req,res)=>{
+  mkprofile.uploadProfilePicture(req.body["image"],req.body["user"],req.body["filetype"],res);
+})
 app.post("/reqfriend",(req,res)=>{
   friends.reqFriend(req.body["user"],req.body["friend"],res);
 })
@@ -62,6 +69,10 @@ app.post("/declinefriend",(req,res)=>{
 app.post("/removefriend",(req,res)=>{
   friends.removeFriend(req.body["user"],req.body["friend"],res);
 })
+app.post("/isgame",(req,res)=>{
+  gamepage.isGame(req.body["id"],res);
+})
+
 
 /*----------------------------------------------------------------------------------------*/
 const makeValid = (obj) => {return obj != null ? obj : "";};
@@ -147,7 +158,6 @@ app.post("/postgames", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
 
-
   var game = {
     sport: makeValid(req.body.sport),
     name: makeValid(req.body.name),
@@ -163,7 +173,14 @@ app.post("/postgames", (req, res) =>
   mongo.connect(mongoUrl, (err, db) => {
     if (err) throw err;
 
-    db.db("pickup").collection("games").insertOne(game,() => {res.json(); db.close()});
+    db.db("pickup").collection("games").insertOne(game,() => {
+      db.db("pickup").collection("users").update({"username":game["owner"]},{
+        $push: {games: game["id"]}
+      }).then(()=>{
+        res.json();
+        db.close();
+      })
+    });
 
    });
 
@@ -222,6 +239,21 @@ app.post("/join", (req, res) =>
       client.close();
     });
 
+  });
+
+});
+app.post("/deletegame",(req,res)=>
+{
+  mongo.connect(mongoUrl,(err,client)=>{
+    if(err)throw new Error(err);
+
+    var db=client.db("pickup");
+    db.collection("games").remove({"id":req.body.gameId})
+    .then((arr)=>{
+      console.log(req.body.gameId, "deleted");
+      res.json();
+      client.close();
+    })
   });
 
 });

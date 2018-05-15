@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import '../css/App.css';
 import {CurrentGames} from './CurrentGames.js';
 import NavBar from './NavBar';
@@ -25,7 +24,7 @@ class App extends React.Component {
         </h1>
 
       <section className="SubmissionHome">
-        <CurrentGames user={this.props.user}/>
+        <CurrentGames user={this.props.user} />
         </section>
       </div>
     );

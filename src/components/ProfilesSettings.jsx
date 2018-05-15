@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import '../css/profiles.css';
-import {Switch,BrowserRouter,Route,browserHistory,Redirect} from 'react-router-dom';
-import axios from 'axios';
+var React=require("react");
+var ReactDOM=require("react-dom");
+require("../css/profiles.css");
+var {Switch,BrowserRouter,Route,browserHistory,Redirect}=require('react-router-dom');
+var axios=require("axios");
 
 
 class ProfileSettings extends React.Component{
@@ -26,7 +26,28 @@ class ProfileSettings extends React.Component{
       showPasswordBox:[]
     }
 	}
-
+  componentDidMount(){
+    this.setState({
+      showEmailBox:[
+        <button type="button" className="btn btn-success" key="changeEmailPrompt" onClick={this.changeEmailPrompt}
+					style = {{margin: '20px'}}>
+          change email
+        </button>
+      ],
+      showPasswordBox:[
+        <button type="button" className="btn btn-success" key="changePasswordPrompt" onClick={this.changePasswordPrompt}
+					style = {{margin: '20px'}}>
+        change password
+        </button>
+      ]
+    })
+  }
+  profile(){
+    this.props.history.push("/user:"+this.props.username);
+  }
+  edit(){
+    this.props.history.push("/edit:"+this.props.username);
+  }
   changeEmailPrompt(){
   //  this.refs.changeemail.setAttribute("disabled","disabled");
     this.setState({showEmailBox:[]});
@@ -155,21 +176,29 @@ class ProfileSettings extends React.Component{
 		return(
 			<div id="profile">
 				<div id="panel">
+          <div id="profile">
+            <button type="button" className="btn btn-success"
+							style = {{margin: '20px'}}
+							onClick={this.profile}>
+              profile
+            </button>
+          </div>
+          <div id="edit">
+            <button type="button" className="btn btn-success"
+							style = {{margin: '20px'}}
+							onClick={this.edit}>
+              edit
+            </button>
+          </div>
           <div id="changeemailbox">
-						<button type="button" className="btn btn-success" key="changeEmailPrompt" onClick={this.changeEmailPrompt}
-							style = {{margin: '20px'}}>
-		          change email
-		        </button>
+            {this.state.showEmailBox}
             <div id="emailbox" ref="emailbox" style = {{margin: '20px'}}>
               {this.state.emailPrompt}
               {this.state.emailError}
             </div>
           </div>
           <div id="changepasswordbox">
-						<button type="button" className="btn btn-success" key="changePasswordPrompt" onClick={this.changePasswordPrompt}
-							style = {{margin: '20px'}}>
-						change password
-						</button>
+            {this.state.showPasswordBox}
             <div id="passwordbox" ref="passwordbox" style = {{margin: '20px'}}>
               {this.state.passwordPrompt}
               {this.state.passwordError}
@@ -186,4 +215,6 @@ class ProfileSettings extends React.Component{
 
 
 
-export default ProfileSettings;
+module.exports={
+	ProfileSettings,
+}

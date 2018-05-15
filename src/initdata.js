@@ -19,7 +19,7 @@ mongo.connect(url,(err,client)=>{
 
 	var db=client.db("data")
 	//insert collection
-
+	
 	db.collection("events").insertMany(eventDocs,(err,result)=>{
 		if(err)throw new Error(err);
 		console.log("inserted document");
@@ -28,7 +28,7 @@ mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
 		console.log("inserted document");
 	});
-
+	
 
 	//delete database from console
 	/*
@@ -39,4 +39,11 @@ mongo.connect(url,(err,client)=>{
 
 	console.log("connected to mongodb");
 	client.close();
+<<<<<<< HEAD
 });
+=======
+});
+
+
+
+>>>>>>> rogelio

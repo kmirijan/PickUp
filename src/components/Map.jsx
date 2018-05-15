@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import NavBar from './NavBar';
 import axios from "axios"
 //import '../css/Map.css';
@@ -7,7 +6,7 @@ import axios from "axios"
 
 
 class Map extends React.Component {
-    DEFAULT_ZOOM = 13;
+    DEFAULT_ZOOM = 13; 
     constructor(props)
     {
         super(props);
@@ -19,7 +18,7 @@ class Map extends React.Component {
             range : 5, /* miles away from location */
 
         };
-
+        
         this.setUserPosition = this.setUserPosition.bind(this);
         this.markers = [];
     }
@@ -29,12 +28,12 @@ class Map extends React.Component {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.setUserPosition);
         }
-
+    
     }
 
     componentDidMount()
     {
-
+        
         if (navigator.geolocation)
         {
             // create a google map centered at the user's location
@@ -43,7 +42,7 @@ class Map extends React.Component {
                     this.state.userPosition.lng);
             this.setState({map : new google.maps.Map(this.refs.map,
                             {center: center, zoom: this.DEFAULT_ZOOM})
-
+        
             });
         }
 
@@ -58,7 +57,7 @@ class Map extends React.Component {
             lng: position.coords.longitude
             }
         });
-
+        
         if (this.state.map != {})
         {
             let center = new google.maps.LatLng(this.state.userPosition.lat,
@@ -69,7 +68,7 @@ class Map extends React.Component {
         // get nearby games
         this.retrieveNearbyGames();
     }
-
+    
 
     MILES_PER_DEGREE = 69;
     retrieveNearbyGames() {
@@ -84,7 +83,7 @@ class Map extends React.Component {
                 this.updateMap();
             }
         );
-
+        
     }
 
     updateMap() {
@@ -116,7 +115,7 @@ class Map extends React.Component {
                 '<h1 id="firstHeading" class="firstHeading">' + game.sport + '</h1>' +
                 '<div id="bodyContent">' +
                     '<div>Name: ' + game.name + '</div>' +
-                    '<div>Location: ' + game.location + '</div>' +
+                    '<div>Location: ' + game.location + '</div>' + 
                 '</div>' +
             '</div>'
 
@@ -134,7 +133,7 @@ class Map extends React.Component {
             <NavBar/>
             <div className="Map">
                 <h1>Games near you</h1>
-                <div ref="map" style={{height: "500px", width: "500px"}}></div>
+                <div ref="map" style={{height: "500px", width: "100%"}}></div>
             </div>
         </div>);
     } else {
