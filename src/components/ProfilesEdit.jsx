@@ -248,7 +248,7 @@ render(){
 						<img src= "//placehold.it/100" className="avatar img-circle" alt="avatar"/>
 						<h6>Upload a different photo...</h6>
 
-						<input type="file" className="form-control"/>
+						<input type="file" accept=".jpg, .png" className="form-control" onChange={(e)=>this.changePicture(e)}/>
 
 					</div>
 				</div>
