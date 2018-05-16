@@ -7,6 +7,9 @@ class GamePage extends React.Component{
   constructor(props){
     super(props)
   }
+  //group chat
+  //map
+  //players
   render(){
     return(
       <div>

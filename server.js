@@ -65,6 +65,7 @@ app.post("/uploadprofilepicture",(req,res)=>{
     body[fieldname]=val;
   });
   req.busboy.on("file",(fieldname,file,filename)=>{
+    //temp should have some ID attached so 2 people uploading at once will not be disrupted
 		fstream=fs.createWriteStream("./dist/temp");
     file.pipe(fstream);
   });
