@@ -21,7 +21,6 @@ class SignIn extends React.Component{
 signIn(){
   this.refs.signin.setAttribute("disabled","disabled");
   console.log('this.state', this.state);
-  this.refs.signin.setAttribute("disabled","disabled");
   const{email, password}=this.state;
    axios({
       url:"/signin",
@@ -33,9 +32,8 @@ signIn(){
     }).then((res)=>{
       if(res.data["success"]==true){
         /*https://www.robinwieruch.de/local-storage-react/*/
-        localStorage.setItem("loggedin",true);
+        localStorage.setItem("loggedin","true");
         localStorage.setItem("user",res.data["user"]);
-        this.refs.signin.removeAttribute("disabled");
         this.props.history.push("/user="+res.data["user"]);
       }
       else
@@ -46,9 +44,9 @@ signIn(){
             message:"sign in failed"
           }
         })
-        this.refs.signin.removeAttribute("disabled");
         this.props.history.push("/signin");
       }
+      console.log(localStorage.getItem("loggedin"))
       this.refs.signin.removeAttribute("disabled");
     });
 }

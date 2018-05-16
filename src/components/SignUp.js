@@ -53,7 +53,7 @@ signUp(){
           "password":password,
           "alias": username,
           "bio":"",
-          "pic":"",
+          "pic":"/profilepictures/0defaultprofile.jpg",
           "games":[],
           "friends":[],
           "feed":[]
@@ -61,7 +61,7 @@ signUp(){
       }).then((res)=>{
         if(res.data==true){
           console.log("signed up");
-          localStorage.setItem("loggedin",true);
+          localStorage.setItem("loggedin","true");
           localStorage.setItem("user",this.state.username);
           this.props.history.push("/user="+this.state.username);
         }

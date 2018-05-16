@@ -188,17 +188,24 @@ exports.setPassword=(user,oldPassword,newPassword,res)=>{
 		})
 	})
 }
-exports.uploadProfilePicture=(image,user,filetype,res)=>{
+exports.uploadProfilePicture=(file,user,filetype,res)=>{
+
+	const filePath="./dist/profilePictures/"+user+filetype;
+	console.log(filePath);
+	fs.rename(file,filePath,(err)=>{
+		if(err)throw new Error(err);
+	})
+	console.log("file uploaded");
 	mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
 		var db=client.db("pickup");
-		//https://stackoverflow.com/questions/2496710/writing-files-in-node-js
-		const filePath="./dist/profilePictures/"+user+filetype;
-		var sImage= JSON.stringify(image);
-		fs.writeFileSync(filePath,sImage,(err)=>{
-			if(err)throw new Error(err);
+		db.collection("users").update({"username":user},{
+			$set:{
+				"pic":"/profilepictures/"+user+filetype
+			}
+		}).then(()=>{
+			res.json(filePath);
+			client.close();
 		})
-		console.log("file uploaded");
-
 	})
 }

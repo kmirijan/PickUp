@@ -1,7 +1,7 @@
 To do:
 ---
 1. Profile picture implement. Crop,zoom image
-2. Private game requests
+2. email validation check
 
 PickUp
 ---

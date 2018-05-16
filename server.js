@@ -6,6 +6,9 @@ const bodyParser=require("body-parser");
 const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
 const gamepage=require("./src/server/gamepage.js");
+const fs=require("fs");
+const busboy=require("connect-busboy");
+
 
 var {Game} = require('./db/game.js');
 
@@ -15,6 +18,8 @@ const app=express();
 /*configurations*/
 app.use(express.static("./dist"));
 app.use(bodyParser.json());
+app.use(busboy());
+app.use("/profilepictures",express.static("./dist/profilePictures"));
 /*app.use(bodyParser.urlencoded({
   extended: true
 }));*/
@@ -52,7 +57,21 @@ app.post("/setpassword",(req,res)=>{
   mkprofile.setPassword(req.body["user"],req.body["oldPassword"],req.body["newPassword"],res);
 });
 app.post("/uploadprofilepicture",(req,res)=>{
-  mkprofile.uploadProfilePicture(req.body["image"],req.body["user"],req.body["filetype"],res);
+  /*https://stackoverflow.com/questions/23114374/file-upl
+  oading-with-express-4-0-req-files-undefined?utm_med
+  ium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa*/
+  var body={};
+  req.busboy.on("field",(fieldname,val)=>{
+    body[fieldname]=val;
+  });
+  req.busboy.on("file",(fieldname,file,filename)=>{
+		fstream=fs.createWriteStream("./dist/temp");
+    file.pipe(fstream);
+  });
+  req.busboy.on("finish",()=>{
+    mkprofile.uploadProfilePicture("./dist/temp",body["user"],body["filetype"],res);
+  })
+  req.pipe(req.busboy);
 })
 app.post("/reqfriend",(req,res)=>{
   friends.reqFriend(req.body["user"],req.body["friend"],res);
@@ -177,7 +196,7 @@ app.post("/postgames", (req, res) =>
       db.db("pickup").collection("users").update({"username":game["owner"]},{
         $push: {games: game["id"]}
       }).then(()=>{
-        res.json();
+        res.sendStatus(200);
         db.close();
       })
     });
