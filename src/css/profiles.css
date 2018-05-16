@@ -7,26 +7,29 @@
 	text-align:center;
 }
 #panel{
-	width:50%;
+	width:30%;
 	float: left;
+	margin-top: 20px;
 }
 #fpanel{
-	width:50%;
+	width:70%;
 	float:right;
+	margin-top: 0px
 }
 
 #card{
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 300px;
-    margin: auto;
-    position: left;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	max-width: 300px;
+	margin: auto;
+	padding-top: 30px;
+	padding-bottom: 30px;
 }
 #picture{
-	margin:20px;
-	width:200px;
-	height:200px;
+	margin: 0 auto;
+	width: 200px;
+	height: 200px;
 	background-color:gray;
-	float: left;
+	margin-bottom: 10px
 }
 
 #mask:hover{

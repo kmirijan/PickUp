@@ -11,9 +11,15 @@ class Home extends React.Component {
     return (
       <div className>
           <NavBar/>
-          <h1 className='HomepageText'>Discover, Connect, Play</h1>
-          <h2 className='HomepageSubtext'>PickUp is the easiest way to find members in your community interested in the same sports as you!</h2>
-          <p class="texts"><a class="btn btn-primary btn-lg" href="signin" role="button">Sign In</a> to continue the fun or <a class="btn btn-primary btn-lg" href="signup" role="button">Sign Up</a> to join our community!</p>
+          <div className="mainDiv">
+            <img src="/background.png" className="jumbotron" alt="background"/>
+            <div className='centerText'>
+
+              <h1 className='HomepageText'>Discover, Connect, Play</h1>
+              <p>PickUp is the easiest way to find members in your community interested in the same sports as you!</p>
+              <p><a className="btn btn-primary btn-lg" href="signin" role="button">Sign In</a></p>
+            </div>
+          </div>
       </div>
     );
   }

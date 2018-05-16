@@ -7,9 +7,6 @@ import axios from 'axios';
 
 const GUEST = "guest";
 
-
-
-
 export class CurrentGames extends React.Component{
 
 
@@ -252,6 +249,9 @@ class Game extends React.Component {
   {
     axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
   }
+  leaveGame(){
+    axios.patch('/games', {uid:this.props.user, gid:this.props.game.id});
+  }
 
 
   render(){
@@ -261,6 +261,8 @@ class Game extends React.Component {
           <td ><h3>{this.props.game.name} </h3></td>
           <td > <h3>{this.props.game.location}</h3> </td>
           <td><button className="joinGame" onClick={this.joinGame.bind(this)}><h3>Join</h3></button></td>
+          <td><button className="leaveGame" onClick={this.leaveGame.bind(this)}><h3>Leave</h3></button></td>
+          <td > <h3>{this.props.game.players.length}</h3> </td>
           <td><Link to={"/game:"+this.props.game.id}><h3>Details</h3></Link></td>
         </tr>
     );
