@@ -7,9 +7,6 @@ import axios from 'axios';
 
 const GUEST = "guest";
 
-
-
-
 export class CurrentGames extends React.Component{
 
 
