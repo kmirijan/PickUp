@@ -21,10 +21,6 @@ class NavBar extends React.Component {
               </ul>
             </ul>
           </nav>
-          <header className="App-header">
-            <img src="/logo.png" className="App-logo" alt="logo" />
-            <h1 className="App-title">The Hub for Connecting Players</h1>
-          </header>
         </div>
       )
     }
@@ -46,10 +42,6 @@ class NavBar extends React.Component {
               </ul>
             </ul>
           </nav>
-          <header className="App-header">
-            <img src="/logo.png" className="App-logo" alt="logo" />
-            <h1 className="App-title">The Hub for Connecting Players</h1>
-          </header>
         </div>
       )
     }
