@@ -18,7 +18,7 @@ class NavBar extends React.Component {
                 <li className="NavIcons"><NavLink to={'/logout'} style={{color:'white'}} activeClassName='active' className = 'pages'>
                   <span className="glyphicon glyphicon-log-in" style={{color:'white'}}></span> Logout</NavLink></li>
                 <li className="NavIcons"><NavLink to={'/user:'+localStorage.getItem("user")} style={{color:'white'}} activeClassName='active' className = 'pages'>
-                  <span className="glyphicon glyphicon-user" style={{color:'white'}}></span> Account</NavLink></li>
+                  <span className="glyphicon glyphicon-user" style={{color:'white'}}></span> Profile</NavLink></li>
               </ul>
             </ul>
           </nav>

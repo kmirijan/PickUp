@@ -49,7 +49,8 @@ exports.saveProfile=(data,res)=>{
 			$set:{
 				"alias":data["alias"],
 				"bio":data["bio"],
-				"pic":data["pic"]
+				"pic":data["pic"],
+				"email":data["email"]
 			}
 		})
 		.then(()=>{
