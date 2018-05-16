@@ -5,6 +5,7 @@ var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
 var {CurrentGames}=require("./CurrentGames.js");
 var {CurrentTeams}=require("./CurrentTeams.jsx");
+var {CurrentTeamGames}=require("./CurrentTeamGames.jsx");
 var {Users}=require("../helpers/Users.jsx");
 var{GamePage}=require("./GamePage.jsx");
 var{ProfileSettings}=require("./ProfilesSettings.jsx");
@@ -22,7 +23,9 @@ var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 
 class Routes extends React.Component{
     render(){
+      if(localStorage.getItem("loggedin")=="true"){
         return(
+
             <BrowserRouter>
                 <Switch>
                 	<Route exact path="/" component={NavBar} />
@@ -34,15 +37,31 @@ class Routes extends React.Component{
                     <Route path="/game:id" component={RenderGamePage}/>
                     <Route path="/map" component={Map}/>
                     <Route path="/teams" component={CurrentTeams} user={getCurrentUser()}/>
+                    <Route path="/teamgames" component={CurrentTeamGames} user={getCurrentUser()}/>
                     <Route path="/app"
                         render={(props) => <App user = {getCurrentUser()}/>}/>
                     <Route path="/signin" component={SignIn}/>
-					<Route path="/signup" component={SignUp}/>
-					<Route path="/logout" component={LogOut}/>
+          					<Route path="/signup" component={SignUp}/>
+          					<Route path="/logout" component={LogOut}/>
                     <Route component={_404} />
                 </Switch>
             </BrowserRouter>
         )
+      }
+      else{
+        return(
+
+            <BrowserRouter>
+                <Switch>
+                	<Route exact path="/" component={NavBar} />
+                	<Route exact path="/home" component={Home} />
+                  <Route path="/signin" component={SignIn}/>
+				          <Route path="/signup" component={SignUp}/>
+                  <Route component={_404} />
+                </Switch>
+            </BrowserRouter>
+        )
+      }
     }
 }
 
