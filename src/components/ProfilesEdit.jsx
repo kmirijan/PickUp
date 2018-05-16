@@ -245,7 +245,7 @@ render(){
 		<div className="row">
 				<div className="col-md-3">
 					<div className="text-center">
-						<img src= "//placehold.it/100" className="avatar img-circle" alt="avatar"/>
+						<img src={this.state.pic} style={picStyle} className="avatar img-circle" alt="avatar"/>
 						<h6>Upload a different photo...</h6>
 
 						<input type="file" accept=".jpg, .png" className="form-control" onChange={(e)=>this.changePicture(e)}/>
