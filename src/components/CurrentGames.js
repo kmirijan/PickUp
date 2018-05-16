@@ -8,7 +8,7 @@ import axios from 'axios';
 const GUEST = "guest";
 
 
-var updateTable = updateTableUnbound;
+
 
 export class CurrentGames extends React.Component{
 
@@ -28,7 +28,7 @@ export class CurrentGames extends React.Component{
            this.autocomplete = new google.maps.places.Autocomplete(input);
     }
 
-    
+
 
 
     getName()
@@ -75,7 +75,7 @@ export class CurrentGames extends React.Component{
                 lng: coords.lng()
             },
         };
-        axios.post('/postgames', game).then( () => 
+        axios.post('/postgames', game).then( () =>
                 {alert("Game added. It will appear upon refreshing the games table")});
         this.refs.sport.value='';
         this.refs.name.value='';
@@ -189,7 +189,7 @@ class GameTable extends React.Component{
             (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
             (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1));
             })
-        }); 
+        });
     }
 
     retrieveGames() {
@@ -200,11 +200,11 @@ class GameTable extends React.Component{
             });
             this.setState({games: data, retrieving: false});
             this.updateTable(this.refs.search.value);
-            
+
 
         });
 
-    
+
     }
 
 
@@ -219,7 +219,7 @@ class GameTable extends React.Component{
         type="text" placeholder="Search"
 		ref="search"
         onChange={this.updateSearch.bind(this)}/>
-        
+
 
         <input type="button" value="Refresh" onClick={this.retrieveGames.bind(this)} />
 	   <table>
@@ -266,4 +266,3 @@ class Game extends React.Component {
     );
   }
 }
-
