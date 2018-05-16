@@ -261,6 +261,37 @@ app.post("/join", (req, res) =>
   });
 
 });
+
+app.patch('/games', (req, res) => {
+  console.log('patch: ', req.body);
+
+  Game.findOneAndUpdate(
+    {'id': req.body.gid},
+    {$pull: {players : req.body.uid}},
+    {new: true}
+  )
+  .then((game) =>{
+    console.log('length: ', game.players.length)
+    console.log('req: ', req.body);
+    if(game.players.length === 0){
+      game.remove();
+    }
+    res.status(200).send({game});
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
+})
+
+app.delete('/games', (req, res) => {
+  console.log('deleting', req.body);
+  Game.findOneAndRemove({'id': req.body.gid})
+  .then((game) =>{
+  res.status(200).send({game});
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
+})
+
 app.post("/deletegame",(req,res)=>
 {
   mongo.connect(mongoUrl,(err,client)=>{
