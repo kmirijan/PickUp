@@ -33,21 +33,24 @@ class ProfileEdit extends React.Component{
 	profile(){
 		this.props.history.push("/user:"+this.props.username);
 	}
+
 	save(){
-		axios({
-			url:"/saveprofile",
-			method:"post",
-			data:{
-				"username":this.state.username,
-				"alias":this.state.alias,
-				"bio":this.state.long,
-				"pic":this.state.pic
-			}
-		}).then(()=>{
-			console.log("saved");
-			this.props.history.push("/user"+this.props.username);
-		});
-	}
+			axios({
+				url:"/saveprofile",
+				method:"post",
+				data:{
+					"username":this.state.username,
+					"alias":this.state.alias,
+					"bio":this.state.long,
+					"pic":this.state.pic,
+					"email":this.state.email
+				}
+			}).then(()=>{
+				console.log("saved");
+				this.props.history.push("/user"+this.props.username);
+			});
+		}
+
 	removeFriend(friend){
 		this.refs.removefriend.setAttribute("disabled","disabled");
 		if(confirm("remove "+friend+" ?")){
@@ -106,7 +109,6 @@ class ProfileEdit extends React.Component{
 changePasswordPrompt(){
 //  this.refs.changepassword.setAttribute("disabled","disabled");
 	this.setState({
-		showPasswordPrompt:[],
 		passwordPrompt:[
 			<div className="passwordChange">
 			<div className="form-group">
@@ -145,7 +147,7 @@ changePasswordPrompt(){
 
 changePassword(oldPassword,newPassword){
 	if(newPassword.length<8){
-		this.setState({passwordError:"password must be 8 characters long"})
+		this.setState({passwordError:"Password must be at least 8 characters long"})
 	}
 	else{
 		axios({
@@ -259,7 +261,7 @@ render(){
 							<label className="col-lg-3 control-label">Name:</label>
 							<div className="col-lg-8">
 								<input className="form-control" type="text" value={this.state.username}
-
+									readOnly
 									/>
 							</div>
 						</div>
@@ -267,7 +269,7 @@ render(){
 							<label className="col-lg-3 control-label">Username:</label>
 							<div className="col-lg-8">
 								<input className="form-control" type="text" value={this.state.alias}
-									onChange={e=>this.setState({alias:e.target.value})}
+									onChange={e => this.setState({alias: e.target.value})}
 									/>
 							</div>
 						</div>
@@ -275,7 +277,7 @@ render(){
 							<label className="col-lg-3 control-label">email:</label>
 							<div className="col-lg-8">
 								<input className="form-control" type="text" value={this.state.email}
-									onChange={event => this.setState({newEmail: event.target.value})}
+									onChange={e => this.setState({email: e.target.value})}
 									/>
 							</div>
 						</div>
@@ -294,7 +296,8 @@ render(){
 						<div className="form-group">
 							<label className="col-md-3 control-label"></label>
 							<div className="col-md-8">
-								<input type="button" className="btn btn-primary" value="Save Changes" onClick={this.save}/>
+								<input type="button" className="btn btn-primary" value="Save Changes"
+									 onClick={this.save}/>
 								<span></span>
 								<input type="reset" className="btn btn-default" value="Cancel"/>
 							</div>
@@ -304,7 +307,6 @@ render(){
 							<label className="col-md-3 control-label"></label>
 							<div className="col-md-8">
 								<input type="button" className="btn btn-primary"
-									key="changePasswordPrompt"
 									value="Change Password"
 									onClick={this.changePasswordPrompt}/>
 							</div>
@@ -320,11 +322,6 @@ render(){
 						</form>
 				</div>
 		</div>
-		<div className="friendslistEdit">
-							<h2>Friends:</h2>
-							<ul>{this.friendsList()}</ul>
-						</div>
-
 	</div>
 			);
 		}
