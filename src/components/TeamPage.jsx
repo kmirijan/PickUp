@@ -22,13 +22,138 @@ class TeamPage extends React.Component{
         return(
             <div>
                 <NavBar/>
-                <TeamCreate user={this.props.user}
+                <TeamCreate user={this.props.user }/>
                 <TeamTable user={this.props.user} />
             </div>
         );
 
     }
 }
+class TeamCreate extends React.Component{
+
+
+
+    constructor(props) {
+        super(props);
+    }
+
+    getName()
+    {
+        if (this.props.user != GUEST)
+        {
+            return this.props.user;
+        }
+        else
+        {
+            return this.refs.name.value;
+        }
+    }
+
+    addTeam(event) {
+        event.preventDefault();
+        let sport = this.refs.sport.value;
+        let name = this.refs.name.value;
+        let city = this.refs.city.value;
+        let team = {
+            sport: sport,
+            name: name,
+            city: city,
+            captain: this.props.user,
+        };
+        axios.post('/postteam', team);
+        this.refs.sport.value='';
+        this.refs.name.value='';
+        this.refs.city.value='';
+    }
+
+
+    displayNameInput()
+    {
+            return (
+                <input
+                className='teamDetails form-control'
+                type="text"
+                ref="name"
+                placeholder="Name"
+                />
+
+            );
+    }
+
+    render(){
+
+        return(
+            <div>
+
+
+              <div className="container">
+              			<div className="row main">
+              				<div className="panel-heading">
+              	               <div className="panel-title text-center">
+              	               		<h1 className="title">Create a team below:</h1>
+              	               		<hr />
+              	               	</div>
+              	            </div>
+              				<div className="main-create main-center">
+              					<form className="form-horizontal"
+                          onSubmit={this.addTeam.bind(this)}>
+                                    <div className="form-group">
+              							<label className="cols-sm-2 control-label">Activity</label>
+              							<div className="cols-sm-10">
+              								<div className="input-group">
+              									<span className="input-group-addon"></span>
+                                                {this.displayNameInput()}
+              								</div>
+              							</div>
+              						</div>
+
+              						<div className="form-group">
+              							<label className="cols-sm-2 control-label">Activity</label>
+              							<div className="cols-sm-10">
+              								<div className="input-group">
+              									<span className="input-group-addon"></span>
+              									<input className='teamDetails form-control' type="text"  type="text"
+                                ref="sport"
+                                placeholder="Activity"/>
+              								</div>
+              							</div>
+              						</div>
+
+                          <div className="form-group">
+              							<label className="cols-sm-2 control-label">City</label>
+              							<div className="cols-sm-10">
+              								<div className="input-group">
+              									<span className="input-group-addon"></span>
+              									<input className='teamDetails form-control' type="text"  type="text"
+                                  id= 'city'
+                                  ref="city"
+                                  placeholder="City"/>
+              								</div>
+              							</div>
+              						</div>
+
+
+                          <div className="form-group">
+
+              						<div>
+                            <input type="submit" className="btn btn-primary" value="Create"/>
+            								<span></span>
+            								<input type="reset" className="btn btn-default" value="Clear"/>
+              						</div>
+                          </div>
+              					</form>
+              				</div>
+              			</div>
+              		</div>
+
+
+
+            </div>
+        );
+
+    }
+}
+
 
 class TeamTable extends React.Component {
     
