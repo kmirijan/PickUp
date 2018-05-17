@@ -214,9 +214,10 @@ changePicture(e){
 		console.log("err")
 	}
 	var data=new FormData();
-	data.append("image",img);
 	data.append("user",localStorage.getItem("user"));
 	data.append("filetype",type);
+	data.append("image",img);
+
 
 	/*https://stackoverflow.com/questions/43013858/ajax-post-a-f
 	ile-from-a-form-with-axios?utm_medium=organic&utm_source

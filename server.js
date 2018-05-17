@@ -8,6 +8,7 @@ const friends=require("./src/server/friends.js");
 const gamepage=require("./src/server/gamepage.js");
 const fs=require("fs");
 const busboy=require("connect-busboy");
+const util = require('util')
 
 
 var {Game} = require('./db/game.js');
@@ -61,15 +62,20 @@ app.post("/uploadprofilepicture",(req,res)=>{
   oading-with-express-4-0-req-files-undefined?utm_med
   ium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa*/
   var body={};
+  var tempPath="";
   req.busboy.on("field",(fieldname,val)=>{
     body[fieldname]=val;
+    if(fieldname=="user"){
+      tempPath="./dist/"+val;
+    }
   });
   req.busboy.on("file",(fieldname,file,filename)=>{
-		fstream=fs.createWriteStream("./dist/temp");
+    console.log(tempPath);
+    fstream=fs.createWriteStream(tempPath);
     file.pipe(fstream);
   });
   req.busboy.on("finish",()=>{
-    mkprofile.uploadProfilePicture("./dist/temp",body["user"],body["filetype"],res);
+    mkprofile.uploadProfilePicture(tempPath,body["user"],body["filetype"],res);
   })
   req.pipe(req.busboy);
 })

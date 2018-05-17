@@ -1,6 +1,6 @@
 To do:
 ---
-1. Profile picture implement. Crop,zoom image
+1. Fix upload image.
 2. email validation check
 
 PickUp
