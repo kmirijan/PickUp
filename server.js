@@ -6,6 +6,7 @@ const bodyParser=require("body-parser");
 const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
 const gamepage=require("./src/server/gamepage.js");
+const teamgames=require("./src/server/teamgames.js");
 const fs=require("fs");
 const busboy=require("connect-busboy");
 const util = require('util')
@@ -286,6 +287,27 @@ app.post("/deletegame",(req,res)=>
 
 });
 
+app.post("/joinT", (req, res) =>{
+  teamgames.joinT(req,res);
+});
+app.post("/nearbygamesT", (req, res) => {
+  teamgames.nearByGamesT(req,res);
+});
+app.post("/usergamesT", (req, res) => {
+  teamgames.userGamesT(req,res);
+});
+app.post("/postgamesT", (req, res) =>{
+  teamgames.postGamesT(req,res);
+});
+app.post("/retrievegamesT", (req, res) =>{
+  teamgames.retrieveGamesT(req,res);
+});
+app.patch('/gamesT', (req, res) => {
+  teamgames.gamesT(req,res);
+})
+app.post("/deletegameT",(req,res)=>{
+  teamgames.deleteGameT(req,res);
+});
 
 
 

@@ -5,6 +5,7 @@ import NavBar from './components/NavBar';
 
 
 
+
 class Everything extends React.Component{
 	render(){
 		return(

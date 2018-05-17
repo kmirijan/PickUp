@@ -25,7 +25,6 @@ class Routes extends React.Component{
     render(){
       if(localStorage.getItem("loggedin")=="true"){
         return(
-
             <BrowserRouter>
                 <Switch>
                 	<Route exact path="/" component={NavBar} />
