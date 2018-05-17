@@ -55,7 +55,7 @@ signIn(){
     return(
       <div>
         <NavBar/>
-          <div className="form-inline" style={{margin: '5%'}}>
+          <form className="form-inline" style={{margin: '5%'}}>
         <h2>SignIn</h2>
         <div className="form-group">
         <input
@@ -75,7 +75,7 @@ signIn(){
         <button
         ref="signin"
         className="btn btn-primary"
-        type="button"
+        type="submit"
         onClick={() => this.signIn()}
         >
         Sign In
@@ -83,7 +83,7 @@ signIn(){
       </div>
       <div>{this.state.error.message}</div>
       <div><Link to={'/signup'}>Sign up instead</Link></div>
-    </div>
+    </form>
   </div>
     );
   }
