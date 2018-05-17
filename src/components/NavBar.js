@@ -10,7 +10,7 @@ class NavBar extends React.Component {
           <nav className="navbar navbar-default">
             <ul className="NavBar">
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/home'}>Home</NavLink></li>
-              <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/app'}>Casual Games</NavLink></li>
+              <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/app'}>Create Games</NavLink></li>
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/teams'}>Team Games</NavLink></li>
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/users'}>Users</NavLink></li>
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/map'}>Map</NavLink></li>

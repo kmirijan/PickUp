@@ -1,5 +1,4 @@
 import React from 'react';
-import '../css/profilesEdit.css';
 import {Switch,BrowserRouter,Route,browserHistory,Redirect} from 'react-router-dom';
 import axios from "axios";
 
@@ -260,16 +259,16 @@ render(){
 						<div className="form-group">
 							<label className="col-lg-3 control-label">Name:</label>
 							<div className="col-lg-8">
-								<input className="form-control" type="text" value={this.state.username}
-									readOnly
-									/>
+									<input className="form-control" type="text" value={this.state.alias}
+										onChange={e => this.setState({alias: e.target.value})}
+										/>
 							</div>
 						</div>
 						<div className="form-group">
 							<label className="col-lg-3 control-label">Username:</label>
 							<div className="col-lg-8">
-								<input className="form-control" type="text" value={this.state.alias}
-									onChange={e => this.setState({alias: e.target.value})}
+								<input className="form-control" type="text" value={this.state.username}
+									readOnly
 									/>
 							</div>
 						</div>
