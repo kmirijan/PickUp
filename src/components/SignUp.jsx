@@ -44,11 +44,13 @@ signUp(){
     this.refs.signup.removeAttribute("disabled");
   }
   else if(username[0].match(/[a-z]/i)==null){
+    this.refs.signup.removeAttribute("disabled");
     this.setState({
       error:{
         message:"username must begin with a letter"
       }
     })
+    this.refs.signup.removeAttribute("disabled");
   }
   else{
     axios({
@@ -70,7 +72,7 @@ signUp(){
           console.log("signed up");
           localStorage.setItem("loggedin",true);
           localStorage.setItem("user",this.state.username);
-          this.props.history.push("/user="+this.state.username);
+          this.props.history.push("/user:"+this.state.username);
         }
         else{
           this.setState({
@@ -89,7 +91,7 @@ signUp(){
     return(
     <div>
       <NavBar/>
-        <div className="form-inline" style={{margin: '5%'}}>
+        <form className="form-inline" style={{margin: '5%'}}>
         <h2>SignUp</h2>
         <div className="form-group">
         <input
@@ -116,7 +118,7 @@ signUp(){
         <button
         ref="signup"
         className="btn btn-primary"
-        type="button"
+        type="submit"
         onClick={() => this.signUp()}
         >
         Sign Up
@@ -124,7 +126,7 @@ signUp(){
       </div>
       <div>{this.state.error.message}</div>
       <div><Link to={'/signin'}>Already a user? Sign in instead</Link></div>
-    </div>
+    </form>
   </div>
     );
   }
