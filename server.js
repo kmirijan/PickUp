@@ -65,6 +65,7 @@ app.post("/uploadprofilepicture",(req,res)=>{
     body[fieldname]=val;
   });
   req.busboy.on("file",(fieldname,file,filename)=>{
+    //temp should have some ID attached so 2 people uploading at once will not be disrupted
 		fstream=fs.createWriteStream("./dist/temp");
     file.pipe(fstream);
   });
@@ -104,7 +105,7 @@ app.post("/join", (req, res) =>
   mongo.connect(mongoUrl, (err, client) =>
   {
     var collection = client.db("pickup").collection("games");
-    var query = {id: req.body.gid};
+    var query = {id: req.body.gid, players: { $nin: [req.body.uid] } };
     var newPlayer = { $push: {players: req.body.uid} };
 
     console.log("user: ", req.body.uid);
@@ -233,34 +234,37 @@ app.post("/retrievegames", (req, res) =>
 });
 
 
+app.patch('/games', (req, res) => {
+  console.log('patch: ', req.body);
 
-app.post("/join", (req, res) =>
-{
-  console.log('[', (new Date()).toLocaleTimeString(), "] Game joined");
+  Game.findOneAndUpdate(
+    {'id': req.body.gid},
+    {$pull: {players : req.body.uid}},
+    {new: true}
+  )
+  .then((game) =>{
+    console.log('length: ', game.players.length)
+    console.log('req: ', req.body);
+    if(game.players.length === 0){
+      game.remove();
+    }
+    res.status(200).send({game});
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
+})
 
-  mongo.connect(mongoUrl, (err, client) =>
-  {
-    var collection = client.db("pickup").collection("games");
-    var query = {id: req.body.gid};
-    var newPlayer = { $push: {players: req.body.uid} };
+app.delete('/games', (req, res) => {
+  console.log('deleting', req.body);
+  Game.findOneAndRemove({'id': req.body.gid})
+  .then((game) =>{
+  console.log("Deleting", game);
+  res.status(200).send({game});
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
+})
 
-	if (req.body.uid != GUEST)
-	{
-	  console.log("user: ", req.body.uid);
-	  var userQuery = {username: req.body.uid};
-	  var joinedGame = {$push: {games: req.body.gid}};
-	  client.db("pickup").collection("users").update(userQuery, joinedGame);
-	}
-
-    collection.update(query, newPlayer, (err) =>
-    {
-      if (err) throw err;
-      client.close();
-    });
-
-  });
-
-});
 app.post("/deletegame",(req,res)=>
 {
   mongo.connect(mongoUrl,(err,client)=>{
@@ -269,7 +273,7 @@ app.post("/deletegame",(req,res)=>
     var db=client.db("pickup");
     db.collection("games").remove({"id":req.body.gameId})
     .then((arr)=>{
-      console.log(req.body.gameId, "deleted");
+      console.log(arr, "deleted");
       res.json();
       client.close();
     })

@@ -1,5 +1,4 @@
 import React from 'react';
-import '../css/profilesEdit.css';
 import {Switch,BrowserRouter,Route,browserHistory,Redirect} from 'react-router-dom';
 import axios from "axios";
 
@@ -245,7 +244,7 @@ render(){
 		<div className="row">
 				<div className="col-md-3">
 					<div className="text-center">
-						<img src= "//placehold.it/100" className="avatar img-circle" alt="avatar"/>
+						<img src={this.state.pic} style={picStyle} className="avatar img-circle" alt="avatar"/>
 						<h6>Upload a different photo...</h6>
 
 						<input type="file" accept=".jpg, .png" className="form-control" onChange={(e)=>this.changePicture(e)}/>
@@ -260,16 +259,16 @@ render(){
 						<div className="form-group">
 							<label className="col-lg-3 control-label">Name:</label>
 							<div className="col-lg-8">
-								<input className="form-control" type="text" value={this.state.username}
-									readOnly
-									/>
+									<input className="form-control" type="text" value={this.state.alias}
+										onChange={e => this.setState({alias: e.target.value})}
+										/>
 							</div>
 						</div>
 						<div className="form-group">
 							<label className="col-lg-3 control-label">Username:</label>
 							<div className="col-lg-8">
-								<input className="form-control" type="text" value={this.state.alias}
-									onChange={e => this.setState({alias: e.target.value})}
+								<input className="form-control" type="text" value={this.state.username}
+									readOnly
 									/>
 							</div>
 						</div>

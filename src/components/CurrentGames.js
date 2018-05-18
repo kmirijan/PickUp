@@ -7,157 +7,8 @@ import axios from 'axios';
 
 const GUEST = "guest";
 
-export class CurrentGames extends React.Component{
 
-
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            game: {},
-            isprivate:false
-        };
-        this.addGame = this.addGame.bind(this);
-        this.togglePrivate=this.togglePrivate.bind(this);
-    }
-    componentDidMount() {
-           let input = document.getElementById('location');
-           this.autocomplete = new google.maps.places.Autocomplete(input);
-    }
-
-
-
-
-    getName()
-    {
-        if (this.props.user != GUEST)
-        {
-            return this.props.user;
-        }
-        else
-        {
-            return this.refs.name.value;
-        }
-    }
-
-    getName()
-    {
-        if (this.props.user != GUEST)
-        {
-            return this.props.user;
-        }
-        else
-        {
-            return this.refs.name.value;
-        }
-    }
-
-    addGame(event) {
-        event.preventDefault();
-        let sport = this.refs.sport.value;
-        let name = this.getName();
-        let location = this.refs.location.value;
-        let isprivate = this.state.isprivate;
-        let coords = this.autocomplete.getPlace().geometry.location;
-        let id = Math.floor((Math.random()*(1 << 30))+1);
-        let game = {
-            gameId: id,
-            sport: sport,
-            name: name,
-            isprivate:isprivate,
-            location: location,
-            user: this.props.user,
-            coords: {
-                lat: coords.lat(),
-                lng: coords.lng()
-            },
-        };
-        axios.post('/postgames', game).then( () =>
-                {alert("Game added. It will appear upon refreshing the games table")});
-        this.refs.sport.value='';
-        this.refs.name.value='';
-        this.refs.location.value='';
-    }
-    togglePrivate(){
-      if(this.state.isprivate==false){
-        this.setState({
-          isprivate:true
-        })
-      }
-      else{
-        this.setState({
-          isprivate:false
-        });
-      }
-    }
-
-
-    displayNameInput()
-    {
-        if (this.props.user != GUEST)
-        {
-            return null;
-        }
-        else
-        {
-            return (
-                <input
-                className='gameDetails'
-                type="text"
-                ref="name"
-                placeholder="Name"
-                />
-
-            );
-        }
-    }
-
-    render(){
-
-        return(
-            <div>
-
-                <form
-                className="form-inline"
-                onSubmit={this.addGame.bind(this)}
-                >
-                    {this.displayNameInput()}
-                    <input
-                    className='gameDetails'
-                    type="text"
-                    ref="sport"
-                    placeholder="Activity"/>
-                    <input
-                    className='gameDetails'
-                    id= 'location'
-                    type="text"
-                    ref="location"
-                    placeholder="Location"/>
-                    <p>Private</p>
-                    <input
-                      className='gameDetails'
-                      id= 'isprivate'
-                     type="checkbox"
-                     ref="isprivate"
-                     onChange={this.togglePrivate}/>
-
-                    <div className="App-submitButton">
-                        <input type="submit" value="Submit"/>
-                    </div>
-                </form>
-
-
-                <h1 className="App-currentGames">
-                Below are the currently available games:
-                </h1>
-            <GameTable user={this.props.user} />
-            </div>
-        );
-
-    }
-}
-
-class GameTable extends React.Component{
+export class GameTable extends React.Component{
 
   constructor(props)
   {
@@ -212,20 +63,27 @@ class GameTable extends React.Component{
     }
     else return (
       <div>
-        <input className = "searchBox"
-        type="text" placeholder="Search"
-		ref="search"
+        <div className="searchBox">
+          <input className="form-control" type="text"
+            placeholder="Search"
+		          ref="search"
         onChange={this.updateSearch.bind(this)}/>
 
+        <input className = "btn btn-primary" type="button" value="Refresh"
+          onClick={this.retrieveGames.bind(this)}
+          style={{margin:"auto"}}/>
+    </div>
 
-        <input type="button" value="Refresh" onClick={this.retrieveGames.bind(this)} />
-	   <table>
+	   <table className="table table-bordered table-hover">
 	   <thead>
        <tr>
-	  <th><h3>Activity</h3></th>
-	  <th><h3>Name</h3></th>
-	  <th><h3>Location</h3></th>
-	  <th><h3>Join</h3></th>
+	  <th>Activity</th>
+	  <th>Name</th>
+	  <th>Location</th>
+	  <th>Join</th>
+    <th>Leave</th>
+    <th># Joined</th>
+    <th></th>
 	</tr>
       </thead>
       <tbody>
@@ -243,22 +101,31 @@ class GameTable extends React.Component{
 
 }
 
-class Game extends React.Component {
+export class Game extends React.Component {
 
   joinGame()
   {
     axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
+  }
+  leaveGame(){
+    axios.patch('/games', {uid:this.props.user, gid:this.props.game.id});
   }
 
 
   render(){
     return(
         <tr>
-          <td ><h3>{this.props.game.sport} </h3></td>
-          <td ><h3>{this.props.game.name} </h3></td>
-          <td > <h3>{this.props.game.location}</h3> </td>
-          <td><button className="joinGame" onClick={this.joinGame.bind(this)}><h3>Join</h3></button></td>
-          <td><Link to={"/game:"+this.props.game.id}><h3>Details</h3></Link></td>
+          <td>{this.props.game.sport}</td>
+          <td>{this.props.game.name}</td>
+          <td>{this.props.game.location}</td>
+          <td><input  type="button"
+            className="btn btn-success btn-md"
+            onClick={this.joinGame.bind(this)} value="Join"/></td>
+          <td><input type="button"
+            className="btn btn-danger btn-md"
+            onClick={this.leaveGame.bind(this)} value="Leave"/></td>
+          <td>{this.props.game.players.length}</td>
+          <td><Link to={"/game:"+this.props.game.id}>Details</Link></td>
         </tr>
     );
   }

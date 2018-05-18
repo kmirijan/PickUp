@@ -9,27 +9,22 @@ import axios from 'axios';
 const GUEST = "guest";
 
 
-class CurrentTeams extends React.Component{
-
-
-
+class CurrentTeamGames extends React.Component{
     constructor(props) {
         super(props);
         console.log("rendered")
     }
 
-
-
     render(){
         return(
             <div>
                 <NavBar/>
-                <h1>Page where you can join teams.</h1>
+                <h1>Page where you can join Team Games</h1>
             </div>
         );
 
     }
 }
 module.exports={
-  CurrentTeams
+  CurrentTeamGames
 }
