@@ -37,7 +37,7 @@ class Routes extends React.Component{
                     <Route path="/game:id" component={RenderGamePage}/>
                     <Route path="/map" component={Map}/>
                     <Route path="/teams" render={(props) => <TeamPage user={getCurrentUser()} /> }/>
-                    <Route path="/teamgames" render={CurrentTeamGames} user={getCurrentUser()}/>
+                    <Route path="/teamgames" render={(props) => <CurrentTeamGames user={getCurrentUser()} />} />
                     <Route path="/app"
                         render={(props) => <App user = {getCurrentUser()}/>}/>
                     <Route path="/signin" component={SignIn}/>
