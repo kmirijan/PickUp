@@ -138,7 +138,7 @@ class Map extends React.Component {
                 <button type="button" className="btn btn-primary" data-toggle="collapse"
                   data-target="#createSoloGames">Create A Game</button>
                 <div id="createSoloGames" className="collapse">
-                <CurrentGames/>
+                <CurrentGames user={this.props.user}/>
                   </div>
                 </div>
 

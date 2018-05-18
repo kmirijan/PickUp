@@ -3,7 +3,6 @@ var ReactDOM=require("react-dom");
 var {Profile}=require("./Profiles.jsx");
 var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
-var {CurrentGames}=require("./CurrentGames.js");
 var {TeamPage}=require("./TeamPage.jsx");
 var {CurrentTeamGames}=require("./CurrentTeamGames.jsx");
 var {Users}=require("../helpers/Users.jsx");
@@ -36,7 +35,7 @@ class Routes extends React.Component{
                     <Route path="/settings:username" component={Settings}/>
                     <Route path="/game:id" component={RenderGamePage}/>
                     <Route path="/tgame:id" component={RenderTeamGamePage}/>
-                    <Route path="/map" component={Map}/>
+                    <Route path="/map" render={(props) => <Map user = {getCurrentUser()}/>}/>
                     <Route path="/teams" render={(props) => <TeamPage user={getCurrentUser()} /> }/>
                     <Route path="/teamgames" render={(props) => <CurrentTeamGames user={getCurrentUser()} />} />
                     <Route path="/signin" component={SignIn}/>
