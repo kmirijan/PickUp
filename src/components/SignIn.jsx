@@ -34,7 +34,7 @@ signIn(){
         /*https://www.robinwieruch.de/local-storage-react/*/
         localStorage.setItem("loggedin","true");
         localStorage.setItem("user",res.data["user"]);
-        this.props.history.push("/user="+res.data["user"]);
+        this.props.history.push("/user:"+res.data["user"]);
       }
       else
       {
