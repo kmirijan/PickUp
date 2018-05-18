@@ -7,8 +7,10 @@ const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
 const gamepage=require("./src/server/gamepage.js");
 const teams=require("./src/server/teams.js");
+const teamgames=require("./src/server/teamgames.js");
 const fs=require("fs");
 const busboy=require("connect-busboy");
+const util = require('util')
 
 
 var {Game} = require('./db/game.js');
@@ -71,16 +73,20 @@ app.post("/uploadprofilepicture",(req,res)=>{
   oading-with-express-4-0-req-files-undefined?utm_med
   ium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa*/
   var body={};
+  var tempPath="";
   req.busboy.on("field",(fieldname,val)=>{
     body[fieldname]=val;
+    if(fieldname=="user"){
+      tempPath="./dist/"+val;
+    }
   });
   req.busboy.on("file",(fieldname,file,filename)=>{
-    //temp should have some ID attached so 2 people uploading at once will not be disrupted
-		fstream=fs.createWriteStream("./dist/temp");
+    console.log(tempPath);
+    fstream=fs.createWriteStream(tempPath);
     file.pipe(fstream);
   });
   req.busboy.on("finish",()=>{
-    mkprofile.uploadProfilePicture("./dist/temp",body["user"],body["filetype"],res);
+    mkprofile.uploadProfilePicture(tempPath,body["user"],body["filetype"],res);
   })
   req.pipe(req.busboy);
 })
@@ -101,6 +107,9 @@ app.post("/removefriend",(req,res)=>{
 })
 app.post("/isgame",(req,res)=>{
   gamepage.isGame(req.body["id"],res);
+})
+app.post("/isgamet",(req,res)=>{
+  gamepage.isGameT(req.body["id"],res);
 })
 
 
@@ -291,6 +300,27 @@ app.post("/deletegame",(req,res)=>
 
 });
 
+app.post("/joinT", (req, res) =>{
+  teamgames.joinT(req,res);
+});
+app.post("/nearbygamesT", (req, res) => {
+  teamgames.nearByGamesT(req,res);
+});
+app.post("/usergamesT", (req, res) => {
+  teamgames.userGamesT(req,res);
+});
+app.post("/postgamesT", (req, res) =>{
+  teamgames.postGamesT(req,res);
+});
+app.post("/retrievegamesT", (req, res) =>{
+  teamgames.retrieveGamesT(req,res);
+});
+app.patch('/gamesT', (req, res) => {
+  teamgames.gamesT(req,res);
+})
+app.post("/deletegameT",(req,res)=>{
+  teamgames.deleteGameT(req,res);
+});
 
 
 
