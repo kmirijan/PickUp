@@ -1,20 +1,22 @@
 {
   "name": "pickup",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "First scrum ",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha ./tests/server.test.js",
+    "dev": "webpack-dev-server --hot --inline",
+    "start": "npm run build && node server.js",
+    "compile": "babel public --out-dir dist",
+    "server": "nodemon index.js",
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --watch"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kmirijan/PickUp.git"
   },
-  "engines": {
-    "node": "9.7.1"
-  },
-  "author": "",
+  "author": "me",
   "license": "ISC",
   "babel": {
     "presets": [
@@ -27,30 +29,39 @@
     "url": "https://github.com/kmirijan/PickUp/issues"
   },
   "homepage": "https://github.com/kmirijan/PickUp#readme",
-  "dependencies": {
+  "devDependencies": {
     "axios": "^0.18.0",
-    "babel": "^6.23.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "babel-register": "^6.26.0",
+    "expect": "^22.4.3",
+    "mocha": "^5.1.1",
+    "react-hot-loader": "^4.1.1",
+    "style-loader": "^0.21.0",
+    "supertest": "^3.0.0",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.14",
+    "webpack-dev-server": "^3.1.3"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
-    "create-react-class": "^15.6.3",
+    "bootstrap": "^4.1.1",
+    "cheerio": "^1.0.0-rc.2",
+    "connect-busboy": "0.0.2",
     "css-loader": "^0.28.11",
     "express": "^4.16.3",
     "mongodb": "^3.0.7",
-    "mongoose": "^5.0.15",
+    "mongodb-core": "^3.0.7",
+    "mongoose": "^5.0.16",
+    "node": "^9.11.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
-    "react-redux": "^5.0.7",
-    "react-router": "^4.2.0"
-  },
-  "devDependencies": {
-    "style-loader": "^0.21.0",
-    "react-hot-loader": "^4.1.1",
-    "webpack": "^4.6.0",
-    "webpack-cli": "^2.0.15"
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "reactstrap": "^6.0.1"
   }
 }

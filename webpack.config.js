@@ -1,28 +1,12 @@
-// module.exports = {
-// 	entry: './client.js',
-// 	output: {
-// 		filename: 'bundle.js',
-// 		path: __dirname + '/public'
-// 	},
-// 	module: {
-//         rules: [
-//           {
-//              test: /\.jsx?$/,
-//              exclude: /node_modules/,
-//              loader: 'babel-loader',
-//              query: {
-//                 presets: ['es2015', 'react']
-//              }
-//           }
-//         ]
-//    }
-// }
 
+/*https://github.com/alanbsmith/react-node-example*/
 const webpack = require('webpack');
 module.exports = {
+  mode:'none',
   entry: [
-    './client.js'
+    './src/index.js'
   ],
+  devtool: 'inline-source-map',
   module: {
     rules: [
       {
@@ -40,12 +24,16 @@ module.exports = {
     extensions: ['*', '.js', '.jsx']
   },
   output: {
-    path: __dirname + '/public',
+    path: __dirname + '/dist',
     publicPath: '/',
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: './public'
-  }
+    contentBase: './dist',
+    historyApiFallback: true
+  },
+  plugins:[
+    new webpack.HotModuleReplacementPlugin()
+  ]
 
 };

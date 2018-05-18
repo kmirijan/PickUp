@@ -1,0 +1,51 @@
+#head1:hover{
+}
+.link{
+    color:yellow;
+}
+
+#form{
+    padding:0px 0px 0px 0px;
+}
+#panel{
+    margin: 0px 200px 0px 200px;
+}
+
+#top{
+    text-align:center;
+    padding: 10px 0px 10px 0px;
+    margin: 0px 0px 0px 0px;
+    font-size:large;
+    background-color:black;
+    color:white;
+}
+#banner{
+	text-align:center;
+    padding: 5px 10px 5px 10px;
+    background-color:rgba(57, 46, 157, 0.4);
+    border-radius:5px;
+    font-size:x-large;
+	color:white;
+    margin: 0px 0px 0px 0px;
+}
+#banner:hover{
+	font-style: oblique;
+}
+#page{
+	text-align:center;
+    padding: 10px 10px 10px 10px;
+    background-color:rgba(0, 0, 0, 0.7);
+    border-radius:5px;
+    color:white;
+}
+#main{
+	padding: 10px 10px 10px 10px;
+	margin: 0px 200px 0px 200px;
+	background-color:rgba(57, 46, 157, 0.3);
+	border-radius:5px;
+}
+#map{
+    height: 70%;
+    width: 100%;
+    background-color: grey;
+}

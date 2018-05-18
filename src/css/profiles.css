@@ -1,0 +1,95 @@
+#profile{
+	width:100%;
+	display:table;
+	clear:both;
+	content:"";
+	margin: auto;
+	text-align:center;
+}
+#panel{
+	width:30%;
+	float: left;
+	margin-top: 20px;
+}
+#fpanel{
+	width:70%;
+	float:right;
+	margin-top: 0px
+}
+
+#card{
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	max-width: 300px;
+	margin: auto;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+#picture{
+	margin: 0 auto;
+	width: 200px;
+	height: 200px;
+	background-color:gray;
+	margin-bottom: 10px
+}
+
+#mask:hover{
+	background-color:rgba(0, 0, 0, 0.4);
+}
+#mask:hover #changeimg{
+	visibility:visible;
+	color:white;
+}
+#edit{
+	text-align:center;
+}
+#settings{
+	text-align:center;
+}
+#username{
+	margin:auto;
+	text-align:center;
+	color:blue;
+	padding:5px;
+}
+#email{
+	margin:auto;
+	text-align:center;
+	color:red;
+	padding:0px;
+}
+#alias{
+	margin:0, auto, 0, auto;
+	text-align:center;
+	font-size:x-large;
+	padding:10px;
+}
+#bio{
+	margin:auto;
+	text-align:center;
+	padding:20px 50px 20px 50px;
+}
+#expand{
+	width:111px;
+	margin:auto;
+}
+#gamesList{
+	text-align:center;
+}
+#friendsList{
+	text-align:center;
+}
+#feed{
+	text-align:center;
+}
+#save{
+	text-align:center;
+}
+#friendslist{
+	text-align:center;
+}
+#addfriend{
+	text-align:center;
+}
+#gamesmade{
+	width:100%;
+}

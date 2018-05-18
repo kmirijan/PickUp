@@ -1,0 +1,157 @@
+.NavBar{
+   list-style-type: none;
+   margin: 0;
+   padding: 0;
+   overflow: hidden;
+   background-color: #333;
+   position: fixed;
+   top: 0;
+   width: 100%;
+   z-index: 50;
+}
+
+.Nav {
+   float: left;
+}
+
+.NavIcons {
+   float: right;
+}
+
+.Nav .pages {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: none;
+}
+
+.Nav .pages:hover:not(.active) {
+    background-color: #111;
+}
+
+
+.Nav .active {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: F9690E;
+}
+
+.NavIcons .pages {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 14px 16px;
+   text-decoration: none;
+}
+
+.NavIcons .pages:hover:not(.active) {
+    background-color: #111;
+}
+
+
+.NavIcons .active {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: F9690E;
+}
+
+
+
+
+.mainDiv{
+  width: 100%;
+  height:100%;
+}
+
+.jumbotron{
+  width: 100%;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height:100%;
+  background-color: white;
+  margin-bottom: 0px;
+}
+
+.centerText{
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-70%, -40%);
+  color: white;
+}
+
+.signup{
+	text-align:center;
+}
+
+
+
+.texts{
+  text-align: center;
+}
+
+.HomepageText {
+  font-size: 4.5rem;
+  font-weight: 350;
+}
+
+.searchBox {
+    width: 30%;
+    resize: vertical;
+    margin: 10px
+}
+
+
+.editPage{
+  margin:auto;
+}
+
+
+.gameTableInMap{
+  width:68%;
+  float:right;
+  margin:10px;
+}
+
+
+
+
+
+.main{
+  margin-bottom: 30px;
+}
+
+
+.form-group{
+	margin-bottom: 15px;
+}
+
+
+
+
+
+.main-center{
+ 	margin-bottom: 30px;
+ 	margin: 0 auto;
+ 	max-width: 330px;
+    padding: 40px 40px;
+
+}
+
+.main-create{
+ 	background-color: #fff;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+
+}
