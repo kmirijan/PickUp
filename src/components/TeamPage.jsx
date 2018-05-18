@@ -250,10 +250,10 @@ export class Team extends React.Component {
 
   joinTeam()
   {
-    axios.post('/jointeam', {uid:this.props.user, tid:this.props.team.name});
+    axios.post('/jointeam', {user:this.props.user, teamName:this.props.team.name});
   }
   leaveGame(){
-    axios.patch('/team', {uid:this.props.user, tid:this.props.team.name});
+    axios.patch('/team', {user:this.props.user, teanName:this.props.team.name});
   }
 
 
