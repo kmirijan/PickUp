@@ -4,7 +4,7 @@ var axios=require("axios");
 import NavBar from "./NavBar"
 require("../css/gamePage.css")
 
-class GamePage extends React.Component{
+class TeamGamePage extends React.Component{
   constructor(props){
     super(props);
 
@@ -12,9 +12,6 @@ class GamePage extends React.Component{
   componentWillMount(){
 
   }
-  //group chat
-  //map
-  //players
   render(){
     return(
       <div>
@@ -44,5 +41,5 @@ class GamePage extends React.Component{
 }
 
 module.exports={
-  GamePage
+  TeamGamePage
 }
