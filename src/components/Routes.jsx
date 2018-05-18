@@ -30,7 +30,7 @@ class Routes extends React.Component{
                 <Switch>
                 	<Route exact path="/" component={NavBar} />
                 	<Route exact path="/home" component={Home} />
-                    <Route path="/users" component={Users} />
+                    <Route path="/list_users" component={Users} />
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
                     <Route path="/settings:username" component={Settings}/>
@@ -88,7 +88,7 @@ class User extends React.Component{
 			usrnm=usrnm.substring(1,usrnm.length);
 		}
     this.usrnm=usrnm;
-    this.isValidUser=false;
+    this.isValidUser=true;
 	}
 	componentWillMount(){
 		if(!(localStorage.getItem("loggedin")=="true")){
