@@ -3,6 +3,7 @@ import NavBar from './NavBar';
 import axios from "axios"
 import {GameTable, Game} from './CurrentGames';
 import {CurrentGames} from './CreateGames';
+//import '../css/Map.css';
 
 
 
@@ -124,7 +125,6 @@ class Map extends React.Component {
 
 
     }
-
     render() {
 
     if (navigator.geolocation)
@@ -136,9 +136,9 @@ class Map extends React.Component {
 
               <div className="container">
                 <button type="button" className="btn btn-primary" data-toggle="collapse"
-                  data-target="#createSoloGames">Create A Team Game</button>
+                  data-target="#createSoloGames">Create A Game</button>
                 <div id="createSoloGames" className="collapse">
-                  <CurrentGames/>
+                <CurrentGames/>
                   </div>
                 </div>
 

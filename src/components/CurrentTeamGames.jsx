@@ -101,12 +101,20 @@ export class CurrentTeamGames extends React.Component{
         else
         {
             return (
-                <input
-                className='gameDetails'
-                type="text"
-                ref="name"
-                placeholder="Name"
-                />
+              <div className="form-group">
+      <label className="cols-sm-2 control-label">Team Name</label>
+      <div className="cols-sm-10">
+        <div className="input-group">
+          <span className="input-group-addon"></span>
+            <input
+            className='gameDetails form-control'
+            type="text"
+            ref="name"
+            placeholder="Name"
+            />
+        </div>
+      </div>
+    </div>
 
             );
         }
@@ -135,12 +143,14 @@ export class CurrentTeamGames extends React.Component{
                     <form className="form-horizontal"
                       onSubmit={this.addGame.bind(this)}>
 
+                      {this.displayNameInput()}
+
                       <div className="form-group">
                         <label className="cols-sm-2 control-label">Activity</label>
                         <div className="cols-sm-10">
                           <div className="input-group">
                             <span className="input-group-addon"></span>
-                            <input className='teamDetails form-control' type="text"  type="text"
+                            <input className='gameDetails form-control' type="text"
                             ref="sport"
                             placeholder="Activity"/>
                           </div>
@@ -152,7 +162,7 @@ export class CurrentTeamGames extends React.Component{
                         <div className="cols-sm-10">
                           <div className="input-group">
                             <span className="input-group-addon"></span>
-                            <input className='teamDetails form-control' type="text"  type="text"
+                            <input className='gameDetails form-control' type="text"
                               id= 'location'
                               ref="location"
                               placeholder="Location"/>
@@ -160,6 +170,16 @@ export class CurrentTeamGames extends React.Component{
                         </div>
                       </div>
 
+
+                      <div className="form-group">
+                        <p>Private</p>
+                        <input
+                          className='gameDetails'
+                          id= 'isprivate'
+                         type="checkbox"
+                         ref="isprivate"
+                         onChange={this.togglePrivate}/>
+                      </div>
 
                       <div className="form-group">
 
