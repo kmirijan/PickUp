@@ -278,7 +278,7 @@ class Game extends React.Component {
             </div>
           </td>
           <td > <h3>{this.props.game.players.length}</h3> </td>
-          <td><Link to={"/game:"+this.props.game.id}><h3>Details</h3></Link></td>
+          <td><Link to={"/gamet:"+this.props.game.id}><h3>Details</h3></Link></td>
         </tr>
     );
   }

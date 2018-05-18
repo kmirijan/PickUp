@@ -64,7 +64,7 @@ signUp(){
           console.log("signed up");
           localStorage.setItem("loggedin","true");
           localStorage.setItem("user",this.state.username);
-          this.props.history.push("/user="+this.state.username);
+          this.props.history.push("/user:"+this.state.username);
         }
         else{
           this.setState({

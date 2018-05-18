@@ -22,3 +22,19 @@ exports.isGame=(id,res)=>{
 		})
 	})
 }
+exports.isGameT=(id,res)=>{
+	mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
+		var db=client.db("pickup");
+		console.log(id);
+		db.collection("teamgames").count({"id":Number(id)}).then((count)=>{
+			if(count<1){
+				res.json(false);
+			}
+			else{
+				res.json(true);
+			}
+			client.close();
+		})
+	})
+}

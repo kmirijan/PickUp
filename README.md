@@ -2,6 +2,8 @@ To do:
 ---
 1. Fix upload image.
 2. email validation check
+3. 404 page fix after sign up
+4. change 404 to loading screen.
 
 PickUp
 ---

@@ -8,8 +8,10 @@ var {CurrentTeams}=require("./CurrentTeams.jsx");
 var {CurrentTeamGames}=require("./CurrentTeamGames.jsx");
 var {Users}=require("../helpers/Users.jsx");
 var{GamePage}=require("./GamePage.jsx");
+var{TeamGamePage}=require("./TeamGamePage.jsx");
 var{ProfileSettings}=require("./ProfilesSettings.jsx");
 var axios=require("axios");
+import loadImg from "../../dist/load.gif"
 require("../css/App.css");
 require("../css/font.css");
 import NavBar from './NavBar';
@@ -33,7 +35,8 @@ class Routes extends React.Component{
                     <Route path='/user:username' component={User}/>
                     <Route path="/edit:username" component={Edit}/>
                     <Route path="/settings:username" component={Settings}/>
-                    <Route path="/game:id" component={RenderGamePage}/>
+                    <Route path="/game:id" component={RenderTeamGamePage}/>
+                    <Route path="/teamgame:id" component={RenderGamePage}/>
                     <Route path="/map" component={Map}/>
                     <Route path="/teams" component={CurrentTeams} user={getCurrentUser()}/>
                     <Route path="/teamgames" component={CurrentTeamGames} user={getCurrentUser()}/>
@@ -42,7 +45,8 @@ class Routes extends React.Component{
                     <Route path="/signin" component={SignIn}/>
           					<Route path="/signup" component={SignUp}/>
           					<Route path="/logout" component={LogOut}/>
-                    <Route component={_404} />
+                    <Route path="/Loading"component={Loading}/>
+                    <Route path="/_404"component={_404} />
                 </Switch>
             </BrowserRouter>
         )
@@ -88,6 +92,7 @@ class User extends React.Component{
 		}
     this.usrnm=usrnm;
     this.isValidUser=false;
+    this.loading=true;
 	}
 	componentWillMount(){
 		if(!(localStorage.getItem("loggedin")=="true")){
@@ -104,6 +109,7 @@ class User extends React.Component{
     .then((isUser)=>{
       console.log(isUser.data)
       this.isValidUser=isUser.data;
+      this.loading=false;
       this.forceUpdate();
     })
 	}
@@ -139,6 +145,9 @@ class User extends React.Component{
   				/>
   				</div>
   		)}
+    else if(this.loading==true){
+      return(<Loading/>);
+    }
 		else{
       console.log(this.isValidUser);
 			return(<_404/>);
@@ -196,10 +205,12 @@ class RenderGamePage extends React.Component{
   constructor(props){
     super(props);
     this.id=this.props.match.params.id;
+    console.log(this.id);
     while(!(/[0-9]|[a-z]/i.test(this.id[0]))){
 			this.id=this.id.substring(1,this.id.length);
 		}
     this.isGame=false;
+    this.loading=true;
   }
   componentWillMount(){
     axios({
@@ -210,6 +221,7 @@ class RenderGamePage extends React.Component{
       }
     }).then((isGame)=>{
       this.isGame=isGame.data;
+      this.loading=false;
       this.forceUpdate();
     })
   }
@@ -219,6 +231,48 @@ class RenderGamePage extends React.Component{
     if(this.isGame==true&&localStorage.getItem("loggedin")=="true"){
 
       return(<GamePage id={this.id}/>)
+    }
+    else if(this.loading==true){
+      return(<Loading/>)
+    }
+    else{
+      return(<_404/>);
+    }
+  }
+}
+class RenderTeamGamePage extends React.Component{
+  constructor(props){
+    super(props);
+    this.id=this.props.match.params.id;
+    console.log(this.id);
+    while(!(/[0-9]|[a-z]/i.test(this.id[0]))){
+			this.id=this.id.substring(1,this.id.length);
+		}
+    this.isGame=false;
+    this.loading=true;
+  }
+  componentWillMount(){
+    axios({
+      method:"post",
+      url:"/isgamet",
+      data:{
+        id:this.id
+      }
+    }).then((isGame)=>{
+      this.isGame=isGame.data;
+      this.loading=false;
+      this.forceUpdate();
+    })
+  }
+  render(){
+    console.log("gametrue",this.isGame);
+    console.log("loggedin",localStorage.getItem("loggedin"))
+    if(this.isGame==true&&localStorage.getItem("loggedin")=="true"){
+
+      return(<TeamGamePage id={this.id}/>)
+    }
+    else if(this.loading==true){
+      return(<Loading/>)
     }
     else{
       return(<_404/>)
@@ -239,7 +293,9 @@ class LogOut extends React.Component{
 const _404=()=>(
 	<h1>404</h1>
 );
-
+const Loading=()=>(
+	<img src={loadImg} />
+);
 
 
 module.exports={

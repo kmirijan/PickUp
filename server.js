@@ -98,6 +98,9 @@ app.post("/removefriend",(req,res)=>{
 app.post("/isgame",(req,res)=>{
   gamepage.isGame(req.body["id"],res);
 })
+app.post("/isgamet",(req,res)=>{
+  gamepage.isGameT(req.body["id"],res);
+})
 
 
 /*----------------------------------------------------------------------------------------*/
