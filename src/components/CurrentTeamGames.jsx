@@ -117,38 +117,67 @@ export class CurrentTeamGames extends React.Component{
         return(
             <div>
                 <NavBar/>
-                <form
-                className="form-inline"
-                onSubmit={this.addGame.bind(this)}
-                >
-                    {this.displayNameInput()}
-                    <input
-                    className='gameDetails'
-                    type="text"
-                    ref="sport"
-                    placeholder="Activity"/>
-                    <input
-                    className='gameDetails'
-                    id= 'location'
-                    type="text"
-                    ref="location"
-                    placeholder="Location"/>
-                    <p>Private</p>
-                    <input
-                      className='gameDetails'
-                      id= 'isprivate'
-                     type="checkbox"
-                     ref="isprivate"
-                     onChange={this.togglePrivate}/>
 
-                    <div className="App-submitButton">
-                        <input type="submit" value="Submit"/>
-                    </div>
-                </form>
+                  <div className="container">
+                    <button type="button" className="btn btn-primary" data-toggle="collapse"
+                      data-target="#createTeamGames">Create A Team Game</button>
 
+
+                    <div id="createTeamGames" className="collapse">
+                        <div className="row main">
+                          <div className="panel-heading">
+                           <div className="panel-title text-center">
+                              <h1 className="title">Create a team game below:</h1>
+                              <hr />
+                            </div>
+                        </div>
+                        <div className="main-create main-center">
+                    <form className="form-horizontal"
+                      onSubmit={this.addGame.bind(this)}>
+
+                      <div className="form-group">
+                        <label className="cols-sm-2 control-label">Activity</label>
+                        <div className="cols-sm-10">
+                          <div className="input-group">
+                            <span className="input-group-addon"></span>
+                            <input className='teamDetails form-control' type="text"  type="text"
+                            ref="sport"
+                            placeholder="Activity"/>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="cols-sm-2 control-label">City</label>
+                        <div className="cols-sm-10">
+                          <div className="input-group">
+                            <span className="input-group-addon"></span>
+                            <input className='teamDetails form-control' type="text"  type="text"
+                              id= 'location'
+                              ref="location"
+                              placeholder="Location"/>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div className="form-group">
+
+                      <div>
+                        <input type="submit" className="btn btn-primary" value="Create"/>
+                        <span></span>
+                        <input type="reset" className="btn btn-default" value="Clear"/>
+                      </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+        </div>
+        </div>
 
                 <h1 className="App-currentGames">
-                Below are the currently available games:
+                  Below are the currently available games:
                 </h1>
             <GameTable user={this.props.user} />
             </div>
@@ -216,32 +245,41 @@ class GameTable extends React.Component{
         return (<h2 className="retrieving">Retrieving Games...</h2>);
     }
     else return (
+
       <div>
-        <input className = "searchBox"
-        type="text" placeholder="Search"
-		ref="search"
+        <div className="searchBox">
+          <input className="form-control" type="text"
+            placeholder="Search"
+              ref="search"
         onChange={this.updateSearch.bind(this)}/>
 
+        <input className = "btn btn-primary" type="button" value="Refresh"
+          onClick={this.retrieveGames.bind(this)}
+          style={{margin:"auto"}}/>
+    </div>
 
-        <input type="button" value="Refresh" onClick={this.retrieveGames.bind(this)} />
-	   <table>
-	   <thead>
+     <table className="table table-bordered table-hover">
+     <thead>
        <tr>
-	  <th><h3>Activity</h3></th>
-	  <th><h3>Name</h3></th>
-	  <th><h3>Location</h3></th>
-	  <th><h3>Join</h3></th>
-	</tr>
+    <th>Activity</th>
+    <th>Name</th>
+    <th>Location</th>
+    <th>Join</th>
+    <th>Leave</th>
+    <th># Joined</th>
+    <th></th>
+    </tr>
       </thead>
       <tbody>
-	      {
+        {
             this.state.filteredGames.map((game)=>{
-                return (<Game userGames={this.props.userGames} game = {game} user={this.props.user} key={game.id} />);
+                return (<Game  userGames={this.props.userGames} game = {game} user={this.props.user} key={game.id} />);
             })
          }
-	  </tbody>
+    </tbody>
       </table>
       </div>
+
 	);
 
   }
@@ -266,20 +304,26 @@ class Game extends React.Component {
 
   render(){
     return(
-        <tr>
-          <td ><h3>{this.props.game.sport} </h3></td>
-          <td ><h3>{this.props.game.name} </h3></td>
-          <td > <h3>{this.props.game.location}</h3> </td>
-          <td><button className="joinGame" onClick={this.joinGame.bind(this)}><h3>Join</h3></button></td>
-          <td>
-            <button className="leaveGame" onClick={this.leaveGame.bind(this)}><h3>Leave</h3></button>
-            <div>
-              {this.showTeamGames()}
-            </div>
-          </td>
-          <td > <h3>{this.props.game.players.length}</h3> </td>
-          <td><Link to={"/tgame:"+this.props.game.id}><h3>Details</h3></Link></td>
-        </tr>
+
+
+      <tr>
+        <td>{this.props.game.sport}</td>
+        <td>{this.props.game.name}</td>
+        <td>{this.props.game.location}</td>
+        <td><input  type="button"
+          className="btn btn-success btn-md"
+          onClick={this.joinGame.bind(this)} value="Join"/></td>
+        <td><input type="button"
+          className="btn btn-danger btn-md"
+          onClick={this.leaveGame.bind(this)} value="Leave"/>
+          <div>
+            {this.showTeamGames()}
+          </div>
+    </td>
+        <td>{this.props.game.players.length}</td>
+        <td><Link to={"/tgame:"+this.props.game.id}>Details</Link></td>
+      </tr>
+
     );
   }
 }

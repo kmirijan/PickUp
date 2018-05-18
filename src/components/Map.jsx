@@ -2,7 +2,7 @@ import React from 'react';
 import NavBar from './NavBar';
 import axios from "axios"
 import {GameTable, Game} from './CurrentGames';
-//import '../css/Map.css';
+import {CurrentGames} from './CreateGames';
 
 
 
@@ -132,6 +132,16 @@ class Map extends React.Component {
     return (
         <div>
             <NavBar/>
+
+
+              <div className="container">
+                <button type="button" className="btn btn-primary" data-toggle="collapse"
+                  data-target="#createSoloGames">Create A Team Game</button>
+                <div id="createSoloGames" className="collapse">
+                  <CurrentGames/>
+                  </div>
+                </div>
+
             <div className="Map">
                 <h1>Games near you</h1>
                 <div ref="map" style={{height: "500px", width: "30%", float: "left"}}></div>
