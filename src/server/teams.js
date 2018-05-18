@@ -12,7 +12,7 @@ function printErr(err, message)
 exports.getTeams = function getTeams(req, res) {
     console.log('[', (new Date()).toLocaleTimeString(), "] Retrieving teams");
 
-    mongo.connect(mongo Url, (err, client) => {
+    mongo.connect(mongourl, (err, client) => {
         if (err) {
             printErr(err, "Connection to mongo failed for retrieving teams");
             client.close();
@@ -29,8 +29,8 @@ exports.getTeams = function getTeams(req, res) {
             }
             else
             {
+                res.status(200);
                 res.json(results);
-                res.sendStatus(200);
             }
             client.close();
         });
@@ -50,7 +50,7 @@ exports.createTeam = function createTeam(req, res) {
         games: []
     }
 
-    mongo.connect(mongo Url, (err, client) => {
+    mongo.connect(mongourl, (err, client) => {
         if (err) {
             printErr(err, "Connection to mongo failed for creating Team");
             client.close();
@@ -81,7 +81,7 @@ exports.createTeam = function createTeam(req, res) {
 exports.joinTeam = function joinTeam() {
     console.log('[', (new Date()).toLocaleTimeString(), "] Team joining");
     
-    mongo.connect(mongo Url, (err, client) => {
+    mongo.connect(mongourl, (err, client) => {
         if (err) {
             printErr(err, "Connection to mongo failed for joining Team");
             client.close();
@@ -112,10 +112,10 @@ exports.joinTeam = function joinTeam() {
 }
 
 // removes a user from the members list, deletes the team if it 
-exports.leaveTeam = leaveTeam (req, res) {
+exports.leaveTeam = function leaveTeam (req, res) {
     console.log('[', (new Date()).toLocaleTimeString(), "] Team leaving");
     
-    mongo.connect(mongo Url, (err, client) => {
+    mongo.connect(mongourl, (err, client) => {
         if (err) {
             printErr(err, "Connection to mongo failed for leaving Team");
             client.close();
@@ -135,6 +135,11 @@ exports.leaveTeam = leaveTeam (req, res) {
                 client.close();
                 return;
             }
+            if (result == null)
+            {
+                console.log ("Team \"",req.body.teamName, "\" not found. Unable to leave");
+            }
+
             
             let team = result.value;
             if (team.captain == req.body.user) {

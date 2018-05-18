@@ -6,6 +6,7 @@ const bodyParser=require("body-parser");
 const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
 const gamepage=require("./src/server/gamepage.js");
+const teams=require("./src/server/teams.js");
 const fs=require("fs");
 const busboy=require("connect-busboy");
 
@@ -29,6 +30,15 @@ app.get("*",(req,res)=>{
   res.sendFile(__dirname+"/dist/index.html");
   console.log('[', (new Date()).toLocaleTimeString(), "] Main file sending");
 });
+
+// --------------- Team related requests --------------
+app.post("/postteam", teams.createTeam);
+app.post("/retrieveteams", teams.getTeams);
+app.post("/jointeam", teams.joinTeam);
+app.patch("/team", teams.leaveTeam);
+
+
+// --------------- User relate requests ---------------
 app.post("/user",(req,res)=>{
 	mkprofile.getUsers(req.body.user,res);
 });
@@ -109,7 +119,7 @@ app.post("/join", (req, res) =>
     var newPlayer = { $push: {players: req.body.uid} };
 
     console.log("user: ", req.body.uid);
-    var userQuery = {username: req.body.uid, games {$nin: [req.body.gid]}};
+    var userQuery = {username: req.body.uid, games: {$nin: [req.body.gid]}};
     var joinedGame = {$push: {games: req.body.gid}};
     client.db("pickup").collection("users").update(userQuery, joinedGame);
 

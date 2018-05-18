@@ -12,12 +12,6 @@ const GUEST = "guest";
 class TeamPage extends React.Component{
 
 
-
-    componentDidMount() {
-        console.log("rendered")
-    }
-
-
     render(){
         return(
             <div>
@@ -98,7 +92,7 @@ class TeamCreate extends React.Component{
               					<form className="form-horizontal"
                           onSubmit={this.addTeam.bind(this)}>
                                     <div className="form-group">
-              							<label className="cols-sm-2 control-label">Activity</label>
+              							<label className="cols-sm-2 control-label">Team Name</label>
               							<div className="cols-sm-10">
               								<div className="input-group">
               									<span className="input-group-addon"></span>
@@ -234,7 +228,7 @@ class TeamTable extends React.Component {
       <tbody>
 	      {
             this.state.filteredTeams.map((team)=>{
-                return (<TeamRow team = {team} user={this.props.user}/>);
+                return (<TeamRow team = {team} user={this.props.user} key={team.name}/>);
             })
          }
 	  </tbody>
@@ -246,14 +240,14 @@ class TeamTable extends React.Component {
 
 }
 
-export class Team extends React.Component {
+export class TeamRow extends React.Component {
 
   joinTeam()
   {
     axios.post('/jointeam', {user:this.props.user, teamName:this.props.team.name});
   }
-  leaveGame(){
-    axios.patch('/team', {user:this.props.user, teanName:this.props.team.name});
+  leaveTeam(){
+    axios.patch('/team', {user:this.props.user, teamName:this.props.team.name});
   }
 
 
