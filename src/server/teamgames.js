@@ -187,10 +187,13 @@ exports.deleteGameT=(req,res)=>
 exports.retrievePlayerTeams=(req,res)=>{
   mongo.connect(mongoUrl,(err,client)=>{
     if(err)throw new Error(err);
-    db=client.db("pickup");
-    db.collection("users").find({"username":req.body.user}).toArray((player)=>{
+    var db=client.db("pickup");
+    db.collection("users").find({"username":req.body.user}).toArray((err,player)=>{
+      if(err)throw new Error(err);
       const teams=player[0]["teams"];
-      db.collection("teams").find({name: {$in:teams}}).toArray((teams)=>{
+      console.log(player[0]["teams"]);
+      db.collection("teams").find({name: {$in:teams}}).toArray((err,teams)=>{
+        if(err)throw new Error(err);
         res.json(teams);
         client.close();
       });

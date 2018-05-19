@@ -65,7 +65,7 @@ signUp(){
           "pic":"",
           "games":[],
           "teamgames":[],
-          "teams",
+          "teams":[],
           "friends":[],
           "feed":[]
         }

@@ -16,6 +16,7 @@ export class CurrentTeamGames extends React.Component{
             game: {},
             isprivate:false
         };
+        this.playerteams=[];
         this.addGame = this.addGame.bind(this);
         this.togglePrivate=this.togglePrivate.bind(this);
     }
@@ -23,7 +24,18 @@ export class CurrentTeamGames extends React.Component{
            let input = document.getElementById('location');
            this.autocomplete = new google.maps.places.Autocomplete(input);
     }
-
+    componentWillMount(){
+      axios({
+        method:"post",
+        url:"/retrieveplayerteams",
+        data:{
+          user:localStorage.getItem("user")
+        }
+      }).then((res)=>{
+        this.playerteams=res.data;
+        console.log(this.playerteams);
+      })
+    }
 
 
 

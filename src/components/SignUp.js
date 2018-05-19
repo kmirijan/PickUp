@@ -56,6 +56,7 @@ signUp(){
           "pic":"/profilepictures/0defaultprofile.jpg",
           "games":[],
           "teamgames":[],
+          "teams":[],
           "friends":[],
           "feed":[]
         }
