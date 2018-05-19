@@ -99,7 +99,7 @@ exports.postGamesT= (req, res) =>
     isprivate:makeValid(req.body.isprivate),
     id: makeValid(req.body.gameId),
     owner: makeValid(req.body.user),
-    players: [makeValid(req.body.user),],
+    teams: [makeValid(req.body.team),],
     coords: req.body.coords,
   };
 
@@ -148,7 +148,7 @@ exports.retrieveGamesT=(req, res) =>
 };
 
 //redo
-exports.gamesT=(req, res) => {
+exports.leavegameT=(req, res) => {
   console.log('patch: ', req.body);
 
   Game.findOneAndUpdate(

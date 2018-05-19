@@ -8,49 +8,84 @@ const GUEST = "guest";
 
 export class CurrentTeamGames extends React.Component{
 
-
-
     constructor(props) {
         super(props);
         this.state = {
             game: {},
-            isprivate:false
+            isprivate:false,
+            playerteams:[],
+            toggleTeamDropDown:false,
+            teamselected:""
         };
-        this.playerteams=[];
         this.addGame = this.addGame.bind(this);
         this.togglePrivate=this.togglePrivate.bind(this);
+        this.selectTeam=this.selectTeam.bind(this);
+        this.teamDropDown=this.teamDropDown.bind(this);
+        this.dropTeam=this.dropTeam.bind(this);
+        this.ownedteams=[];
+        axios({
+          method:"post",
+          url:"/retrieveplayerteams",
+          data:{
+            user:localStorage.getItem("user")
+          }
+        }).then((res)=>{
+          this.playerteams=res.data;
+          console.log(this.playerteams);
+        })
     }
     componentDidMount() {
-           let input = document.getElementById('location');
-           this.autocomplete = new google.maps.places.Autocomplete(input);
+       let input = document.getElementById('location');
+       this.autocomplete = new google.maps.places.Autocomplete(input);
+       axios({
+         method:"post",
+         url:"/retrieveplayerteams",
+         data:{
+           user:localStorage.getItem("user")
+         }
+       }).then((res)=>{
+         this.setState({
+           playerteams:res.data
+         })
+         console.log(this.playerteams);
+       })
     }
-    componentWillMount(){
-      axios({
-        method:"post",
-        url:"/retrieveplayerteams",
-        data:{
-          user:localStorage.getItem("user")
-        }
-      }).then((res)=>{
-        this.playerteams=res.data;
-        console.log(this.playerteams);
+    selectTeam(team){
+      if(confirm("select "+team["name"]+"?")){
+        this.setState({
+          teamselected:team
+        })
+      }
+    }
+    dropTeam(){
+      if(this.state.toggleTeamDropDown==false){
+        this.setState({
+          toggleTeamDropDown:true
+        })
+      }
+      else{
+        this.setState({
+          toggleTeamDropDown:false
+        })
+      }
+    }
+    teamDropDown(){
+      if(this.state.toggleTeamDropDown==false){
+        return;
+      }
+      if(this.ownedteams.length==0){
+        return(<div>You have no teams</div>);
+      }
+      const teams=this.ownedteams.map((team)=>{
+        return(
+          <div className="team" key={"team:"+team["name"]}>
+            <div><h3>{team["name"]}</h3></div>
+            <button onClick={()=>{this.selectTeam(team)}}>select</button>
+          </div>
+        )
       })
+      return teams;
     }
-
-
-
-    getName()
-    {
-        if (this.props.user != GUEST)
-        {
-            return this.props.user;
-        }
-        else
-        {
-            return this.refs.name.value;
-        }
-    }
-
     getName()
     {
         if (this.props.user != GUEST)
@@ -65,10 +100,15 @@ export class CurrentTeamGames extends React.Component{
 
     addGame(event) {
         event.preventDefault();
+        if(this.state.teamselected==""){
+          alert("select a team");
+          return;
+        }
         let sport = this.refs.sport.value;
         let name = this.getName();
         let location = this.refs.location.value;
         let isprivate = this.state.isprivate;
+        let team = this.state.teamselected;
         let coords = this.autocomplete.getPlace().geometry.location;
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let game = {
@@ -78,6 +118,7 @@ export class CurrentTeamGames extends React.Component{
             isprivate:isprivate,
             location: location,
             user: localStorage.getItem("user"),
+            teams:[team],
             coords: {
                 lat: coords.lat(),
                 lng: coords.lng()
@@ -125,7 +166,9 @@ export class CurrentTeamGames extends React.Component{
     }
 
     render(){
-
+        this.ownedteams=this.state.playerteams.filter((team)=>{
+          return(team["captain"]==this.props.user)
+        })
         return(
             <div>
                 <NavBar/>
@@ -152,7 +195,15 @@ export class CurrentTeamGames extends React.Component{
                      type="checkbox"
                      ref="isprivate"
                      onChange={this.togglePrivate}/>
-
+                     <button
+                     onClick={()=>{this.dropTeam()}}
+                     className='gameDetails'
+                     id= 'team select'
+                     ref="team select"
+                     >select team</button>
+                     <div>
+                      {this.teamDropDown()}
+                     </div>
                     <div className="App-submitButton">
                         <input type="submit" value="Submit"/>
                     </div>
@@ -162,7 +213,7 @@ export class CurrentTeamGames extends React.Component{
                 <h1 className="App-currentGames">
                 Below are the currently available games:
                 </h1>
-            <GameTable user={this.props.user} />
+            <GameTable user={this.props.user} ownedgames={this.ownedgames}/>
             </div>
         );
 
@@ -248,7 +299,7 @@ class GameTable extends React.Component{
       <tbody>
 	      {
             this.state.filteredGames.map((game)=>{
-                return (<Game userGames={this.props.userGames} game = {game} user={this.props.user} key={game.id} />);
+                return (<Game ownedgames={this.props.ownedgames} game = {game} user={this.props.user} key={game.id} />);
             })
          }
 	  </tbody>
@@ -263,30 +314,121 @@ class GameTable extends React.Component{
 class Game extends React.Component {
   constructor(props){
     super(props);
-    this.showTeamGames=this.showTeamGames.bind(this);
+    this.showTeamGamesJoin=this.showTeamGamesJoin.bind(this);
+    this.showTeamGamesLeave=this.showTeamGamesLeave.bind(this);
+    this.state={
+      showDropDownJoin:false,
+      showDropDownLeave:false
+    }
+    this.ownedteams=[];
   }
   joinGame()
   {
-    axios.post('/joinT', {uid:this.props.user, gid:this.props.game.id});
+    //axios.post('/joinT', {uid:this.props.user, gid:this.props.game.id});
+    if(this.state.showDropDownJoin==false){
+      this.setState({
+      showDropDownJoin:true
+      })
+    }
+    else{
+      this.setState({
+        showDropDownJoin:false
+      })
+    }
   }
   leaveGame(){
-    axios.patch('/gamesT', {uid:this.props.user, gid:this.props.game.id});
+    //axios.patch('/gamesT', {uid:this.props.user, gid:this.props.game.id});
+    if(this.state.showDropDownLeave==false){
+      this.setState({
+      showDropDownLeave:true
+      })
+    }
+    else{
+      this.setState({
+        showDropDownLeave:false
+      })
+    }
   }
-  showTeamGames(){
-
+  showTeamGamesJoin(){
+    if(this.state.showDropDownJoin==false){
+      return;
+    }
+    if(this.props.ownedteams.length==0){
+      return(<div>You have no teams</div>);
+    }
+    const teams=this.ownedteams.map((team)=>{
+      return(
+        <div className="team" key={"team:"+team["name"]}>
+          <div><h3>{team["name"]}</h3></div>
+          <button onClick={()=>{this.selectTeamJoin(team)}}>select</button>
+        </div>
+      )
+    })
+    return teams;
+  }
+  selectTeamJoin(team){
+    /*
+    if(confirm("join with "+team["name"]+"?")){
+      axios({
+        url:"/joinT",
+        method:post,
+        data:{
+          team:team,
+          game:this.props.game
+        }
+      })
+    }
+    */
+  }
+  selectTeamLeave(team){
+    /*
+    if(confirm("leave with "+team["name"]+"?")){
+      axios({
+        url:"/leavegameT",
+        method:post,
+        data:{
+          team:team,
+          game:this.props.game
+        }
+      })
+    }
+    */
+  }
+  showTeamGamesLeave(){
+    if(this.state.showDropDownLeave==false){
+      return;
+    }
+    if(this.props.ownedteams.length==0){
+      return(<div>You have no teams</div>);
+    }
+    const teams=this.ownedteams.map((team)=>{
+      return(
+        <div className="team" key={"team:"+team["name"]}>
+          <button onClick={()=>{this.selectTeamLeave(team)}}>select</button>
+          <div><h3>{team["name"]}</h3></div>
+        </div>
+      )
+    })
+    return teams;
   }
 
   render(){
+
     return(
         <tr>
           <td ><h3>{this.props.game.sport} </h3></td>
           <td ><h3>{this.props.game.name} </h3></td>
           <td > <h3>{this.props.game.location}</h3> </td>
-          <td><button className="joinGame" onClick={this.joinGame.bind(this)}><h3>Join</h3></button></td>
+          <td>
+            <button className="joinGame" onClick={this.joinGame.bind(this)}><h3>Join</h3></button>
+            <div className="dropdown">
+              {this.showTeamGamesJoin()}
+            </div>
+          </td>
           <td>
             <button className="leaveGame" onClick={this.leaveGame.bind(this)}><h3>Leave</h3></button>
-            <div>
-              {this.showTeamGames()}
+            <div className="dropdown">
+              {this.showTeamGamesLeave()}
             </div>
           </td>
           <td > <h3>{this.props.game.players.length}</h3> </td>
