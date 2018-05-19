@@ -321,6 +321,9 @@ app.patch('/gamesT', (req, res) => {
 app.post("/deletegameT",(req,res)=>{
   teamgames.deleteGameT(req,res);
 });
+app.post("/retrieveplayerteams",(req,res)=>{
+  teamgames.retrievePlayerTeams(req,res);
+})
 
 
 
