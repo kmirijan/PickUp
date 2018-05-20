@@ -101,7 +101,10 @@ export class CurrentTeamGames extends React.Component{
 
     addGame(event) {
         event.preventDefault();
-
+        if(this.state.teamselected==null){
+          alert("select a team");
+          return;
+        }
         let sport = this.refs.sport.value;
         let name = this.getName();
         let location = this.refs.location.value;
@@ -127,7 +130,7 @@ export class CurrentTeamGames extends React.Component{
           url:'/postgamesT',
           method:"post",
           data:{
-            game
+            game:game
           }
           }).then( () =>
                 {alert("Game added. It will appear upon refreshing the games table")});
@@ -372,7 +375,7 @@ class Game extends React.Component {
     }
     const teams=this.props.ownedteams.map((team)=>{
       return(
-        <div className="team" key={"team:"+team["name"]}>
+        <div className="team" key={"teamjoin:"+team["name"]}>
           <div><h3>{team["name"]}</h3></div>
           <button onClick={()=>{this.selectTeamJoin(team)}}>select</button>
         </div>
@@ -413,7 +416,7 @@ class Game extends React.Component {
     }
     const teams=this.props.ownedteams.map((team)=>{
       return(
-        <div className="team" key={"team:"+team["name"]}>
+        <div className="team" key={"teamleave:"+team["name"]}>
           <button onClick={()=>{this.selectTeamLeave(team)}}>select</button>
           <div><h3>{team["name"]}</h3></div>
         </div>

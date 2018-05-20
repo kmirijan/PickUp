@@ -20,7 +20,7 @@ exports.joinT=(req, res) =>
   {
     var collection = client.db("pickup").collection("teamgames");
     var query = {id: req.body.game.id, teams: { $nin: [req.body.team] } };
-    var newTeam = { $push: {teams: req.body.team.id} };
+    var newTeam = { $push: {teams: req.body.team.name} };
 
     console.log("team: ", req.body.team.name);
     var userQuery = {username: {$in:req.body.team.members}};
@@ -92,14 +92,14 @@ exports.postGamesT= (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
   var game = {
-    sport: makeValid(req.body.sport),
-    name: makeValid(req.body.name),
-    location: makeValid(req.body.location),
-    isprivate:makeValid(req.body.isprivate),
-    id: makeValid(req.body.gameId),
-    owner: makeValid(req.body.user),
-    teams: makeValid(req.body.teams),
-    coords: req.body.coords,
+    sport: makeValid(req.body.game.sport),
+    name: makeValid(req.body.game.name),
+    location: makeValid(req.body.game.location),
+    isprivate:makeValid(req.body.game.isprivate),
+    id: makeValid(req.body.game.gameId),
+    owner: makeValid(req.body.game.user),
+    teams: makeValid(req.body.game.teams),
+    coords: req.body.game.coords,
   };
 
 
@@ -148,6 +148,7 @@ exports.retrieveGamesT=(req, res) =>
 
 //redo
 //leave game way to identifying
+//if no teams exist, delete game
 exports.leaveGameT=(req, res) => {
   mongo.connect(mongoUrl,(err,client)=>{
     if(err) throw new Error(err);
