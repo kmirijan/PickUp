@@ -12,22 +12,22 @@ const bcrypt=require("bcrypt");
 const makeValid = (obj) => {return obj != null ? obj : "";};
 var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
-exports.jointT=(req, res) =>
+exports.joinT=(req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game joined");
 
   mongo.connect(mongoUrl, (err, client) =>
   {
     var collection = client.db("pickup").collection("teamgames");
-    var query = {id: req.body.gid, players: { $nin: [req.body.uid] } };
-    var newPlayer = { $push: {players: req.body.uid} };
+    var query = {id: req.body.game.id, teams: { $nin: [req.body.team] } };
+    var newTeam = { $push: {teams: req.body.team.id} };
 
-    console.log("user: ", req.body.uid);
-    var userQuery = {username: req.body.uid};
-    var joinedGame = {$push: {teamgames: req.body.gid}};
+    console.log("team: ", req.body.team.name);
+    var userQuery = {username: {$in:req.body.team.members}};
+    var joinedGame = {$push: {teamgames: req.body.game.id}};
     client.db("pickup").collection("users").update(userQuery, joinedGame);
 
-    collection.update(query, newPlayer, (err) =>
+    collection.update(query, newTeam, (err) =>
     {
       if (err) throw err;
       client.close();
@@ -91,7 +91,6 @@ exports.userGamesT=(req, res) => {
 exports.postGamesT= (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
-
   var game = {
     sport: makeValid(req.body.sport),
     name: makeValid(req.body.name),
@@ -99,7 +98,7 @@ exports.postGamesT= (req, res) =>
     isprivate:makeValid(req.body.isprivate),
     id: makeValid(req.body.gameId),
     owner: makeValid(req.body.user),
-    teams: [makeValid(req.body.team),],
+    teams: makeValid(req.body.teams),
     coords: req.body.coords,
   };
 
@@ -148,23 +147,16 @@ exports.retrieveGamesT=(req, res) =>
 };
 
 //redo
-exports.leavegameT=(req, res) => {
-  console.log('patch: ', req.body);
-
-  Game.findOneAndUpdate(
-    {'id': req.body.gid},
-    {$pull: {players : req.body.uid}},
-    {new: true}
-  )
-  .then((game) =>{
-    console.log('length: ', game.players.length)
-    console.log('req: ', req.body);
-    if(game.players.length === 0){
-      game.remove();
-    }
-    res.status(200).send({game});
-  }).catch((e) => {
-    res.status(400).send(e);
+//leave game way to identifying
+exports.leaveGameT=(req, res) => {
+  mongo.connect(mongoUrl,(err,client)=>{
+    if(err) throw new Error(err);
+    var db=client.db("pickup");
+    db.collection("teamgames").update({id:req.body.game.id},{
+        $pull:{
+          teams:req.body.team.name
+        }
+    })
   })
 }
 

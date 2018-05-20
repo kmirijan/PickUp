@@ -316,7 +316,7 @@ app.post("/retrievegamesT", (req, res) =>{
   teamgames.retrieveGamesT(req,res);
 });
 app.post('/leavegameT', (req, res) => {
-  teamgames.leavegameT(req,res);
+  teamgames.leaveGameT(req,res);
 })
 app.post("/deletegameT",(req,res)=>{
   teamgames.deleteGameT(req,res);

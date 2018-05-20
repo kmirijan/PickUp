@@ -15,7 +15,7 @@ export class CurrentTeamGames extends React.Component{
             isprivate:false,
             playerteams:[],
             toggleTeamDropDown:false,
-            teamselected:""
+            teamselected:null
         };
         this.addGame = this.addGame.bind(this);
         this.togglePrivate=this.togglePrivate.bind(this);
@@ -23,6 +23,7 @@ export class CurrentTeamGames extends React.Component{
         this.teamDropDown=this.teamDropDown.bind(this);
         this.dropTeam=this.dropTeam.bind(this);
         this.ownedteams=[];
+        this.teamSelected=this.teamSelected.bind(this);
         axios({
           method:"post",
           url:"/retrieveplayerteams",
@@ -100,10 +101,7 @@ export class CurrentTeamGames extends React.Component{
 
     addGame(event) {
         event.preventDefault();
-        if(this.state.teamselected==""){
-          alert("select a team");
-          return;
-        }
+
         let sport = this.refs.sport.value;
         let name = this.getName();
         let location = this.refs.location.value;
@@ -118,14 +116,20 @@ export class CurrentTeamGames extends React.Component{
             isprivate:isprivate,
             location: location,
             user: localStorage.getItem("user"),
-            teams:[team],
+            teams:[team.name],
             coords: {
                 lat: coords.lat(),
                 lng: coords.lng()
             },
         };
         console.log(game);
-        axios.post('/postgamesT', game).then( () =>
+        axios({
+          url:'/postgamesT',
+          method:"post",
+          data:{
+            game
+          }
+          }).then( () =>
                 {alert("Game added. It will appear upon refreshing the games table")});
         this.refs.sport.value='';
         this.refs.name.value='';
@@ -164,7 +168,14 @@ export class CurrentTeamGames extends React.Component{
             );
         }
     }
-
+    teamSelected(){
+      if(this.state.teamselected==null){
+        return(<h3>No team selected</h3>)
+      }
+      else{
+        return(<h3>{this.state.teamselected.name}</h3>)
+      }
+    }
     render(){
         this.ownedteams=this.state.playerteams.filter((team)=>{
           return(team["captain"]==this.props.user)
@@ -172,6 +183,18 @@ export class CurrentTeamGames extends React.Component{
         return(
             <div>
                 <NavBar/>
+                <button
+                onClick={()=>{this.dropTeam()}}
+                className='gameDetails'
+                id= 'team select'
+                ref="team select"
+                >select team</button>
+                <div>
+                  team selected:{this.teamSelected()}
+                </div>
+                <div>
+                 {this.teamDropDown()}
+                </div>
                 <form
                 className="form-inline"
                 onSubmit={this.addGame.bind(this)}
@@ -195,15 +218,6 @@ export class CurrentTeamGames extends React.Component{
                      type="checkbox"
                      ref="isprivate"
                      onChange={this.togglePrivate}/>
-                     <button
-                     onClick={()=>{this.dropTeam()}}
-                     className='gameDetails'
-                     id= 'team select'
-                     ref="team select"
-                     >select team</button>
-                     <div>
-                      {this.teamDropDown()}
-                     </div>
                     <div className="App-submitButton">
                         <input type="submit" value="Submit"/>
                     </div>
@@ -213,7 +227,7 @@ export class CurrentTeamGames extends React.Component{
                 <h1 className="App-currentGames">
                 Below are the currently available games:
                 </h1>
-            <GameTable user={this.props.user} ownedgames={this.ownedgames}/>
+            <GameTable user={this.props.user} ownedteams={this.ownedteams}/>
             </div>
         );
 
@@ -299,7 +313,7 @@ class GameTable extends React.Component{
       <tbody>
 	      {
             this.state.filteredGames.map((game)=>{
-                return (<Game ownedgames={this.props.ownedgames} game = {game} user={this.props.user} key={game.id} />);
+                return (<Game ownedteams={this.props.ownedteams} game = {game} user={this.props.user} key={game.id} />);
             })
          }
 	  </tbody>
@@ -356,7 +370,7 @@ class Game extends React.Component {
     if(this.props.ownedteams.length==0){
       return(<div>You have no teams</div>);
     }
-    const teams=this.ownedteams.map((team)=>{
+    const teams=this.props.ownedteams.map((team)=>{
       return(
         <div className="team" key={"team:"+team["name"]}>
           <div><h3>{team["name"]}</h3></div>
@@ -367,32 +381,28 @@ class Game extends React.Component {
     return teams;
   }
   selectTeamJoin(team){
-    /*
     if(confirm("join with "+team["name"]+"?")){
       axios({
         url:"/joinT",
-        method:post,
+        method:"post",
         data:{
           team:team,
           game:this.props.game
         }
       })
     }
-    */
   }
   selectTeamLeave(team){
-    /*
     if(confirm("leave with "+team["name"]+"?")){
       axios({
         url:"/leavegameT",
-        method:post,
+        method:"post",
         data:{
           team:team,
           game:this.props.game
         }
       })
     }
-    */
   }
   showTeamGamesLeave(){
     if(this.state.showDropDownLeave==false){
@@ -401,7 +411,7 @@ class Game extends React.Component {
     if(this.props.ownedteams.length==0){
       return(<div>You have no teams</div>);
     }
-    const teams=this.ownedteams.map((team)=>{
+    const teams=this.props.ownedteams.map((team)=>{
       return(
         <div className="team" key={"team:"+team["name"]}>
           <button onClick={()=>{this.selectTeamLeave(team)}}>select</button>
@@ -413,11 +423,10 @@ class Game extends React.Component {
   }
 
   render(){
-
     return(
         <tr>
           <td ><h3>{this.props.game.sport} </h3></td>
-          <td ><h3>{this.props.game.name} </h3></td>
+          <td ><h3>{this.props.game.owner} </h3></td>
           <td > <h3>{this.props.game.location}</h3> </td>
           <td>
             <button className="joinGame" onClick={this.joinGame.bind(this)}><h3>Join</h3></button>
@@ -431,7 +440,7 @@ class Game extends React.Component {
               {this.showTeamGamesLeave()}
             </div>
           </td>
-          <td > <h3>{this.props.game.players.length}</h3> </td>
+          <td > <h3>{this.props.game.teams.length}</h3> </td>
           <td><Link to={"/tgame:"+this.props.game.id}><h3>Details</h3></Link></td>
         </tr>
     );
