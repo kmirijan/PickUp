@@ -40,28 +40,16 @@ export class CurrentGames extends React.Component{
         }
     }
 
-    getName()
-    {
-        if (this.props.user != GUEST)
-        {
-            return this.props.user;
-        }
-        else
-        {
-            return this.refs.name.value;
-        }
-    }
-
     addGame(event) {
         event.preventDefault();
-        let sport = this.refs.sport.value;
+        let sport = this.refs.sport.getInput;
         let name = this.getName();
-        let location = this.refs.location.value;
+        let location = this.refs.location.getInput();
         let isprivate = this.state.isprivate;
         let coords = this.autocomplete.getPlace().geometry.location;
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let startTime = (new Date()).getTime();
-        let gameLength = 60*60*1000; // expected length of game in milliseconds
+        let gameLength = this.refs.gameLength.getInput(); // expected length of game in milliseconds
         let game = {
             gameId: id,
             sport: sport,
@@ -133,31 +121,11 @@ export class CurrentGames extends React.Component{
               					<form className="form-horizontal"
                           onSubmit={this.addGame.bind(this)}>
                           {this.displayNameInput()}
+                                    
 
-              						<div className="form-group">
-              							<label className="cols-sm-2 control-label">Activity</label>
-              							<div className="cols-sm-10">
-              								<div className="input-group">
-              									<span className="input-group-addon"></span>
-              									<input className='gameDetails form-control' type="text"  type="text"
-                                ref="sport"
-                                placeholder="Activity"/>
-              								</div>
-              							</div>
-              						</div>
-
-                          <div className="form-group">
-              							<label className="cols-sm-2 control-label">Location</label>
-              							<div className="cols-sm-10">
-              								<div className="input-group">
-              									<span className="input-group-addon"></span>
-              									<input className='gameDetails form-control' type="text"  type="text"
-                                  id= 'location'
-                                  ref="location"
-                                  placeholder="Location"/>
-              								</div>
-              							</div>
-              						</div>
+                                    <GameInputField label="Activity" ref="sport" placeholder="Activity" />
+                                    <GameInputField label="Location" ref="location" id='location' placeholder="Location" />
+              				        <GameInputField label="Game Length(Hours)" ref="gameLength" placeholder="Hours" />
 
 
                           <div className="form-group">
@@ -186,4 +154,29 @@ export class CurrentGames extends React.Component{
         );
 
     }
+}
+
+
+class GameInputField extends React.Component {
+
+    getInput()
+    {
+        return this.refs.input.value;
+    }
+    
+    render()
+    {
+        <div className="form-group">
+        	<label className="cols-sm-2 control-label">{this.props.label}</label>
+                <div className="cols-sm-10">
+        			<div className="input-group">
+        				<span className="input-group-addon"></span>
+          				<input className='gameDetails form-control' type="text"  type="text"
+                                ref="input"
+                                {...props}/>
+        			</div>
+            	</div>
+        </div>
+    }
+
 }
