@@ -7,6 +7,7 @@ const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
 const gamepage=require("./src/server/gamepage.js");
 const teams=require("./src/server/teams.js");
+const timedRemove=require("./src/server/timedRemove.js");
 const teamgames=require("./src/server/teamgames.js");
 const fs=require("fs");
 const busboy=require("connect-busboy");
@@ -206,6 +207,8 @@ app.post("/postgames", (req, res) =>
     owner: makeValid(req.body.user),
     players: [makeValid(req.body.user),],
     coords: req.body.coords,
+    startTime: req.body.startTime,
+    endTime: req.body.startTime + req.body.gameLength
   };
 
 
@@ -326,7 +329,6 @@ app.post("/retrieveplayerteams",(req,res)=>{
 })
 
 
-
 /*deploy app*/
 const port=process.env.PORT;
 app.listen(port,()=>{
@@ -334,5 +336,9 @@ app.listen(port,()=>{
     console.log(process.env.NODE_ENV);
     console.log(process.env.MONGODB_URI);
 });
+
+// interval in milliseconds
+var removeInterval = 60*1000;
+setInterval(timedRemove.removeExpiredGames, removeInterval, mongoUrl);
 
 module.exports = {app};

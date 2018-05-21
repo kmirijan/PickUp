@@ -60,6 +60,8 @@ export class CurrentGames extends React.Component{
         let isprivate = this.state.isprivate;
         let coords = this.autocomplete.getPlace().geometry.location;
         let id = Math.floor((Math.random()*(1 << 30))+1);
+        let startTime = (new Date()).getTime();
+        let gameLength = 60*60*1000; // expected length of game in milliseconds
         let game = {
             gameId: id,
             sport: sport,
@@ -71,9 +73,10 @@ export class CurrentGames extends React.Component{
                 lat: coords.lat(),
                 lng: coords.lng()
             },
+            startTime: startTime,
+            gameLength: gameLength,
         };
-        axios.post('/postgames', game).then( () =>
-                {alert("Game added. It will appear upon refreshing the games table")});
+        axios.post('/postgames', game)
         this.refs.sport.value='';
         this.refs.name.value='';
         this.refs.location.value='';
