@@ -21,10 +21,9 @@ exports.removeExpiredGames = function removeExpiredGames(mongoUrl) {
                 console.log(err);
             }
             
-            if (results != null)
+            if (results.deletedCount != 0)
             {
-                console.log("Expired games deleted:");
-                console.log(results, "\nExpiredGames\n");
+                console.log('[', (new Date()).toLocaleTimeString(), "] ", results.deletedCount, " expired games deleted");
             }
         
         });

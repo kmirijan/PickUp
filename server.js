@@ -339,6 +339,7 @@ app.listen(port,()=>{
 
 // interval in milliseconds
 var removeInterval = 60*1000;
+timedRemove.removeExpiredGames(mongoUrl); // do it immedieately just to make sure
 setInterval(timedRemove.removeExpiredGames, removeInterval, mongoUrl);
 
 module.exports = {app};
