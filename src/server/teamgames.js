@@ -145,6 +145,17 @@ exports.retrieveGamesT=(req, res) =>
   });
 
 };
+exports.retrieveSpecificGamesT=(req,res)=>{
+  mongo.connect(mongoUrl,(err,client)=>{
+    if(err)throw new Error(err);
+    client.db("pickup").collection("teamgames").find({id:Number(req.body.id)}).toArray((err,arr)=>{
+      if(err)throw new Error(err);
+      res.json(arr);
+      res.end();
+      client.close();
+    })
+  })
+}
 
 //redo
 //leave game way to identifying

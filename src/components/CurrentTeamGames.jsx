@@ -387,7 +387,7 @@ class Game extends React.Component {
     if(confirm("join with "+team["name"]+"?")){
       axios({
         url:"/joinT",
-        method:"post",
+        method:"patch",
         data:{
           team:team,
           game:this.props.game
@@ -399,7 +399,7 @@ class Game extends React.Component {
     if(confirm("leave with "+team["name"]+"?")){
       axios({
         url:"/leavegameT",
-        method:"post",
+        method:"patch",
         data:{
           team:team,
           game:this.props.game

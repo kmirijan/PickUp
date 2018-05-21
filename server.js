@@ -11,13 +11,39 @@ const teamgames=require("./src/server/teamgames.js");
 const fs=require("fs");
 const busboy=require("connect-busboy");
 const util = require('util')
+const app=express();
+const http=require("http").Server(app);
+
+const port=process.env.PORT;
+http.listen(port,()=>{
+    console.log(port);
+    console.log(process.env.NODE_ENV);
+    console.log(process.env.MONGODB_URI);
+});
+
+const io=require("socket.io")(http);
+//socket.io----------------------------------
+io.on('connection',(socket)=>{
+  console.log("someone joined");
+  socket.on("send",(m)=>{
+    console.log(m);
+    let messageWithTime={
+      sender:m["sender"],
+      message:m["message"],
+      time:(new Date()).toLocaleTimeString()
+    }
+    io.emit("message",messageWithTime)
+  })
+});
+
 
 
 var {Game} = require('./db/game.js');
 
 //var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
-const app=express();
+
+
 /*configurations*/
 app.use(express.static("./dist"));
 app.use(bodyParser.json());
@@ -300,7 +326,7 @@ app.post("/deletegame",(req,res)=>
 
 });
 
-app.post("/joinT", (req, res) =>{
+app.patch("/joinT", (req, res) =>{
   teamgames.joinT(req,res);
 });
 app.post("/nearbygamesT", (req, res) => {
@@ -315,7 +341,10 @@ app.post("/postgamesT", (req, res) =>{
 app.post("/retrievegamesT", (req, res) =>{
   teamgames.retrieveGamesT(req,res);
 });
-app.post('/leavegameT', (req, res) => {
+app.post("/retrievespecificgamesT",(req,res)=>{
+  teamgames.retrieveSpecificGamesT(req,res);
+})
+app.patch('/leavegameT', (req, res) => {
   teamgames.leaveGameT(req,res);
 })
 app.post("/deletegameT",(req,res)=>{
@@ -328,11 +357,7 @@ app.post("/retrieveplayerteams",(req,res)=>{
 
 
 /*deploy app*/
-const port=process.env.PORT;
-app.listen(port,()=>{
-    console.log(port);
-    console.log(process.env.NODE_ENV);
-    console.log(process.env.MONGODB_URI);
-});
+
+
 
 module.exports = {app};
