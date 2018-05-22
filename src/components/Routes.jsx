@@ -125,7 +125,6 @@ class User extends React.Component{
 	render(){
 		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==this.usrnm))
 		{
-			console.log("hello world");
 			return(
 				<div>
 				<NavBar />
