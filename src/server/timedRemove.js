@@ -22,13 +22,15 @@ exports.removeExpiredGames = function removeExpiredGames(mongoUrl) {
                 return;
             }
             
-            if (results != null)
+            if (results.length > 0)
             {
                 let gameIds = [];
-                for (game in results)
+                for (var i = 0; i < results.length; i++)
                 {
-                    gameIds.push(game.id);
+                    gameIds.push(results[i].id);
                 }
+                console.log(results);
+                console.log(gameIds);
                 games.deleteMany({id: {$in: gameIds}}, (err) => {
                     if (err) {
                         console.log("Failed to delete expired games");
