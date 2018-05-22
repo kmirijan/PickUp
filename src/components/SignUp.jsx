@@ -64,6 +64,8 @@ signUp(){
           "bio":"",
           "pic":"",
           "games":[],
+          "teamgames":[],
+          "teams":[],
           "friends":[],
           "feed":[]
         }

@@ -183,3 +183,17 @@ exports.deleteGameT=(req,res)=>
   });
 
 };
+
+exports.retrievePlayerTeams=(req,res)=>{
+  mongo.connect(mongoUrl,(err,client)=>{
+    if(err)throw new Error(err);
+    db=client.db("pickup");
+    db.collection("users").find({"username":req.body.user}).toArray((player)=>{
+      const teams=player[0]["teams"];
+      db.collection("teams").find({name: {$in:teams}}).toArray((teams)=>{
+        res.json(teams);
+        client.close();
+      });
+    })
+  })
+}

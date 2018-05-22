@@ -19,7 +19,7 @@ exports.getTeams = function getTeams(req, res) {
             res.sendStatus(500);
             return;
         }
-        
+
         let teams = client.db("pickup").collection("teams");
         teams.find({}).toArray( (err, results) => {
             if (err)
@@ -34,13 +34,13 @@ exports.getTeams = function getTeams(req, res) {
             }
             client.close();
         });
-    
+
     });
 }
 
 exports.createTeam = function createTeam(req, res) {
     console.log('[', (new Date()).toLocaleTimeString(), "] Team creating");
-    
+
     let team = {
         sport: req.body.sport,
         name: req.body.name,
@@ -59,6 +59,7 @@ exports.createTeam = function createTeam(req, res) {
         }
 
         let teams = client.db("pickup").collection("teams");
+        let users=client.db("pickup").collection("users");
         teams.insertOne(team, (err) => {
             if (err)
             {
@@ -67,20 +68,30 @@ exports.createTeam = function createTeam(req, res) {
             }
             else
             {
-                res.sendStatus(200);
+                users.update({"username":{$in:team["members"]}},{
+                    $push:{"teams":team["name"]}
+                },(err)=>{
+                  if(err){
+                    printErr(err);
+                    res.sendStatus(500);
+                  }
+                  else{
+                    res.sendStatus(200);
+                  }
+                })
+
             }
-            client.close();
         });
-    
+
     });
 
 }
 
 
 // adds the member to the team
-exports.joinTeam = function joinTeam() {
+exports.joinTeam = function joinTeam(req,res) {
     console.log('[', (new Date()).toLocaleTimeString(), "] Team joining");
-    
+
     mongo.connect(mongourl, (err, client) => {
         if (err) {
             printErr(err, "Connection to mongo failed for joining Team");
@@ -88,11 +99,12 @@ exports.joinTeam = function joinTeam() {
             res.sendStatus(500);
             return;
         }
-        
+
         let teamQuery = {name: req.body.teamName};
         let newMember = { $push: {member: req.body.user} }
 
         let teams = client.db("pickup").collection("teams");
+        let users=client.db("pickup").collection("users");
         teams.updateOne(teamQuery, newMember, (err) => {
             if (err)
             {
@@ -101,20 +113,31 @@ exports.joinTeam = function joinTeam() {
             }
             else
             {
-                res.sendStatus(200);
+              users.update({"username":req.body.user},{
+                  $push:{"teams":req.body.teamName}
+              },(err)=>{
+                if(err){
+                  printErr(err);
+                  res.sendStatus(500);
+                }
+                else{
+                  res.sendStatus(200);
+                }
+              })
+
             }
             client.close();
         });
-    
+
     });
 
 
 }
 
-// removes a user from the members list, deletes the team if it 
+// removes a user from the members list, deletes the team if it
 exports.leaveTeam = function leaveTeam (req, res) {
     console.log('[', (new Date()).toLocaleTimeString(), "] Team leaving");
-    
+
     mongo.connect(mongourl, (err, client) => {
         if (err) {
             printErr(err, "Connection to mongo failed for leaving Team");
@@ -122,7 +145,7 @@ exports.leaveTeam = function leaveTeam (req, res) {
             res.sendStatus(500);
             return;
         }
-        
+
         let teamQuery = {name: req.body.teamName};
         let newMember = { $pull: {member: req.body.user} }
 
@@ -140,16 +163,16 @@ exports.leaveTeam = function leaveTeam (req, res) {
                 console.log ("Team \"",req.body.teamName, "\" not found. Unable to leave");
             }
 
-            
+
             let team = result.value;
             if (team.captain == req.body.user) {
                 teams.deleteOne(teamQuery, (err) => {
                     if (err)
-                    {    
+                    {
                         printErr(err, "Deleting captainless team failed");
                         res.sendStatus(500);
-                    } 
-                    else 
+                    }
+                    else
                     {
                         console.log('[', (new Date()).toLocaleTimeString(), "] Deleting team");
                         res.sendStatus(200);
@@ -163,7 +186,7 @@ exports.leaveTeam = function leaveTeam (req, res) {
             }
 
         });
-    
+
     });
 
 
