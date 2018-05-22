@@ -16,6 +16,7 @@ class TeamGamePage extends React.Component{
       game:null
     }
 
+
   }
   componentWillMount(){
     axios({
@@ -31,7 +32,7 @@ class TeamGamePage extends React.Component{
     })
   }
   render(){
-    console.log(this.state.game);
+    console.log("render",this.state.game);
     return(
       <div>
         <NavBar/>

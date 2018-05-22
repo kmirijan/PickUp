@@ -15,109 +15,75 @@ class MapIndiv extends React.Component {
             map : {},
             thisGame:null,
             range : 5, /* miles away from location */
+            users:[]
 
         };
-
-        this.setUserPosition = this.setUserPosition.bind(this);
-        this.markers = [];
-
+        console.log("props",this.props)
+        this.initMap=this.initMap.bind(this);
+        this.setUserPosition=this.setUserPosition.bind(this);
     }
-
-
     componentWillMount() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.setUserPosition);
         }
-
-
     }
-    componentWillReceiveProps(newProps){
-      console.log(newProps);
+    setUserPosition(position,fn){
       this.setState({
-        thisGame:newProps.thisGame
+        userPosition : {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+          }
+      },()=>{
+        var theUsers=this.state.users.slice();
+        this.setState({
+          users:theUsers.push({
+            name:localStorage.getItem("user"),
+            location:this.state.userPosition
+          }
+
+        })
       })
+
     }
-    componentDidMount()
-    {
-
-        if (navigator.geolocation)
-        {
-            // create a google map centered at the user's location
-
-            let center = new google.maps.LatLng(this.state.userPosition.lat,
-                    this.state.userPosition.lng);
-            this.setState({map : new google.maps.Map(this.refs.map,
-                            {center: center, zoom: this.DEFAULT_ZOOM})
-
-
-            });
-            this.setState({
-              thisGame:this.props.thisGame
-            })
-            this.updateMap();
+    initMap() {
+        if(this.state.thisGame==null){
+          console.log("thisGame is null")
+          return;
         }
+        var gameLocation = this.state.thisGame.coords;
 
-
-
-
-    }
-
-    setUserPosition(position) {
-        this.setState({userPosition : {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-            }
+        var map = new google.maps.Map(this.refs.map, {
+          zoom: 4,
+          center: gameLocation
         });
 
-        if (this.state.map != {})
-        {
-            let center = new google.maps.LatLng(this.state.userPosition.lat,
-            this.state.userPosition.lng);
-            this.state.map.panTo(center);
+        var marker = new google.maps.Marker({
+          position: gameLocation,
+          map: map,
+          title: this.state.thisGame.name
+        });
+
+        for(var i=0; i<this.state.users.length; i++){
+          console.log("wonderful",this.state.users[i])
+          var marker = new google.maps.Marker({
+            position: this.state.users[i].location,
+            map: map,
+            title: this.state.users[i].name
+          });
         }
 
     }
-
-
-    MILES_PER_DEGREE = 69;
-
-    updateMap() {
-      let game=this.state.thisGame;
-      console.log("log game",game);
-      if(game==null){
-        return;
-      }
-      console.log("adding markers");
-
-      // add games as markers
-      let position = new google.maps.LatLng(game.coords.lat, game.coords.lng);
-
-      var marker = new google.maps.Marker({position:position, title:game.sport});
-      let content = this.createInfoWindowContent(game);
-      var infoWindow = new google.maps.InfoWindow({
-          content: content
-      });
-      this.markers.push(marker);
-      marker.setMap(this.state.map);
-      marker.addListener('click', () => {infoWindow.open(this.state.map, marker)});
-      console.log("Marker added");
+    componentDidUpdate(){
+      this.initMap();
     }
-
-    createInfoWindowContent(game)
-    {
-        return (
-            '<div id="content">' +
-                '<div id="siteNotice" />' +
-                '<h1 id="firstHeading" class="firstHeading">' + game.sport + '</h1>' +
-                '<div id="bodyContent">' +
-                    '<div>Name: ' + game.name + '</div>' +
-                    '<div>Location: ' + game.location + '</div>' +
-                '</div>' +
-            '</div>'
-
-        );
-
-
+    componentWillReceiveProps(nextProps){
+      console.log("nextprops",nextProps.thisGame)
+      this.setState({
+        thisGame:nextProps.thisGame
+      },()=>{
+        console.log("updated",this.state.thisGame);
+        this.initMap();
+      })
     }
 
     render() {
