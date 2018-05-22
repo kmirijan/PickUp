@@ -90,7 +90,6 @@ exports.createTeam = function createTeam(req, res) {
 
 // adds the member to the team
 exports.joinTeam = function joinTeam(req,res) {
-    console.log('[', (new Date()).toLocaleTimeString(), "] Team joining");
 
     mongo.connect(mongourl, (err, client) => {
         if (err) {
@@ -101,7 +100,7 @@ exports.joinTeam = function joinTeam(req,res) {
         }
 
         let teamQuery = {name: req.body.teamName};
-        let newMember = { $push: {member: req.body.user} }
+        let newMember = { $addToSet: {members: req.body.user} }
 
         let teams = client.db("pickup").collection("teams");
         let users=client.db("pickup").collection("users");
@@ -113,14 +112,15 @@ exports.joinTeam = function joinTeam(req,res) {
             }
             else
             {
-              users.update({"username":req.body.user},{
-                  $push:{"teams":req.body.teamName}
+              users.updateOne({"username":req.body.user},{
+                  $addToSet:{"teams":req.body.teamName}
               },(err)=>{
                 if(err){
                   printErr(err);
                   res.sendStatus(500);
                 }
                 else{
+                  console.log('[', (new Date()).toLocaleTimeString(), "] Team joined");
                   res.sendStatus(200);
                 }
               })
@@ -147,7 +147,7 @@ exports.leaveTeam = function leaveTeam (req, res) {
         }
 
         let teamQuery = {name: req.body.teamName};
-        let newMember = { $pull: {member: req.body.user} }
+        let newMember = { $pull: {members: req.body.user} }
 
         let teams = client.db("pickup").collection("teams");
         teams.findOneAndUpdate(teamQuery, newMember, (err, result) => {

@@ -7,6 +7,7 @@ const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
 const gamepage=require("./src/server/gamepage.js");
 const teams=require("./src/server/teams.js");
+const timedRemove=require("./src/server/timedRemove.js");
 const teamgames=require("./src/server/teamgames.js");
 const login=require("./src/server/login.js")
 const fs=require("fs");
@@ -238,6 +239,8 @@ app.post("/postgames", (req, res) =>
     owner: makeValid(req.body.user),
     players: [makeValid(req.body.user),],
     coords: req.body.coords,
+    startTime: req.body.startTime,
+    endTime: req.body.startTime + req.body.gameLength
   };
 
 
@@ -373,9 +376,13 @@ app.post("/retrieveplayerteams",(req,res)=>{
 })
 
 
-
 /*deploy app*/
 
 
+
+// interval in milliseconds
+var removeInterval = 60*1000;
+timedRemove.removeExpiredGames(mongoUrl); // do it immedieately just to make sure
+setInterval(timedRemove.removeExpiredGames, removeInterval, mongoUrl);
 
 module.exports = {app};
