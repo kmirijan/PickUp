@@ -30,26 +30,19 @@ export class CurrentGames extends React.Component{
 
     getName()
     {
-        if (this.props.user != GUEST)
-        {
-            return this.props.user;
-        }
-        else
-        {
-            return this.refs.name.value;
-        }
+        return this.props.user;
     }
 
     addGame(event) {
         event.preventDefault();
-        let sport = this.refs.sport.getInput;
+        let sport = this.refs.sport.getInput();
         let name = this.getName();
         let location = this.refs.location.getInput();
         let isprivate = this.state.isprivate;
         let coords = this.autocomplete.getPlace().geometry.location;
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let startTime = (new Date()).getTime();
-        let gameLength = this.refs.gameLength.getInput(); // expected length of game in milliseconds
+        let gameLength = this.refs.gameLength.getInput() * 60*60*1000; // expected length of game in milliseconds
         let game = {
             gameId: id,
             sport: sport,
@@ -65,9 +58,9 @@ export class CurrentGames extends React.Component{
             gameLength: gameLength,
         };
         axios.post('/postgames', game)
-        this.refs.sport.value='';
-        this.refs.name.value='';
-        this.refs.location.value='';
+        this.refs.sport.clear();
+        this.refs.location.clear();
+        this.refs.gameLength.clear();
     }
     togglePrivate(){
       if(this.state.isprivate==false){
@@ -82,26 +75,6 @@ export class CurrentGames extends React.Component{
       }
     }
 
-
-    displayNameInput()
-    {
-        if (this.props.user != GUEST)
-        {
-            return null;
-        }
-        else
-        {
-            return (
-                <input
-                className='gameDetails'
-                type="text"
-                ref="name"
-                placeholder="Name"
-                />
-
-            );
-        }
-    }
 
     render(){
 
@@ -120,7 +93,6 @@ export class CurrentGames extends React.Component{
               				<div className="main-create main-center">
               					<form className="form-horizontal"
                           onSubmit={this.addGame.bind(this)}>
-                          {this.displayNameInput()}
                                     
 
                                     <GameInputField label="Activity" ref="sport" placeholder="Activity" />
@@ -163,9 +135,15 @@ class GameInputField extends React.Component {
     {
         return this.refs.input.value;
     }
+
+    clear()
+    {
+        this.refs.input.value = "";
+    }
     
     render()
     {
+        return (
         <div className="form-group">
         	<label className="cols-sm-2 control-label">{this.props.label}</label>
                 <div className="cols-sm-10">
@@ -173,10 +151,11 @@ class GameInputField extends React.Component {
         				<span className="input-group-addon"></span>
           				<input className='gameDetails form-control' type="text"  type="text"
                                 ref="input"
-                                {...props}/>
+                                {...this.props}/>
         			</div>
             	</div>
         </div>
+        );
     }
 
 }

@@ -13,23 +13,49 @@ exports.removeExpiredGames = function removeExpiredGames(mongoUrl) {
         let query = { endTime: {$lt: currentTime} };
         let games = client.db("pickup").collection("games");
         
-        games.deleteMany(query, (err, results) => {
-            client.close();
+        games.find(query).toArray( (err, results) => {
             if (err)
             {
-                console.log("Failed to delete expired games");
+                console.log("Failed to find expired games");
                 console.log(err);
+                client.close();
+                return;
             }
             
-            if (results.deletedCount != 0)
+            if (results != null)
             {
-                console.log('[', (new Date()).toLocaleTimeString(), "] ", results.deletedCount, " expired games deleted");
+                let gameIds = [];
+                for (game in results)
+                {
+                    gameIds.push(game.id);
+                }
+                games.deleteMany({id: {$in: gameIds}}, (err) => {
+                    if (err) {
+                        console.log("Failed to delete expired games");
+                        console.log(err);
+                        client.close();
+                        return;
+                    }
+                    
+                    let users = client.db("pickup").collection("users");
+                    users.updateMany({}, {$pull: { games: gameIds}}, (err) => {
+                        if (err) {
+                            console.log("Failed to remove expired games from users");
+                            console.log(err);
+                        }
+                        else {
+                             console.log('[', (new Date()).toLocaleTimeString(), "] ", gameIds.length, " expired games deleted");
+                        }
+                        client.close();
+                    });
+                });
+            }
+            else {
+                client.close();
             }
         
         });
 
     });
 }
-
-
 
