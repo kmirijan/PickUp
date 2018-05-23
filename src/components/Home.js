@@ -17,6 +17,7 @@ class Home extends React.Component {
 
               <h1 className='HomepageText'>Discover, Connect, Play</h1>
               <p>PickUp is the easiest way to find members in your community interested in the same sports as you!</p>
+              
               <p><a className="btn btn-primary btn-lg" href="signin" role="button">Sign In</a></p>
             </div>
           </div>
