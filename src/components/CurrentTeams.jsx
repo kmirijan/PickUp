@@ -18,8 +18,6 @@ class CurrentTeams extends React.Component{
         console.log("rendered")
     }
 
-
-
     render(){
         return(
             <div>

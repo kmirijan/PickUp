@@ -3,8 +3,11 @@ var ReactDOM=require("react-dom");
 var axios=require("axios");
 import NavBar from "./NavBar"
 require("../css/gamePage.css")
+//https://medium.com/dailyjs/combining-react-with-socket-io-for-real-time-goodness-d26168429a34
 import io from 'socket.io-client';
 import MapIndiv from "./MapIndiv";
+
+
 
 class GamePage extends React.Component{
   constructor(props){
@@ -12,6 +15,8 @@ class GamePage extends React.Component{
     this.state={
       game:null
     }
+
+
   }
   componentWillMount(){
     axios({
@@ -26,10 +31,8 @@ class GamePage extends React.Component{
       })
     })
   }
-  //group chat
-  //map
-  //players
   render(){
+    console.log("render",this.state.game);
     return(
       <div>
         <NavBar/>
