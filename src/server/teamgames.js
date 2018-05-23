@@ -12,22 +12,22 @@ const bcrypt=require("bcrypt");
 const makeValid = (obj) => {return obj != null ? obj : "";};
 var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
-exports.jointT=(req, res) =>
+exports.joinT=(req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game joined");
 
   mongo.connect(mongoUrl, (err, client) =>
   {
     var collection = client.db("pickup").collection("teamgames");
-    var query = {id: req.body.gid, players: { $nin: [req.body.uid] } };
-    var newPlayer = { $push: {players: req.body.uid} };
+    var query = {id: req.body.game.id, teams: { $nin: [req.body.team] } };
+    var newTeam = { $push: {teams: req.body.team.name} };
 
-    console.log("user: ", req.body.uid);
-    var userQuery = {username: req.body.uid};
-    var joinedGame = {$push: {teamgames: req.body.gid}};
+    console.log("team: ", req.body.team.name);
+    var userQuery = {username: {$in:req.body.team.members}};
+    var joinedGame = {$push: {teamgames: req.body.game.id}};
     client.db("pickup").collection("users").update(userQuery, joinedGame);
 
-    collection.update(query, newPlayer, (err) =>
+    collection.update(query, newTeam, (err) =>
     {
       if (err) throw err;
       client.close();
@@ -91,16 +91,15 @@ exports.userGamesT=(req, res) => {
 exports.postGamesT= (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
-
   var game = {
-    sport: makeValid(req.body.sport),
-    name: makeValid(req.body.name),
-    location: makeValid(req.body.location),
-    isprivate:makeValid(req.body.isprivate),
-    id: makeValid(req.body.gameId),
-    owner: makeValid(req.body.user),
-    players: [makeValid(req.body.user),],
-    coords: req.body.coords,
+    sport: makeValid(req.body.game.sport),
+    name: makeValid(req.body.game.name),
+    location: makeValid(req.body.game.location),
+    isprivate:makeValid(req.body.game.isprivate),
+    id: makeValid(req.body.game.gameId),
+    owner: makeValid(req.body.game.user),
+    teams: makeValid(req.body.game.teams),
+    coords: req.body.game.coords,
   };
 
 
@@ -146,25 +145,30 @@ exports.retrieveGamesT=(req, res) =>
   });
 
 };
+exports.retrieveSpecificGamesT=(req,res)=>{
+  mongo.connect(mongoUrl,(err,client)=>{
+    if(err)throw new Error(err);
+    client.db("pickup").collection("teamgames").find({id:Number(req.body.id)}).toArray((err,arr)=>{
+      if(err)throw new Error(err);
+      res.json(arr);
+      res.end();
+      client.close();
+    })
+  })
+}
 
 //redo
-exports.gamesT=(req, res) => {
-  console.log('patch: ', req.body);
-
-  Game.findOneAndUpdate(
-    {'id': req.body.gid},
-    {$pull: {players : req.body.uid}},
-    {new: true}
-  )
-  .then((game) =>{
-    console.log('length: ', game.players.length)
-    console.log('req: ', req.body);
-    if(game.players.length === 0){
-      game.remove();
-    }
-    res.status(200).send({game});
-  }).catch((e) => {
-    res.status(400).send(e);
+//leave game way to identifying
+//if no teams exist, delete game
+exports.leaveGameT=(req, res) => {
+  mongo.connect(mongoUrl,(err,client)=>{
+    if(err) throw new Error(err);
+    var db=client.db("pickup");
+    db.collection("teamgames").update({id:req.body.game.id},{
+        $pull:{
+          teams:req.body.team.name
+        }
+    })
   })
 }
 
@@ -187,10 +191,13 @@ exports.deleteGameT=(req,res)=>
 exports.retrievePlayerTeams=(req,res)=>{
   mongo.connect(mongoUrl,(err,client)=>{
     if(err)throw new Error(err);
-    db=client.db("pickup");
-    db.collection("users").find({"username":req.body.user}).toArray((player)=>{
+    var db=client.db("pickup");
+    db.collection("users").find({"username":req.body.user}).toArray((err,player)=>{
+      if(err)throw new Error(err);
       const teams=player[0]["teams"];
-      db.collection("teams").find({name: {$in:teams}}).toArray((teams)=>{
+      console.log(player[0]["teams"]);
+      db.collection("teams").find({name: {$in:teams}}).toArray((err,teams)=>{
+        if(err)throw new Error(err);
         res.json(teams);
         client.close();
       });

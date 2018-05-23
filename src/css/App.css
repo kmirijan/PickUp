@@ -91,6 +91,14 @@
 	text-align:center;
 }
 
+.App-title {
+  text-align: center;
+  font-family: 'Helvetica';
+  font-size: 70px;
+  margin: 5%;
+  font-weight: bold;
+  color: black;
+}
 
 
 .texts{

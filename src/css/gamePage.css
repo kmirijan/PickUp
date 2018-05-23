@@ -5,13 +5,13 @@
 #gamePage{
   width:70%;
   height:100%;
-  background-color:red;
+  border-style:solid;
   float:left;
 }
 #chat{
   width:30%;
   height:100%;
-  background-color:blue;
+  border-style:solid;
   float:right;
 }
 #players{

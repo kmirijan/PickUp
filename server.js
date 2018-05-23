@@ -7,17 +7,45 @@ const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
 const gamepage=require("./src/server/gamepage.js");
 const teams=require("./src/server/teams.js");
+const timedRemove=require("./src/server/timedRemove.js");
 const teamgames=require("./src/server/teamgames.js");
+const login=require("./src/server/login.js")
 const fs=require("fs");
 const busboy=require("connect-busboy");
 const util = require('util')
+const app=express();
+const http=require("http").Server(app);
+
+const port=process.env.PORT;
+http.listen(port,()=>{
+    console.log(port);
+    console.log(process.env.NODE_ENV);
+    console.log(process.env.MONGODB_URI);
+});
+
+const io=require("socket.io")(http);
+//socket.io----------------------------------
+io.on('connection',(socket)=>{
+  console.log("someone joined");
+  socket.on("send",(m)=>{
+    console.log(m);
+    let messageWithTime={
+      sender:m["sender"],
+      message:m["message"],
+      time:(new Date()).toLocaleTimeString()
+    }
+    io.emit("message",messageWithTime)
+  })
+});
+
 
 
 var {Game} = require('./db/game.js');
 
 //var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
-const app=express();
+
+
 /*configurations*/
 app.use(express.static("./dist"));
 app.use(bodyParser.json());
@@ -32,6 +60,11 @@ app.get("*",(req,res)=>{
   res.sendFile(__dirname+"/dist/index.html");
   console.log('[', (new Date()).toLocaleTimeString(), "] Main file sending");
 });
+
+//-----------------login------------------------
+app.post("/verify-login",(req,res)=>{
+  login.verifyLogin(req.body.user,req.body.key,res);
+})
 
 // --------------- Team related requests --------------
 app.post("/postteam", teams.createTeam);
@@ -154,10 +187,17 @@ app.post("/nearbygames", (req, res) => {
 
         let collection = client.db("pickup").collection("games");
 
-        let query = {"coords.lat": {$gt: center.lat - range.lat, $lt: center.lat + range.lat},
-                "coords.lng": {$gt: center.lng - range.lng, $lt: center.lng + range.lng },
-                isprivate: false
-
+        let query = {coords: 
+                        {$near: 
+                            {
+                                $geometry: {
+                                    type: "Point",
+                                    coordinates: [center.lng, center.lat]
+                                },
+                                $maxDistance: range * 1000,
+                            }
+                        },
+                    isprivate: false
         };
         collection.find(query).toArray((err, result) => {
             if (err) throw err;
@@ -205,7 +245,9 @@ app.post("/postgames", (req, res) =>
     id: makeValid(req.body.gameId),
     owner: makeValid(req.body.user),
     players: [makeValid(req.body.user),],
-    coords: req.body.coords,
+    coords: {type: "Point", coordinates: [req.body.coords.lng, req.body.coords.lat] },
+    startTime: req.body.startTime,
+    endTime: req.body.startTime + req.body.gameLength
   };
 
 
@@ -213,9 +255,14 @@ app.post("/postgames", (req, res) =>
     if (err) throw err;
 
     db.db("pickup").collection("games").insertOne(game,() => {
+      if (err){
+        console.log("error sending game");
+        console.log(err);
+      }
       db.db("pickup").collection("users").update({"username":game["owner"]},{
         $push: {games: game["id"]}
       }).then(()=>{
+        console.log("game successfully sent");
         res.sendStatus(200);
         db.close();
       })
@@ -300,7 +347,19 @@ app.post("/deletegame",(req,res)=>
 
 });
 
-app.post("/joinT", (req, res) =>{
+app.post("/retrievespecificgames", (req,res)=>{
+  mongo.connect(mongoUrl,(err,client)=>{
+    if(err)throw new Error(err);
+    client.db("pickup").collection("games").find({id:Number(req.body.id)}).toArray((err,arr)=>{
+      if(err)throw new Error(err);
+      res.json(arr);
+      res.end();
+      client.close();
+    })
+  })
+
+})
+app.patch("/joinT", (req, res) =>{
   teamgames.joinT(req,res);
 });
 app.post("/nearbygamesT", (req, res) => {
@@ -315,8 +374,11 @@ app.post("/postgamesT", (req, res) =>{
 app.post("/retrievegamesT", (req, res) =>{
   teamgames.retrieveGamesT(req,res);
 });
-app.patch('/gamesT', (req, res) => {
-  teamgames.gamesT(req,res);
+app.post("/retrievespecificgamesT",(req,res)=>{
+  teamgames.retrieveSpecificGamesT(req,res);
+})
+app.patch('/leavegameT', (req, res) => {
+  teamgames.leaveGameT(req,res);
 })
 app.post("/deletegameT",(req,res)=>{
   teamgames.deleteGameT(req,res);
@@ -326,13 +388,13 @@ app.post("/retrieveplayerteams",(req,res)=>{
 })
 
 
-
 /*deploy app*/
-const port=process.env.PORT;
-app.listen(port,()=>{
-    console.log(port);
-    console.log(process.env.NODE_ENV);
-    console.log(process.env.MONGODB_URI);
-});
+
+
+
+// interval in milliseconds
+var removeInterval = 60*1000;
+timedRemove.removeExpiredGames(mongoUrl); // do it immedieately just to make sure
+setInterval(timedRemove.removeExpiredGames, removeInterval, mongoUrl);
 
 module.exports = {app};
