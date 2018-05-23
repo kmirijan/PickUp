@@ -108,7 +108,7 @@ class TeamCreate extends React.Component{
                 <div className="cols-sm-10">
                   <div className="input-group">
                     <span className="input-group-addon"></span>
-                    <input className='teamDetails form-control' type="text"  type="text"
+                    <input className='teamDetails form-control' type="text"
                     ref="sport"
                     placeholder="Activity"/>
                   </div>
@@ -120,7 +120,7 @@ class TeamCreate extends React.Component{
                 <div className="cols-sm-10">
                   <div className="input-group">
                     <span className="input-group-addon"></span>
-                    <input className='teamDetails form-control' type="text"  type="text"
+                    <input className='teamDetails form-control' type="text"
                       id= 'city'
                       ref="city"
                       placeholder="City"/>
