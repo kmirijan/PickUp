@@ -2,6 +2,7 @@ import React from 'react';
 import NavBar from './NavBar';
 import axios from "axios"
 import {GameTable, Game} from './CurrentGames';
+import {CurrentGames} from './CreateGames';
 //import '../css/Map.css';
 
 
@@ -16,7 +17,7 @@ class Map extends React.Component {
             map : {},
             games : [],
             nearbyGames: [],
-            range : 5, /* miles away from location */
+            range : 10, /* kilometers away from location */
 
         };
 
@@ -73,12 +74,8 @@ class Map extends React.Component {
 
     MILES_PER_DEGREE = 69;
     retrieveNearbyGames() {
-        let range = {
-            lat: this.state.range / this.MILES_PER_DEGREE,
-            lng: Math.cos(this.state.userPosition.lat) * this.state.range / this.MILES_PER_DEGREE
-        };
 
-        axios.post("/nearbygames", {range: range, center: this.state.userPosition}).then(
+        axios.post("/nearbygames", {range: this.state.range, center: this.state.userPosition}).then(
             (results) => {
                 this.setState({nearbyGames : results.data});
                 this.updateMap();
@@ -94,7 +91,8 @@ class Map extends React.Component {
         {
             console.log(game);
             // add games as markers
-            let position = new google.maps.LatLng(game.coords.lat, game.coords.lng);
+            // game.coords.coordinates = [lng, lat]
+            let position = new google.maps.LatLng(game.coords.coordinates[1], game.coords.coordinates[0]);
 
             var marker = new google.maps.Marker({position:position, title:game.sport});
             let content = this.createInfoWindowContent(game);
@@ -124,7 +122,6 @@ class Map extends React.Component {
 
 
     }
-
     render() {
 
     if (navigator.geolocation)
@@ -132,6 +129,16 @@ class Map extends React.Component {
     return (
         <div>
             <NavBar/>
+
+
+              <div className="container">
+                <button type="button" className="btn btn-primary" data-toggle="collapse"
+                  data-target="#createSoloGames">Create A Game</button>
+                <div id="createSoloGames" className="collapse">
+                <CurrentGames user={this.props.user}/>
+                  </div>
+                </div>
+
             <div className="Map">
                 <h1>Games near you</h1>
                 <div ref="map" style={{height: "500px", width: "30%", float: "left"}}></div>

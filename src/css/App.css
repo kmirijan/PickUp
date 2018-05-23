@@ -1,7 +1,3 @@
-.App {
-  text-align: center;
-}
-
 .NavBar{
    list-style-type: none;
    margin: 0;
@@ -11,7 +7,7 @@
    position: fixed;
    top: 0;
    width: 100%;
-   z-index: 1
+   z-index: 50;
 }
 
 .Nav {
@@ -41,7 +37,7 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  background-color: orange;
+  background-color: F9690E;
 }
 
 .NavIcons .pages {
@@ -63,8 +59,11 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  background-color: orange;
+  background-color: F9690E;
 }
+
+
+
 
 .mainDiv{
   width: 100%;
@@ -92,7 +91,6 @@
 	text-align:center;
 }
 
-
 .App-title {
   text-align: center;
   font-family: 'Helvetica';
@@ -101,6 +99,7 @@
   font-weight: bold;
   color: black;
 }
+
 
 .texts{
   text-align: center;
@@ -121,6 +120,8 @@
 .editPage{
   margin:auto;
 }
+
+
 .gameTableInMap{
   width:68%;
   float:right;
@@ -132,7 +133,7 @@
 
 
 .main{
- 	margin-top: 70px;
+  margin-bottom: 30px;
 }
 
 
@@ -140,8 +141,12 @@
 	margin-bottom: 15px;
 }
 
+
+
+
+
 .main-center{
- 	margin-top: 30px;
+ 	margin-bottom: 30px;
  	margin: 0 auto;
  	max-width: 330px;
     padding: 40px 40px;

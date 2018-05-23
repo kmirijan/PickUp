@@ -34,7 +34,7 @@ signIn(){
         /*https://www.robinwieruch.de/local-storage-react/*/
         localStorage.setItem("loggedin","true");
         localStorage.setItem("user",res.data["user"]);
-        this.props.history.push("/user="+res.data["user"]);
+        this.props.history.push("/user:"+res.data["user"]);
       }
       else
       {
@@ -44,10 +44,10 @@ signIn(){
             message:"sign in failed"
           }
         })
+        this.refs.signin.removeAttribute("disabled");
         this.props.history.push("/signin");
       }
       console.log(localStorage.getItem("loggedin"))
-      this.refs.signin.removeAttribute("disabled");
     });
 }
 

@@ -9,7 +9,7 @@ class Home extends React.Component {
 
   render() {
     return (
-      <div className>
+      <div className="home">
           <NavBar/>
           <div className="mainDiv">
             <img src="/background.png" className="jumbotron" alt="background"/>

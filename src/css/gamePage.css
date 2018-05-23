@@ -1,0 +1,38 @@
+#entirePage{
+  width:100%;
+  height:100%;
+}
+#gamePage{
+  width:70%;
+  height:100%;
+  border-style:solid;
+  float:left;
+}
+#chat{
+  width:30%;
+  height:100%;
+  border-style:solid;
+  float:right;
+}
+#players{
+  margin-top:20px;
+  margin-bottom:20px;
+  background-color:gray;
+}
+#teams{
+  margin-top:20px;
+  margin-bottom:20px;
+  background-color:gray;
+}
+#locaton{
+  margin-top:20px;
+  margin-bottom:20px;
+  background-color:gray;
+}
+#map{
+  margin-left:10%;
+  margin-right:10%;
+  width:80%;
+  height:500px;
+  background-color:gray;
+}
