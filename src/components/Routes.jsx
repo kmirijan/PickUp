@@ -27,7 +27,7 @@ class Routes extends React.Component{
         return(
             <BrowserRouter>
                 <Switch>
-                	<Route exact path="/" component={NavBar} />
+                	<Route exact path="/" component={Home} />
                 	<Route exact path="/home" component={Home} />
                     <Route path="/list_users" component={Users} />
                     <Route path='/user:username' component={User}/>

@@ -33,7 +33,7 @@ class ProfileP extends React.Component{
 			games:[],
 			friends:[],
 			feed:[],
-            myGames:[]
+      myGames:[]
 
 		}
 	}

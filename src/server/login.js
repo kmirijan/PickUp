@@ -14,7 +14,7 @@ exports.verifyLogin=(data,res)=>{
   mongo.connect(url,(err,client)=>{
     if(err) throw new Error(err);
     var loggedin=client.db("pickup").collection("loggedin");
-    if(data.key.length==24){
+    if(data.key!=null && data.key.length==24){
       loggedin.find({
         "_id":ObjectID(data.key)
       },(err,ret)=>{
@@ -53,7 +53,7 @@ exports.verifyLogin=(data,res)=>{
 exports.logout=(data,res)=>{
   mongo.connect(url,(err,client)=>{
     var loggedin=client.db("pickup").collection("loggedin");
-    if(data.key.length==24){
+    if(data.key!=null&&data.key.length==24){
       loggedin.deleteOne({
         "_id":ObjectID(data.key)
       }).then(()=>{
