@@ -35,7 +35,7 @@ signIn(){
         localStorage.setItem("loggedin","true");
         localStorage.setItem("user",res.data["user"]);
         localStorage.setItem("key",res.data["key"]);
-        this.props.history.push("/user:"+res.data["user"]);
+
       }
       else
       {
@@ -46,9 +46,14 @@ signIn(){
           }
         })
         this.refs.signin.removeAttribute("disabled");
+
+      }
+      if(localStorage.getItem("loggedin")=="true"){
+        this.props.history.push("/user:"+res.data["user"]);
+      }
+      else{
         this.props.history.push("/signin");
       }
-      console.log(localStorage.getItem("loggedin"))
     });
 }
 

@@ -55,7 +55,7 @@ class Routes extends React.Component{
                 	<Route exact path="/" component={NavBar} />
                 	<Route exact path="/home" component={Home} />
                   <Route path="/signin" component={SignIn}/>
-				          <Route path="/signup" component={SignUp}/>
+				          <Route path="/signup" component={SignUpWrap}/>
                   <Route component={_404} />
                 </Switch>
             </BrowserRouter>
@@ -84,7 +84,7 @@ class SignUpWrap extends React.Component{
     return(
       <div>
         <NavBar/>
-        <SignUp/>
+        <SignUp history={this.props.history}/>
       </div>
     )
   }

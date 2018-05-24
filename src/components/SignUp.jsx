@@ -81,7 +81,7 @@ signUp(){
             }
           })
         }
-        this.refs.signup.removeAttribute("disabled");
+
       });
 
   }
