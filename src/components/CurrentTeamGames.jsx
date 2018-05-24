@@ -65,7 +65,10 @@ export class CurrentTeamGames extends React.Component{
         return(
           <div className="team" key={"team:"+team["name"]}>
             <div>{team["name"]}</div>
-            <button className = "btn btn-basic" onClick={()=>{this.selectTeam(team)}}>Select</button>
+            <button className = "btn btn-basic"
+              data-toggle="collapse"
+              data-target="#selectTeam"
+              onClick={()=>{this.selectTeam(team)}}>Select</button>
           </div>
         )
       })
