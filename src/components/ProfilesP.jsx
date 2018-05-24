@@ -11,7 +11,6 @@ class ProfileP extends React.Component{
 		super(props);
 		this.expandBio=this.expandBio.bind(this);
 		this.edit=this.edit.bind(this);
-		this.settings=this.settings.bind(this);
 		this.processFeed=this.processFeed.bind(this);
 		this.acceptFriendreq=this.acceptFriendreq.bind(this);
 		this.declineFriendreq=this.declineFriendreq.bind(this);
@@ -23,7 +22,7 @@ class ProfileP extends React.Component{
 		}
 
 		this.state={
-			expname:"expand",
+			expname:"Expand",
 			expanded:false,
 			pic:"",
 			short:"",
@@ -41,15 +40,14 @@ class ProfileP extends React.Component{
 	edit(){
 		this.props.history.push("/edit:"+this.props.username);
 	}
-
 	expandBio(){
 		if(this.state.expanded==false){
 			this.setState({expanded:true});
-			this.setState({expname:"collapse"});
+			this.setState({expname:"Collapse"});
 		}
 		else{
 			this.setState({expanded:false});
-			this.setState({expname:"expand"});
+			this.setState({expname:"Expand"});
 		}
 	}
 	componentDidMount(){
@@ -93,10 +91,10 @@ class ProfileP extends React.Component{
 			friend=>friend["req"]=="accepted"
 		);
 		friends=friends.map((f)=>
-			<li key={f["username"]}>{f["username"]}</li>
+			<li className="list-group-item" key={f["username"]}>{f["username"]}</li>
 		)
 		return(
-			<ul key="friends">{friends}</ul>
+			<ul className="list-group" key="friends">{friends}</ul>
 		)
 	}
 	acceptFriendreq(friend){
@@ -132,17 +130,19 @@ class ProfileP extends React.Component{
 			return(
 				<div>
 					<p>
-						{f["sender"]} sent you a friend request!
+						{f["sender"]} Sent you a friend request!
 					</p>
 					<button
 						ref="friendaccept"
+						className="btn btn-success"
 						onClick={()=>this.acceptFriendreq(f["sender"])}>
-						accept
+						Accept
 					</button>
 					<button
 						ref="frienddecline"
+						className="btn btn-danger"
 						onClick={()=>this.declineFriendreq(f["sender"])}>
-						decline
+						Decline
 					</button>
 				</div>
 			)
@@ -152,10 +152,10 @@ class ProfileP extends React.Component{
 	feed(){
 		if(this.state.feed==undefined){return}
 		const feed=this.state.feed.map((f)=>
-			<li key={f["type"]}>{this.processFeed(f)}</li>
+			<li className="list-group-item" key={f["type"]}>{this.processFeed(f)}</li>
 		)
 		return(
-			<ul key="feed">{feed}</ul>
+			<ul className="list-group" key="feed">{feed}</ul>
 		)
 	}
 	componentDidUpdate(prevProps,prevState){
@@ -197,11 +197,14 @@ class ProfileP extends React.Component{
 						</div>
 
 						<div id="edit">
-							<button onClick={this.edit}>
-								edit
+							<button
+								className="btn btn-primary"
+								onClick={this.edit}>
+								Edit
 							</button>
-
-							<button onClick={this.expandBio}>
+							<button
+								className="btn btn-secondary"
+								onClick={this.expandBio}>
 								{this.state.expname}
 							</button>
 						</div>
@@ -209,10 +212,13 @@ class ProfileP extends React.Component{
 
 					<GamesList games={this.state.myGames}/>
 					<div id="friendsList">
-						Friends:<br></br>
+						<h2>Friends:</h2><br></br>
 						{this.friendsList()}
 					</div>
 				</div>
+
+
+
 				<div id="fpanel">
 					<h1>FEED</h1>
 					<div id="feed">
@@ -270,22 +276,23 @@ class GamesList extends React.Component
     {
         return (
 					<tr key={game.id}>
-						<td ><h3>{game.sport} </h3></td>
-						<td ><h3>{game.name} </h3></td>
-						<td > <h3>{game.location}</h3> </td>
-						<td><Link to={"/game:"+game.id}><h3>Details</h3></Link></td>
+						<td >{game.sport}</td>
+						<td >{game.name}</td>
+						<td >{game.location}</td>
+						<td><Link to={"/game:"+game.id}>Details</Link></td>
 					</tr>
         )
     }
 		displayGamesMade(game){
 			return (
 				<tr key={game.id}>
-					<td ><h3>{game.sport} </h3></td>
-					<td ><h3>{game.name} </h3></td>
-					<td > <h3>{game.location}</h3> </td>
-					<td><Link to={"/game:"+game.id}><h3>Details</h3></Link></td>
-					<td><button onClick={()=>{this.deleteGame(game.id)}}>
-						<h3>delete</h3>
+					<td >{game.sport}</td>
+					<td >{game.name}</td>
+					<td >{game.location}</td>
+					<td><Link to={"/game:"+game.id}>Details</Link></td>
+					<td><button className="btn btn-danger"
+						onClick={()=>{this.deleteGame(game.id)}}>
+						Delete
 					</button></td>
 				</tr>
 			)
@@ -309,7 +316,8 @@ class GamesList extends React.Component
         return(
 					<div>
 						<h2>Games Played</h2>
-						<table><tbody key="gamesList">{gamesList}</tbody></table>
+						<table classNaem="table table-bordered table-hover">
+							<tbody key="gamesList">{gamesList}</tbody></table>
 						<h2>Games Made</h2>
 						<table><tbody key="gamesMadeList">{gamesMade}</tbody></table>
 					</div>
