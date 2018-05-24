@@ -41,9 +41,7 @@ class ProfileP extends React.Component{
 	edit(){
 		this.props.history.push("/edit:"+this.props.username);
 	}
-	settings(){
-		this.props.history.push("/settings:"+this.props.username);
-	}
+
 	expandBio(){
 		if(this.state.expanded==false){
 			this.setState({expanded:true});
@@ -202,9 +200,7 @@ class ProfileP extends React.Component{
 							<button onClick={this.edit}>
 								edit
 							</button>
-							<button onClick={this.settings}>
-								settings
-							</button>
+
 							<button onClick={this.expandBio}>
 								{this.state.expname}
 							</button>
