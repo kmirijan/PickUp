@@ -23,7 +23,7 @@ signIn(){
   console.log('this.state', this.state);
   const{email, password}=this.state;
    axios({
-      url:"/signin",
+      url:"/signin-test",
       method:"post",
       data:{
         "email":email,
@@ -34,6 +34,7 @@ signIn(){
         /*https://www.robinwieruch.de/local-storage-react/*/
         localStorage.setItem("loggedin","true");
         localStorage.setItem("user",res.data["user"]);
+        localStorage.setItem("key",res.data["key"]);
         this.props.history.push("/user:"+res.data["user"]);
       }
       else

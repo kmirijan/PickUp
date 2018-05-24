@@ -83,14 +83,23 @@
   position: absolute;
   top: 45%;
   left: 50%;
-  transform: translate(-70%, -40%);
+  transform: translate(-40%, -40%);
   color: white;
+  font-size:30px;
 }
 
 .signup{
 	text-align:center;
 }
 
+.App-title {
+  text-align: center;
+  font-family: 'Helvetica';
+  font-size: 70px;
+  margin: 5%;
+  font-weight: bold;
+  color: black;
+}
 
 
 .texts{
@@ -156,7 +165,8 @@
   font-size: 4.5rem;
   font-weight: 350;
 }
-.mainDiv{
+.first{
+    margin: 0px 0px 0px 0px;
   /* The image used */
     background-image: url("https://wallpaper.wiki/wp-content/uploads/2017/04/wallpaper.wiki-Free-desktop-basketball-background-hd-PIC-WPC0010432.jpg");
 
@@ -169,7 +179,8 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
-.two{
+.second{
+  margin: 0px 0px 0px 0px;
   font-size: 4.5rem;
   font-weight: 350;
   /* The image used */
@@ -183,4 +194,59 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+.third{
+  margin: 0px 0px 0px 0px;
+  font-size: 4.5rem;
+  font-weight: 350;
+  /* The image used */
+    background-image: url("http://aslania.com/wp-content/uploads/2018/03/basketball-wallpapers-6.jpg");
+
+    /* Set a specific height */
+    height: 1000px;
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.signUpHome{
+  height:500px;
+  background-color:#333;
+  color:white;
+  margin:auto;
+}
+.startCount{
+  height:500px;
+  background-color:#333;
+  color:white;
+  margin:auto
+}
+.title{
+  color:white;
+  font-size:50px
+}
+.usersCount{
+  width:50%;
+  float:left;
+}
+.gamesCount{
+  width:50%;
+  float:right
+}
+.secondHeader{
+  height:500px;
+  font-size:100px;
+  text-align:center;
+  color:white;
+}
+.thirdHeader{
+  height:500px;
+  font-size:100px;
+  text-align:center;
+  color:white;
+}
+.count{
+  font-size:250px;
 }

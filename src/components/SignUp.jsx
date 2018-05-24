@@ -72,9 +72,7 @@ signUp(){
       }).then((res)=>{
         if(res.data==true){
           console.log("signed up");
-          localStorage.setItem("loggedin",true);
-          localStorage.setItem("user",this.state.username);
-          this.props.history.push("/user:"+this.state.username);
+          this.props.history.push("/signin");
         }
         else{
           this.setState({
@@ -92,7 +90,6 @@ signUp(){
   render(){
     return(
     <div>
-      <NavBar/>
         <form className="form-inline" style={{margin: '5%'}}>
         <h2>SignUp</h2>
         <div className="form-group">

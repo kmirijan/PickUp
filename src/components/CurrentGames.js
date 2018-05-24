@@ -1,11 +1,7 @@
 import React from 'react';
 import '../css/App.css';
 var {Link}=require('react-router-dom');
-
-
 import axios from 'axios';
-
-const GUEST = "guest";
 
 
 export class GameTable extends React.Component{

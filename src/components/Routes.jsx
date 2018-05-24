@@ -3,7 +3,6 @@ var ReactDOM=require("react-dom");
 var {Profile}=require("./Profiles.jsx");
 var {ProfileP}=require("./ProfilesP.jsx");
 var {ProfileEdit}=require("./ProfilesEdit.jsx");
-var {CurrentGames}=require("./CurrentGames.js");
 var {TeamPage}=require("./TeamPage.jsx");
 var {CurrentTeamGames}=require("./CurrentTeamGames.jsx");
 var {Users}=require("../helpers/Users.jsx");
@@ -17,7 +16,6 @@ require("../css/font.css");
 import NavBar from './NavBar';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
-import App from "./App";
 import Home from "./Home";
 import Map from "./Map";
 var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
@@ -37,13 +35,11 @@ class Routes extends React.Component{
                     <Route path="/settings:username" component={Settings}/>
                     <Route path="/game:id" component={RenderGamePage}/>
                     <Route path="/tgame:id" component={RenderTeamGamePage}/>
-                    <Route path="/map" component={Map}/>
+                    <Route path="/map" render={(props) => <Map user = {getCurrentUser()}/>}/>
                     <Route path="/teams" render={(props) => <TeamPage user={getCurrentUser()} /> }/>
                     <Route path="/teamgames" render={(props) => <CurrentTeamGames user={getCurrentUser()} />} />
-                    <Route path="/app"
-                        render={(props) => <App user = {getCurrentUser()}/>}/>
                     <Route path="/signin" component={SignIn}/>
-          					<Route path="/signup" component={SignUp}/>
+          					<Route path="/signup" component={SignUpWrap}/>
           					<Route path="/logout" component={LogOut}/>
                     <Route path="/Loading"component={Loading}/>
                     <Route path="/_404"component={_404} />
@@ -68,6 +64,7 @@ class Routes extends React.Component{
     }
 }
 
+
 function getCurrentUser()
 {
     let user = localStorage.getItem("user");
@@ -82,7 +79,16 @@ function getCurrentUser()
     }
 }
 
-
+class SignUpWrap extends React.Component{
+  render(){
+    return(
+      <div>
+        <NavBar/>
+        <SignUp/>
+      </div>
+    )
+  }
+}
 class User extends React.Component{
 	constructor(props){
 		super(props);
@@ -281,13 +287,31 @@ class RenderTeamGamePage extends React.Component{
 }
 
 class LogOut extends React.Component{
+  constructor(props){
+    super(props);
+    this.loading=true;
+  }
 	componentDidMount(){
-		localStorage.setItem("loggedin",false);
-        localStorage.setItem("user","");
-        this.props.history.push("/signin");
+    axios({
+      url:"/logout-test",
+      method:"delete",
+      data:{
+        key:localStorage.getItem("key")
+      }
+    }).then(()=>{
+      localStorage.setItem("loggedin",false);
+      localStorage.setItem("user","");
+      localStorage.setItem("key","");
+      this.loading=false;
+      this.props.history.push("/signin");
+    })
+
 	}
 	render(){
-        return(<_404 />);
+    if(this.loading==true){
+      return(<Loading/>)
+    }
+    else{return(<_404 />);}
 	}
 }
 const _404=()=>(

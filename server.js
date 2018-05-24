@@ -63,7 +63,13 @@ app.get("*",(req,res)=>{
 
 //-----------------login------------------------
 app.post("/verify-login",(req,res)=>{
-  login.verifyLogin(req.body.user,req.body.key,res);
+  login.verifyLogin(req.body,res);
+})
+app.post("/signin-test",(req,res)=>{
+  login.signIn(req.body,res);
+})
+app.delete("/logout-test",(req,res)=>{
+  login.logout(req.body,res);
 })
 
 // --------------- Team related requests --------------
@@ -72,7 +78,35 @@ app.post("/retrieveteams", teams.getTeams);
 app.post("/jointeam", teams.joinTeam);
 app.patch("/team", teams.leaveTeam);
 
+//-------------==homepage-------------------------------
+app.post("/get-players-and-games-count",(req,res)=>{
+  var gamescount=0;
+  var userscount=0;
+  mongo.connect(mongoUrl, (err, client) =>
+  {
+    if(err) throw new Error(err);
+    var games=client.db("pickup").collection("games");
+    var users=client.db("pickup").collection("users");
+    var teamgames=client.db("pickup").collection("teamgames");
 
+    games.count({}).then((numberOfGames)=>{
+      gamescount=gamescount+numberOfGames;
+      teamgames.count({}).then((numberOfTeamGames)=>{
+        gamescount=gamescount+numberOfTeamGames;
+        users.count({}).then((numberOfUsers)=>{
+          userscount=userscount+numberOfUsers;
+          res.json({
+            games:gamescount,
+            users:userscount
+          })
+          res.end();
+          client.close();
+        })
+      })
+    });
+  });
+
+})
 // --------------- User relate requests ---------------
 app.post("/user",(req,res)=>{
 	mkprofile.getUsers(req.body.user,res);
@@ -187,10 +221,17 @@ app.post("/nearbygames", (req, res) => {
 
         let collection = client.db("pickup").collection("games");
 
-        let query = {"coords.lat": {$gt: center.lat - range.lat, $lt: center.lat + range.lat},
-                "coords.lng": {$gt: center.lng - range.lng, $lt: center.lng + range.lng },
-                isprivate: false
-
+        let query = {coords:
+                        {$near:
+                            {
+                                $geometry: {
+                                    type: "Point",
+                                    coordinates: [center.lng, center.lat]
+                                },
+                                $maxDistance: range * 1000,
+                            }
+                        },
+                    isprivate: false
         };
         collection.find(query).toArray((err, result) => {
             if (err) throw err;
@@ -238,7 +279,7 @@ app.post("/postgames", (req, res) =>
     id: makeValid(req.body.gameId),
     owner: makeValid(req.body.user),
     players: [makeValid(req.body.user),],
-    coords: req.body.coords,
+    coords: {type: "Point", coordinates: [req.body.coords.lng, req.body.coords.lat] },
     startTime: req.body.startTime,
     endTime: req.body.startTime + req.body.gameLength
   };
@@ -248,9 +289,14 @@ app.post("/postgames", (req, res) =>
     if (err) throw err;
 
     db.db("pickup").collection("games").insertOne(game,() => {
+      if (err){
+        console.log("error sending game");
+        console.log(err);
+      }
       db.db("pickup").collection("users").update({"username":game["owner"]},{
         $push: {games: game["id"]}
       }).then(()=>{
+        console.log("game successfully sent");
         res.sendStatus(200);
         db.close();
       })
