@@ -48,16 +48,19 @@ class TeamCreate extends React.Component{
         let sport = this.refs.sport.value;
         let name = this.refs.name.value;
         let city = this.refs.city.value;
+        let maxPlayers = parseInt( this.refs.maxPlayers.value, 10 );
         let team = {
             sport: sport,
             name: name,
             city: city,
             captain: this.props.user,
+            maxPlayers: maxPlayers
         };
         axios.post('/postteam', team);
         this.refs.sport.value='';
         this.refs.name.value='';
         this.refs.city.value='';
+        this.refs.maxPlayers.value='';
     }
 
 
@@ -128,6 +131,18 @@ class TeamCreate extends React.Component{
                 </div>
               </div>
 
+              <div className="form-group">
+                <label className="cols-sm-2 control-label">Max # Players</label>
+                <div className="cols-sm-10">
+                  <div className="input-group">
+                    <span className="input-group-addon"></span>
+                    <input className='teamDetails form-control' type="text"
+                      id='maxPlayers'
+                      ref="maxPlayers"
+                      placeholder="Max # Players"/>
+                  </div>
+                </div>
+              </div>
 
               <div className="form-group">
 

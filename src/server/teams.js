@@ -47,7 +47,8 @@ exports.createTeam = function createTeam(req, res) {
         city: req.body.city,
         captain: req.body.captain,
         members: [req.body.captain],
-        games: []
+        games: [],
+        maxPlayers: req.body.maxPlayers
     }
 
     mongo.connect(mongourl, (err, client) => {
@@ -99,18 +100,19 @@ exports.joinTeam = function joinTeam(req,res) {
             return;
         }
 
-        let teamQuery = {name: req.body.teamName};
+        // let teamQuery = {$expr: { $eq: ["$name", {$literal: req.body.teamName} ], $gt: ["$maxPlayers", "$members.length"] } };
+        let teamQuery = { name: req.body.teamName, $where: "this.members.length < this.maxPlayers" };
         let newMember = { $addToSet: {members: req.body.user} }
 
         let teams = client.db("pickup").collection("teams");
         let users=client.db("pickup").collection("users");
-        teams.updateOne(teamQuery, newMember, (err) => {
+        teams.updateOne(teamQuery, newMember, (err, result) => {
             if (err)
             {
                 printErr(err, "Joining team failed");
                 res.sendStatus(500);
             }
-            else
+            else if (result.matchedCount > 0)
             {
               users.updateOne({"username":req.body.user},{
                   $addToSet:{"teams":req.body.teamName}
@@ -125,6 +127,10 @@ exports.joinTeam = function joinTeam(req,res) {
                 }
               })
 
+            }
+            else 
+            {
+                console.log('[', (new Date()).toLocaleTimeString(), "] Team full: join failed");
             }
             client.close();
         });
