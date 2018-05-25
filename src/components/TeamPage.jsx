@@ -297,7 +297,7 @@ export class TeamRow extends React.Component {
           <td>{this.props.team.city}</td>
           <td>{this.props.team.captain}</td>
           <td>{this.getJoinLeaveButton()}</td>
-          <td>{this.props.team.members.length}/{this.props.team.members.maxPlayers}</td>
+          <td>{this.props.team.members.length}/{this.props.team.maxPlayers}</td>
           <td><Link to={"/team:"+this.props.team.name}>Details</Link></td>
         </tr>
     );
