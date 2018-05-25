@@ -237,7 +237,6 @@ class TeamTable extends React.Component {
 	  <th>City</th>
       <th>Captain</th>
 	  <th>Join</th>
-    <th>Leave</th>
     <th>Players</th>
     <th></th>
 	</tr>
@@ -267,6 +266,28 @@ export class TeamRow extends React.Component {
     axios.patch('/team', {user:this.props.user, teamName:this.props.team.name});
   }
 
+  getJoinLeaveButton()
+  {
+    
+    if (this.props.team.members.includes(this.props.user)) {
+      return (
+        <input type="button"
+            className="btn btn-danger btn-md"
+            onClick={this.leaveTeam.bind(this)} value="Leave"/>
+      );
+    }
+    else if (this.props.team.members.length >= this.props.team.maxPlayers) {
+      return (<div className="fullTeam">FULL</div>);
+    }
+    else {
+      return (
+        <input  type="button"
+            className="btn btn-success btn-md"
+            onClick={this.joinTeam.bind(this)} value="Join"/>
+      );
+    }
+      
+  }
 
   render(){
     return(
@@ -275,13 +296,8 @@ export class TeamRow extends React.Component {
           <td>{this.props.team.sport}</td>
           <td>{this.props.team.city}</td>
           <td>{this.props.team.captain}</td>
-          <td><input  type="button"
-            className="btn btn-success btn-md"
-            onClick={this.joinTeam.bind(this)} value="Join"/></td>
-          <td><input type="button"
-            className="btn btn-danger btn-md"
-            onClick={this.leaveTeam.bind(this)} value="Leave"/></td>
-          <td>{this.props.team.members.length}</td>
+          <td>{this.getJoinLeaveButton()}</td>
+          <td>{this.props.team.members.length}/{this.props.team.members.maxPlayers}</td>
           <td><Link to={"/team:"+this.props.team.name}>Details</Link></td>
         </tr>
     );
