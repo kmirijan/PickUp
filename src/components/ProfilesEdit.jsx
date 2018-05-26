@@ -6,6 +6,7 @@ import axios from "axios";
 class ProfileEdit extends React.Component{
 	constructor(props){
 		super(props);
+		console.log("USER",this.props.user);
 		this.save=this.save.bind(this);
 		this.profile=this.profile.bind(this);
 		this.friendsList=this.friendsList.bind(this);
@@ -57,7 +58,7 @@ class ProfileEdit extends React.Component{
 				method:"post",
 				url:"/removefriend",
 				data:{
-					"user":localStorage.getItem("user"),
+					"user":this.props.user,
 					"friend":friend,
 				}
 			}).then((res)=>{
@@ -153,7 +154,7 @@ changePassword(oldPassword,newPassword){
 			method:"post",
 			url:"/setpassword",
 			data:{
-				user:localStorage.getItem("user"),
+				user:this.props.user,
 				oldPassword:oldPassword,
 				newPassword:newPassword
 			}
@@ -213,7 +214,7 @@ changePicture(e){
 		console.log("err")
 	}
 	var data=new FormData();
-	data.append("user",localStorage.getItem("user"));
+	data.append("user",this.props.user);
 	data.append("filetype",type);
 	data.append("image",img);
 

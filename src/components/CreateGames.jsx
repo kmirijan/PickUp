@@ -13,12 +13,14 @@ export class CurrentGames extends React.Component{
 
     constructor(props) {
         super(props);
+        console.log("USER",this.props.user);
         this.state = {
             game: {},
             isprivate:false
         };
         this.addGame = this.addGame.bind(this);
         this.togglePrivate=this.togglePrivate.bind(this);
+
     }
     componentDidMount() {
            let input = document.getElementById('location');
@@ -93,7 +95,7 @@ export class CurrentGames extends React.Component{
               				<div className="main-create main-center">
               					<form className="form-horizontal"
                           onSubmit={this.addGame.bind(this)}>
-                                    
+
 
                                     <GameInputField label="Activity" ref="sport" placeholder="Activity" />
                                     <GameInputField label="Location" ref="location" id='location' placeholder="Location" />
@@ -140,7 +142,7 @@ class GameInputField extends React.Component {
     {
         this.refs.input.value = "";
     }
-    
+
     render()
     {
         return (

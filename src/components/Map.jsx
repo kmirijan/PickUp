@@ -12,6 +12,7 @@ class Map extends React.Component {
     constructor(props)
     {
         super(props);
+        console.log("USER",this.props.user);
         this.state = {
             userPosition : {lat: 37.758, lng: -122.473}, // San Francisco as default
             map : {},
@@ -128,7 +129,7 @@ class Map extends React.Component {
     {
     return (
         <div>
-            <NavBar/>
+            <NavBar user={this.props.user}/>
 
 
               <div className="container">
@@ -143,7 +144,7 @@ class Map extends React.Component {
                 <h1>Games near you</h1>
                 <div ref="map" style={{height: "500px", width: "30%", float: "left"}}></div>
                   <div className = "gameTableInMap">
-                    <GameTable/>
+                    <GameTable user={this.props.user}/>
                   </div>
             </div>
 
@@ -152,7 +153,7 @@ class Map extends React.Component {
     } else {
         return (
         <div>
-            <NavBar/>
+            <NavBar user={this.props.user}/>
             <div className="Map">
                 <h1>Location must be allowed to use this feature</h1>
             </div>

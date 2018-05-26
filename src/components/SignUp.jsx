@@ -9,6 +9,7 @@ var axios=require("axios");
 class SignUp extends React.Component{
   constructor(props){
     super(props);
+    console.log("USER",this.props.user);
     this.signUp=this.signUp.bind(this);
     this.state={
       email:'',

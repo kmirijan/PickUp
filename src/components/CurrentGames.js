@@ -9,6 +9,7 @@ export class GameTable extends React.Component{
   constructor(props)
   {
     super(props);
+    console.log("USER",this.props.user);
 	this.state =
 	{
       games: [],

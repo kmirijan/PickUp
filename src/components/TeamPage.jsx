@@ -10,12 +10,14 @@ const GUEST = "guest";
 
 
 class TeamPage extends React.Component{
-
-
+constructor(props){
+  super(props);
+  console.log("USER",this.props.user);
+}
     render(){
         return(
             <div>
-                <NavBar/>
+                <NavBar user={this.props.user}/>
                 <TeamCreate user={this.props.user }/>
                 <TeamTable user={this.props.user} />
             </div>
@@ -268,7 +270,7 @@ export class TeamRow extends React.Component {
 
   getJoinLeaveButton()
   {
-    
+
     if (this.props.team.members.includes(this.props.user)) {
       return (
         <input type="button"
@@ -286,7 +288,7 @@ export class TeamRow extends React.Component {
             onClick={this.joinTeam.bind(this)} value="Join"/>
       );
     }
-      
+
   }
 
   render(){

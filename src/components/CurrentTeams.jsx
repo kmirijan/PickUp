@@ -15,13 +15,14 @@ class CurrentTeams extends React.Component{
 
     constructor(props) {
         super(props);
+        console.log("USER",this.props.user);
         console.log("rendered")
     }
 
     render(){
         return(
             <div>
-                <NavBar/>
+                <NavBar user={this.props.user}/>
                 <h1>Page where you can join teams.</h1>
             </div>
         );

@@ -8,12 +8,13 @@ var axios=require("axios");
 class Welcome extends React.Component{
   constructor(props){
     super(props);
+    console.log("USER",this.props.user);
   }
 
   render(){
     return(
     <div>
-      <h1>Welcome, {localStorage.getItem("user")},!</h1>
+      <h1>Welcome, {this.props.user},!</h1>
       <div><Link to={'/map'}>BEGIN PLAYING</Link></div>
   </div>
     );

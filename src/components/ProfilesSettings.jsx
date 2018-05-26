@@ -8,6 +8,7 @@ var axios=require("axios");
 class ProfileSettings extends React.Component{
 	constructor(props){
 		super(props);
+		console.log("USER",this.props.user);
     this.changeEmail=this.changeEmail.bind(this);
     this.state={
       emailError:"",
@@ -25,7 +26,7 @@ class ProfileSettings extends React.Component{
         method:"post",
         url:"/setemail",
         data:{
-          user:localStorage.getItem("user"),
+          user:this.props.user,
           email:newemail
         }
       }).then((res)=>{

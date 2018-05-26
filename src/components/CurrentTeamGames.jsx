@@ -10,6 +10,7 @@ export class CurrentTeamGames extends React.Component{
 
     constructor(props) {
         super(props);
+        console.log("USER",this.props.user);
         this.state = {
             game: {},
             isprivate:false,
@@ -26,7 +27,7 @@ export class CurrentTeamGames extends React.Component{
           method:"post",
           url:"/retrieveplayerteams",
           data:{
-            user:localStorage.getItem("user")
+            user:this.props.user
           }
         }).then((res)=>{
           this.playerteams=res.data;
@@ -40,7 +41,7 @@ export class CurrentTeamGames extends React.Component{
          method:"post",
          url:"/retrieveplayerteams",
          data:{
-           user:localStorage.getItem("user")
+           user:this.props.user
          }
        }).then((res)=>{
          this.setState({
@@ -107,7 +108,7 @@ export class CurrentTeamGames extends React.Component{
             name: name,
             isprivate:isprivate,
             location: location,
-            user: localStorage.getItem("user"),
+            user: this.props.user,
             teams:[team.name],
             coords: {
                 lat: coords.lat(),
@@ -182,7 +183,7 @@ export class CurrentTeamGames extends React.Component{
         })
         return(
             <div>
-                <NavBar/>
+                <NavBar user={this.props.user}/>
 
 
 

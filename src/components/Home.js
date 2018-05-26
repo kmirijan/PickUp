@@ -7,17 +7,13 @@ var axios=require("axios");
 import SignUp from "./SignUp.jsx";
 import CountUp from "react-countup";
 import Welcome from "./Welcome.jsx";
-import Login from "../helpers/login.js";
 
-
-Login.verify(localStorage.getItem("key"),(res)=>{
-  console.log("user",res);
-})
 
 
 class Home extends React.Component {
   constructor(props){
     super(props);
+    console.log("USER",this.props.user);
     this.state={
       usersCount:0,
       gamesCount:0
@@ -48,7 +44,7 @@ class Home extends React.Component {
   render() {
     return (
       <div className="home">
-        <NavBar/>
+        <NavBar user={this.props.user}/>
           <div className="first">
 
             <div className='centerText'>
@@ -63,7 +59,7 @@ class Home extends React.Component {
             <StartCount usersCount={this.state.usersCount} gamesCount={this.state.gamesCount}/>
           </div>
           <div className="third">
-            <SignUpHome/>
+            <SignUpHome user={this.props.user}/>
           </div>
       </div>
     );
@@ -112,14 +108,14 @@ class StartCount extends React.Component{
 }
 class SignUpHome extends React.Component{
   render(){
-    if(localStorage.getItem("loggedin")=="true"){
+    if(this.props.user!=null){
       return(
         <div>
           <div className="thirdHeader">
             Welcome
           </div>
         <div className="signUpHome">
-          <Welcome/>
+          <Welcome user={this.props.user}/>
         </div>
         </div>
       );

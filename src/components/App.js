@@ -9,6 +9,7 @@ class App extends React.Component {
   constructor(props)
   {
     super(props);
+    console.log("USER",this.props.user);
     console.log("props"); // DEBUG
     console.log(this.props);
   }
@@ -18,7 +19,7 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <NavBar/>
+        <NavBar user={this.props.user}/>
         <CurrentGames user={this.props.user} />
       </div>
     );

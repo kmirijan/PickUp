@@ -8,6 +8,7 @@ var {Link}=require('react-router-dom');
 class Profile extends React.Component{
 	constructor(props){
 		super(props);
+		console.log("USER",this.props.user);
 		this.expandBio=this.expandBio.bind(this);
 		this.addFriend=this.addFriend.bind(this);
 
@@ -55,7 +56,7 @@ class Profile extends React.Component{
 				method:"post",
 				url:"/reqfriend",
 				data:{
-					"user":localStorage.getItem("user"),
+					"user":this.props.user,
 					"friend":this.state.username,
 				}
 			}).then(()=>{
@@ -94,7 +95,7 @@ class Profile extends React.Component{
 	      		method:"post",
 	      		url:"/isfriend",
 	      		data:{
-	      			"user":localStorage.getItem("user"),
+	      			"user":this.props.user,
 	      			"friend":this.state.username
 	      		}
 	      	}).then((res)=>{
@@ -205,7 +206,7 @@ class Profile extends React.Component{
 							{this.state.expname}
 						</button>
 					</div>
-                    <GamesList games={this.state.myGames}
+                    <GamesList games={this.state.myGames} user={this.props.user}
 											username={this.state.username} frname={this.state.frname}/>
 					<div id="friendsList">
 						<h2>Friends:</h2><br></br>
@@ -231,7 +232,7 @@ class GamesList extends React.Component
 		}
 		joinGame(game)
 		{
-		  axios.post('/join', {uid:localStorage.getItem("user"), gid:game.id});
+		  axios.post('/join', {uid:this.props.user, gid:game.id});
 		}
     displayGame(game)
     {
