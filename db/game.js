@@ -41,7 +41,9 @@ var Game = mongoose.model('Game', {
 			lng: Number,
 			lat: Number
 		}]
-	}
+	},
+	startTime: {type: Number},
+	gameLength: {type: Number}
 });
 
 module.exports = {Game};

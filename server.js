@@ -286,33 +286,28 @@ app.post("/postgames", (req, res) =>
   };
 
 
-  mongo.connect(mongoUrl, (err, db) => {
-    if (err) throw err;
-
-    db.db("pickup").collection("games").insertOne(game,() => {
-      if (err){
-        console.log("error sending game");
-        console.log(err);
-      }
-      db.db("pickup").collection("users").update({"username":game["owner"]},{
-        $push: {games: game["id"]}
-      }).then(()=>{
-        console.log("game successfully sent");
-        res.sendStatus(200);
-        db.close();
-      })
-    });
-
-   });
-
-  /*
-  game.save().then((doc) => {
-      res.send(doc);
+  console.log(game);
+  game.save().then((game) => {
+      res.status(200).send({game});
     }, (e) => {
+      console.log(e);
       res.status(400).send(e);
   })
-  */
 });
+
+app.patch('/user:game', (req, res) => {
+  console.log('Adding game to user');
+  User.findOneAndUpdate(
+    {'username' : req.body.uid},
+    {$push: {games: req.body.gid}},
+    {new: true}
+  ).then((user) => {
+    console.log(user);
+    res.status(200).send({user})
+  }, (e) => {
+    res.status(400).send(e);
+  })
+})
 
 app.post("/retrievegames", (req, res) =>
 {

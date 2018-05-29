@@ -60,6 +60,7 @@ export class CurrentGames extends React.Component{
             gameLength: gameLength,
         };
         axios.post('/postgames', game)
+        axios.patch('/user:game', {uid: this.props.user, gid: game.id});
         this.refs.sport.clear();
         this.refs.location.clear();
         this.refs.gameLength.clear();
