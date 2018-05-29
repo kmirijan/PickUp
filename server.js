@@ -351,10 +351,10 @@ app.patch('/games', (req, res) => {
 })
 
 app.delete('/games', (req, res) => {
-  console.log('deleting', req.body);
+  // console.log('deleting', req.body);
   Game.findOneAndRemove({'id': req.body.gid})
   .then((game) =>{
-  console.log("Deleting", game);
+  // console.log("Deleting", game);
   res.status(200).send({game});
   }).catch((e) => {
     res.status(400).send(e);

@@ -245,13 +245,8 @@ class GamesList extends React.Component
 		deleteGame(gameId){
 			if(this.state.deleteGameClicked==false){
 				if(confirm("delete game?")){
-					axios({
-						method:"post",
-						url:"/deletegame",
-						data:{
-							gameId:gameId
-						}
-					}).then(()=>{
+					axios.delete('/games', {gid: gameId})
+					.then(()=>{
 						console.log("game deleted");
 						this.setState({
 							deleteGameClicked:true
