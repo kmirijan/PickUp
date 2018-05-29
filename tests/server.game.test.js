@@ -210,7 +210,7 @@ describe('PATCH /game:user', () => {
 			}).catch((e) => done(e));
 		});
 	});
-	it('should not add add a redundant user to a game', (done) => {
+	it('should not add a redundant user to a game', (done) => {
 		request(app)
 		.patch('/game:user')
 		.send({
@@ -218,9 +218,6 @@ describe('PATCH /game:user', () => {
 			uid: 'Jeff'
 		})
 		.expect(200)
-		.expect((res) => {
-			expect(res.body.game.players).toEqual(['Jan', 'Jeff'])
-		})
 		.end((err, res) => {
 			if(err){
 				return done(err);
@@ -228,6 +225,7 @@ describe('PATCH /game:user', () => {
 
 			Game.find().then((games) => {
 				expect(games.length).toBe(3);
+				expect(JSON.stringify(games[0].players)).toEqual(JSON.stringify(['Jan', 'Jeff']));
 				done();
 			}).catch((e) => done(e));
 		});
