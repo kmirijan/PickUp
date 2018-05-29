@@ -361,21 +361,6 @@ app.delete('/games', (req, res) => {
   })
 })
 
-app.post("/deletegame",(req,res)=>
-{
-  mongo.connect(mongoUrl,(err,client)=>{
-    if(err)throw new Error(err);
-
-    var db=client.db("pickup");
-    db.collection("games").remove({"id":req.body.gameId})
-    .then((arr)=>{
-      console.log(arr, "deleted");
-      res.json();
-      client.close();
-    })
-  });
-
-});
 
 app.post("/retrievespecificgames", (req,res)=>{
   mongo.connect(mongoUrl,(err,client)=>{
