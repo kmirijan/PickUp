@@ -295,11 +295,27 @@ app.post("/postgames", (req, res) =>
   })
 });
 
+// add user to game
+app.patch('/game:user', (req, res) => {
+  console.log('Adding user to game');
+  console.log(req.body);
+  Game.findOneAndUpdate(
+    {id : req.body.gid},
+    {$push: {players: req.body.uid}},
+    {new: true}
+  ).then((game) => {
+    console.log(game);
+    res.status(200).send({game})
+  }, (e) => {
+    res.status(400).send(e);
+  })
+})
+
 // Add game to user
 app.patch('/user:game', (req, res) => {
   console.log('Adding game to user');
   User.findOneAndUpdate(
-    {'username' : req.body.uid},
+    {username : req.body.uid},
     {$push: {games: req.body.gid}},
     {new: true}
   ).then((user) => {

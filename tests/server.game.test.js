@@ -187,6 +187,53 @@ describe('PATCH /leave:games', () => {
 	})
 })
 
+describe('PATCH /game:user', () => {
+	it('should add a user to a game', (done) => {
+		request(app)
+		.patch('/game:user')
+		.send({
+			gid: 12345,
+			uid: 'Khach'
+		})
+		.expect(200)
+		.expect((res) => {
+			expect(res.body.game.players).toEqual(['Jan', 'Jeff', 'Khach'])
+		})
+		.end((err, res) => {
+			if(err){
+				return done(err);
+			}
+
+			Game.find().then((games) => {
+				expect(games.length).toBe(3);
+				done();
+			}).catch((e) => done(e));
+		});
+	});
+	it('should not add add a redundant user to a game', (done) => {
+		request(app)
+		.patch('/game:user')
+		.send({
+			gid: 12345,
+			uid: 'Jeff'
+		})
+		.expect(200)
+		.expect((res) => {
+			expect(res.body.game.players).toEqual(['Jan', 'Jeff'])
+		})
+		.end((err, res) => {
+			if(err){
+				return done(err);
+			}
+
+			Game.find().then((games) => {
+				expect(games.length).toBe(3);
+				done();
+			}).catch((e) => done(e));
+		});
+	});
+})
+
 describe('DELETE /games', () => {
 	it('should remove a game', (done) => {
 		request(app)
