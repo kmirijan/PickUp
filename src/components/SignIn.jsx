@@ -8,6 +8,7 @@ var axios=require("axios");
 class SignIn extends React.Component{
   constructor(props){
     super(props);
+    console.log("USER",this.props.user);
     this.signIn=this.signIn.bind(this);
     this.state={
       email:'',
@@ -23,7 +24,7 @@ signIn(){
   console.log('this.state', this.state);
   const{email, password}=this.state;
    axios({
-      url:"/signin",
+      url:"/signin-test",
       method:"post",
       data:{
         "email":email,
@@ -32,8 +33,7 @@ signIn(){
     }).then((res)=>{
       if(res.data["success"]==true){
         /*https://www.robinwieruch.de/local-storage-react/*/
-        localStorage.setItem("loggedin","true");
-        localStorage.setItem("user",res.data["user"]);
+        localStorage.setItem("key",res.data["key"]);
         this.props.history.push("/user:"+res.data["user"]);
       }
       else
@@ -46,15 +46,15 @@ signIn(){
         })
         this.refs.signin.removeAttribute("disabled");
         this.props.history.push("/signin");
+
       }
-      console.log(localStorage.getItem("loggedin"))
     });
 }
 
   render(){
     return(
       <div>
-        <NavBar/>
+        <NavBar user={this.props.user}/>
           <form className="form-inline" style={{margin: '5%'}}>
         <h2>SignIn</h2>
         <div className="form-group">

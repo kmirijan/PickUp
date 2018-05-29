@@ -49,7 +49,7 @@ class Users extends React.Component{
 	render(){
 		return(
 			<div>
-				<NavBar />
+				<NavBar user={this.props.user}/>
 				<h2>Users list:</h2>
 				<div>
           <input className="w3-input w3-border w3-round"

@@ -19,30 +19,61 @@ import SignIn from './SignIn';
 import Home from "./Home";
 import Map from "./Map";
 var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
+import Login from "../helpers/login.js";
+
+
 
 
 class Routes extends React.Component{
+  constructor(props){
+    super(props);
+    this.loading=true;
+    this.state={
+      user:null,
+      loading:true
+    }
+  }
+  componentWillMount(){
+    Login.verify(localStorage.getItem("key"),(user)=>{
+      console.log("the user",user);
+      if(user!=null){
+        console.log("valid user")
+      }
+      else{
+        console.log("invalid user")
+      }
+
+      this.setState({
+        user:user,
+        loading:false
+      })
+    })
+  }
     render(){
-      if(localStorage.getItem("loggedin")=="true"){
+      console.log(this.state.loading)
+      if(this.state.loading==true){
+        return(<Loading/>)
+      }
+      else if(this.state.user!=null){
         return(
             <BrowserRouter>
                 <Switch>
-                	<Route exact path="/" component={NavBar} />
-                	<Route exact path="/home" component={Home} />
-                    <Route path="/list_users" component={Users} />
-                    <Route path='/user:username' component={User}/>
-                    <Route path="/edit:username" component={Edit}/>
-                    <Route path="/settings:username" component={Settings}/>
-                    <Route path="/game:id" component={RenderGamePage}/>
-                    <Route path="/tgame:id" component={RenderTeamGamePage}/>
-                    <Route path="/map" render={(props) => <Map user = {getCurrentUser()}/>}/>
-                    <Route path="/teams" render={(props) => <TeamPage user={getCurrentUser()} /> }/>
-                    <Route path="/teamgames" render={(props) => <CurrentTeamGames user={getCurrentUser()} />} />
-                    <Route path="/signin" component={SignIn}/>
-          					<Route path="/signup" component={SignUp}/>
-          					<Route path="/logout" component={LogOut}/>
-                    <Route path="/Loading"component={Loading}/>
-                    <Route path="/_404"component={_404} />
+                	<Route exact path="/" render={(props)=><Home user={this.state.user} {...props}/>}/>
+                  <Route exact path="/home" render={(props)=><Home user={this.state.user} {...props}/>}/>
+                  <Route path="/list_users" render={(props)=><Users user={this.state.user} {...props}/>}/>
+                  <Route path="/user:username" render={(props)=><User user={this.state.user} {...props}/>}/>
+                  <Route path="/edit:username" render={(props)=><Edit user={this.state.user} {...props}/>}/>
+                  <Route path="/settings:username" render={(props)=><Settings user={this.state.user} {...props}/>}/>
+                  <Route path="/game:id" render={(props)=><RenderGamePage user={this.state.user} {...props}/>}/>
+                  <Route path="/tgame:id" render={(props)=><RenderTeamGamePage user={this.state.user} {...props}/>}/>
+                  <Route path="/map" render={(props)=><Map user={this.state.user} {...props}/>}/>
+                  <Route path="/teams" render={(props)=><TeamPage user={this.state.user} {...props}/>}/>
+                  <Route path="/teamgames" render={(props)=><CurrentTeamGames user={this.state.user} {...props}/>}/>
+                  <Route path="/signin" render={(props)=><SignIn user={this.state.user} {...props}/>}/>
+                  <Route path="/signup" render={(props)=><SignUpWrap user={this.state.user} {...props}/>}/>
+                  <Route path="/logout" render={(props)=><LogOut user={this.state.user} {...props}/>}/>
+                  <Route path="/Loading" render={(props)=><Loading user={this.state.user} {...props}/>}/>
+                  <Route path="/_404" render={(props)=><_404 user={this.state.user} {...props}/>}/>
                 </Switch>
             </BrowserRouter>
         )
@@ -55,7 +86,7 @@ class Routes extends React.Component{
                 	<Route exact path="/" component={NavBar} />
                 	<Route exact path="/home" component={Home} />
                   <Route path="/signin" component={SignIn}/>
-				          <Route path="/signup" component={SignUp}/>
+				          <Route path="/signup" component={SignUpWrap}/>
                   <Route component={_404} />
                 </Switch>
             </BrowserRouter>
@@ -63,6 +94,7 @@ class Routes extends React.Component{
       }
     }
 }
+
 
 function getCurrentUser()
 {
@@ -78,7 +110,16 @@ function getCurrentUser()
     }
 }
 
-
+class SignUpWrap extends React.Component{
+  render(){
+    return(
+      <div>
+        <NavBar user={this.props.user}/>
+        <SignUp user={this.props.user} history={this.props.history}/>
+      </div>
+    )
+  }
+}
 class User extends React.Component{
 	constructor(props){
 		super(props);
@@ -91,10 +132,10 @@ class User extends React.Component{
     this.loading=true;
 	}
 	componentWillMount(){
-		if(!(localStorage.getItem("loggedin")=="true")){
+	/*	if(!(localStorage.getItem("loggedin")=="true")){
 			alert("Must be logged in to find users")
 			this.props.history.push("/signin");
-		}
+		}*/
     axios({
       method:"post",
       url:"/isuser",
@@ -119,24 +160,26 @@ class User extends React.Component{
       this.forceUpdate();
   }
 	render(){
-		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==this.usrnm))
+		if(this.props.user==this.usrnm)
 		{
 			return(
 				<div>
-				<NavBar />
+				<NavBar user={this.props.user}/>
 				<ProfileP
 					username={this.usrnm}
 					history={this.props.history}
+          user={this.props.user}
 				/>
 				</div>
 		)}
-    else if(localStorage.getItem("loggedin")=="true" && this.isValidUser==true){
+    else if(this.isValidUser==true){
   			return(
   				<div>
-  				<NavBar />
+  				<NavBar user={this.props.user}/>
   				<Profile
   					username={this.usrnm}
   					history={this.props.history}
+            user={this.props.user}
   				/>
   				</div>
   		)}
@@ -150,20 +193,24 @@ class User extends React.Component{
 	};
 };
 class Edit extends React.Component{
+  constructor(props){
+    super(props);
+  }
 	render(){
 		var usrnm=this.props.match.params.username;
 		while(!(/[a-z]/i.test(usrnm[0]))){
 			usrnm=usrnm.substring(1,usrnm.length);
 		}
-		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
+		if(this.props.user==usrnm)
 		{
 			return(
         <div>
-          <NavBar />
+          <NavBar user={this.props.user}/>
           <div className = "editPage">
             <ProfileEdit
               username={usrnm}
               history={this.props.history}
+              user={this.props.user}
               />
           </div>
         </div>
@@ -174,19 +221,23 @@ class Edit extends React.Component{
 	}
 }
 class Settings extends React.Component{
+  constructor(props){
+    super(props);
+  }
 	render(){
 		var usrnm=this.props.match.params.username;
 		while(!(/[a-z]/i.test(usrnm[0]))){
 			usrnm=usrnm.substring(1,usrnm.length);
 		}
-		if((localStorage.getItem("loggedin")=="true")&&(localStorage.getItem("user")==usrnm))
+		if(this.props.user==usrnm)
 		{
 			return(
 				<div>
-					<NavBar />
+					<NavBar user={this.props.user}/>
 					<ProfileSettings
 						username={usrnm}
 						history={this.props.history}
+            user={this.props.user}
 					/>
 				</div>
 			)}
@@ -223,10 +274,9 @@ class RenderGamePage extends React.Component{
   }
   render(){
     console.log("gametrue",this.isGame);
-    console.log("loggedin",localStorage.getItem("loggedin"))
-    if(this.isGame==true&&localStorage.getItem("loggedin")=="true"){
+    if(this.isGame==true){
 
-      return(<GamePage id={this.id}/>)
+      return(<GamePage id={this.id} user={this.props.user}/>)
     }
     else if(this.loading==true){
       return(<Loading/>)
@@ -262,10 +312,9 @@ class RenderTeamGamePage extends React.Component{
   }
   render(){
     console.log("gametrue",this.isGame);
-    console.log("loggedin",localStorage.getItem("loggedin"))
-    if(this.isGame==true&&localStorage.getItem("loggedin")=="true"){
+    if(this.isGame==true){
 
-      return(<TeamGamePage id={this.id}/>)
+      return(<TeamGamePage id={this.id} user={this.props.user}/>)
     }
     else if(this.loading==true){
       return(<Loading/>)
@@ -277,13 +326,30 @@ class RenderTeamGamePage extends React.Component{
 }
 
 class LogOut extends React.Component{
+  constructor(props){
+    super(props);
+    this.loading=true;
+  }
 	componentDidMount(){
-		localStorage.setItem("loggedin",false);
-        localStorage.setItem("user","");
-        this.props.history.push("/signin");
+    axios({
+      url:"/logout-test",
+      method:"delete",
+      data:{
+        key:localStorage.getItem("key")
+      }
+    }).then(()=>{
+      localStorage.setItem("key","");
+      this.loading=false;
+      location.reload();
+      this.props.history.push("/signin");
+    })
+
 	}
 	render(){
-        return(<_404 />);
+    if(this.loading==true){
+      return(<Loading/>)
+    }
+    else{return(<_404 />);}
 	}
 }
 const _404=()=>(

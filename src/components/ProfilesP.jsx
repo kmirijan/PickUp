@@ -9,6 +9,7 @@ var {Link}=require('react-router-dom');
 class ProfileP extends React.Component{
 	constructor(props){
 		super(props);
+		console.log("USER",this.props.user);
 		this.expandBio=this.expandBio.bind(this);
 		this.edit=this.edit.bind(this);
 		this.processFeed=this.processFeed.bind(this);
@@ -33,7 +34,7 @@ class ProfileP extends React.Component{
 			games:[],
 			friends:[],
 			feed:[],
-            myGames:[]
+      myGames:[]
 
 		}
 	}
@@ -103,7 +104,7 @@ class ProfileP extends React.Component{
 			method:"post",
 			url:"/acceptfriend",
 			data:{
-				"user":localStorage.getItem("user"),
+				"user":this.props.user,
 				"friend":friend,
 			}
 		}).then((res)=>{
@@ -117,7 +118,7 @@ class ProfileP extends React.Component{
 			method:"post",
 			url:"/declinefriend",
 			data:{
-				"user":localStorage.getItem("user"),
+				"user":this.props.user,
 				"friend":friend,
 			}
 		}).then((res)=>{
@@ -210,7 +211,7 @@ class ProfileP extends React.Component{
 						</div>
 					</div>
 
-					<GamesList games={this.state.myGames}/>
+					<GamesList games={this.state.myGames} user={this.props.user}/>
 					<div id="friendsList">
 						<h2>Friends:</h2><br></br>
 						{this.friendsList()}
@@ -244,13 +245,8 @@ class GamesList extends React.Component
 		deleteGame(gameId){
 			if(this.state.deleteGameClicked==false){
 				if(confirm("delete game?")){
-					axios({
-						method:"post",
-						url:"/deletegame",
-						data:{
-							gameId:gameId
-						}
-					}).then(()=>{
+					axios.delete('/games', {gid: gameId})
+					.then(()=>{
 						console.log("game deleted");
 						this.setState({
 							deleteGameClicked:true
@@ -261,14 +257,14 @@ class GamesList extends React.Component
 		}
 		componentDidUpdate(){
 			if(this.state.deleteGameClicked==true){
-				axios.post("/usergames", {user:localStorage.getItem("user")}).then( (results) => {
+				axios.post("/usergames", {user:this.props.user}).then( (results) => {
 						this.setState({games : results.data});
 				})
 				this.setState({deleteGameClicked:false});
 			}
 		}
 		componentWillMount(){
-				axios.post("/usergames", {user:localStorage.getItem("user")}).then( (results) => {
+				axios.post("/usergames", {user:this.props.user}).then( (results) => {
 						this.setState({games : results.data});
 				});
 		}
@@ -301,13 +297,13 @@ class GamesList extends React.Component
     {
 			if (this.props.games==[]) return;
 			var gamesList = this.state.games.filter((game)=>{
-				{return game["owner"]!=localStorage.getItem("user")}
+				{return game["owner"]!=this.props.user}
 			})
 			gamesList = gamesList.map((game) =>
 					{return this.displayGame(game)}
 			);
 			var gamesMade = this.state.games.filter((game)=>{
-				{return game["owner"]==localStorage.getItem("user")}
+				{return game["owner"]==this.props.user}
 			})
 			gamesMade = gamesMade.map((game) =>
 					{return this.displayGamesMade(game)}
