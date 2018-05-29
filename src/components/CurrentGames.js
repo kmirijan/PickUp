@@ -102,7 +102,10 @@ export class Game extends React.Component {
 
   joinGame()
   {
-    axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
+    // axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
+    axios.patch('/game:user', {uid: this.props.user, gid: this.props.game.id});
+    axios.patch('/user:game', {uid: this.props.user, gid: this.props.game.id});
+
   }
   leaveGame(){
     axios.patch('/leave:games', {uid:this.props.user, gid:this.props.game.id});
