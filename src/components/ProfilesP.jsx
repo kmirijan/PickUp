@@ -317,7 +317,7 @@ class GamesList extends React.Component
         return(
 					<div>
 						<h2>Games Played</h2>
-						<table classNaem="table table-bordered table-hover">
+						<table className="table table-bordered table-hover">
 							<tbody key="gamesList">{gamesList}</tbody></table>
 						<h2>Games Made</h2>
 						<table><tbody key="gamesMadeList">{gamesMade}</tbody></table>
