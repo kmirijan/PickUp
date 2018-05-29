@@ -35,15 +35,14 @@ var Game = mongoose.model('Game', {
 		type: Boolean,
 		required:true
 	},
-	coords: {
-		type : {type: String},
-		coordinates: [{
-			lng: Number,
-			lat: Number
-		}]
-	},
+	// coords: {
+	// 	type : {type: String},
+	// 	coordinates: [{
+	// 		type: Number
+	// 	}]
+	// },
 	startTime: {type: Number},
-	gameLength: {type: Number}
+	endTime: {type: Number}
 });
 
 module.exports = {Game};

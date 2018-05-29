@@ -273,19 +273,18 @@ app.post("/postgames", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
 
-  var game = {
+  var game = new Game({
     sport: makeValid(req.body.sport),
     name: makeValid(req.body.name),
     location: makeValid(req.body.location),
     isprivate:makeValid(req.body.isprivate),
-    id: makeValid(req.body.gameId),
+    id: makeValid(req.body.id),
     owner: makeValid(req.body.user),
     players: [makeValid(req.body.user),],
-    coords: {type: "Point", coordinates: [req.body.coords.lng, req.body.coords.lat] },
+    //coords: {type: "Point", coordinates: [req.body.coords.lat, req.body.coords.lng] },
     startTime: req.body.startTime,
     endTime: req.body.startTime + req.body.gameLength
-  };
-
+  });
 
   console.log(game);
   game.save().then((game) => {
@@ -328,16 +327,15 @@ app.post("/retrievegames", (req, res) =>
 
 
 app.patch('/leave:games', (req, res) => {
-  console.log('patch: ', req.body);
-
+  // console.log('patch: ', req.body);
   Game.findOneAndUpdate(
     {'id': req.body.gid},
     {$pull: {players : req.body.uid}},
     {new: true}
   )
   .then((game) =>{
-    console.log('length: ', game.players.length)
-    console.log('req: ', req.body);
+    // console.log('length: ', game.players.length)
+    // console.log('req: ', req.body);
     if(game.players.length === 0){
       game.remove();
     }

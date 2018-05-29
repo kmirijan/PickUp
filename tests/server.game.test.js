@@ -56,7 +56,9 @@ describe('POST /postgames', () => {
 			coords: {
 				lat: 32,
 				lng: 27
-			}
+			},
+			startTime: 123,
+			gameLength: 123
 		}
 
 		request(app)
@@ -70,6 +72,8 @@ describe('POST /postgames', () => {
 			expect(res.body.game.id).toBe(517381293891);
 			expect(res.body.game.owner).toBe('user');
 			expect(res.body.game.players).toEqual(['user']);
+			expect(res.body.game.startTime).toBe(123);
+			expect(res.body.game.endTime).toBe(123+123);
 		})
 		.end((err, res) => {
 			if(err){
