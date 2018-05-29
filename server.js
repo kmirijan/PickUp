@@ -325,13 +325,8 @@ app.post("/retrievegames", (req, res) =>
       res.json(result);
       res.end();
       db.close();
-
-
     });
-
-
   });
-
 });
 
 
@@ -421,10 +416,6 @@ app.post("/deletegameT",(req,res)=>{
 app.post("/retrieveplayerteams",(req,res)=>{
   teamgames.retrievePlayerTeams(req,res);
 })
-
-
-/*deploy app*/
-
 
 
 // interval in milliseconds
