@@ -42,6 +42,7 @@ io.on('connection',(socket)=>{
 
 
 var {Game} = require('./db/game.js');
+var {User} = require('./db/User.js');
 
 //var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
