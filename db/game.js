@@ -29,12 +29,18 @@ var Game = mongoose.model('Game', {
 	},
   players: [{
 		type: String,
-		minlength: 1,
 		trim: true
 	}],
 	isprivate:{
 		type: Boolean,
 		required:true
+	},
+	coords: {
+		type : {type: String},
+		coordinates: [{
+			lng: Number,
+			lat: Number
+		}]
 	}
 });
 
