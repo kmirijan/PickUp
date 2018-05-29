@@ -286,25 +286,25 @@ app.post("/postgames", (req, res) =>
     endTime: req.body.startTime + req.body.gameLength
   });
 
-  console.log(game);
+  //console.log(game);
   game.save().then((game) => {
       res.status(200).send({game});
     }, (e) => {
-      console.log(e);
+      //console.log(e);
       res.status(400).send(e);
   })
 });
 
 // add user to game
 app.patch('/game:user', (req, res) => {
-  console.log('Adding user to game');
-  console.log(req.body);
+  //console.log('Adding user to game');
+  //console.log(req.body);
   Game.findOneAndUpdate(
-    {id : req.body.gid},
+    {id : req.body.gid, players: { $nin: [req.body.uid]} },
     {$push: {players: req.body.uid}},
     {new: true}
   ).then((game) => {
-    console.log(game);
+    //console.log(game);
     res.status(200).send({game})
   }, (e) => {
     res.status(400).send(e);
