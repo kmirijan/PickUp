@@ -12,7 +12,8 @@ const games = [{
   location: 'San Jose',
   id: 12345,
   owner: 'Jan',
-  players: ['Jan', 'Jeff']
+  players: ['Jan', 'Jeff'],
+	isprivate: false
 }, {
   _id: new ObjectID(),
   sport: 'Sport',
@@ -20,7 +21,18 @@ const games = [{
   location: 'San Jose',
   id: 12346,
   owner: 'Jan',
-  players: ['Alex', 'Jeff']
+  players: ['Alex', 'Jeff'],
+	isprivate: false
+},
+{
+	_id: new ObjectID(),
+  sport: 'Sport',
+  name: 'Alex',
+  location: 'San Jose',
+  id: 12349,
+  owner: 'Alex',
+  players: ['Alex'],
+	isprivate: true
 }];
 
 beforeEach((done) => {
@@ -29,25 +41,94 @@ beforeEach((done) => {
 
 beforeEach((done) => {
 	Game.insertMany(games).then(() => done());
-});
+})
 
-describe('POST /games', () => {
-	it('should create new game', (done) => {
+describe('POST /postgames', () => {
+	it('should create new game and add to database', (done) => {
 
-    var sport = 'Activity';
-    var name = 'Name';
-    var location = 'Location';
+		var gameData= {
+			sport: 'sport',
+			location: 'location',
+			name: 'name',
+			user: 'user',
+			isprivate: false,
+			id: 517381293891,
+			coords: {
+				lat: 32,
+				lng: 27
+			}
+		}
 
 		request(app)
-		.post('/games')
+		.post('/postgames')
+		.send(gameData)
+		.expect(200)
+		.expect((res) => {
+			expect(res.body.game.sport).toBe('sport');
+			expect(res.body.game.location).toBe('location');
+			expect(res.body.game.name).toBe('name');
+			expect(res.body.game.id).toBe(517381293891);
+			expect(res.body.game.owner).toBe('user');
+			expect(res.body.game.players).toEqual(['user']);
+		})
+		.end((err, res) => {
+			if(err){
+				return done(err);
+			}
+
+			Game.find({}).then((games) => {
+				expect(games.length).toBe(4);
+				done();
+			}).catch((e) => done(e));
+		});
+	});
+
+	it('should not create a game with invalid body data', (done) => {
+		request(app)
+		.post('/postgames')
+		.send({sport: 'sport'})
+		.expect(400)
+		.end((err, res) => {
+			if(err){
+				return done(err);
+			}
+
+			Game.find().then((games) => {
+				expect(games.length).toBe(3);
+				done();
+			}).catch((e) => done(e));
+		});
+	});
+
+	it('should not create game with no body data', (done) => {
+		request(app)
+		.post('/postgames')
+		.send({})
+		.expect(400)
+		.end((err, res) => {
+			if(err){
+				return done(err);
+			}
+
+			Game.find().then((games) => {
+				expect(games.length).toBe(3);
+				done();
+			}).catch((e) => done(e));
+		});
+	});
+});
+
+describe('PATCH /leave:games', () => {
+	it('should update and remove a player in a game', (done) => {
+		request(app)
+		.patch('/leave:games')
 		.send({
-			sport,
-			name,
-			location
+			gid: 12345,
+			uid: 'Jeff'
 		})
 		.expect(200)
 		.expect((res) => {
-			expect(res.body.sport).toBe(sport);
+			expect(res.body.game.players).toEqual(['Jan'])
 		})
 		.end((err, res) => {
 			if(err){
@@ -59,22 +140,64 @@ describe('POST /games', () => {
 				done();
 			}).catch((e) => done(e));
 		});
-	});
+	})
 
-	// it('should not create todo invalid body data', (done) => {
-	// 	request(app)
-	// 	.post('/todos')
-	// 	.send({})
-	// 	.expect(400)
-	// 	.end((err, res) => {
-	// 		if(err){
-	// 			return done(err);
-	// 		}
-  //
-	// 		Todo.find().then((todos) => {
-	// 			expect(todos.length).toBe(2);
-	// 			done();
-	// 		}).catch((e) => done(e));
-	// 	});
-	// });
-});
+	it('should remove the game when last player is removed', (done) => {
+		request(app)
+		.patch('/leave:games')
+		.send({
+			gid: 12349,
+			uid: 'Alex'
+		})
+		.expect(200)
+		.end((err, res) => {
+			if(err){
+				return done(err);
+			}
+
+			Game.find({}).then((games) => {
+				expect(games.length).toBe(2);
+				done();
+			}).catch((e) => done(e));
+		});
+	})
+
+	it('should return normally but not remove anything if player leaving is not a game player', (done) => {
+		request(app)
+		.patch('/leave:games')
+		.send({
+			gid: 12349,
+			uid: 'Jordan'
+		})
+		.expect(200)
+		.end((err, res) => {
+			if(err){
+				return done(err);
+			}
+
+			Game.find({}).then((games) => {
+				expect(games.length).toBe(3);
+				done();
+			}).catch((e) => done(e));
+		});
+	})
+})
+
+describe('DELETE /games', () => {
+	it('should remove a game', (done) => {
+		request(app)
+		.delete('/games')
+		.send({gid: 12345})
+		.expect(200)
+		.end((err, res) => {
+			if(err){
+				return done(err);
+			}
+
+			Game.find().then((games) => {
+				expect(games.length).toBe(2);
+				done();
+			}).catch((e) => done(e));
+		});
+	});
+})

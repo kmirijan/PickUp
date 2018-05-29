@@ -296,6 +296,7 @@ app.post("/postgames", (req, res) =>
   })
 });
 
+// Add game to user
 app.patch('/user:game', (req, res) => {
   console.log('Adding game to user');
   User.findOneAndUpdate(
@@ -326,7 +327,7 @@ app.post("/retrievegames", (req, res) =>
 });
 
 
-app.patch('/games', (req, res) => {
+app.patch('/leave:games', (req, res) => {
   console.log('patch: ', req.body);
 
   Game.findOneAndUpdate(
