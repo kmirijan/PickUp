@@ -16,6 +16,7 @@ const util = require('util')
 const app=express();
 const http=require("http").Server(app);
 
+//deploy app
 const port=process.env.PORT;
 http.listen(port,()=>{
     console.log(port);
