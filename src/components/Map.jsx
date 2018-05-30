@@ -9,6 +9,7 @@ import {CurrentGames} from './CreateGames';
 
 class Map extends React.Component {
     DEFAULT_ZOOM = 13;
+    MI_TO_KM = 1.609;
     constructor(props)
     {
         super(props);
@@ -18,7 +19,7 @@ class Map extends React.Component {
             map : {},
             games : [],
             nearbyGames: [],
-            range : 10, /* kilometers away from location */
+            range : 5 * this.MI_TO_KM, /* kilometers away from location */
 
         };
 
@@ -73,7 +74,6 @@ class Map extends React.Component {
     }
 
 
-    MILES_PER_DEGREE = 69;
     retrieveNearbyGames() {
 
         axios.post("/nearbygames", {range: this.state.range, center: this.state.userPosition}).then(
@@ -123,6 +123,12 @@ class Map extends React.Component {
 
 
     }
+
+    updateRange(event)
+    {
+        this.setState({range: parseFloat(event.target.value) * this.MI_TO_KM});
+    }
+
     render() {
 
     if (navigator.geolocation)
@@ -142,7 +148,12 @@ class Map extends React.Component {
 
             <div className="Map">
                 <h1>Games near you</h1>
-                <div ref="map" style={{height: "500px", width: "30%", float: "left"}}></div>
+                <div ref="mapContainer" style={{height: "512px", width: "30%", float: "left"}}>
+                    <div ref="map" style={{height: "500px"}} />
+                    <input type="text" ref="range"
+                        placeholder="Miles away"
+                        onChange={this.updateRange.bind(this)} />
+                </div>
                   <div className = "gameTableInMap">
                     <GameTable user={this.props.user}/>
                   </div>
