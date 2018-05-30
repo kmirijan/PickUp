@@ -35,6 +35,7 @@ class Routes extends React.Component{
     }
   }
   componentWillMount(){
+    console.log("router will mount");
     const cookies = new Cookies();
     Login.verify(cookies.get("key"),(user)=>{
       console.log("the user",user);
@@ -52,6 +53,7 @@ class Routes extends React.Component{
     })
   }
   componentWillReceiveProps(){
+    console.log("router received props");
     this.forceUpdate();
   }
     render(){
