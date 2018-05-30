@@ -15,6 +15,7 @@ const busboy=require("connect-busboy");
 const util = require('util')
 const app=express();
 const http=require("http").Server(app);
+var cors = require('cors');
 
 //deploy app
 const port=process.env.PORT;
@@ -48,7 +49,9 @@ var {User} = require('./db/User.js');
 
 
 
+
 /*configurations*/
+app.use(cors());
 app.use(express.static("./dist"));
 app.use(bodyParser.json());
 app.use(busboy());
@@ -248,6 +251,7 @@ app.post("/nearbygames", (req, res) => {
 
 // return the games that the user has played
 app.post("/usergames", (req, res) => {
+  console.log(req.body.user)
     console.log('[', (new Date()).toLocaleTimeString(), "] Sending ", req.body.user.trim(), "'s games");
 
     mongo.connect(mongoUrl, (err, client) => {
