@@ -7,14 +7,16 @@
 	text-align:center;
 }
 #panel{
-	width:30%;
+	width:65%;
 	float: left;
 	margin-top: 20px;
+	margin-left: 10px;
 }
 #fpanel{
-	width:70%;
+	width:30%;
 	float:right;
-	margin-top: 0px
+	margin-top: 0px;
+	margin-right: 10px;
 }
 
 #card{
@@ -123,17 +125,19 @@
 	font-size:20px;
 	text-align:center;
 }
+
 #friendsList{
 	font-size:20px;
 	text-align:center;
 }
+
 #feed{
 	text-align:center;
 }
-#save{
-	text-align:center;
-}
+
 #friendslist{
+	width: 30%;
+	margin: auto;
 	text-align:center;
 }
 #addfriend{

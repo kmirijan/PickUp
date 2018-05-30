@@ -9,9 +9,9 @@ var {Link}=require('react-router-dom');
 class ProfileP extends React.Component{
 	constructor(props){
 		super(props);
+		console.log("USER",this.props.user);
 		this.expandBio=this.expandBio.bind(this);
 		this.edit=this.edit.bind(this);
-		this.settings=this.settings.bind(this);
 		this.processFeed=this.processFeed.bind(this);
 		this.acceptFriendreq=this.acceptFriendreq.bind(this);
 		this.declineFriendreq=this.declineFriendreq.bind(this);
@@ -23,7 +23,7 @@ class ProfileP extends React.Component{
 		}
 
 		this.state={
-			expname:"expand",
+			expname:"Expand",
 			expanded:false,
 			pic:"",
 			short:"",
@@ -34,24 +34,21 @@ class ProfileP extends React.Component{
 			games:[],
 			friends:[],
 			feed:[],
-            myGames:[]
+      myGames:[]
 
 		}
 	}
 	edit(){
 		this.props.history.push("/edit:"+this.props.username);
 	}
-	settings(){
-		this.props.history.push("/settings:"+this.props.username);
-	}
 	expandBio(){
 		if(this.state.expanded==false){
 			this.setState({expanded:true});
-			this.setState({expname:"collapse"});
+			this.setState({expname:"Collapse"});
 		}
 		else{
 			this.setState({expanded:false});
-			this.setState({expname:"expand"});
+			this.setState({expname:"Expand"});
 		}
 	}
 	componentDidMount(){
@@ -95,10 +92,10 @@ class ProfileP extends React.Component{
 			friend=>friend["req"]=="accepted"
 		);
 		friends=friends.map((f)=>
-			<li key={f["username"]}>{f["username"]}</li>
+			<li className="list-group-item" key={f["username"]}>{f["username"]}</li>
 		)
 		return(
-			<ul key="friends">{friends}</ul>
+			<ul className="list-group" key="friends">{friends}</ul>
 		)
 	}
 	acceptFriendreq(friend){
@@ -107,7 +104,7 @@ class ProfileP extends React.Component{
 			method:"post",
 			url:"/acceptfriend",
 			data:{
-				"user":localStorage.getItem("user"),
+				"user":this.props.user,
 				"friend":friend,
 			}
 		}).then((res)=>{
@@ -121,7 +118,7 @@ class ProfileP extends React.Component{
 			method:"post",
 			url:"/declinefriend",
 			data:{
-				"user":localStorage.getItem("user"),
+				"user":this.props.user,
 				"friend":friend,
 			}
 		}).then((res)=>{
@@ -134,17 +131,19 @@ class ProfileP extends React.Component{
 			return(
 				<div>
 					<p>
-						{f["sender"]} sent you a friend request!
+						{f["sender"]} Sent you a friend request!
 					</p>
 					<button
 						ref="friendaccept"
+						className="btn btn-success"
 						onClick={()=>this.acceptFriendreq(f["sender"])}>
-						accept
+						Accept
 					</button>
 					<button
 						ref="frienddecline"
+						className="btn btn-danger"
 						onClick={()=>this.declineFriendreq(f["sender"])}>
-						decline
+						Decline
 					</button>
 				</div>
 			)
@@ -154,10 +153,10 @@ class ProfileP extends React.Component{
 	feed(){
 		if(this.state.feed==undefined){return}
 		const feed=this.state.feed.map((f)=>
-			<li key={f["type"]}>{this.processFeed(f)}</li>
+			<li className="list-group-item" key={f["type"]}>{this.processFeed(f)}</li>
 		)
 		return(
-			<ul key="feed">{feed}</ul>
+			<ul className="list-group" key="feed">{feed}</ul>
 		)
 	}
 	componentDidUpdate(prevProps,prevState){
@@ -218,6 +217,7 @@ class ProfileP extends React.Component{
 							</div>
 						</div>
 
+
 						<div className="w3-card">
 							<GamesList games={this.state.myGames}/>
 							<div id="gamesText">
@@ -225,7 +225,6 @@ class ProfileP extends React.Component{
 								{this.friendsList()}
 							</div>
 						</div>
-
 					</div>
 
 					<div id="fpanel">
@@ -253,13 +252,8 @@ class GamesList extends React.Component
 		deleteGame(gameId){
 			if(this.state.deleteGameClicked==false){
 				if(confirm("delete game?")){
-					axios({
-						method:"post",
-						url:"/deletegame",
-						data:{
-							gameId:gameId
-						}
-					}).then(()=>{
+					axios.delete('/games', {gid: gameId})
+					.then(()=>{
 						console.log("game deleted");
 						this.setState({
 							deleteGameClicked:true
@@ -270,14 +264,14 @@ class GamesList extends React.Component
 		}
 		componentDidUpdate(){
 			if(this.state.deleteGameClicked==true){
-				axios.post("/usergames", {user:localStorage.getItem("user")}).then( (results) => {
+				axios.post("/usergames", {user:this.props.user}).then( (results) => {
 						this.setState({games : results.data});
 				})
 				this.setState({deleteGameClicked:false});
 			}
 		}
 		componentWillMount(){
-				axios.post("/usergames", {user:localStorage.getItem("user")}).then( (results) => {
+				axios.post("/usergames", {user:this.props.user}).then( (results) => {
 						this.setState({games : results.data});
 				});
 		}
@@ -285,22 +279,23 @@ class GamesList extends React.Component
     {
         return (
 					<tr key={game.id}>
-						<td ><h3>{game.sport} </h3></td>
-						<td ><h3>{game.name} </h3></td>
-						<td > <h3>{game.location}</h3> </td>
-						<td><Link to={"/game:"+game.id}><h3>Details</h3></Link></td>
+						<td >{game.sport}</td>
+						<td >{game.name}</td>
+						<td >{game.location}</td>
+						<td><Link to={"/game:"+game.id}>Details</Link></td>
 					</tr>
         )
     }
 		displayGamesMade(game){
 			return (
 				<tr key={game.id}>
-					<td ><h3>{game.sport} </h3></td>
-					<td ><h3>{game.name} </h3></td>
-					<td > <h3>{game.location}</h3> </td>
-					<td><Link to={"/game:"+game.id}><h3>Details</h3></Link></td>
-					<td><button onClick={()=>{this.deleteGame(game.id)}}>
-						<h3>delete</h3>
+					<td >{game.sport}</td>
+					<td >{game.name}</td>
+					<td >{game.location}</td>
+					<td><Link to={"/game:"+game.id}>Details</Link></td>
+					<td><button className="btn btn-danger"
+						onClick={()=>{this.deleteGame(game.id)}}>
+						Delete
 					</button></td>
 				</tr>
 			)
@@ -309,13 +304,13 @@ class GamesList extends React.Component
     {
 			if (this.props.games==[]) return;
 			var gamesList = this.state.games.filter((game)=>{
-				{return game["owner"]!=localStorage.getItem("user")}
+				{return game["owner"]!=this.props.user}
 			})
 			gamesList = gamesList.map((game) =>
 					{return this.displayGame(game)}
 			);
 			var gamesMade = this.state.games.filter((game)=>{
-				{return game["owner"]==localStorage.getItem("user")}
+				{return game["owner"]==this.props.user}
 			})
 			gamesMade = gamesMade.map((game) =>
 					{return this.displayGamesMade(game)}
@@ -323,6 +318,7 @@ class GamesList extends React.Component
 
         return(
 					<div>
+
 						<h2 id="gamesText">Games Played</h2>
 						<table><tbody key="gamesList">{gamesList}</tbody></table>
 						<h2 id="gamesText">Games Made</h2>

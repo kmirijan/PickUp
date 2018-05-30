@@ -10,25 +10,24 @@ export class CurrentTeamGames extends React.Component{
 
     constructor(props) {
         super(props);
+        console.log("USER",this.props.user);
         this.state = {
             game: {},
             isprivate:false,
             playerteams:[],
-            toggleTeamDropDown:false,
             teamselected:null
         };
         this.addGame = this.addGame.bind(this);
         this.togglePrivate=this.togglePrivate.bind(this);
         this.selectTeam=this.selectTeam.bind(this);
         this.teamDropDown=this.teamDropDown.bind(this);
-        this.dropTeam=this.dropTeam.bind(this);
         this.ownedteams=[];
         this.teamSelected=this.teamSelected.bind(this);
         axios({
           method:"post",
           url:"/retrieveplayerteams",
           data:{
-            user:localStorage.getItem("user")
+            user:this.props.user
           }
         }).then((res)=>{
           this.playerteams=res.data;
@@ -42,7 +41,7 @@ export class CurrentTeamGames extends React.Component{
          method:"post",
          url:"/retrieveplayerteams",
          data:{
-           user:localStorage.getItem("user")
+           user:this.props.user
          }
        }).then((res)=>{
          this.setState({
@@ -58,35 +57,26 @@ export class CurrentTeamGames extends React.Component{
         })
       }
     }
-    dropTeam(){
-      if(this.state.toggleTeamDropDown==false){
-        this.setState({
-          toggleTeamDropDown:true
-        })
-      }
-      else{
-        this.setState({
-          toggleTeamDropDown:false
-        })
-      }
-    }
-    teamDropDown(){
-      if(this.state.toggleTeamDropDown==false){
-        return;
-      }
+
+        teamDropDown(){
       if(this.ownedteams.length==0){
         return(<div>You have no teams</div>);
       }
       const teams=this.ownedteams.map((team)=>{
         return(
           <div className="team" key={"team:"+team["name"]}>
-            <div><h3>{team["name"]}</h3></div>
-            <button onClick={()=>{this.selectTeam(team)}}>select</button>
+            <div>{team["name"]}</div>
+            <button className = "btn btn-secondary"
+              data-toggle="collapse"
+              data-target="#selectTeam"
+              onClick={()=>{this.selectTeam(team)}}>Select</button>
           </div>
         )
       })
       return teams;
     }
+
+
     getName()
     {
         if (this.props.user != GUEST)
@@ -118,7 +108,7 @@ export class CurrentTeamGames extends React.Component{
             name: name,
             isprivate:isprivate,
             location: location,
-            user: localStorage.getItem("user"),
+            user: this.props.user,
             teams:[team.name],
             coords: {
                 lat: coords.lat(),
@@ -193,19 +183,8 @@ export class CurrentTeamGames extends React.Component{
         })
         return(
             <div>
-                <NavBar/>
-                <button
-                onClick={()=>{this.dropTeam()}}
-                className='gameDetails'
-                id= 'team select'
-                ref="team select"
-                >select team</button>
-                <div>
-                  team selected:{this.teamSelected()}
-                </div>
-                <div>
-                 {this.teamDropDown()}
-                </div>
+                <NavBar user={this.props.user}/>
+
 
 
                   <div className="container">
@@ -215,17 +194,54 @@ export class CurrentTeamGames extends React.Component{
 
                     <div id="createTeamGames" className="collapse">
                         <div className="row main">
+
+
                           <div className="panel-heading">
                            <div className="panel-title text-center">
                               <h1 className="title">Create a team game below:</h1>
                               <hr />
                             </div>
                         </div>
+
+
+
+
+
                         <div className="main-create main-center">
                     <form className="form-horizontal"
                       onSubmit={this.addGame.bind(this)}>
 
                       {this.displayNameInput()}
+
+
+
+                      <div className="form-group">
+                        <button
+                          data-toggle="collapse"
+                            data-target="#selectTeam"
+                     className='btn btn-primary'
+                     >Select Team</button>
+
+                   <div id="selectTeam" className="collapse">
+                     <div>
+                      {this.teamDropDown()}
+                     </div>
+                      </div>
+                    </div>
+
+
+
+                    <div className="form-group">
+                      <div className="cols-sm-10">
+                        <div className="input-group">
+                          <div>
+                            Team Selected:{this.teamSelected()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
 
                       <div className="form-group">
                         <label className="cols-sm-2 control-label">Activity</label>
@@ -252,13 +268,7 @@ export class CurrentTeamGames extends React.Component{
                         </div>
                       </div>
 
-                      <p>Private</p>
-                      <input
-                        className='gameDetails'
-                        id= 'isprivate'
-                       type="checkbox"
-                       ref="isprivate"
-                       onChange={this.togglePrivate}/>
+
                       <div className="form-group">
                         <p>Private</p>
                         <input
@@ -399,51 +409,21 @@ class Game extends React.Component {
     super(props);
     this.showTeamGamesJoin=this.showTeamGamesJoin.bind(this);
     this.showTeamGamesLeave=this.showTeamGamesLeave.bind(this);
-    this.state={
-      showDropDownJoin:false,
-      showDropDownLeave:false
-    }
     this.ownedteams=[];
   }
-  joinGame()
-  {
-    //axios.post('/joinT', {uid:this.props.user, gid:this.props.game.id});
-    if(this.state.showDropDownJoin==false){
-      this.setState({
-      showDropDownJoin:true
-      })
-    }
-    else{
-      this.setState({
-        showDropDownJoin:false
-      })
-    }
-  }
-  leaveGame(){
-    //axios.patch('/gamesT', {uid:this.props.user, gid:this.props.game.id});
-    if(this.state.showDropDownLeave==false){
-      this.setState({
-      showDropDownLeave:true
-      })
-    }
-    else{
-      this.setState({
-        showDropDownLeave:false
-      })
-    }
-  }
   showTeamGamesJoin(){
-    if(this.state.showDropDownJoin==false){
-      return;
-    }
     if(this.props.ownedteams.length==0){
       return(<div>You have no teams</div>);
     }
     const teams=this.props.ownedteams.map((team)=>{
       return(
         <div className="team" key={"teamjoin:"+team["name"]}>
-          <div><h3>{team["name"]}</h3></div>
-          <button onClick={()=>{this.selectTeamJoin(team)}}>select</button>
+          <div>{team["name"]}</div>
+          <button
+            data-toggle="collapse"
+            data-target="#joinTeamGame"
+            className="btn btn-secondary btn-sm"
+            onClick={()=>{this.selectTeamJoin(team)}}>Select</button>
         </div>
       )
     })
@@ -474,17 +454,18 @@ class Game extends React.Component {
     }
   }
   showTeamGamesLeave(){
-    if(this.state.showDropDownLeave==false){
-      return;
-    }
     if(this.props.ownedteams.length==0){
       return(<div>You have no teams</div>);
     }
     const teams=this.props.ownedteams.map((team)=>{
       return(
         <div className="team" key={"teamleave:"+team["name"]}>
-          <button onClick={()=>{this.selectTeamLeave(team)}}>select</button>
-          <div><h3>{team["name"]}</h3></div>
+          <div>{team["name"]}</div>
+          <button
+            data-toggle="collapse"
+            data-target="#leaveTeamGame"
+            className="btn btn-secondary btn-sm"
+            onClick={()=>{this.selectTeamLeave(team)}}>Select</button>
         </div>
       )
     })
@@ -494,23 +475,35 @@ class Game extends React.Component {
   render(){
     return(
         <tr>
-          <td ><h3>{this.props.game.sport} </h3></td>
-          <td ><h3>{this.props.game.owner} </h3></td>
-          <td > <h3>{this.props.game.location}</h3> </td>
+          <td >{this.props.game.sport} </td>
+          <td >{this.props.game.owner} </td>
+          <td > {this.props.game.location} </td>
           <td>
-            <button className="joinGame" onClick={this.joinGame.bind(this)}><h3>Join</h3></button>
-            <div className="dropdown">
+            <button className="btn btn-success"
+              data-toggle="collapse"
+              data-target="#joinTeamGame">Join</button>
+
+
+            <div id="joinTeamGame" className="collapse">
               {this.showTeamGamesJoin()}
             </div>
+
+
           </td>
           <td>
-            <button className="leaveGame" onClick={this.leaveGame.bind(this)}><h3>Leave</h3></button>
-            <div className="dropdown">
+            <button className="btn btn-danger"
+              data-toggle="collapse"
+              data-target="#leaveTeamGame">Leave</button>
+
+
+            <div id="leaveTeamGame" className="collapse">
               {this.showTeamGamesLeave()}
             </div>
+
+
           </td>
-          <td > <h3>{this.props.game.teams.length}</h3> </td>
-          <td><Link to={"/tgame:"+this.props.game.id}><h3>Details</h3></Link></td>
+          <td > {this.props.game.teams.length}</td>
+          <td><Link to={"/tgame:"+this.props.game.id}>Details</Link></td>
         </tr>
     );
   }
