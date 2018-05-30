@@ -52,13 +52,12 @@ export class CurrentGames extends React.Component{
             isprivate:isprivate,
             location: location,
             user: this.props.user,
-            coords: {
-                lat: coords.lat(),
-                lng: coords.lng()
-            },
+            lat: coords.lat(),
+            lng: coords.lng(),
             startTime: startTime,
             gameLength: gameLength,
         };
+        console.log(game);
         axios.post('/postgames', game)
         axios.patch('/user:game', {uid: this.props.user, gid: game.id});
         this.refs.sport.clear();
