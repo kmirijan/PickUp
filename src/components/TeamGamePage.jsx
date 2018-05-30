@@ -12,6 +12,7 @@ import MapIndiv from "./MapIndiv";
 class TeamGamePage extends React.Component{
   constructor(props){
     super(props);
+    console.log("USER",this.props.user);
     this.state={
       game:null
     }
@@ -35,7 +36,7 @@ class TeamGamePage extends React.Component{
     console.log("render",this.state.game);
     return(
       <div>
-        <NavBar/>
+        <NavBar user={this.props.user}/>
         <div id="entirePage">
           <div id="gamePage">
             <div id="players">
@@ -52,7 +53,7 @@ class TeamGamePage extends React.Component{
             </div>
           </div>
           <div id="chat">
-            <Chat/>
+            <Chat user={this.props.user}/>
           </div>
         </div>
       </div>
@@ -82,7 +83,7 @@ class Chat extends React.Component{
   }
   sendMessages(){
     this.socket.emit("send",{
-      sender:localStorage.getItem("user"),
+      sender:this.props.user,
       message:this.state.myMessage
     })
     this.setState({myMessage:""})

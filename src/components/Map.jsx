@@ -9,15 +9,16 @@ import {CurrentGames} from './CreateGames';
 
 class Map extends React.Component {
     DEFAULT_ZOOM = 13;
+    MI_TO_KM = 1.609;
     constructor(props)
     {
         super(props);
+        console.log("USER",this.props.user);
         this.state = {
             userPosition : {lat: 37.758, lng: -122.473}, // San Francisco as default
             map : {},
             games : [],
             nearbyGames: [],
-            range : 10, /* kilometers away from location */
 
         };
 
@@ -72,10 +73,10 @@ class Map extends React.Component {
     }
 
 
-    MILES_PER_DEGREE = 69;
     retrieveNearbyGames() {
-
-        axios.post("/nearbygames", {range: this.state.range, center: this.state.userPosition}).then(
+        let range = parseFloat(this.refs.range.value) * this.MI_TO_KM;
+        console.log("Range:", range, "km");
+        axios.post("/nearbygames", {range: range, center: this.state.userPosition}).then(
             (results) => {
                 this.setState({nearbyGames : results.data});
                 this.updateMap();
@@ -85,6 +86,7 @@ class Map extends React.Component {
     }
 
     updateMap() {
+        this.clearMarkers();
         console.log("adding markers");
         console.log(this.state.nearbyGames);
         this.state.nearbyGames.map((game) =>
@@ -106,6 +108,15 @@ class Map extends React.Component {
         });
     }
 
+    clearMarkers()
+    {
+        while (this.markers.length > 0)
+        {
+            let marker = this.markers.pop();
+            marker.setMap(null);
+        }
+    }
+
     createInfoWindowContent(game)
     {
         return (
@@ -122,13 +133,14 @@ class Map extends React.Component {
 
 
     }
+
     render() {
 
     if (navigator.geolocation)
     {
     return (
         <div>
-            <NavBar/>
+            <NavBar user={this.props.user}/>
 
 
               <div className="container">
@@ -141,9 +153,18 @@ class Map extends React.Component {
 
             <div className="Map">
                 <h1>Games near you</h1>
-                <div ref="map" style={{height: "500px", width: "30%", float: "left"}}></div>
+                <div ref="mapContainer" style={{width: "30%", float: "left"}}>
+                    <div ref="map" style={{height: "500px"}} />
+                    Distance(Miles):
+                    <input type="text" ref="range"
+                        defaultValue="5"
+                        placeholder="Miles away" />
+                    <input type="button" value="Refresh Map"
+                        className="btn btn-primary"
+                        onClick={this.retrieveNearbyGames.bind(this)} />
+                </div>
                   <div className = "gameTableInMap">
-                    <GameTable/>
+                    <GameTable user={this.props.user}/>
                   </div>
             </div>
 
@@ -152,7 +173,7 @@ class Map extends React.Component {
     } else {
         return (
         <div>
-            <NavBar/>
+            <NavBar user={this.props.user}/>
             <div className="Map">
                 <h1>Location must be allowed to use this feature</h1>
             </div>

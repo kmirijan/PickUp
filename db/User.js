@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const UserSchema = new mongoose.Schema({
-  firstName: {
+
+var User = mongoose.model('User', {
+  username: {
     type: String,
     default: ''
   },
-  lastName: {
+  bio: {
     type: String,
     default: ''
   },
@@ -20,15 +21,31 @@ const UserSchema = new mongoose.Schema({
   isDeleted: {
     type: Boolean,
     default: false
-  }
+  },
+  games: [{
+		type: Number
+	}],
+  friends:[{
+    username: String,
+    req: String
+  }],
+  feed:[{
+    type: String
+  }],
+  teams: [{
+    type: String
+  }],
+  teamgames: [{
+    type: String
+  }]
 });
 
-UserSchema.methods.generateHash = function(password){
+User.generateHash = function(password){
   return bcrypt.hashSync(password,bcrypt.genSaltSync(8), null);
 };
 
-UserSchema.methods.validPassword =function(password){
+User.validPassword =function(password){
   return bcrypt.compareSync(password, this.password);
 };
 
-module.exports = mongoose('User', UserSchema);
+module.exports = {User};

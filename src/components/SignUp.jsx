@@ -9,6 +9,7 @@ var axios=require("axios");
 class SignUp extends React.Component{
   constructor(props){
     super(props);
+    console.log("USER",this.props.user);
     this.signUp=this.signUp.bind(this);
     this.state={
       email:'',
@@ -20,7 +21,8 @@ class SignUp extends React.Component{
     }
   }
 
-signUp(){
+signUp(e){
+  e.preventDefault();
   this.refs.signup.setAttribute("disabled","disabled");
   const{email, password, username}=this.state;
   this.refs.signup.setAttribute("disabled","disabled");
@@ -72,9 +74,7 @@ signUp(){
       }).then((res)=>{
         if(res.data==true){
           console.log("signed up");
-          localStorage.setItem("loggedin",true);
-          localStorage.setItem("user",this.state.username);
-          this.props.history.push("/user:"+this.state.username);
+          this.props.history.push("/signin");
         }
         else{
           this.setState({
@@ -83,7 +83,7 @@ signUp(){
             }
           })
         }
-        this.refs.signup.removeAttribute("disabled");
+
       });
 
   }
@@ -92,8 +92,11 @@ signUp(){
   render(){
     return(
     <div>
-      <NavBar/>
-        <form className="form-inline" style={{margin: '5%'}}>
+        <form
+          className="form-inline"
+          style={{margin: '5%'}}
+          onSubmit={(e)=>this.signUp(e)}
+          >
         <h2>SignUp</h2>
         <div className="form-group">
         <input
@@ -121,7 +124,6 @@ signUp(){
         ref="signup"
         className="btn btn-primary"
         type="submit"
-        onClick={() => this.signUp()}
         >
         Sign Up
         </button>

@@ -3,15 +3,20 @@ var ReactDOM=require("react-dom");
 var axios=require("axios");
 import NavBar from "./NavBar"
 require("../css/gamePage.css")
+//https://medium.com/dailyjs/combining-react-with-socket-io-for-real-time-goodness-d26168429a34
 import io from 'socket.io-client';
 import MapIndiv from "./MapIndiv";
+
+
 
 class GamePage extends React.Component{
   constructor(props){
     super(props);
+    console.log("USER",this.props.user);
     this.state={
       game:null
     }
+
   }
   componentWillMount(){
     axios({
@@ -26,13 +31,11 @@ class GamePage extends React.Component{
       })
     })
   }
-  //group chat
-  //map
-  //players
   render(){
+    console.log("render",this.state.game);
     return(
       <div>
-        <NavBar/>
+        <NavBar user={this.props.user}/>
         <div id="entirePage">
           <div id="gamePage">
             <div id="players">
@@ -49,7 +52,7 @@ class GamePage extends React.Component{
             </div>
           </div>
           <div id="chat">
-            <Chat/>
+            <Chat user={this.props.user}/>
           </div>
         </div>
       </div>
@@ -79,7 +82,7 @@ class Chat extends React.Component{
   }
   sendMessages(){
     this.socket.emit("send",{
-      sender:localStorage.getItem("user"),
+      sender:this.props.user,
       message:this.state.myMessage
     })
     this.setState({myMessage:""})

@@ -7,14 +7,16 @@ import axios from "axios"
 
 class MapIndiv extends React.Component {
     DEFAULT_ZOOM = 13;
+    MI_TO_KM = 1.609;
     constructor(props)
     {
         super(props);
+        console.log("USER",this.props.user);
         this.state = {
             userPosition : {lat: 37.758, lng: -122.473}, // San Francisco as default
             map : {},
             thisGame:null,
-            range : 5, /* miles away from location */
+            range : 5 * MI_TO_KM, /* kilometers away from location */
             users:[]
 
         };
@@ -64,6 +66,13 @@ class MapIndiv extends React.Component {
         }
 
     }
+
+   
+    updateRange(event)
+    {
+        this.setState({range: (parseFloat(event.target.value) * MI_TO_KM)});
+    }
+
     componentDidUpdate(){
       this.initMap();
     }
@@ -83,10 +92,16 @@ class MapIndiv extends React.Component {
     {
     return (
         <div>
-            <NavBar/>
+            <NavBar user={this.props.user}/>
             <div className="Map">
                 <h1>Game location</h1>
                 <div ref="map" style={{height: "100%", width: "100%"}}></div>
+                <div>
+                    Distance(Miles):
+                    <input type="text" ref="range" 
+                        value="5"
+                        onChange={this.updateRange.bind(this)}/>
+                </div>
             </div>
 
 
@@ -94,7 +109,7 @@ class MapIndiv extends React.Component {
     } else {
         return (
         <div>
-            <NavBar/>
+            <NavBar user={this.props.user}/>
             <div className="Map">
                 <h1>Location must be allowed to use this feature</h1>
             </div>
