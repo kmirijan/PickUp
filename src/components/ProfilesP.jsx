@@ -173,64 +173,57 @@ class ProfileP extends React.Component{
 		}
 		return(
 			<div id="profile">
-				<div className="container">
-					<img src="/feed.jpg" className="centerPic"/>
-						<div className="text-block">
-
-							<div id="picture">
-								<img src={this.state.pic} style={picStyle}></img>
-								<div id="mask"></div>
-								<p id="changeimg">change picture</p>
-							</div>
-
+				<div id="panel">
+				<div id = "card">
+						<div id="picture">
+							<img src={this.state.pic} style={picStyle}></img>
+							<div id="mask"></div>
+							<p id="changeimg">change picture</p>
 						</div>
 
 						<div id="alias">
-							<div>
-								{this.state.alias}
-							</div>
-						</div>
-				</div>
-				<div className="container">
-					<div id="panel">
-						<div id = "card">
-							<div className="infoHeader">Info:</div>
-							<div id="username">
-								{this.state.username}
-							</div>
-
-							<div id="email">
-								{this.state.email}
-							</div>
-
-							<div id="bio" ref="bio">
-								{this.state.short}
-							</div>
-
-							<div id="edit">
-								<button className="btn btn-default btn-md" onClick={this.edit}>
-									Edit
-								</button>
-								<button className ="btn btn-default btn-md" onClick={this.expandBio}>
-									{this.state.expname}
-								</button>
-							</div>
+							{this.state.alias}
 						</div>
 
+						<div id="username">
+							{this.state.username}
+						</div>
 
-						<div className="w3-card">
-							<GamesList games={this.state.myGames}/>
-							<div id="gamesText">
-								Friends:<br></br>
-								{this.friendsList()}
-							</div>
+						<div id="email">
+							{this.state.email}
+						</div>
+
+						<div id="bio" ref="bio">
+							{this.state.short}
+						</div>
+
+						<div id="edit">
+							<button
+								className="btn btn-primary"
+								onClick={this.edit}>
+								Edit
+							</button>
+							<button
+								className="btn btn-secondary"
+								onClick={this.expandBio}>
+								{this.state.expname}
+							</button>
 						</div>
 					</div>
 
-					<div id="fpanel">
-						<div id="feed">
-							{this.feed()}
-						</div>
+					<GamesList games={this.state.myGames} user={this.props.user}/>
+					<div id="friendsList">
+						<h2>Friends:</h2><br></br>
+						{this.friendsList()}
+					</div>
+				</div>
+
+
+
+				<div id="fpanel">
+					<h1>FEED</h1>
+					<div id="feed">
+						{this.feed()}
 					</div>
 				</div>
 			</div>
@@ -318,10 +311,10 @@ class GamesList extends React.Component
 
         return(
 					<div>
-
-						<h2 id="gamesText">Games Played</h2>
-						<table><tbody key="gamesList">{gamesList}</tbody></table>
-						<h2 id="gamesText">Games Made</h2>
+						<h2>Games Played</h2>
+						<table classNaem="table table-bordered table-hover">
+							<tbody key="gamesList">{gamesList}</tbody></table>
+						<h2>Games Made</h2>
 						<table><tbody key="gamesMadeList">{gamesMade}</tbody></table>
 					</div>
 	    );
