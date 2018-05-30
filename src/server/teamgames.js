@@ -99,7 +99,6 @@ exports.postGamesT= (req, res) =>
     id: makeValid(req.body.game.gameId),
     owner: makeValid(req.body.game.user),
     teams: makeValid(req.body.game.teams),
-    coords: req.body.game.coords,
   };
 
 
