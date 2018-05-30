@@ -282,7 +282,8 @@ export class CurrentTeamGames extends React.Component{
                       <div className="form-group">
 
                       <div>
-                        <input type="submit" className="btn btn-primary" value="Create"/>
+                        <input type="submit" className="btn btn-primary" data-toggle="collapse"
+                          data-target="#createTeamGames" value="Create"/>
                         <span></span>
                         <input type="reset" className="btn btn-default" value="Clear"/>
                       </div>
@@ -409,46 +410,12 @@ class Game extends React.Component {
     super(props);
     this.showTeamGamesJoin=this.showTeamGamesJoin.bind(this);
     this.showTeamGamesLeave=this.showTeamGamesLeave.bind(this);
-    this.state={
-      showDropDownJoin:false,
-      showDropDownLeave:false
-    }
+    this.joinButton=this.joinButton.bind(this);
+    this.leaveButton=this.leaveButton.bind(this);
     this.ownedteams=[];
   }
 
-  joinGame()
-   {
-     //axios.post('/joinT', {uid:this.props.user, gid:this.props.game.id});
-     if(this.state.showDropDownJoin==false){
-       this.setState({
-       showDropDownJoin:true
-       })
-     }
-     else{
-       this.setState({
-         showDropDownJoin:false
-       })
-     }
-   }
-   leaveGame(){
-     //axios.patch('/gamesT', {uid:this.props.user, gid:this.props.game.id});
-     if(this.state.showDropDownLeave==false){
-       this.setState({
-       showDropDownLeave:true
-       })
-     }
-     else{
-       this.setState({
-         showDropDownLeave:false
-       })
-     }
-   }
-
-
    showTeamGamesJoin(){
-    if(this.state.showDropDownJoin==false){
-      return;
-    }
     if(this.props.ownedteams.length==0){
       return(<div>You have no teams</div>);
     }
@@ -489,9 +456,6 @@ class Game extends React.Component {
     }
   }
   showTeamGamesLeave(){
-    if(this.state.showDropDownLeave==false){
-      return;
-    }
     if(this.props.ownedteams.length==0){
       return(<div>You have no teams</div>);
     }
@@ -508,6 +472,36 @@ class Game extends React.Component {
     return teams;
   }
 
+  joinButton(){
+  return(
+    <div>
+  <button className="btn btn-success"
+    data-toggle="collapse"
+     data-target={"#teamjoincollapse:"+this.props.game.owner}>Join</button>
+
+
+   <div id={"teamjoincollapse:"+this.props.game.owner} className="collapse">
+    {this.showTeamGamesLeave()}
+  </div>
+  </div>
+);
+}
+
+  leaveButton(){
+    return(
+      <div>
+    <button className="btn btn-danger"
+      data-toggle="collapse"
+       data-target={"#teamleavecollapse:"+this.props.game.owner}>Leave</button>
+
+
+     <div id={"teamleavecollapse:"+this.props.game.owner} className="collapse">
+      {this.showTeamGamesLeave()}
+    </div>
+    </div>
+  );
+  }
+
   render(){
     return(
       <tr>
@@ -515,25 +509,14 @@ class Game extends React.Component {
        <td >{this.props.game.owner}</td>
        <td >{this.props.game.location}</td>
        <td>
-         <button className="btn btn-success"
-           onClick={this.joinGame.bind(this)}>Join</button>
 
 
-         <div className="dropdown">
-           {this.showTeamGamesJoin()}
-         </div>
+         {this.joinButton()}
 
 
        </td>
        <td>
-         <button className="btn btn-danger"
-           onClick={this.leaveGame.bind(this)}>Leave</button>
-
-
-         <div className="dropdown">
-           {this.showTeamGamesLeave()}
-         </div>
-
+         {this.leaveButton()}
 
        </td>
        <td > {this.props.game.teams.length}</td>
