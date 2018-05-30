@@ -219,7 +219,7 @@ class ProfileP extends React.Component{
 
 
 						<div className="w3-card">
-							<GamesList games={this.state.myGames}/>
+							<GamesList games={this.state.myGames} user={this.props.user}/>
 							<div id="gamesText">
 								Friends:<br></br>
 								{this.friendsList()}

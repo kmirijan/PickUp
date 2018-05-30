@@ -20,6 +20,7 @@ import Home from "./Home";
 import Map from "./Map";
 var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 import Login from "../helpers/login.js";
+import Cookies from 'universal-cookie';
 
 
 
@@ -34,7 +35,8 @@ class Routes extends React.Component{
     }
   }
   componentWillMount(){
-    Login.verify(localStorage.getItem("key"),(user)=>{
+    const cookies = new Cookies();
+    Login.verify(cookies.get("key"),(user)=>{
       console.log("the user",user);
       if(user!=null){
         console.log("valid user")
@@ -130,12 +132,7 @@ class User extends React.Component{
     this.usrnm=usrnm;
     this.isValidUser=false;
     this.loading=true;
-	}
-	componentWillMount(){
-	/*	if(!(localStorage.getItem("loggedin")=="true")){
-			alert("Must be logged in to find users")
-			this.props.history.push("/signin");
-		}*/
+    console.log("constructed");
     axios({
       method:"post",
       url:"/isuser",
@@ -144,11 +141,14 @@ class User extends React.Component{
       }
     })
     .then((isUser)=>{
-      console.log(isUser.data)
+      console.log("isuser?",isUser.data)
       this.isValidUser=isUser.data;
       this.loading=false;
       this.forceUpdate();
     })
+	}
+	componentWillMount(){
+
 	}
   componentWillReceiveProps(props){
     console.log(props);
@@ -156,8 +156,25 @@ class User extends React.Component{
      while(!(/[a-z]/i.test(usrnm[0]))){
        usrnm=usrnm.substring(1,usrnm.length);
      }
-      this.usrnm=usrnm;
-      this.forceUpdate();
+    this.usrnm=usrnm;
+    this.forceUpdate();
+      /*if(!(localStorage.getItem("loggedin")=="true")){
+  			alert("Must be logged in to find users")
+  			this.props.history.push("/signin");
+  		}*/
+      axios({
+        method:"post",
+        url:"/isuser",
+        data:{
+          "user":this.usrnm
+        }
+      })
+      .then((isUser)=>{
+        console.log("isuser?",isUser.data)
+        this.isValidUser=isUser.data;
+        this.loading=false;
+        this.forceUpdate();
+      })
   }
 	render(){
 		if(this.props.user==this.usrnm)
@@ -338,9 +355,12 @@ class LogOut extends React.Component{
         key:localStorage.getItem("key")
       }
     }).then(()=>{
-      localStorage.setItem("key","");
+      //localStorage.setItem("key","");
+      const cookies = new Cookies();
+      cookies.set("key","",{path:"/"} );
       this.loading=false;
-      location.reload();
+      //location.reload(false);
+      //window.onload(this.props.history.push("/signin"));
       this.props.history.push("/signin");
     })
 

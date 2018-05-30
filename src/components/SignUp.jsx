@@ -21,7 +21,8 @@ class SignUp extends React.Component{
     }
   }
 
-signUp(){
+signUp(e){
+  e.preventDefault();
   this.refs.signup.setAttribute("disabled","disabled");
   const{email, password, username}=this.state;
   this.refs.signup.setAttribute("disabled","disabled");
@@ -91,7 +92,11 @@ signUp(){
   render(){
     return(
     <div>
-        <form className="form-inline" style={{margin: '5%'}}>
+        <form
+          className="form-inline"
+          style={{margin: '5%'}}
+          onSubmit={(e)=>this.signUp(e)}
+          >
         <h2>SignUp</h2>
         <div className="form-group">
         <input
@@ -119,7 +124,6 @@ signUp(){
         ref="signup"
         className="btn btn-primary"
         type="submit"
-        onClick={() => this.signUp()}
         >
         Sign Up
         </button>
