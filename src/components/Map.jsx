@@ -148,7 +148,7 @@ class Map extends React.Component {
 
             <div className="Map">
                 <h1>Games near you</h1>
-                <div ref="mapContainer" style={{height: "512px", width: "30%", float: "left"}}>
+                <div ref="mapContainer" style={{width: "30%", float: "left"}}>
                     <div ref="map" style={{height: "500px"}} />
                     <input type="text" ref="range"
                         placeholder="Miles away"
