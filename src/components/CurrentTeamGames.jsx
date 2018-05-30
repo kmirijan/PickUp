@@ -208,26 +208,27 @@ export class CurrentTeamGames extends React.Component{
 
 
                         <div className="main-create main-center">
+
+                          <div>
+                            <button
+                              data-toggle="collapse"
+                                data-target="#selectTeam"
+                          className='btn btn-primary'
+                          >Select Team</button>
+
+                          <div id="selectTeam" className="collapse">
+                          <div>
+                          {this.teamDropDown()}
+                          </div>
+                          </div>
+                        </div>
+
                     <form className="form-horizontal"
                       onSubmit={this.addGame.bind(this)}>
 
                       {this.displayNameInput()}
 
 
-
-                      <div className="form-group">
-                        <button
-                          data-toggle="collapse"
-                            data-target="#selectTeam"
-                     className='btn btn-primary'
-                     >Select Team</button>
-
-                   <div id="selectTeam" className="collapse">
-                     <div>
-                      {this.teamDropDown()}
-                     </div>
-                      </div>
-                    </div>
 
 
 
@@ -477,10 +478,10 @@ class Game extends React.Component {
     <div>
   <button className="btn btn-success"
     data-toggle="collapse"
-     data-target={"#teamjoincollapse:"+this.props.game.owner}>Join</button>
+     data-target={"#join"+this.props.game.id}>Join</button>
 
 
-   <div id={"teamjoincollapse:"+this.props.game.owner} className="collapse">
+   <div id={"join"+this.props.game.id} className="collapse">
     {this.showTeamGamesLeave()}
   </div>
   </div>
@@ -492,10 +493,10 @@ class Game extends React.Component {
       <div>
     <button className="btn btn-danger"
       data-toggle="collapse"
-       data-target={"#teamleavecollapse:"+this.props.game.owner}>Leave</button>
+       data-target={"#leave"+this.props.game.id}>Leave</button>
 
 
-     <div id={"teamleavecollapse:"+this.props.game.owner} className="collapse">
+     <div id={"leave"+this.props.game.id} className="collapse">
       {this.showTeamGamesLeave()}
     </div>
     </div>

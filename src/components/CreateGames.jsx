@@ -152,7 +152,7 @@ class GameInputField extends React.Component {
                 <div className="cols-sm-10">
         			<div className="input-group">
         				<span className="input-group-addon"></span>
-          				<input className='gameDetails form-control' type="text"  type="text"
+          				<input required className='gameDetails form-control' type="text"  type="text"
                                 ref="input"
                                 {...this.props}/>
         			</div>
