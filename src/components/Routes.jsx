@@ -76,6 +76,7 @@ class Routes extends React.Component{
                   <Route path="/logout" render={(props)=><LogOut user={this.state.user} {...props}/>}/>
                   <Route path="/Loading" render={(props)=><Loading user={this.state.user} {...props}/>}/>
                   <Route path="/_404" render={(props)=><_404 user={this.state.user} {...props}/>}/>
+                  <Route component={_404} />
                 </Switch>
             </BrowserRouter>
         )

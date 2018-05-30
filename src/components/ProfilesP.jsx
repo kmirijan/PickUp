@@ -1,164 +1,71 @@
-var React=require("react");
-var ReactDOM=require("react-dom");
-require("../css/profiles.css");
+var React=require('react');
+var ReactDOM=require('react-dom');
+require('../css/profiles.css');
 var {Switch,BrowserRouter,Route,browserHistory,Redirect}=require('react-router-dom');
-var axios=require("axios");
+var axios=require('axios');
 var {Link}=require('react-router-dom');
+
+//constants
+const SINGLE=0;
 
 
 class ProfileP extends React.Component{
 	constructor(props){
 		super(props);
-		console.log("USER",this.props.user);
+
+		//check whether user is passed down correctly
+		console.log('USER',this.props.user);
+
+		//function bindings
 		this.expandBio=this.expandBio.bind(this);
 		this.edit=this.edit.bind(this);
 		this.processFeed=this.processFeed.bind(this);
 		this.acceptFriendreq=this.acceptFriendreq.bind(this);
 		this.declineFriendreq=this.declineFriendreq.bind(this);
 
-
-        var usrnm=this.props.username;
+		//rids username of semicolons/equal signs
+    var usrnm=this.props.username;
 		while(!(/[a-z]/i.test(usrnm[0]))){
 			usrnm=usrnm.substring(1,usrnm.length);
 		}
 
+		//default states
 		this.state={
-			expname:"Expand",
+			expname:'Expand',
 			expanded:false,
-			pic:"",
-			short:"",
-			long:"",
+			pic:'',
+			short:'',
+			long:'',
 			username:usrnm,
-			alias:"",
-			email:"",
+			alias:'',
+			email:'',
 			games:[],
 			friends:[],
 			feed:[],
-      myGames:[]
-
+      myGames:[],
+			myTeamGames:[],
+			myTeams:[]
 		}
 	}
+
+	//directs to edit page
 	edit(){
-		this.props.history.push("/edit:"+this.props.username);
+		this.props.history.push('/edit:'+this.props.username);
 	}
+
+	//expands and reduces bio
 	expandBio(){
 		if(this.state.expanded==false){
 			this.setState({expanded:true});
-			this.setState({expname:"Collapse"});
+			this.setState({expname:'Collapse'});
 		}
 		else{
 			this.setState({expanded:false});
-			this.setState({expname:"Expand"});
+			this.setState({expname:'Expand'});
 		}
 	}
-	componentDidMount(){
 
-		console.log('"',this.state.username,'"')
-		axios.post("/user",{
-				user:this.state.username
-		}).then((res)=>{
-			var userStates=res.data[0];
-			this.setState({
-				username:userStates["username"],
-				pic:userStates["pic"],
-				alias:userStates["alias"],
-				long:userStates["bio"],
-				short:userStates["bio"],
-				email:userStates["email"],
-				games:userStates["games"],
-				friends:userStates["friends"],
-				feed:userStates["feed"],
-			});
-			//make bio shorter
-	      	if(this.state.long.length>100){
-	      		this.setState({short:this.state.long.substring(0,100)});
-	      	}
-
-		}).catch((error)=>{
-         	console.log(error.response.data);
-      	});
-
-	}
-
-    componentWillMount() {
-        axios.post("/usergames", {user:this.state.username}).then( (results) => {
-            this.setState({myGames : results.data});
-        });
-    }
-
-    	friendsList(){
-		if(this.state.friends==undefined){return}
-		var friends=this.state.friends.filter(
-			friend=>friend["req"]=="accepted"
-		);
-		friends=friends.map((f)=>
-			<li className="list-group-item" key={f["username"]}>{f["username"]}</li>
-		)
-		return(
-			<ul className="list-group" key="friends">{friends}</ul>
-		)
-	}
-	acceptFriendreq(friend){
-		this.refs.friendaccept.setAttribute("disabled","disabled");
-		axios({
-			method:"post",
-			url:"/acceptfriend",
-			data:{
-				"user":this.props.user,
-				"friend":friend,
-			}
-		}).then((res)=>{
-			this.setState(res.data);
-			this.refs.friendaccept.removeAttribute("disabled");
-		})
-	}
-	declineFriendreq(friend){
-		this.refs.frienddecline.setAttribute("disabled","disabled");
-		axios({
-			method:"post",
-			url:"/declinefriend",
-			data:{
-				"user":this.props.user,
-				"friend":friend,
-			}
-		}).then((res)=>{
-			this.setState(res.data);
-			this.refs.frienddecline.removeAttribute("disabled");
-		})
-	}
-	processFeed(f){
-		if(f["type"]=="friendreq"){
-			return(
-				<div>
-					<p>
-						{f["sender"]} Sent you a friend request!
-					</p>
-					<button
-						ref="friendaccept"
-						className="btn btn-success"
-						onClick={()=>this.acceptFriendreq(f["sender"])}>
-						Accept
-					</button>
-					<button
-						ref="frienddecline"
-						className="btn btn-danger"
-						onClick={()=>this.declineFriendreq(f["sender"])}>
-						Decline
-					</button>
-				</div>
-			)
-		}
-		else{return}
-	}
-	feed(){
-		if(this.state.feed==undefined){return}
-		const feed=this.state.feed.map((f)=>
-			<li className="list-group-item" key={f["type"]}>{this.processFeed(f)}</li>
-		)
-		return(
-			<ul className="list-group" key="feed">{feed}</ul>
-		)
-	}
+	/*bio expansion*/
 	componentDidUpdate(prevProps,prevState){
 		if(this.state.expanded==true && this.state.expanded!=prevState.expanded)
 			this.refs.bio.innerHTML=this.state.long;
@@ -166,69 +73,207 @@ class ProfileP extends React.Component{
 			this.refs.bio.innerHTML=this.state.short;
 
 	}
-	render(){
-		const picStyle={
-			"maxWidth":"200px",
-			"maxHeight":"200px"
-		}
+
+	componentDidMount(){
+		//get user data from username collection
+		axios.post('/user',{
+				user:this.state.username
+		}).then((res)=>{
+			var userStates=res.data[SINGLE];
+			console.log('user states',res.data[SINGLE])
+			this.setState({
+				username:userStates['username'],
+				pic:userStates['pic'],
+				alias:userStates['alias'],
+				long:userStates['bio'],
+				short:userStates['bio'],
+				email:userStates['email'],
+				games:userStates['games'],
+				teamGames:userStates['teamgames'],
+				teams:userStates['teams'],
+				friends:userStates['friends'],
+				feed:userStates['feed'],
+			});
+			//make bio shorter if it's too long
+    	if(this.state.long.length>100){
+    		this.setState({short:this.state.long.substring(0,100)});
+    	}
+
+			//catches error from post to /user
+		}).catch((error)=>{
+         	console.log(error.response.data);
+      	});
+	}
+
+  componentWillMount(){
+		/*retrieves user's games, team games, and teams, respectively*/
+    axios.post('/usergames', {user:this.state.username}).then( (results) => {
+        this.setState({myGames : results.data});
+    });
+		axios.post("/usergamest",{user:this.props.username}).then((results)=>{
+			this.setState({myTeamGames:results.data});
+		})
+		axios.post("/retrieveplayerteams",{user:this.props.username}).then((results)=>{
+			this.setState({myTeams:results.data});
+		})
+  }
+
+	//creates friends list
+  friendsList(){
+		if(this.state.friends==undefined){return}
+		var friends=this.state.friends.filter(
+			friend=>friend['req']=='accepted'
+		);
+		friends=friends.map((f)=>
+			<li className='list-group-item' key={f['username']}>{f['username']}</li>
+		)
 		return(
-			<div id="profile">
-				<div className="container">
-					<img src="/feed.jpg" className="centerPic"/>
-						<div className="text-block">
+			<ul className='list-group' key='friends'>{friends}</ul>
+		)
+	}
 
-							<div id="picture">
-								<img src={this.state.pic} style={picStyle}></img>
-								<div id="mask"></div>
-								<p id="changeimg">change picture</p>
-							</div>
+	//handles accept friend request
+	acceptFriendreq(friend){
+		this.refs.friendaccept.setAttribute('disabled','disabled');
+		axios({
+			method:'post',
+			url:'/acceptfriend',
+			data:{
+				'user':this.props.user,
+				'friend':friend,
+			}
+		}).then((res)=>{
+			this.setState(res.data);
+			this.refs.friendaccept.removeAttribute('disabled');
+		})
+	}
 
-						</div>
+	//handles decline friend request
+	declineFriendreq(friend){
+		this.refs.frienddecline.setAttribute('disabled','disabled');
+		axios({
+			method:'post',
+			url:'/declinefriend',
+			data:{
+				'user':this.props.user,
+				'friend':friend,
+			}
+		}).then((res)=>{
+			this.setState(res.data);
+			this.refs.frienddecline.removeAttribute('disabled');
+		})
+	}
 
-						<div id="alias">
-							<div>
-								{this.state.alias}
-							</div>
-						</div>
+	/*processes feed by the type of messages received
+	The only type available in this project is friend requests*/
+	processFeed(f){
+		if(f['type']=='friendreq'){
+			return(
+				<div>
+					<p>
+						{f['sender']} Sent you a friend request!
+					</p>
+					<button
+						ref='friendaccept'
+						className='btn btn-success'
+						onClick={()=>this.acceptFriendreq(f['sender'])}>
+						Accept
+					</button>
+					<button
+						ref='frienddecline'
+						className='btn btn-danger'
+						onClick={()=>this.declineFriendreq(f['sender'])}>
+						Decline
+					</button>
 				</div>
-				<div className="container">
-					<div id="panel">
-						<div id = "card">
-							<div className="infoHeader">Info:</div>
-							<div id="username">
+			)
+		}
+		else{return}
+	}
+
+	/*creates feed*/
+	feed(){
+		if(this.state.feed==undefined){return}
+		const feed=this.state.feed.map((f)=>
+			<li className='list-group-item' key={f['type']}>{this.processFeed(f)}</li>
+		)
+		return(
+			<ul className='list-group' key='feed'>{feed}</ul>
+		)
+	}
+
+	render(){
+		/*profile picture dimensions*/
+		const picStyle={
+			'maxWidth':'200px',
+			'maxHeight':'200px'
+		}
+
+		return(
+			<div id='profile'>
+
+				<div className='container'>
+
+					<img src='/feed.jpg' className='centerPic'/>
+					<div className='text-block'>
+						<div id='picture'>
+							<img src={this.state.pic} style={picStyle}></img>
+							<div id='mask'></div>
+							<p id='changeimg'>change picture</p>
+						</div>
+					</div>
+
+					<div id='alias'>
+						<div>
+							{this.state.alias}
+						</div>
+					</div>
+
+				</div>
+
+				<div className='container'>
+					<div id='panel'>
+						<div id = 'card'>
+							<div className='infoHeader'>Info:</div>
+							<div id='username'>
 								{this.state.username}
 							</div>
 
-							<div id="email">
+							<div id='email'>
 								{this.state.email}
 							</div>
 
-							<div id="bio" ref="bio">
+							<div id='bio' ref='bio'>
 								{this.state.short}
 							</div>
 
-							<div id="edit">
-								<button className="btn btn-default btn-md" onClick={this.edit}>
+							<div id='edit'>
+								<button className='btn btn-default btn-md' onClick={this.edit}>
 									Edit
 								</button>
-								<button className ="btn btn-default btn-md" onClick={this.expandBio}>
+								<button className ='btn btn-default btn-md' onClick={this.expandBio}>
 									{this.state.expname}
 								</button>
 							</div>
 						</div>
 
 
-						<div className="w3-card">
-							<GamesList games={this.state.myGames} user={this.props.user}/>
-							<div id="gamesText">
+						<div className='w3-card'>
+							<GamesList
+							 	games={this.state.myGames}
+								teamgames={this.state.myTeamGames}
+								teams={this.state.myTeams}
+								user={this.props.user}
+							/>
+							<div id='gamesText'>
 								Friends:<br></br>
 								{this.friendsList()}
 							</div>
 						</div>
 					</div>
 
-					<div id="fpanel">
-						<div id="feed">
+					<div id='fpanel'>
+						<div id='feed'>
 							{this.feed()}
 						</div>
 					</div>
@@ -242,19 +287,27 @@ class GamesList extends React.Component
 {
 		constructor(props){
 			super(props);
+			//function binding
 			this.deleteGame=this.deleteGame.bind(this);
 			this.displayGame=this.displayGame.bind(this);
 			this.state={
-				games:[],
 				deleteGameClicked:false
 			}
 		}
+
 		deleteGame(gameId){
 			if(this.state.deleteGameClicked==false){
-				if(confirm("delete game?")){
-					axios.delete('/games', {gid: gameId})
+				if(confirm('delete game?')){
+					axios({
+						method:'delete',
+						url:'/games',
+						data:{
+							gid:gameId,
+							owner:this.props.user
+						}
+					})
 					.then(()=>{
-						console.log("game deleted");
+						console.log('game deleted');
 						this.setState({
 							deleteGameClicked:true
 						})
@@ -262,19 +315,28 @@ class GamesList extends React.Component
 				}
 			}
 		}
+
+		deleteTeamGame(gameId){
+
+		}
+
+		deleteTeam(teamName){
+
+		}
+
 		componentDidUpdate(){
 			if(this.state.deleteGameClicked==true){
-				axios.post("/usergames", {user:this.props.user}).then( (results) => {
+				axios.post('/usergames', {user:this.props.user}).then( (results) => {
 						this.setState({games : results.data});
 				})
 				this.setState({deleteGameClicked:false});
 			}
 		}
+
 		componentWillMount(){
-				axios.post("/usergames", {user:this.props.user}).then( (results) => {
-						this.setState({games : results.data});
-				});
 		}
+
+
     displayGame(game)
     {
         return (
@@ -282,7 +344,7 @@ class GamesList extends React.Component
 						<td >{game.sport}</td>
 						<td >{game.name}</td>
 						<td >{game.location}</td>
-						<td><Link to={"/game:"+game.id}>Details</Link></td>
+						<td><Link to={'/game:'+game.id}>Details</Link></td>
 					</tr>
         )
     }
@@ -292,8 +354,8 @@ class GamesList extends React.Component
 					<td >{game.sport}</td>
 					<td >{game.name}</td>
 					<td >{game.location}</td>
-					<td><Link to={"/game:"+game.id}>Details</Link></td>
-					<td><button className="btn btn-danger"
+					<td><Link to={'/game:'+game.id}>Details</Link></td>
+					<td><button className='btn btn-danger'
 						onClick={()=>{this.deleteGame(game.id)}}>
 						Delete
 					</button></td>
@@ -303,27 +365,26 @@ class GamesList extends React.Component
     render()
     {
 			if (this.props.games==[]) return;
-			var gamesList = this.state.games.filter((game)=>{
-				{return game["owner"]!=this.props.user}
+			var gamesList = this.props.games.filter((game)=>{
+				{return game['owner']!=this.props.user}
 			})
 			gamesList = gamesList.map((game) =>
 					{return this.displayGame(game)}
 			);
-			var gamesMade = this.state.games.filter((game)=>{
-				{return game["owner"]==this.props.user}
+			var gamesMade = this.props.games.filter((game)=>{
+				{return game['owner']==this.props.user}
 			})
 			gamesMade = gamesMade.map((game) =>
 					{return this.displayGamesMade(game)}
 			);
 
-        return(
-					<div>
-
-						<h2 id="gamesText">Games Played</h2>
-						<table><tbody key="gamesList">{gamesList}</tbody></table>
-						<h2 id="gamesText">Games Made</h2>
-						<table><tbody key="gamesMadeList">{gamesMade}</tbody></table>
-					</div>
+      return(
+				<div>
+					<h2 id='gamesText'>Games Played</h2>
+					<table><tbody key='gamesList'>{gamesList}</tbody></table>
+					<h2 id='gamesText'>Games Made</h2>
+					<table><tbody key='gamesMadeList'>{gamesMade}</tbody></table>
+				</div>
 	    );
     }
 

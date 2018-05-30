@@ -367,10 +367,21 @@ app.patch('/leave:games', (req, res) => {
 
 app.delete('/games', (req, res) => {
   // console.log('deleting', req.body);
+  console.log("testing games",req.body.gid)
   Game.findOneAndRemove({'id': req.body.gid})
   .then((game) =>{
+    User.findOneAndUpdate(
+      {'username': req.body.owner},
+      {$pull: {games : req.body.gid}},
+      {new: true}
+    )
+    .then(()=>{
+      res.status(200).send({game});
+    }).catch((e) => {
+      res.status(400).send(e);
+    })
   // console.log("Deleting", game);
-  res.status(200).send({game});
+
   }).catch((e) => {
     res.status(400).send(e);
   })
