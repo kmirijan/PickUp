@@ -46,7 +46,7 @@ export class CurrentGames extends React.Component{
         let startTime = (new Date()).getTime();
         let gameLength = this.refs.gameLength.getInput() * 60*60*1000; // expected length of game in milliseconds
         let game = {
-            gameId: id,
+            id: id,
             sport: sport,
             name: name,
             isprivate:isprivate,
@@ -60,6 +60,7 @@ export class CurrentGames extends React.Component{
             gameLength: gameLength,
         };
         axios.post('/postgames', game)
+        axios.patch('/user:game', {uid: this.props.user, gid: game.id});
         this.refs.sport.clear();
         this.refs.location.clear();
         this.refs.gameLength.clear();
