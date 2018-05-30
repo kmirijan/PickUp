@@ -251,6 +251,7 @@ app.post("/nearbygames", (req, res) => {
 
 // return the games that the user has played
 app.post("/usergames", (req, res) => {
+  console.log(req.body.user)
     console.log('[', (new Date()).toLocaleTimeString(), "] Sending ", req.body.user.trim(), "'s games");
 
     mongo.connect(mongoUrl, (err, client) => {
