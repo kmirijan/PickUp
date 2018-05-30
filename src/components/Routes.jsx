@@ -51,6 +51,9 @@ class Routes extends React.Component{
       })
     })
   }
+  componentWillReceiveProps(){
+    this.forceUpdate();
+  }
     render(){
       console.log(this.state.loading)
       if(this.state.loading==true){
@@ -151,6 +154,7 @@ class User extends React.Component{
 
 	}
   componentWillReceiveProps(props){
+    this.forceUpdate();
     console.log(props);
     var usrnm=props.match.params.username;
      while(!(/[a-z]/i.test(usrnm[0]))){
@@ -359,9 +363,9 @@ class LogOut extends React.Component{
       const cookies = new Cookies();
       cookies.set("key","",{path:"/"} );
       this.loading=false;
-      //location.reload(false);
-      //window.onload(this.props.history.push("/signin"));
+
       this.props.history.push("/signin");
+      location.reload(false);
     })
 
 	}

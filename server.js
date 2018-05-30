@@ -15,7 +15,6 @@ const busboy=require("connect-busboy");
 const util = require('util')
 const app=express();
 const http=require("http").Server(app);
-var cors = require('cors');
 
 //deploy app
 const port=process.env.PORT;
@@ -51,7 +50,6 @@ var {User} = require('./db/User.js');
 
 
 /*configurations*/
-app.use(cors());
 app.use(express.static("./dist"));
 app.use(bodyParser.json());
 app.use(busboy());

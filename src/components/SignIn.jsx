@@ -41,8 +41,8 @@ signIn(e){
         const cookies = new Cookies();
         cookies.set("key",res.data["key"],{path:"/"});
         console.log("mykey",cookies.get("key"))
-      //  location.reload(false);
-        window.onload(this.props.history.push("/user:"+res.data["user"]));
+        this.props.history.push("/user:"+res.data["user"]);
+        location.reload(false);
       }
       else
       {
@@ -54,6 +54,7 @@ signIn(e){
         })
         this.refs.signin.removeAttribute("disabled");
         this.props.history.push("/signin");
+        location.reload(false);
 
       }
     });
