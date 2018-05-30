@@ -132,12 +132,7 @@ class User extends React.Component{
     this.usrnm=usrnm;
     this.isValidUser=false;
     this.loading=true;
-	}
-	componentWillMount(){
-	/*	if(!(localStorage.getItem("loggedin")=="true")){
-			alert("Must be logged in to find users")
-			this.props.history.push("/signin");
-		}*/
+    console.log("constructed");
     axios({
       method:"post",
       url:"/isuser",
@@ -146,11 +141,14 @@ class User extends React.Component{
       }
     })
     .then((isUser)=>{
-      console.log(isUser.data)
+      console.log("isuser?",isUser.data)
       this.isValidUser=isUser.data;
       this.loading=false;
       this.forceUpdate();
     })
+	}
+	componentWillMount(){
+
 	}
   componentWillReceiveProps(props){
     console.log(props);
@@ -158,8 +156,25 @@ class User extends React.Component{
      while(!(/[a-z]/i.test(usrnm[0]))){
        usrnm=usrnm.substring(1,usrnm.length);
      }
-      this.usrnm=usrnm;
-      this.forceUpdate();
+    this.usrnm=usrnm;
+    this.forceUpdate();
+      /*if(!(localStorage.getItem("loggedin")=="true")){
+  			alert("Must be logged in to find users")
+  			this.props.history.push("/signin");
+  		}*/
+      axios({
+        method:"post",
+        url:"/isuser",
+        data:{
+          "user":this.usrnm
+        }
+      })
+      .then((isUser)=>{
+        console.log("isuser?",isUser.data)
+        this.isValidUser=isUser.data;
+        this.loading=false;
+        this.forceUpdate();
+      })
   }
 	render(){
 		if(this.props.user==this.usrnm)
