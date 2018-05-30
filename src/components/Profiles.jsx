@@ -31,7 +31,9 @@ class Profile extends React.Component{
 			games:[],
 			friends:[],
 			feed:[],
-            myGames:[]
+      myGames:[],
+			myTeamGames:[],
+			myTeams:[],
 		}
 	}
 	expandBio(){
@@ -67,7 +69,6 @@ class Profile extends React.Component{
 	}
 
 	componentDidMount(){
-
 		console.log(this.state.username);
 		axios.post("/user",{
 				user:this.state.username
@@ -81,6 +82,8 @@ class Profile extends React.Component{
 				short:userStates["bio"],
 				email:userStates["email"],
 				games:userStates["games"],
+				teamGames:userStates["teamgames"],
+				teams:userStates["teams"],
 				friends:userStates["friends"],
 				feed:userStates["feed"]
 			});
@@ -121,6 +124,12 @@ class Profile extends React.Component{
         axios.post("/usergames", {user:this.props.username}).then( (results) => {
             this.setState({myGames : results.data});
         });
+				axios.post("/usergamest",{user:this.props.username}).then((results)=>{
+					this.setState({myTeamGames:results.data});
+				})
+				axios.post("/retrieveplayerteams",{user:this.props.username}).then((results)=>{
+					this.setState({myTeams:results.data});
+				})
     }
 
 	gamesList(){
@@ -130,8 +139,30 @@ class Profile extends React.Component{
 		)
 		return(
 			<ul className="list-group" key="gamesList">
-{gamesList}
-</ul>
+			{gamesList}
+			</ul>
+		)
+	}
+	teamGamesList(){
+		if(this.state.teamGames==undefined){return}
+		const teamGamesList=this.state.teamGames.map((teamGames)=>
+			<li  className="list-group-item" key={teamGames["game"]}>{teamGames["game"]}</li>
+		)
+		return(
+			<ul className="list-group" key="teamGamesList">
+			{teamGamesList}
+			</ul>
+		)
+	}
+	teamsList(){
+		if(this.state.teams==undefined){return}
+		const teamsList=this.state.teams.map((teams)=>
+			<li  className="list-group-item" key={teams["game"]}>{teams["game"]}</li>
+		)
+		return(
+			<ul className="list-group" key="gamesList">
+			{teamsList}
+			</ul>
 		)
 	}
 
@@ -206,8 +237,14 @@ class Profile extends React.Component{
 							{this.state.expname}
 						</button>
 					</div>
-                    <GamesList games={this.state.myGames} user={this.props.user}
-											username={this.state.username} frname={this.state.frname}/>
+          <GamesList
+						games={this.state.myGames}
+						user={this.props.user}
+						username={this.state.username}
+						frname={this.state.frname}
+						teamGames={this.state.myTeamGames}
+						teams={this.state.myTeams}
+					/>
 					<div id="friendsList">
 						<h2>Friends:</h2><br></br>
 						{this.friendsList()}
@@ -295,7 +332,6 @@ class GamesList extends React.Component
         );
 			}
     }
-
 
     render()
     {

@@ -20,6 +20,7 @@ import Home from "./Home";
 import Map from "./Map";
 var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 import Login from "../helpers/login.js";
+import Cookies from 'universal-cookie';
 
 
 
@@ -34,7 +35,8 @@ class Routes extends React.Component{
     }
   }
   componentWillMount(){
-    Login.verify(localStorage.getItem("key"),(user)=>{
+    const cookies = new Cookies();
+    Login.verify(cookies.get("key"),(user)=>{
       console.log("the user",user);
       if(user!=null){
         console.log("valid user")
@@ -338,9 +340,12 @@ class LogOut extends React.Component{
         key:localStorage.getItem("key")
       }
     }).then(()=>{
-      localStorage.setItem("key","");
+      //localStorage.setItem("key","");
+      const cookies = new Cookies();
+      cookies.set("key","",{path:"/"} );
       this.loading=false;
-      location.reload();
+      //location.reload(false);
+      //window.onload(this.props.history.push("/signin"));
       this.props.history.push("/signin");
     })
 
