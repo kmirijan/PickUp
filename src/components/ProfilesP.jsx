@@ -336,7 +336,9 @@ class GamesList extends React.Component
 		componentWillMount(){
 		}
 
-
+		componentWillReceiveProps(newprops){
+			this.forceUpdate();
+		}
     displayGame(game)
     {
         return (
@@ -362,8 +364,59 @@ class GamesList extends React.Component
 				</tr>
 			)
 		}
+		displayTeamGame(game)
+    {
+        return (
+					<tr key={game.id}>
+						<td >{game.sport}</td>
+						<td >{game.name}</td>
+						<td >{game.location}</td>
+						<td><Link to={'/tgame:'+game.id}>Details</Link></td>
+					</tr>
+        )
+    }
+		displayTeamGamesMade(game){
+			return (
+				<tr key={game.id}>
+					<td >{game.sport}</td>
+					<td >{game.name}</td>
+					<td >{game.location}</td>
+					<td><Link to={'/tgame:'+game.id}>Details</Link></td>
+					<td><button className='btn btn-danger'
+						onClick={()=>{this.deleteTeamGame(game.id)}}>
+						Delete
+					</button></td>
+				</tr>
+			)
+		}
+		displayTeam(game)
+    {
+        return (
+					<tr key={game.id}>
+						<td >{game.sport}</td>
+						<td >{game.name}</td>
+						<td >{game.location}</td>
+						<td><Link to={'/game:'+game.id}>Details</Link></td>
+					</tr>
+        )
+    }
+		displayTeamsMade(game){
+			return (
+				<tr key={game.id}>
+					<td >{game.sport}</td>
+					<td >{game.name}</td>
+					<td >{game.location}</td>
+					<td><Link to={'/game:'+game.id}>Details</Link></td>
+					<td><button className='btn btn-danger'
+						onClick={()=>{this.deleteGame(game.id)}}>
+						Delete
+					</button></td>
+				</tr>
+			)
+		}
     render()
     {
+			//games
 			if (this.props.games==[]) return;
 			var gamesList = this.props.games.filter((game)=>{
 				{return game['owner']!=this.props.user}
@@ -378,12 +431,49 @@ class GamesList extends React.Component
 					{return this.displayGamesMade(game)}
 			);
 
+			//teamgames
+			if (this.props.teamgames==[]) return;
+			var teamGamesList = this.props.teamgames.filter((game)=>{
+				{return game['owner']!=this.props.user}
+			})
+			teamGamesList = teamGamesList.map((game) =>
+					{return this.displayTeamGame(game)}
+			);
+			var teamGamesMade = this.props.teamgames.filter((game)=>{
+				{return game['owner']==this.props.user}
+			})
+			teamGamesMade = teamGamesMade.map((game) =>
+					{return this.displayTeamGamesMade(game)}
+			);
+
+			//teams
+			if (this.props.teams==[]) return;
+			var teamsList = this.props.teams.filter((game)=>{
+				{return game['captain']!=this.props.user}
+			})
+			teamsList = teamsList.map((game) =>
+					{return this.displayTeam(game)}
+			);
+			var teamsMade = this.props.teams.filter((game)=>{
+				{return game['captain']==this.props.user}
+			})
+			teamsMade = teamsMade.map((game) =>
+					{return this.displayTeamsMade(game)}
+			);
       return(
 				<div>
 					<h2 id='gamesText'>Games Played</h2>
 					<table><tbody key='gamesList'>{gamesList}</tbody></table>
 					<h2 id='gamesText'>Games Made</h2>
 					<table><tbody key='gamesMadeList'>{gamesMade}</tbody></table>
+					<h2 id='gamesText'>Team Games Played</h2>
+					<table><tbody key='teamGamesList'>{teamGamesList}</tbody></table>
+					<h2 id='gamesText'>Team Games Made</h2>
+					<table><tbody key='teamGamesMadeList'>{teamGamesMade}</tbody></table>
+					<h2 id='gamesText'>Teams Joined</h2>
+					<table><tbody key='teamsList'>{teamsList}</tbody></table>
+					<h2 id='gamesText'>Teams Made</h2>
+					<table><tbody key='teamsMadeList'>{teamsMade}</tbody></table>
 				</div>
 	    );
     }

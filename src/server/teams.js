@@ -141,6 +141,32 @@ exports.joinTeam = function joinTeam(req,res) {
 
 }
 
+/*
+  req.body = teamId, teamMembers
+*/
+exports.deleteTeam = (req,res)=>{
+  mongo.connect(mongourl,(err,client)=>{
+    let teams=client.db('pickup').collection('teams');
+    let users=users.db('pickup').collection('users');
+    //remove game from teams, and the ID from each member of the team
+    if(String(teamId).length!=24){
+      printErr(err,"not valid game id");
+      res.sendStatus(500);
+      return;
+    }
+    const objectTeamId=ObjectID(teamId);
+    teams.remove({'_id':objectTeamId})
+    .then(()=>{
+      users.update({'username':{$in:teamMembers}},{
+        $pull:{teams:teamId}
+      })
+    .then(()=>{
+      res.end();
+      client.close();
+    })
+    })
+  })
+}
 // removes a user from the members list, deletes the team if it
 exports.leaveTeam = function leaveTeam (req, res) {
     console.log('[', (new Date()).toLocaleTimeString(), "] Team leaving");

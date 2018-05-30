@@ -172,6 +172,9 @@ exports.leaveGameT=(req, res) => {
   })
 }
 
+/*
+  body = gameId, user
+*/
 exports.deleteGameT=(req,res)=>
 {
   mongo.connect(mongoUrl,(err,client)=>{
@@ -180,9 +183,14 @@ exports.deleteGameT=(req,res)=>
     var db=client.db("pickup");
     db.collection("teamgames").remove({"id":req.body.gameId})
     .then((arr)=>{
-      console.log(arr, "deleted");
-      res.json();
-      client.close();
+      db.collection("users").update({'username':req.body.user},{
+        $pull:{teamgames:req.body.gameId}
+      }).then(()=>{
+        console.log(arr, "deleted");
+        res.json();
+        client.close();
+      })
+
     })
   });
 
