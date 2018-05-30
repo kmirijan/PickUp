@@ -260,7 +260,7 @@ app.post("/usergames", (req, res) => {
         let users = client.db("pickup").collection("users");
         let games = client.db("pickup").collection("games");
         users.findOne(username, (err, user) => {
-            let userGames = {id: {$in: user.games} };
+            let userGames = {id: {$in: (user.games != null ? user.games : [])} };
             games.find(userGames).toArray((err, results) => {
                 if (err) throw err;
                 res.json(results);
