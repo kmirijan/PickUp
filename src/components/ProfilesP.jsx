@@ -191,6 +191,7 @@ class ProfileP extends React.Component{
 							</div>
 						</div>
 				</div>
+
 				<div className="container">
 					<div id="panel">
 						<div id = "card">
@@ -318,10 +319,9 @@ class GamesList extends React.Component
 
         return(
 					<div>
-
-						<h2 id="gamesText">Games Played</h2>
+						<h2 id="gamesText">Games Played:</h2>
 						<table><tbody key="gamesList">{gamesList}</tbody></table>
-						<h2 id="gamesText">Games Made</h2>
+						<h2 id="gamesText">Games Made:</h2>
 						<table><tbody key="gamesMadeList">{gamesMade}</tbody></table>
 					</div>
 	    );
