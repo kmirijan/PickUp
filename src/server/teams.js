@@ -61,7 +61,7 @@ exports.createTeam = function createTeam(req, res) {
 
         let teams = client.db("pickup").collection("teams");
         let users=client.db("pickup").collection("users");
-        teams.insertOne(team, (err) => {
+        teams.insertOne(team, (err,ret) => {
             if (err)
             {
                 printErr(err, "Adding team failed");
@@ -69,8 +69,9 @@ exports.createTeam = function createTeam(req, res) {
             }
             else
             {
+              console.log("insertedId",ret.insertedId)
                 users.update({"username":{$in:team["members"]}},{
-                    $push:{"teams":team["name"]}
+                    $push:{"teams":ret.insertedId}
                 },(err)=>{
                   if(err){
                     printErr(err);
@@ -128,7 +129,7 @@ exports.joinTeam = function joinTeam(req,res) {
               })
 
             }
-            else 
+            else
             {
                 console.log('[', (new Date()).toLocaleTimeString(), "] Team full: join failed");
             }

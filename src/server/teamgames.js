@@ -195,9 +195,19 @@ exports.retrievePlayerTeams=(req,res)=>{
     db.collection("users").find({"username":req.body.user}).toArray((err,player)=>{
       if(err)throw new Error(err);
       const teams=player[0]["teams"];
-      console.log(player[0]["teams"]);
-      db.collection("teams").find({name: {$in:teams}}).toArray((err,teams)=>{
+      console.log("player teams",player[0]["teams"]);
+      const teamsObjects=teams.map((team)=>{
+        if(team!=null&&String(team).length==24){
+          return ObjectID(team);
+        }
+        else {
+          return null;
+        }
+      }
+      );
+      db.collection("teams").find({'_id': {$in:teamsObjects}}).toArray((err,teams)=>{
         if(err)throw new Error(err);
+        console.log("sent teams",teamsObjects);
         res.json(teams);
         client.close();
       });
