@@ -36,7 +36,6 @@ export class CurrentTeamGames extends React.Component{
     }
     componentDidMount() {
        let input = document.getElementById('location');
-       this.autocomplete = new google.maps.places.Autocomplete(input);
        axios({
          method:"post",
          url:"/retrieveplayerteams",
@@ -100,7 +99,6 @@ export class CurrentTeamGames extends React.Component{
         let location = this.refs.location.value;
         let isprivate = this.state.isprivate;
         let team = this.state.teamselected;
-        let coords = this.autocomplete.getPlace().geometry.location;
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let game = {
             gameId: id,
@@ -110,10 +108,6 @@ export class CurrentTeamGames extends React.Component{
             location: location,
             user: this.props.user,
             teams:[team.name],
-            coords: {
-                lat: coords.lat(),
-                lng: coords.lng()
-            },
         };
         console.log(game);
         axios({
