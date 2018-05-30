@@ -18,7 +18,7 @@ class Profile extends React.Component{
 		}
 
 		this.state={
-			expname:"expand",
+			expname:"Expand",
 			frname:"",
 			expanded:false,
 			pic:"",
@@ -105,7 +105,7 @@ class Profile extends React.Component{
 	      			this.setState({frname:"friends"});
 	      		}
 	      		else{
-	      			this.setState({frname:"add friend"});
+	      			this.setState({frname:"Add Friend"});
 	      		}
 	      	})
 
@@ -167,44 +167,63 @@ class Profile extends React.Component{
 		}
 		return(
 			<div id="profile">
-				<div id="panel">
-					<div id="addfriend">
-						<button ref="addfriend" onClick={this.addFriend}>
-							{this.state.frname}
-						</button>
-					</div>
-					<div id="picture" >
-						<img src={this.state.pic} style={picStyle}></img>
-						<div id="mask"></div>
-						<p id="changeimg">change picture</p>
-					</div>
-					<div id="username">
-						{this.state.username}
-					</div>
-					<div id="email">
-						{this.state.email}
-					</div>
-					<div id="alias">
-						{this.state.alias}
-					</div>
-					<div id="bio" ref="bio">
-						{this.state.short}
-					</div>
-					<div id="expand">
-						<button onClick={this.expandBio}>
-							{this.state.expname}
-						</button>
-					</div>
-                    <GamesList games={this.state.myGames} username={this.state.username} frname={this.state.frname}/>
-					<div id="friendsList">
-						Friends:<br></br>
-						{this.friendsList()}
-					</div>
+				<div className="container">
+					<img src="/feed.jpg" className="centerPic"/>
+						<div className="text-block">
+
+							<div id="picture">
+								<img src={this.state.pic} style={picStyle}></img>
+								<div id="mask"></div>
+								<p id="changeimg">change picture</p>
+							</div>
+
+						</div>
+
+						<div id="alias">
+							<div>
+								{this.state.alias}
+							</div>
+						</div>
 				</div>
-				<div id="fpanel">
-					<h1>FEED</h1>
-					<div id="feed">
-						{this.feed()}
+
+				<div className="container">
+					<div id="panel">
+
+						<div id = "card">
+							<div className="infoHeader">Info:</div>
+							<div id="username">
+								{this.state.username}
+							</div>
+
+							<div id="email">
+								{this.state.email}
+							</div>
+
+							<div id="bio" ref="bio">
+								{this.state.short}
+							</div>
+							<div id="edit">
+								<button className="btn btn-default btn-md" onClick={this.expandBio}>
+									{this.state.expname}
+								</button>
+								<button className="btn btn-default btn-md" ref="addfriend" onClick={this.addFriend}>
+									{this.state.frname}
+								</button>
+							</div>
+						</div>
+
+						<div className="w3-card">
+		          <GamesList games={this.state.myGames} username={this.state.username} frname={this.state.frname}/>
+							<div id="gamesText">
+								Friends:<br></br>
+								{this.friendsList()}
+							</div>
+						</div>
+					</div>
+					<div id="fpanel">
+						<div id="feed">
+							{this.feed()}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -301,9 +320,9 @@ class GamesList extends React.Component
 
         return (
             <div>
-                <h2>Games Played</h2>
+                <h2 id="gamesText">Games Played:</h2>
                 <table><tbody key="gamesList">{gamesList}</tbody></table>
-								<h2>Games Made</h2>
+								<h2 id="gamesText">Games Made:</h2>
 								<table><tbody key="gamesMadeList">{gamesMade}</tbody></table>
 
             </div>
