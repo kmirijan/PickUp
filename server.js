@@ -187,8 +187,8 @@ app.post("/nearbygames", (req, res) => {
 
         let collection = client.db("pickup").collection("games");
 
-        let query = {coords: 
-                        {$near: 
+        let query = {coords:
+                        {$near:
                             {
                                 $geometry: {
                                     type: "Point",
