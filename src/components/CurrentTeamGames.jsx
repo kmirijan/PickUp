@@ -476,7 +476,7 @@ class Game extends React.Component {
 
 
    <div id={"join"+this.props.game.id} className="collapse">
-    {this.showTeamGamesLeave()}
+    {this.showTeamGamesJoin()}
   </div>
   </div>
 );
