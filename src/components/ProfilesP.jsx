@@ -316,12 +316,39 @@ class GamesList extends React.Component
 			}
 		}
 
-		deleteTeamGame(gameId){
+		deleteTeamGame(gameId, teams){
+			if(confirm('delete team game?')){
+				axios({
+					method:'post',
+					url:'/deleteGameT',
+					data:{
+						gameId:gameId,
+						teams:teams
+					}
+				})
+				.then(()=>{
+					console.log('team game deleted');
 
+				})
+			}
 		}
 
-		deleteTeam(teamName){
 
+		deleteTeam(teamId,teamMembers){
+			if(confirm('delete team?')){
+				axios({
+					method:'post',
+					url:'/deleteteam',
+					data:{
+						teamId:teamId,
+						teamMembers:teamMembers
+					}
+				})
+				.then(()=>{
+					console.log('team deleted');
+
+				})
+			}
 		}
 
 		componentDidUpdate(){
@@ -383,32 +410,32 @@ class GamesList extends React.Component
 					<td >{game.location}</td>
 					<td><Link to={'/tgame:'+game.id}>Details</Link></td>
 					<td><button className='btn btn-danger'
-						onClick={()=>{this.deleteTeamGame(game.id)}}>
+						onClick={()=>{this.deleteTeamGame(game.id,game.teams)}}>
 						Delete
 					</button></td>
 				</tr>
 			)
 		}
-		displayTeam(game)
+		displayTeam(team)
     {
         return (
-					<tr key={game.id}>
-						<td >{game.sport}</td>
-						<td >{game.name}</td>
-						<td >{game.location}</td>
-						<td><Link to={'/game:'+game.id}>Details</Link></td>
+					<tr key={team.id}>
+						<td >{team.sport}</td>
+						<td >{team.name}</td>
+						<td >{team.location}</td>
+						<td><Link to={'/game:'+team._id}>Details</Link></td>
 					</tr>
         )
     }
-		displayTeamsMade(game){
+		displayTeamsMade(team){
 			return (
-				<tr key={game.id}>
-					<td >{game.sport}</td>
-					<td >{game.name}</td>
-					<td >{game.location}</td>
-					<td><Link to={'/game:'+game.id}>Details</Link></td>
+				<tr key={team.id}>
+					<td >{team.sport}</td>
+					<td >{team.name}</td>
+					<td >{team.location}</td>
+					<td><Link to={'/game:'+team.id}>Details</Link></td>
 					<td><button className='btn btn-danger'
-						onClick={()=>{this.deleteGame(game.id)}}>
+						onClick={()=>{this.deleteTeam(team._id,team.members)}}>
 						Delete
 					</button></td>
 				</tr>

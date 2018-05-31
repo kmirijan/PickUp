@@ -82,6 +82,7 @@ app.post("/postteam", teams.createTeam);
 app.post("/retrieveteams", teams.getTeams);
 app.post("/jointeam", teams.joinTeam);
 app.patch("/team", teams.leaveTeam);
+app.post("/deleteteam",teams.deleteTeam);
 
 //-------------==homepage-------------------------------
 app.post("/get-players-and-games-count",(req,res)=>{
@@ -400,7 +401,7 @@ app.post("/retrievespecificgames", (req,res)=>{
   })
 
 })
-app.patch("/joinT", (req, res) =>{
+app.post("/joinT", (req, res) =>{
   teamgames.joinT(req,res);
 });
 app.post("/nearbygamesT", (req, res) => {
@@ -418,7 +419,7 @@ app.post("/retrievegamesT", (req, res) =>{
 app.post("/retrievespecificgamesT",(req,res)=>{
   teamgames.retrieveSpecificGamesT(req,res);
 })
-app.patch('/leavegameT', (req, res) => {
+app.post('/leavegameT', (req, res) => {
   teamgames.leaveGameT(req,res);
 })
 app.post("/deletegameT",(req,res)=>{

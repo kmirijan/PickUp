@@ -107,7 +107,7 @@ export class CurrentTeamGames extends React.Component{
             isprivate:isprivate,
             location: location,
             user: this.props.user,
-            teams:[team.name],
+            teams:[team._id],
         };
         console.log(game);
         axios({
@@ -202,26 +202,27 @@ export class CurrentTeamGames extends React.Component{
 
 
                         <div className="main-create main-center">
+
+                          <div>
+                            <button
+                              data-toggle="collapse"
+                                data-target="#selectTeam"
+                          className='btn btn-primary'
+                          >Select Team</button>
+
+                          <div id="selectTeam" className="collapse">
+                          <div>
+                          {this.teamDropDown()}
+                          </div>
+                          </div>
+                        </div>
+
                     <form className="form-horizontal"
                       onSubmit={this.addGame.bind(this)}>
 
                       {this.displayNameInput()}
 
 
-
-                      <div className="form-group">
-                        <button
-                          data-toggle="collapse"
-                            data-target="#selectTeam"
-                     className='btn btn-primary'
-                     >Select Team</button>
-
-                   <div id="selectTeam" className="collapse">
-                     <div>
-                      {this.teamDropDown()}
-                     </div>
-                      </div>
-                    </div>
 
 
 
@@ -276,7 +277,8 @@ export class CurrentTeamGames extends React.Component{
                       <div className="form-group">
 
                       <div>
-                        <input type="submit" className="btn btn-primary" value="Create"/>
+                        <input type="submit" className="btn btn-primary" data-toggle="collapse"
+                          data-target="#createTeamGames" value="Create"/>
                         <span></span>
                         <input type="reset" className="btn btn-default" value="Clear"/>
                       </div>
@@ -403,9 +405,12 @@ class Game extends React.Component {
     super(props);
     this.showTeamGamesJoin=this.showTeamGamesJoin.bind(this);
     this.showTeamGamesLeave=this.showTeamGamesLeave.bind(this);
+    this.joinButton=this.joinButton.bind(this);
+    this.leaveButton=this.leaveButton.bind(this);
     this.ownedteams=[];
   }
-  showTeamGamesJoin(){
+
+   showTeamGamesJoin(){
     if(this.props.ownedteams.length==0){
       return(<div>You have no teams</div>);
     }
@@ -414,8 +419,6 @@ class Game extends React.Component {
         <div className="team" key={"teamjoin:"+team["name"]}>
           <div>{team["name"]}</div>
           <button
-            data-toggle="collapse"
-            data-target="#joinTeamGame"
             className="btn btn-secondary btn-sm"
             onClick={()=>{this.selectTeamJoin(team)}}>Select</button>
         </div>
@@ -424,10 +427,11 @@ class Game extends React.Component {
     return teams;
   }
   selectTeamJoin(team){
+    console.log("joining with team")
     if(confirm("join with "+team["name"]+"?")){
       axios({
         url:"/joinT",
-        method:"patch",
+        method:"post",
         data:{
           team:team,
           game:this.props.game
@@ -439,7 +443,7 @@ class Game extends React.Component {
     if(confirm("leave with "+team["name"]+"?")){
       axios({
         url:"/leavegameT",
-        method:"patch",
+        method:"post",
         data:{
           team:team,
           game:this.props.game
@@ -456,8 +460,6 @@ class Game extends React.Component {
         <div className="team" key={"teamleave:"+team["name"]}>
           <div>{team["name"]}</div>
           <button
-            data-toggle="collapse"
-            data-target="#leaveTeamGame"
             className="btn btn-secondary btn-sm"
             onClick={()=>{this.selectTeamLeave(team)}}>Select</button>
         </div>
@@ -466,39 +468,56 @@ class Game extends React.Component {
     return teams;
   }
 
+  joinButton(){
+  return(
+    <div>
+  <button className="btn btn-success"
+    data-toggle="collapse"
+     data-target={"#join"+this.props.game.id}>Join</button>
+
+
+   <div id={"join"+this.props.game.id} className="collapse">
+    {this.showTeamGamesJoin()}
+  </div>
+  </div>
+);
+}
+
+  leaveButton(){
+    return(
+      <div>
+    <button className="btn btn-danger"
+      data-toggle="collapse"
+       data-target={"#leave"+this.props.game.id}>Leave</button>
+
+
+     <div id={"leave"+this.props.game.id} className="collapse">
+      {this.showTeamGamesLeave()}
+    </div>
+    </div>
+  );
+  }
+
   render(){
     return(
-        <tr>
-          <td >{this.props.game.sport} </td>
-          <td >{this.props.game.owner} </td>
-          <td > {this.props.game.location} </td>
-          <td>
-            <button className="btn btn-success"
-              data-toggle="collapse"
-              data-target="#joinTeamGame">Join</button>
+      <tr>
+       <td >{this.props.game.sport}</td>
+       <td >{this.props.game.owner}</td>
+       <td >{this.props.game.location}</td>
+       <td>
 
 
-            <div id="joinTeamGame" className="collapse">
-              {this.showTeamGamesJoin()}
-            </div>
+         {this.joinButton()}
 
 
-          </td>
-          <td>
-            <button className="btn btn-danger"
-              data-toggle="collapse"
-              data-target="#leaveTeamGame">Leave</button>
+       </td>
+       <td>
+         {this.leaveButton()}
 
-
-            <div id="leaveTeamGame" className="collapse">
-              {this.showTeamGamesLeave()}
-            </div>
-
-
-          </td>
-          <td > {this.props.game.teams.length}</td>
-          <td><Link to={"/tgame:"+this.props.game.id}>Details</Link></td>
-        </tr>
+       </td>
+       <td > {this.props.game.teams.length}</td>
+       <td><Link to={"/tgame:"+this.props.game.id}>Details</Link></td>
+     </tr>
     );
   }
 }

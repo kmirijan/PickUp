@@ -149,7 +149,10 @@ class TeamCreate extends React.Component{
               <div className="form-group">
 
               <div>
-                <input type="submit" className="btn btn-primary" value="Create"/>
+                <input type="submit" className="btn btn-primary"
+                  data-toggle="collapse"
+                    data-target="#createTeams"
+                    value="Create"/>
                 <span></span>
                 <input type="reset" className="btn btn-default" value="Clear"/>
               </div>
@@ -262,10 +265,10 @@ export class TeamRow extends React.Component {
 
   joinTeam()
   {
-    axios.post('/jointeam', {user:this.props.user, teamName:this.props.team.name});
+    axios.post('/jointeam', {user:this.props.user, teamId:this.props.team._id});
   }
   leaveTeam(){
-    axios.patch('/team', {user:this.props.user, teamName:this.props.team.name});
+    axios.patch('/team', {user:this.props.user, teamId:this.props.team._id});
   }
 
   getJoinLeaveButton()
@@ -300,7 +303,7 @@ export class TeamRow extends React.Component {
           <td>{this.props.team.captain}</td>
           <td>{this.getJoinLeaveButton()}</td>
           <td>{this.props.team.members.length}/{this.props.team.maxPlayers}</td>
-          <td><Link to={"/team:"+this.props.team.name}>Details</Link></td>
+          <td><Link to={"/team:"+this.props.team._id}>Details</Link></td>
         </tr>
     );
   }

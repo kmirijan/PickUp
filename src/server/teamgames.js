@@ -20,7 +20,8 @@ exports.joinT=(req, res) =>
   {
     var collection = client.db("pickup").collection("teamgames");
     var query = {id: req.body.game.id, teams: { $nin: [req.body.team] } };
-    var newTeam = { $push: {teams: req.body.team.name} };
+    var newTeam = { $push: {teams: req.body.team._id} };
+    console.log("team id",req.body.team._id);
 
     console.log("team: ", req.body.team.name);
     var userQuery = {username: {$in:req.body.team.members}};
@@ -180,22 +181,42 @@ exports.deleteGameT=(req,res)=>
     if(err)throw new Error(err);
 
     var db=client.db("pickup");
+    console.log("req body",req.body.teams)
     db.collection("teamgames").remove({"id":req.body.gameId})
     .then((arr)=>{
-      db.collection("users").update({'username':req.body.user},{
-        $pull:{teamgames:req.body.gameId}
-      }).then(()=>{
-        console.log(arr, "deleted");
-        res.json();
-        client.close();
+      const teamsObjects=req.body.teams.map((team)=>{
+        if(team!=null&&String(team).length==24){
+          return ObjectID(team);
+        }
+        else {
+          return null;
+        }
       })
 
+      db.collection("teams").find({"_id":{$in:teamsObjects}}).toArray((err,arr)=>{
+        if(err) throw new Error(err);
+        var queryArr=[];
+        for(var i=0; i<arr.length; i++){
+          queryArr=queryArr.concat(arr[i].members);
+        }
+        db.collection("users").update({'username':{$in:queryArr}},{
+          $pull:{teamgames:req.body.gameId}
+        }).then(()=>{
+          console.log(arr, "deleted");
+          res.json();
+          client.close();
+        })
+      })
     })
+
+
+
   });
 
 };
 
 exports.retrievePlayerTeams=(req,res)=>{
+  console.log("test body",req.body)
   mongo.connect(mongoUrl,(err,client)=>{
     if(err)throw new Error(err);
     var db=client.db("pickup");
