@@ -9,8 +9,7 @@ import Cookies from 'universal-cookie';
 class SignIn extends React.Component{
   constructor(props){
     super(props);
-    console.log("USER",this.props.user);
-    this.signIn=this.signIn.bind(this);
+    console.log("Props on create\n",this.props);
     this.state={
       email:'',
       password:'',
@@ -24,7 +23,6 @@ signIn(e){
   e.preventDefault();
   //this.refs.signin.setAttribute("disabled","disabled");
   console.log('this.state', this.state);
-
 
   const{email, password}=this.state;
    axios({
@@ -40,9 +38,10 @@ signIn(e){
         //localStorage.setItem("key",res.data["key"]);
         const cookies = new Cookies();
         cookies.set("key",res.data["key"],{path:"/"});
+        this.props.updateUser(); // update the user value in Routes
         console.log("mykey",cookies.get("key"))
       //  location.reload(false);
-        window.onload(this.props.history.push("/user:"+res.data["user"]));
+        this.props.history.push("/user:"+res.data["user"]);
       }
       else
       {
@@ -59,7 +58,6 @@ signIn(e){
     });
 
 }
-
   render(){
     return(
       <div>
@@ -67,7 +65,7 @@ signIn(e){
         <form
           className="form-inline"
           style={{margin: '5%'}}
-          onSubmit={(e)=>this.signIn(e)}
+          onSubmit={this.signIn.bind(this)}
           >
           <h2>SignIn</h2>
           <div className="form-group">
