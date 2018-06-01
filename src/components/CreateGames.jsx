@@ -89,8 +89,8 @@ export class CurrentGames extends React.Component{
               			<div className="row main">
               				<div className="panel-heading">
               	               <div className="panel-title text-center">
-              	               		<h1 className="title">Create a game below:</h1>
-              	               		<hr />
+              	               		<h1 className="collapseTitle">Create a game below:</h1>
+                                  <hr />
               	               	</div>
               	            </div>
               				<div className="main-create main-center">
@@ -98,9 +98,9 @@ export class CurrentGames extends React.Component{
                           onSubmit={this.addGame.bind(this)}>
 
 
-                                    <GameInputField label="Activity" ref="sport" placeholder="Activity" />
-                                    <GameInputField label="Location" ref="location" id='location' placeholder="Location" />
-              				        <GameInputField label="Game Length(Hours)" ref="gameLength" placeholder="Hours" />
+                          <GameInputField label="Activity" ref="sport" placeholder="Activity" />
+                          <GameInputField label="Location" ref="location" id='location' placeholder="Location" />
+                          <GameInputField label="Game Length(Hours)" ref="gameLength" placeholder="Hours" />
 
 
                           <div className="form-group">
