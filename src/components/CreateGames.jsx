@@ -45,7 +45,7 @@ export class CurrentGames extends React.Component{
         let coords = this.autocomplete.getPlace().geometry.location;
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let startTime = (new Date()).getTime();
-        let gameLength = this.refs.gameLength.getInput() * 60*60*1000; // expected length of game in milliseconds
+        let gameLength = this.refs.gameLength.value * 60*60*1000; // expected length of game in milliseconds
         let game = {
             id: id,
             sport: sport,
@@ -100,7 +100,20 @@ export class CurrentGames extends React.Component{
 
                           <GameInputField label="Activity" ref="sport" placeholder="Activity" />
                           <GameInputField label="Location" ref="location" id='location' placeholder="Location" />
-                          <GameInputField label="Game Length(Hours)" ref="gameLength" placeholder="Hours" />
+
+
+                            <div className="form-group">
+                              <label className="cols-sm-2 control-label">{this.props.label}</label>
+                                    <div className="cols-sm-10">
+                                  <div className="input-group">
+                                    <span className="input-group-addon"></span>
+                                      <input required className='gameDetails form-control'
+                                        type="number" ref="number" min="0"
+                                        label="Game Length(Hours)"
+                                        ref="gameLength" placeholder="Hours"/>
+                                  </div>
+                                  </div>
+                            </div>
 
 
                           <div className="form-group">

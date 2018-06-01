@@ -51,7 +51,7 @@ class TeamCreate extends React.Component{
         let sport = this.refs.sport.value;
         let name = this.refs.name.value;
         let city = this.refs.city.value;
-        let maxPlayers = parseInt( this.refs.maxPlayers.value, 10 );
+        let maxPlayers = parseInt(this.refs.maxPlayers.value);
         let team = {
             sport: sport,
             name: name,
@@ -140,9 +140,11 @@ class TeamCreate extends React.Component{
                 <div className="cols-sm-10">
                   <div className="input-group">
                     <span className="input-group-addon"></span>
-                    <input required className='teamDetails form-control' type="text"
+                    <input required className='teamDetails form-control' type="number"
                       id='maxPlayers'
                       ref="maxPlayers"
+                      min="0"
+                      max="10"
                       placeholder="Max # Players"/>
                   </div>
                 </div>
