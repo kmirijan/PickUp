@@ -35,7 +35,7 @@ class Routes extends React.Component{
     }
   }
   componentWillMount(){
-    this.readUser();    
+    this.readUser();
   }
   readUser = () => {
     const cookies = new Cookies();
@@ -53,6 +53,10 @@ class Routes extends React.Component{
         loading:false
       })
     })
+  }
+  componentWillReceiveProps(){
+    console.log("router received props");
+    this.forceUpdate();
   }
     render(){
       let updateUser = this.readUser.bind(this);
@@ -81,6 +85,7 @@ class Routes extends React.Component{
                   <Route path="/logout" render={(props)=><LogOut user={this.state.user} updateUser={updateUser} {...props}/>}/>
                   <Route path="/Loading" render={(props)=><Loading user={this.state.user} {...props}/>}/>
                   <Route path="/_404" render={(props)=><_404 user={this.state.user} {...props}/>}/>
+                  <Route component={_404} />
                 </Switch>
             </BrowserRouter>
         )
@@ -156,6 +161,7 @@ class User extends React.Component{
 
 	}
   componentWillReceiveProps(props){
+    this.forceUpdate();
     console.log(props);
     var usrnm=props.match.params.username;
      while(!(/[a-z]/i.test(usrnm[0]))){
@@ -368,6 +374,7 @@ class LogOut extends React.Component{
       //window.onload(this.props.history.push("/signin"));
       this.props.updateUser(); // update the user value in Routes
       this.props.history.push("/signin");
+      location.reload(false);
     })
 
 	}

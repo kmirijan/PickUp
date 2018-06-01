@@ -15,7 +15,6 @@ const busboy=require("connect-busboy");
 const util = require('util')
 const app=express();
 const http=require("http").Server(app);
-var cors = require('cors');
 
 //deploy app
 const port=process.env.PORT;
@@ -51,7 +50,6 @@ var {User} = require('./db/User.js');
 
 
 /*configurations*/
-app.use(cors());
 app.use(express.static("./dist"));
 app.use(bodyParser.json());
 app.use(busboy());
@@ -82,6 +80,7 @@ app.post("/postteam", teams.createTeam);
 app.post("/retrieveteams", teams.getTeams);
 app.post("/jointeam", teams.joinTeam);
 app.patch("/team", teams.leaveTeam);
+app.post("/deleteteam",teams.deleteTeam);
 
 //-------------==homepage-------------------------------
 app.post("/get-players-and-games-count",(req,res)=>{
@@ -367,10 +366,21 @@ app.patch('/leave:games', (req, res) => {
 
 app.delete('/games', (req, res) => {
   // console.log('deleting', req.body);
+  console.log("testing games",req.body.gid)
   Game.findOneAndRemove({'id': req.body.gid})
   .then((game) =>{
+    User.findOneAndUpdate(
+      {'username': req.body.owner},
+      {$pull: {games : req.body.gid}},
+      {new: true}
+    )
+    .then(()=>{
+      res.status(200).send({game});
+    }).catch((e) => {
+      res.status(400).send(e);
+    })
   // console.log("Deleting", game);
-  res.status(200).send({game});
+
   }).catch((e) => {
     res.status(400).send(e);
   })
@@ -389,7 +399,7 @@ app.post("/retrievespecificgames", (req,res)=>{
   })
 
 })
-app.patch("/joinT", (req, res) =>{
+app.post("/joinT", (req, res) =>{
   teamgames.joinT(req,res);
 });
 app.post("/nearbygamesT", (req, res) => {
@@ -407,7 +417,7 @@ app.post("/retrievegamesT", (req, res) =>{
 app.post("/retrievespecificgamesT",(req,res)=>{
   teamgames.retrieveSpecificGamesT(req,res);
 })
-app.patch('/leavegameT', (req, res) => {
+app.post('/leavegameT', (req, res) => {
   teamgames.leaveGameT(req,res);
 })
 app.post("/deletegameT",(req,res)=>{
