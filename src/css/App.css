@@ -171,7 +171,6 @@
     background-image: url("https://wallpaper.wiki/wp-content/uploads/2017/04/wallpaper.wiki-Free-desktop-basketball-background-hd-PIC-WPC0010432.jpg");
 
     /* Set a specific height */
-    height: 1000px;
 
     /* Create the parallax scrolling effect */
     background-attachment: fixed;
@@ -187,7 +186,6 @@
     background-image: url("https://i.pinimg.com/originals/80/b9/57/80b957f80bbfe2fdb83f3d7d9655831c.jpg");
 
     /* Set a specific height */
-    height: 1000px;
 
     /* Create the parallax scrolling effect */
     background-attachment: fixed;
@@ -203,7 +201,6 @@
     background-image: url("http://aslania.com/wp-content/uploads/2018/03/basketball-wallpapers-6.jpg");
 
     /* Set a specific height */
-    height: 1000px;
 
     /* Create the parallax scrolling effect */
     background-attachment: fixed;
@@ -212,13 +209,11 @@
     background-size: cover;
 }
 .signUpHome{
-  height:500px;
   background-color:#333;
   color:white;
   margin:auto;
 }
 .startCount{
-  height:500px;
   background-color:#333;
   color:white;
   margin:auto
@@ -236,13 +231,11 @@
   float:right
 }
 .secondHeader{
-  height:500px;
   font-size:100px;
   text-align:center;
   color:white;
 }
 .thirdHeader{
-  height:500px;
   font-size:100px;
   text-align:center;
   color:white;

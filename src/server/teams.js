@@ -1,5 +1,6 @@
 const mongo = require("mongodb").MongoClient;
 const mongourl = "mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup"
+const ObjectID = require('mongodb').ObjectID;
 
 function printErr(err, message)
 {
@@ -61,7 +62,7 @@ exports.createTeam = function createTeam(req, res) {
 
         let teams = client.db("pickup").collection("teams");
         let users=client.db("pickup").collection("users");
-        teams.insertOne(team, (err) => {
+        teams.insertOne(team, (err,ret) => {
             if (err)
             {
                 printErr(err, "Adding team failed");
@@ -69,8 +70,9 @@ exports.createTeam = function createTeam(req, res) {
             }
             else
             {
+              console.log("insertedId",ret.insertedId)
                 users.update({"username":{$in:team["members"]}},{
-                    $push:{"teams":team["name"]}
+                    $push:{"teams":ret.insertedId}
                 },(err)=>{
                   if(err){
                     printErr(err);
@@ -99,9 +101,8 @@ exports.joinTeam = function joinTeam(req,res) {
             res.sendStatus(500);
             return;
         }
-
         // let teamQuery = {$expr: { $eq: ["$name", {$literal: req.body.teamName} ], $gt: ["$maxPlayers", "$members.length"] } };
-        let teamQuery = { name: req.body.teamName, $where: "this.members.length < this.maxPlayers" };
+        let teamQuery = { _id: ObjectID(req.body.teamId), $where: "this.members.length < this.maxPlayers" };
         let newMember = { $addToSet: {members: req.body.user} }
 
         let teams = client.db("pickup").collection("teams");
@@ -115,7 +116,7 @@ exports.joinTeam = function joinTeam(req,res) {
             else if (result.matchedCount > 0)
             {
               users.updateOne({"username":req.body.user},{
-                  $addToSet:{"teams":req.body.teamName}
+                  $addToSet:{"teams":ObjectID(req.body.teamId)}
               },(err)=>{
                 if(err){
                   printErr(err);
@@ -128,7 +129,7 @@ exports.joinTeam = function joinTeam(req,res) {
               })
 
             }
-            else 
+            else
             {
                 console.log('[', (new Date()).toLocaleTimeString(), "] Team full: join failed");
             }
@@ -140,6 +141,32 @@ exports.joinTeam = function joinTeam(req,res) {
 
 }
 
+/*
+  req.body = teamId, teamMembers
+*/
+exports.deleteTeam = (req,res)=>{
+  mongo.connect(mongourl,(err,client)=>{
+    let teams=client.db('pickup').collection('teams');
+    let users=client.db('pickup').collection('users');
+    //remove game from teams, and the ID from each member of the team
+    if(String(req.body.teamId).length!=24){
+      printErr(err,"not valid team id");
+      res.sendStatus(500);
+      return;
+    }
+    const objectTeamId=ObjectID(req.body.teamId);
+    teams.remove({'_id':objectTeamId})
+    .then(()=>{
+      users.update({'username':{$in:req.body.teamMembers}},{
+        $pull:{teams:req.body.teamId}
+      })
+    .then(()=>{
+      res.end();
+      client.close();
+    })
+    })
+  })
+}
 // removes a user from the members list, deletes the team if it
 exports.leaveTeam = function leaveTeam (req, res) {
     console.log('[', (new Date()).toLocaleTimeString(), "] Team leaving");
@@ -152,8 +179,9 @@ exports.leaveTeam = function leaveTeam (req, res) {
             return;
         }
 
-        let teamQuery = {name: req.body.teamName};
+        let teamQuery = {_id: ObjectID(req.body.teamId)};
         let newMember = { $pull: {members: req.body.user} }
+        let users =client.db("pickup").collection("users");
 
         let teams = client.db("pickup").collection("teams");
         teams.findOneAndUpdate(teamQuery, newMember, (err, result) => {
@@ -166,8 +194,12 @@ exports.leaveTeam = function leaveTeam (req, res) {
             }
             if (result == null)
             {
-                console.log ("Team \"",req.body.teamName, "\" not found. Unable to leave");
+                console.log ("Team \"",ObjectID(req.body.teamId), "\" not found. Unable to leave");
             }
+
+            users.update({"username":req.body.user},{
+              $pull:{"teams":ObjectID(req.body.teamId)}
+            })
 
 
             let team = result.value;
@@ -191,7 +223,8 @@ exports.leaveTeam = function leaveTeam (req, res) {
                 client.close();
             }
 
-        });
+        })
+
 
     });
 

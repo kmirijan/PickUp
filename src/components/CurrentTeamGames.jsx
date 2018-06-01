@@ -57,7 +57,7 @@ export class CurrentTeamGames extends React.Component{
       }
     }
 
-        teamDropDown(){
+    teamDropDown(){
       if(this.ownedteams.length==0){
         return(<div>You have no teams</div>);
       }
@@ -107,7 +107,7 @@ export class CurrentTeamGames extends React.Component{
             isprivate:isprivate,
             location: location,
             user: this.props.user,
-            teams:[team.name],
+            teams:[team._id],
         };
         console.log(game);
         axios({
@@ -427,10 +427,11 @@ class Game extends React.Component {
     return teams;
   }
   selectTeamJoin(team){
+    console.log("joining with team")
     if(confirm("join with "+team["name"]+"?")){
       axios({
         url:"/joinT",
-        method:"patch",
+        method:"post",
         data:{
           team:team,
           game:this.props.game
@@ -442,7 +443,7 @@ class Game extends React.Component {
     if(confirm("leave with "+team["name"]+"?")){
       axios({
         url:"/leavegameT",
-        method:"patch",
+        method:"post",
         data:{
           team:team,
           game:this.props.game
@@ -476,7 +477,7 @@ class Game extends React.Component {
 
 
    <div id={"join"+this.props.game.id} className="collapse">
-    {this.showTeamGamesLeave()}
+    {this.showTeamGamesJoin()}
   </div>
   </div>
 );
