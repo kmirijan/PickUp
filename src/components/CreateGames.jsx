@@ -36,6 +36,7 @@ export class CurrentGames extends React.Component{
     }
 
     addGame(event) {
+        $('#createSoloGames').collapse('hide');
         event.preventDefault();
         let sport = this.refs.sport.getInput();
         let name = this.getName();
@@ -113,8 +114,7 @@ export class CurrentGames extends React.Component{
               						</div>
 
               						<div>
-                            <input type="submit" className="btn btn-primary" data-toggle="collapse"
-                              data-target="#createSoloGames" value="Create"/>
+                            <input type="submit" className="btn btn-primary" value="Create"/>
             								<span></span>
             								<input type="reset" className="btn btn-default" value="Clear"/>
               						</div>
