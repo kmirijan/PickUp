@@ -91,7 +91,7 @@ export class CurrentTeamGames extends React.Component{
     addGame(event) {
         event.preventDefault();
         if(this.state.teamselected==null){
-          alert("select a team");
+          alert("Select a team");
           return;
         }
         $('#createTeamGames').collapse('hide');
