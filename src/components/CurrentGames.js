@@ -1,11 +1,7 @@
 import React from 'react';
 import '../css/App.css';
 var {Link}=require('react-router-dom');
-
-
 import axios from 'axios';
-
-const GUEST = "guest";
 
 
 export class GameTable extends React.Component{
@@ -13,6 +9,7 @@ export class GameTable extends React.Component{
   constructor(props)
   {
     super(props);
+    console.log("USER",this.props.user);
 	this.state =
 	{
       games: [],
@@ -105,10 +102,13 @@ export class Game extends React.Component {
 
   joinGame()
   {
-    axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
+    // axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
+    axios.patch('/game:user', {uid: this.props.user, gid: this.props.game.id});
+    axios.patch('/user:game', {uid: this.props.user, gid: this.props.game.id});
+
   }
   leaveGame(){
-    axios.patch('/games', {uid:this.props.user, gid:this.props.game.id});
+    axios.patch('/leave:games', {uid:this.props.user, gid:this.props.game.id});
   }
 
 

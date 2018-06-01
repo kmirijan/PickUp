@@ -7,16 +7,51 @@ const mkprofile=require("./src/server/mkprofile.js");
 const friends=require("./src/server/friends.js");
 const gamepage=require("./src/server/gamepage.js");
 const teams=require("./src/server/teams.js");
+const timedRemove=require("./src/server/timedRemove.js");
+const teamgames=require("./src/server/teamgames.js");
+const login=require("./src/server/login.js")
 const fs=require("fs");
 const busboy=require("connect-busboy");
+const util = require('util')
+const app=express();
+const http=require("http").Server(app);
+var cors = require('cors');
+
+//deploy app
+const port=process.env.PORT;
+http.listen(port,()=>{
+    console.log(port);
+    console.log(process.env.NODE_ENV);
+    console.log(process.env.MONGODB_URI);
+});
+
+const io=require("socket.io")(http);
+//socket.io----------------------------------
+io.on('connection',(socket)=>{
+  console.log("someone joined");
+  socket.on("send",(m)=>{
+    console.log(m);
+    let messageWithTime={
+      sender:m["sender"],
+      message:m["message"],
+      time:(new Date()).toLocaleTimeString()
+    }
+    io.emit("message",messageWithTime)
+  })
+});
+
 
 
 var {Game} = require('./db/game.js');
+var {User} = require('./db/User.js');
 
 //var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
-const app=express();
+
+
+
 /*configurations*/
+app.use(cors());
 app.use(express.static("./dist"));
 app.use(bodyParser.json());
 app.use(busboy());
@@ -31,13 +66,52 @@ app.get("*",(req,res)=>{
   console.log('[', (new Date()).toLocaleTimeString(), "] Main file sending");
 });
 
+//-----------------login------------------------
+app.post("/verify-login",(req,res)=>{
+  login.verifyLogin(req.body,res);
+})
+app.post("/signin-test",(req,res)=>{
+  login.signIn(req.body,res);
+})
+app.delete("/logout-test",(req,res)=>{
+  login.logout(req.body,res);
+})
+
 // --------------- Team related requests --------------
 app.post("/postteam", teams.createTeam);
 app.post("/retrieveteams", teams.getTeams);
 app.post("/jointeam", teams.joinTeam);
 app.patch("/team", teams.leaveTeam);
 
+//-------------==homepage-------------------------------
+app.post("/get-players-and-games-count",(req,res)=>{
+  var gamescount=0;
+  var userscount=0;
+  mongo.connect(mongoUrl, (err, client) =>
+  {
+    if(err) throw new Error(err);
+    var games=client.db("pickup").collection("games");
+    var users=client.db("pickup").collection("users");
+    var teamgames=client.db("pickup").collection("teamgames");
 
+    games.count({}).then((numberOfGames)=>{
+      gamescount=gamescount+numberOfGames;
+      teamgames.count({}).then((numberOfTeamGames)=>{
+        gamescount=gamescount+numberOfTeamGames;
+        users.count({}).then((numberOfUsers)=>{
+          userscount=userscount+numberOfUsers;
+          res.json({
+            games:gamescount,
+            users:userscount
+          })
+          res.end();
+          client.close();
+        })
+      })
+    });
+  });
+
+})
 // --------------- User relate requests ---------------
 app.post("/user",(req,res)=>{
 	mkprofile.getUsers(req.body.user,res);
@@ -71,16 +145,20 @@ app.post("/uploadprofilepicture",(req,res)=>{
   oading-with-express-4-0-req-files-undefined?utm_med
   ium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa*/
   var body={};
+  var tempPath="";
   req.busboy.on("field",(fieldname,val)=>{
     body[fieldname]=val;
+    if(fieldname=="user"){
+      tempPath="./dist/"+val;
+    }
   });
   req.busboy.on("file",(fieldname,file,filename)=>{
-    //temp should have some ID attached so 2 people uploading at once will not be disrupted
-		fstream=fs.createWriteStream("./dist/temp");
+    console.log(tempPath);
+    fstream=fs.createWriteStream(tempPath);
     file.pipe(fstream);
   });
   req.busboy.on("finish",()=>{
-    mkprofile.uploadProfilePicture("./dist/temp",body["user"],body["filetype"],res);
+    mkprofile.uploadProfilePicture(tempPath,body["user"],body["filetype"],res);
   })
   req.pipe(req.busboy);
 })
@@ -101,6 +179,9 @@ app.post("/removefriend",(req,res)=>{
 })
 app.post("/isgame",(req,res)=>{
   gamepage.isGame(req.body["id"],res);
+})
+app.post("/isgamet",(req,res)=>{
+  gamepage.isGameT(req.body["id"],res);
 })
 
 
@@ -145,10 +226,17 @@ app.post("/nearbygames", (req, res) => {
 
         let collection = client.db("pickup").collection("games");
 
-        let query = {"coords.lat": {$gt: center.lat - range.lat, $lt: center.lat + range.lat},
-                "coords.lng": {$gt: center.lng - range.lng, $lt: center.lng + range.lng },
-                isprivate: false
-
+        let query = {coords:
+                        {$near:
+                            {
+                                $geometry: {
+                                    type: "Point",
+                                    coordinates: [center.lng, center.lat]
+                                },
+                                $maxDistance: range * 1000,
+                            }
+                        },
+                    isprivate: false
         };
         collection.find(query).toArray((err, result) => {
             if (err) throw err;
@@ -163,6 +251,7 @@ app.post("/nearbygames", (req, res) => {
 
 // return the games that the user has played
 app.post("/usergames", (req, res) => {
+  console.log(req.body.user)
     console.log('[', (new Date()).toLocaleTimeString(), "] Sending ", req.body.user.trim(), "'s games");
 
     mongo.connect(mongoUrl, (err, client) => {
@@ -171,7 +260,7 @@ app.post("/usergames", (req, res) => {
         let users = client.db("pickup").collection("users");
         let games = client.db("pickup").collection("games");
         users.findOne(username, (err, user) => {
-            let userGames = {id: {$in: user.games} };
+            let userGames = {id: {$in: (user.games != null ? user.games : [])} };
             games.find(userGames).toArray((err, results) => {
                 if (err) throw err;
                 res.json(results);
@@ -188,40 +277,58 @@ app.post("/postgames", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
 
-  var game = {
+  var game = new Game({
     sport: makeValid(req.body.sport),
     name: makeValid(req.body.name),
     location: makeValid(req.body.location),
     isprivate:makeValid(req.body.isprivate),
-    id: makeValid(req.body.gameId),
+    id: makeValid(req.body.id),
     owner: makeValid(req.body.user),
     players: [makeValid(req.body.user),],
-    coords: req.body.coords,
-  };
+    coords: {type: "Point", coordinates: [req.body.lng, req.body.lat] },
+    startTime: req.body.startTime,
+    endTime: req.body.startTime + req.body.gameLength
+  });
 
-
-  mongo.connect(mongoUrl, (err, db) => {
-    if (err) throw err;
-
-    db.db("pickup").collection("games").insertOne(game,() => {
-      db.db("pickup").collection("users").update({"username":game["owner"]},{
-        $push: {games: game["id"]}
-      }).then(()=>{
-        res.sendStatus(200);
-        db.close();
-      })
-    });
-
-   });
-
-  /*
-  game.save().then((doc) => {
-      res.send(doc);
+  console.log(game);
+  game.save().then((game) => {
+      res.status(200).send({game});
     }, (e) => {
+      console.log(e);
       res.status(400).send(e);
   })
-  */
 });
+
+// add user to game
+app.patch('/game:user', (req, res) => {
+  //console.log('Adding user to game');
+  //console.log(req.body);
+  Game.findOneAndUpdate(
+    {id : req.body.gid, players: { $nin: [req.body.uid]} },
+    {$push: {players: req.body.uid}},
+    {new: true}
+  ).then((game) => {
+    //console.log(game);
+    res.status(200).send({game})
+  }, (e) => {
+    res.status(400).send(e);
+  })
+})
+
+// Add game to user
+app.patch('/user:game', (req, res) => {
+  console.log('Adding game to user');
+  User.findOneAndUpdate(
+    {username : req.body.uid},
+    {$push: {games: req.body.gid}},
+    {new: true}
+  ).then((user) => {
+    console.log(user);
+    res.status(200).send({user})
+  }, (e) => {
+    res.status(400).send(e);
+  })
+})
 
 app.post("/retrievegames", (req, res) =>
 {
@@ -234,27 +341,21 @@ app.post("/retrievegames", (req, res) =>
       res.json(result);
       res.end();
       db.close();
-
-
     });
-
-
   });
-
 });
 
 
-app.patch('/games', (req, res) => {
-  console.log('patch: ', req.body);
-
+app.patch('/leave:games', (req, res) => {
+  // console.log('patch: ', req.body);
   Game.findOneAndUpdate(
     {'id': req.body.gid},
     {$pull: {players : req.body.uid}},
     {new: true}
   )
   .then((game) =>{
-    console.log('length: ', game.players.length)
-    console.log('req: ', req.body);
+    // console.log('length: ', game.players.length)
+    // console.log('req: ', req.body);
     if(game.players.length === 0){
       game.remove();
     }
@@ -265,41 +366,61 @@ app.patch('/games', (req, res) => {
 })
 
 app.delete('/games', (req, res) => {
-  console.log('deleting', req.body);
+  // console.log('deleting', req.body);
   Game.findOneAndRemove({'id': req.body.gid})
   .then((game) =>{
-  console.log("Deleting", game);
+  // console.log("Deleting", game);
   res.status(200).send({game});
   }).catch((e) => {
     res.status(400).send(e);
   })
 })
 
-app.post("/deletegame",(req,res)=>
-{
+
+app.post("/retrievespecificgames", (req,res)=>{
   mongo.connect(mongoUrl,(err,client)=>{
     if(err)throw new Error(err);
-
-    var db=client.db("pickup");
-    db.collection("games").remove({"id":req.body.gameId})
-    .then((arr)=>{
-      console.log(arr, "deleted");
-      res.json();
+    client.db("pickup").collection("games").find({id:Number(req.body.id)}).toArray((err,arr)=>{
+      if(err)throw new Error(err);
+      res.json(arr);
+      res.end();
       client.close();
     })
-  });
+  })
 
+})
+app.patch("/joinT", (req, res) =>{
+  teamgames.joinT(req,res);
 });
-
-
-
-
-/*deploy app*/
-const port=process.env.PORT;
-app.listen(port,()=>{
-    console.log(port);
-    console.log(process.env.NODE_ENV);
-    console.log(process.env.MONGODB_URI);
+app.post("/nearbygamesT", (req, res) => {
+  teamgames.nearByGamesT(req,res);
 });
+app.post("/usergamesT", (req, res) => {
+  teamgames.userGamesT(req,res);
+});
+app.post("/postgamesT", (req, res) =>{
+  teamgames.postGamesT(req,res);
+});
+app.post("/retrievegamesT", (req, res) =>{
+  teamgames.retrieveGamesT(req,res);
+});
+app.post("/retrievespecificgamesT",(req,res)=>{
+  teamgames.retrieveSpecificGamesT(req,res);
+})
+app.patch('/leavegameT', (req, res) => {
+  teamgames.leaveGameT(req,res);
+})
+app.post("/deletegameT",(req,res)=>{
+  teamgames.deleteGameT(req,res);
+});
+app.post("/retrieveplayerteams",(req,res)=>{
+  teamgames.retrievePlayerTeams(req,res);
+})
+
+
+// interval in milliseconds
+var removeInterval = 60*1000;
+timedRemove.removeExpiredGames(mongoUrl); // do it immedieately just to make sure
+setInterval(timedRemove.removeExpiredGames, removeInterval, mongoUrl);
 
 module.exports = {app};

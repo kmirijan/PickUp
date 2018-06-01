@@ -2,21 +2,23 @@ import React from 'react';
 import NavBar from './NavBar';
 import axios from "axios"
 import {GameTable, Game} from './CurrentGames';
+import {CurrentGames} from './CreateGames';
 //import '../css/Map.css';
 
 
 
 class Map extends React.Component {
     DEFAULT_ZOOM = 13;
+    MI_TO_KM = 1.609;
     constructor(props)
     {
         super(props);
+        console.log("USER",this.props.user);
         this.state = {
             userPosition : {lat: 37.758, lng: -122.473}, // San Francisco as default
             map : {},
             games : [],
             nearbyGames: [],
-            range : 5, /* miles away from location */
 
         };
 
@@ -71,13 +73,9 @@ class Map extends React.Component {
     }
 
 
-    MILES_PER_DEGREE = 69;
     retrieveNearbyGames() {
-        let range = {
-            lat: this.state.range / this.MILES_PER_DEGREE,
-            lng: Math.cos(this.state.userPosition.lat) * this.state.range / this.MILES_PER_DEGREE
-        };
-
+        let range = parseFloat(this.refs.range.value) * this.MI_TO_KM;
+        console.log("Range:", range, "km");
         axios.post("/nearbygames", {range: range, center: this.state.userPosition}).then(
             (results) => {
                 this.setState({nearbyGames : results.data});
@@ -88,13 +86,15 @@ class Map extends React.Component {
     }
 
     updateMap() {
+        this.clearMarkers();
         console.log("adding markers");
         console.log(this.state.nearbyGames);
         this.state.nearbyGames.map((game) =>
         {
             console.log(game);
             // add games as markers
-            let position = new google.maps.LatLng(game.coords.lat, game.coords.lng);
+            // game.coords.coordinates = [lng, lat]
+            let position = new google.maps.LatLng(game.coords.coordinates[1], game.coords.coordinates[0]);
 
             var marker = new google.maps.Marker({position:position, title:game.sport});
             let content = this.createInfoWindowContent(game);
@@ -106,6 +106,15 @@ class Map extends React.Component {
             marker.addListener('click', () => {infoWindow.open(this.state.map, marker)});
             console.log("Marker added");
         });
+    }
+
+    clearMarkers()
+    {
+        while (this.markers.length > 0)
+        {
+            let marker = this.markers.pop();
+            marker.setMap(null);
+        }
     }
 
     createInfoWindowContent(game)
@@ -131,12 +140,31 @@ class Map extends React.Component {
     {
     return (
         <div>
-            <NavBar/>
+            <NavBar user={this.props.user}/>
+
+
+              <div className="container">
+                <button type="button" className="btn btn-primary" data-toggle="collapse"
+                  data-target="#createSoloGames">Create A Game</button>
+                <div id="createSoloGames" className="collapse">
+                <CurrentGames user={this.props.user}/>
+                  </div>
+                </div>
+
             <div className="Map">
                 <h1>Games near you</h1>
-                <div ref="map" style={{height: "500px", width: "30%", float: "left"}}></div>
+                <div ref="mapContainer" style={{width: "30%", float: "left"}}>
+                    <div ref="map" style={{height: "500px"}} />
+                    Distance(Miles):
+                    <input type="text" ref="range"
+                        defaultValue="5"
+                        placeholder="Miles away" />
+                    <input type="button" value="Refresh Map"
+                        className="btn btn-primary"
+                        onClick={this.retrieveNearbyGames.bind(this)} />
+                </div>
                   <div className = "gameTableInMap">
-                    <GameTable/>
+                    <GameTable user={this.props.user}/>
                   </div>
             </div>
 
@@ -145,7 +173,7 @@ class Map extends React.Component {
     } else {
         return (
         <div>
-            <NavBar/>
+            <NavBar user={this.props.user}/>
             <div className="Map">
                 <h1>Location must be allowed to use this feature</h1>
             </div>

@@ -96,26 +96,7 @@ exports.signUp=async (data,res)=>{
 	});
 }
 
-exports.signIn=(data,res)=>{
-	var tf=mongo.connect(url,(err,client)=>{
-		if(err)throw new Error(err);
 
-		var db=client.db("pickup");
-		db.collection("users").find({"email":data["email"]}).toArray()
-		.then((arr)=>{
-			const hash=arr[0]["password"];
-			res.json(
-				{
-					"success":bcrypt.compareSync(data["password"],hash),
-					"user":arr[0]["username"]
-				});
-			client.close();
-		}).catch((err)=>{
-			res.json(false);
-		})
-
-	});
-}
 
 exports.getAllUsers=(res)=>{
 	var tf=mongo.connect(url,(err,client)=>{

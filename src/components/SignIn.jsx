@@ -4,11 +4,12 @@ import '../css/App.css';
 import NavBar from './NavBar';
 var {Switch,BrowserRouter,Route,browserHistory}=require('react-router-dom');
 var axios=require("axios");
+import Cookies from 'universal-cookie';
 
 class SignIn extends React.Component{
   constructor(props){
     super(props);
-    this.signIn=this.signIn.bind(this);
+    console.log("Props on create\n",this.props);
     this.state={
       email:'',
       password:'',
@@ -18,12 +19,14 @@ class SignIn extends React.Component{
     }
   }
 
-signIn(){
-  this.refs.signin.setAttribute("disabled","disabled");
+signIn(e){
+  e.preventDefault();
+  //this.refs.signin.setAttribute("disabled","disabled");
   console.log('this.state', this.state);
+
   const{email, password}=this.state;
    axios({
-      url:"/signin",
+      url:"/signin-test",
       method:"post",
       data:{
         "email":email,
@@ -31,10 +34,13 @@ signIn(){
       }
     }).then((res)=>{
       if(res.data["success"]==true){
-        /*https://www.robinwieruch.de/local-storage-react/*/
-        localStorage.setItem("loggedin","true");
-        localStorage.setItem("user",res.data["user"]);
-        this.refs.signin.removeAttribute("disabled");
+        //https://www.robinwieruch.de/local-storage-react/
+        //localStorage.setItem("key",res.data["key"]);
+        const cookies = new Cookies();
+        cookies.set("key",res.data["key"],{path:"/"});
+        this.props.updateUser(); // update the user value in Routes
+        console.log("mykey",cookies.get("key"))
+      //  location.reload(false);
         this.props.history.push("/user:"+res.data["user"]);
       }
       else
@@ -47,45 +53,48 @@ signIn(){
         })
         this.refs.signin.removeAttribute("disabled");
         this.props.history.push("/signin");
-      }
-      console.log(localStorage.getItem("loggedin"))
-    });
-}
 
+      }
+    });
+
+}
   render(){
     return(
       <div>
-        <NavBar/>
-          <form className="form-inline" style={{margin: '5%'}}>
-        <h2>SignIn</h2>
-        <div className="form-group">
-        <input
-        className="form-control"
-        type="text"
-        style={{marginRight:'5px'}}
-        placeholder="email"
-        onChange={event => this.setState({email: event.target.value})}
-        />
-        <input
-        className="form-control"
-        type="password"
-        style={{marginRight:'5px'}}
-        placeholder="password"
-        onChange={event => this.setState({password: event.target.value})}
-        />
-        <button
-        ref="signin"
-        className="btn btn-primary"
-        type="submit"
-        onClick={() => this.signIn()}
-        >
-        Sign In
-        </button>
-      </div>
-      <div>{this.state.error.message}</div>
-      <div><Link to={'/signup'}>Sign up instead</Link></div>
-    </form>
-  </div>
+        <NavBar user={this.props.user}/>
+        <form
+          className="form-inline"
+          style={{margin: '5%'}}
+          onSubmit={this.signIn.bind(this)}
+          >
+          <h2>SignIn</h2>
+          <div className="form-group">
+          <input
+          className="form-control"
+          type="text"
+          style={{marginRight:'5px'}}
+          placeholder="email"
+          onChange={event => this.setState({email: event.target.value})}
+          />
+          <input
+          className="form-control"
+          type="password"
+          style={{marginRight:'5px'}}
+          placeholder="password"
+          onChange={event => this.setState({password: event.target.value})}
+          />
+          <button
+          ref="signin"
+          className="btn btn-primary"
+          type="submit"
+          >
+          Sign In
+          </button>
+        </div>
+        <div>{this.state.error.message}</div>
+        <div><Link to={'/signup'}>Sign up instead</Link></div>
+      </form>
+    </div>
     );
   }
 }

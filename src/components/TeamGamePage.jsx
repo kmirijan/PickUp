@@ -9,7 +9,7 @@ import MapIndiv from "./MapIndiv";
 
 
 
-class GamePage extends React.Component{
+class TeamGamePage extends React.Component{
   constructor(props){
     super(props);
     console.log("USER",this.props.user);
@@ -17,11 +17,12 @@ class GamePage extends React.Component{
       game:null
     }
 
+
   }
   componentWillMount(){
     axios({
       method:"post",
-      url:"/retrievespecificgames",
+      url:"/retrievespecificgamesT",
       data:{
         id:this.props.id
       }
@@ -132,5 +133,5 @@ class Chat extends React.Component{
   }
 }
 module.exports={
-  GamePage
+  TeamGamePage
 }
