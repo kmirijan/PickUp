@@ -46,6 +46,7 @@ class TeamCreate extends React.Component{
     }
 
     addTeam(event) {
+          $('#createTeams').collapse('hide');
         event.preventDefault();
         let sport = this.refs.sport.value;
         let name = this.refs.name.value;
@@ -70,6 +71,7 @@ class TeamCreate extends React.Component{
     {
             return (
                 <input
+                  required
                 className='teamDetails form-control'
                 type="text"
                 ref="name"
@@ -113,7 +115,7 @@ class TeamCreate extends React.Component{
                 <div className="cols-sm-10">
                   <div className="input-group">
                     <span className="input-group-addon"></span>
-                    <input className='teamDetails form-control' type="text"
+                    <input required className='teamDetails form-control' type="text"
                     ref="sport"
                     placeholder="Activity"/>
                   </div>
@@ -125,7 +127,7 @@ class TeamCreate extends React.Component{
                 <div className="cols-sm-10">
                   <div className="input-group">
                     <span className="input-group-addon"></span>
-                    <input className='teamDetails form-control' type="text"
+                    <input required className='teamDetails form-control' type="text"
                       id= 'city'
                       ref="city"
                       placeholder="City"/>
@@ -138,7 +140,7 @@ class TeamCreate extends React.Component{
                 <div className="cols-sm-10">
                   <div className="input-group">
                     <span className="input-group-addon"></span>
-                    <input className='teamDetails form-control' type="text"
+                    <input required className='teamDetails form-control' type="text"
                       id='maxPlayers'
                       ref="maxPlayers"
                       placeholder="Max # Players"/>
@@ -150,8 +152,6 @@ class TeamCreate extends React.Component{
 
               <div>
                 <input type="submit" className="btn btn-primary"
-                  data-toggle="collapse"
-                    data-target="#createTeams"
                     value="Create"/>
                 <span></span>
                 <input type="reset" className="btn btn-default" value="Clear"/>
