@@ -89,6 +89,7 @@ export class CurrentTeamGames extends React.Component{
     }
 
     addGame(event) {
+      $('#createTeamGames').collapse('hide');
         event.preventDefault();
         if(this.state.teamselected==null){
           alert("select a team");
@@ -243,7 +244,7 @@ export class CurrentTeamGames extends React.Component{
                         <div className="cols-sm-10">
                           <div className="input-group">
                             <span className="input-group-addon"></span>
-                            <input className='gameDetails form-control' type="text"
+                            <input required className='gameDetails form-control' type="text"
                             ref="sport"
                             placeholder="Activity"/>
                           </div>
@@ -255,7 +256,7 @@ export class CurrentTeamGames extends React.Component{
                         <div className="cols-sm-10">
                           <div className="input-group">
                             <span className="input-group-addon"></span>
-                            <input className='gameDetails form-control' type="text"
+                            <input required className='gameDetails form-control' type="text"
                               id= 'location'
                               ref="location"
                               placeholder="Location"/>
@@ -277,8 +278,7 @@ export class CurrentTeamGames extends React.Component{
                       <div className="form-group">
 
                       <div>
-                        <input type="submit" className="btn btn-primary" data-toggle="collapse"
-                          data-target="#createTeamGames" value="Create"/>
+                        <input type="submit" className="btn btn-primary" value="Create"/>
                         <span></span>
                         <input type="reset" className="btn btn-default" value="Clear"/>
                       </div>
