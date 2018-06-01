@@ -89,12 +89,12 @@ export class CurrentTeamGames extends React.Component{
     }
 
     addGame(event) {
-      $('#createTeamGames').collapse('hide');
         event.preventDefault();
         if(this.state.teamselected==null){
           alert("select a team");
           return;
         }
+        $('#createTeamGames').collapse('hide');
         let sport = this.refs.sport.value;
         let name = this.getName();
         let location = this.refs.location.value;
@@ -193,7 +193,7 @@ export class CurrentTeamGames extends React.Component{
 
                           <div className="panel-heading">
                            <div className="panel-title text-center">
-                              <h1 className="title">Create a team game below:</h1>
+                              <h1 className="collapseTitle">Create a team game below:</h1>
                               <hr />
                             </div>
                         </div>

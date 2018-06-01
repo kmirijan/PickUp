@@ -93,7 +93,7 @@ class TeamCreate extends React.Component{
                 <div className="row main">
                   <div className="panel-heading">
                    <div className="panel-title text-center">
-                      <h1 className="title">Create a team below:</h1>
+                      <h1 className="collapseTitle">Create a team below:</h1>
                       <hr />
                     </div>
                 </div>
