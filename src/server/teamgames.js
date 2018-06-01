@@ -166,8 +166,13 @@ exports.leaveGameT=(req, res) => {
     var db=client.db("pickup");
     db.collection("teamgames").update({id:req.body.game.id},{
         $pull:{
-          teams:req.body.team.name
+          teams:req.body.team._id
         }
+    })
+    db.collection("users").update({"username":{$in:req.body.team.members}},{
+      $pull:{
+        teamgames:req.body.game.id
+      }
     })
   })
 }
