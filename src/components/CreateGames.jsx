@@ -1,6 +1,6 @@
 import React from 'react';
+import InputField from '../helpers/InputField';
 import '../css/App.css';
-var {Link}=require('react-router-dom');
 
 
 import axios from 'axios';
@@ -126,11 +126,11 @@ export class CurrentGames extends React.Component{
                           onSubmit={this.addGame.bind(this)}>
 
 
-                          <GameInputField label="Activity" type = "text" 
+                          <InputField label="Activity" type = "text" 
                                 ref="sport" placeholder="Activity" />
-                          <GameInputField label="Location" ref="location" type="text"
+                          <InputField label="Location" ref="location" type="text"
                                 id='location' placeholder="Location" />
-                          <GameInputField label="Game Length(Hours)" 
+                          <InputField label="Game Length(Hours)" 
                                 ref="gameLength" placeholder="hours"
                                 type="number" min="0" />
 
@@ -160,51 +160,4 @@ export class CurrentGames extends React.Component{
         );
 
     }
-}
-
-
-class GameInputField extends React.Component {
-
-    getInput()
-    {
-        return this.refs.input.value;
-    }
-
-    clear()
-    {
-        this.refs.input.value = "";
-    }
-
-    setError(err)
-    {
-        this.refs.errorField.innerHTML = err;
-    }
-
-    clearError()
-    {
-        if (this.refs.errorField.innerHTML != "")
-        {
-            this.refs.errorField.innerHTML = "";
-        }
-    }
-
-    render()
-    {
-        return (
-        <div className="form-group">
-        	<label className="cols-sm-2 control-label">{this.props.label}</label>
-                <div className="cols-sm-10">
-        			<div className="input-group">
-        				<span className="input-group-addon"></span>
-          				<input required className='gameDetails form-control' 
-                                ref="input"
-                                onChange={this.clearError.bind(this)}
-                                {...this.props}/>
-        			</div>
-                    <div className="errorField" ref="errorField"></div>
-            	</div>
-        </div>
-        );
-    }
-
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/App.css';
+import InputField from '../helpers/InputField';
 var {Link}=require('react-router-dom');
 import NavBar from "./NavBar"
 import axios from 'axios';
@@ -105,9 +106,9 @@ export class CurrentTeamGames extends React.Component{
               }
               }).then( () =>
                     {alert("Game added. It will appear upon refreshing the games table")});
-            this.refs.sport.value='';
-            this.refs.name.value='';
-            this.refs.location.value='';
+            this.refs.sport.clear();
+            this.refs.name.clear();
+            this.refs.location.clear();
         }
         else
         {
@@ -228,9 +229,9 @@ export class CurrentTeamGames extends React.Component{
 
 
 
-                      <GameInputField label="Activity" type="text" ref="sport"
+                      <InputField label="Activity" type="text" ref="sport"
                             placeholder="Activity" />
-                      <GameInputField label="City" type="text" id="location"
+                      <InputField label="City" type="text" id="location"
                             ref="location" placeholder="Location" />
 
                       <div className="form-group">
@@ -266,51 +267,6 @@ export class CurrentTeamGames extends React.Component{
         );
 
     }
-}
-class GameInputField extends React.Component {
-
-    getInput()
-    {
-        return this.refs.input.value;
-    }
-
-    clear()
-    {
-        this.refs.input.value = "";
-    }
-
-    setError(err)
-    {
-        this.refs.errorField.innerHTML = err;
-    }
-
-    clearError()
-    {
-        if (this.refs.errorField.innerHTML != "")
-        {
-            this.refs.errorField.innerHTML = "";
-        }
-    }
-
-    render()
-    {
-        return (
-        <div className="form-group">
-        	<label className="cols-sm-2 control-label">{this.props.label}</label>
-                <div className="cols-sm-10">
-        			<div className="input-group">
-        				<span className="input-group-addon"></span>
-          				<input required className='gameDetails form-control' 
-                                ref="input"
-                                onChange={this.clearError.bind(this)}
-                                {...this.props}/>
-        			</div>
-                    <div className="errorField" ref="errorField"></div>
-            	</div>
-        </div>
-        );
-    }
-
 }
 class GameTable extends React.Component{
 
