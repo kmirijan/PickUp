@@ -20,12 +20,12 @@ exports.joinT=(req, res) =>
   {
     var collection = client.db("pickup").collection("teamgames");
     var query = {id: req.body.game.id, teams: { $nin: [req.body.team] } };
-    var newTeam = { $push: {teams: req.body.team._id} };
+    var newTeam = { $addToSet: {teams: req.body.team._id} };
     console.log("team id",req.body.team._id);
 
     console.log("team: ", req.body.team.name);
     var userQuery = {username: {$in:req.body.team.members}};
-    var joinedGame = {$push: {teamgames: req.body.game.id}};
+    var joinedGame = {$addToSet: {teamgames: req.body.game.id}};
     client.db("pickup").collection("users").update(userQuery, joinedGame);
 
     collection.update(query, newTeam, (err) =>
