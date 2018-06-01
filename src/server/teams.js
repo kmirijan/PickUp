@@ -181,6 +181,7 @@ exports.leaveTeam = function leaveTeam (req, res) {
 
         let teamQuery = {_id: ObjectID(req.body.teamId)};
         let newMember = { $pull: {members: req.body.user} }
+        let users =client.db("pickup").collection("users");
 
         let teams = client.db("pickup").collection("teams");
         teams.findOneAndUpdate(teamQuery, newMember, (err, result) => {
@@ -195,6 +196,10 @@ exports.leaveTeam = function leaveTeam (req, res) {
             {
                 console.log ("Team \"",ObjectID(req.body.teamId), "\" not found. Unable to leave");
             }
+
+            users.update({"username":req.body.user},{
+              $pull:{"teams":ObjectID(req.body.teamId)}
+            })
 
 
             let team = result.value;
@@ -218,7 +223,8 @@ exports.leaveTeam = function leaveTeam (req, res) {
                 client.close();
             }
 
-        });
+        })
+
 
     });
 

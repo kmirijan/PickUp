@@ -57,7 +57,7 @@ export class CurrentTeamGames extends React.Component{
       }
     }
 
-        teamDropDown(){
+    teamDropDown(){
       if(this.ownedteams.length==0){
         return(<div>You have no teams</div>);
       }
