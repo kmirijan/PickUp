@@ -64,6 +64,10 @@ export class CurrentGames extends React.Component{
             this.refs.location.clear();
             this.refs.gameLength.clear();
         }
+        else
+        {
+            this.displayInputErrors(game);
+        }
     }
     gameValidate(game)
     {
@@ -71,14 +75,23 @@ export class CurrentGames extends React.Component{
         if (game.sport.trim() == "")
         {
             isValid = false;
-            this.refs.sport.setError("Please give a non-empty name");
         }
         if ( isNaN(game.gameLength) || game.gameLength < 0 )
         {
             isValid = false;
-            this.refs.gameLength.setError("Please input a non-negative number");
         }
         return isValid;
+    }
+    displayInputErrors(game)
+    {
+        if (game.sport.trim() == "")
+        {
+            this.refs.sport.setError("Please give a non-empty name");
+        }
+        if ( isNaN(game.gameLength) || game.gameLength < 0 )
+        {
+            this.refs.gameLength.setError("Please input a non-negative number");
+        }
     }
     togglePrivate(){
       if(this.state.isprivate==false){

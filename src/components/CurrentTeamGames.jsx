@@ -76,52 +76,75 @@ export class CurrentTeamGames extends React.Component{
     }
 
 
-    getName()
-    {
-        if (this.props.user != GUEST)
-        {
-            return this.props.user;
-        }
-        else
-        {
-            return this.refs.name.value;
-        }
-    }
-
     addGame(event) {
         event.preventDefault();
         if(this.state.teamselected==null){
           alert("Select a team");
           return;
         }
-        $('#createTeamGames').collapse('hide');
-        let sport = this.refs.sport.value;
-        let name = this.getName();
-        let location = this.refs.location.value;
-        let isprivate = this.state.isprivate;
         let team = this.state.teamselected;
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let game = {
             gameId: id,
-            sport: sport,
-            name: name,
-            isprivate:isprivate,
-            location: location,
+            sport: this.refs.sport.getInput(),
+            name: this.props.user,
+            isprivate:this.state.isprivate,
+            location: this.refs.location.getInput(),
             user: this.props.user,
             teams:[team._id],
         };
-        console.log(game);
-        axios({
-          url:'/postgamesT',
-          method:"post",
-          data:{
-            game:game
-          }
-          }).then( () =>
-                {alert("Game added. It will appear upon refreshing the games table")});
-        this.refs.sport.value='';
-        this.refs.name.value='';
-        this.refs.location.value='';
+        if (this.gameIsValid(game) == true) 
+        {
+            $('#createTeamGames').collapse('hide');
+            console.log(game);
+            axios({
+              url:'/postgamesT',
+              method:"post",
+              data:{
+                game:game
+              }
+              }).then( () =>
+                    {alert("Game added. It will appear upon refreshing the games table")});
+            this.refs.sport.value='';
+            this.refs.name.value='';
+            this.refs.location.value='';
+        }
+        else
+        {
+            this.displayInputErrors(game);
+        }
+    }
+    gameIsValid(game)
+    {
+        let isValid = true;
+        if (game.sport.trim() == "")
+        {
+            isValid = false;
+        }
+        if ( isNaN(game.gameLength) || game.gameLength < 0 )
+        {
+            isValid = false;
+        }
+        if (game.location.trim() == "")
+        {
+            isValid = false;
+        }
+        return isValid;
+    }
+    displayInputErrors(game)
+    {
+        if (game.sport.trim() == "")
+        {
+            this.refs.sport.setError("Please give a non-empty name");
+        }
+        if (game.location.trim() == "")
+        {
+            this.refs.location.setError("Please give a non-empty location");
+        }
+        if ( isNaN(game.gameLength) || game.gameLength < 0 )
+        {
+            this.refs.gameLength.setError("Please input a non-negative number");
+        }
     }
     togglePrivate(){
       if(this.state.isprivate==false){
@@ -134,35 +157,6 @@ export class CurrentTeamGames extends React.Component{
           isprivate:false
         });
       }
-    }
-
-
-    displayNameInput()
-    {
-        if (this.props.user != GUEST)
-        {
-            return null;
-        }
-        else
-        {
-            return (
-              <div className="form-group">
-      <label className="cols-sm-2 control-label">Team Name</label>
-      <div className="cols-sm-10">
-        <div className="input-group">
-          <span className="input-group-addon"></span>
-            <input
-            className='gameDetails form-control'
-            type="text"
-            ref="name"
-            placeholder="Name"
-            />
-        </div>
-      </div>
-    </div>
-
-            );
-        }
     }
     teamSelected(){
       if(this.state.teamselected==null){
@@ -221,11 +215,6 @@ export class CurrentTeamGames extends React.Component{
                     <form className="form-horizontal"
                       onSubmit={this.addGame.bind(this)}>
 
-                      {this.displayNameInput()}
-
-
-
-
 
                     <div className="form-group">
                       <div className="cols-sm-10">
@@ -239,31 +228,10 @@ export class CurrentTeamGames extends React.Component{
 
 
 
-                      <div className="form-group">
-                        <label className="cols-sm-2 control-label">Activity</label>
-                        <div className="cols-sm-10">
-                          <div className="input-group">
-                            <span className="input-group-addon"></span>
-                            <input required className='gameDetails form-control' type="text"
-                            ref="sport"
-                            placeholder="Activity"/>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="form-group">
-                        <label className="cols-sm-2 control-label">City</label>
-                        <div className="cols-sm-10">
-                          <div className="input-group">
-                            <span className="input-group-addon"></span>
-                            <input required className='gameDetails form-control' type="text"
-                              id= 'location'
-                              ref="location"
-                              placeholder="Location"/>
-                          </div>
-                        </div>
-                      </div>
-
+                      <GameInputField label="Activity" type="text" ref="sport"
+                            placeholder="Activity" />
+                      <GameInputField label="City" type="text" id="location"
+                            ref="location" placeholder="Location" />
 
                       <div className="form-group">
                         <p>Private</p>
@@ -299,7 +267,51 @@ export class CurrentTeamGames extends React.Component{
 
     }
 }
+class GameInputField extends React.Component {
 
+    getInput()
+    {
+        return this.refs.input.value;
+    }
+
+    clear()
+    {
+        this.refs.input.value = "";
+    }
+
+    setError(err)
+    {
+        this.refs.errorField.innerHTML = err;
+    }
+
+    clearError()
+    {
+        if (this.refs.errorField.innerHTML != "")
+        {
+            this.refs.errorField.innerHTML = "";
+        }
+    }
+
+    render()
+    {
+        return (
+        <div className="form-group">
+        	<label className="cols-sm-2 control-label">{this.props.label}</label>
+                <div className="cols-sm-10">
+        			<div className="input-group">
+        				<span className="input-group-addon"></span>
+          				<input required className='gameDetails form-control' 
+                                ref="input"
+                                onChange={this.clearError.bind(this)}
+                                {...this.props}/>
+        			</div>
+                    <div className="errorField" ref="errorField"></div>
+            	</div>
+        </div>
+        );
+    }
+
+}
 class GameTable extends React.Component{
 
   constructor(props)
