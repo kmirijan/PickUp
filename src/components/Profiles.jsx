@@ -251,7 +251,13 @@ class Profile extends React.Component{
 						</div>
 
 						<div className="w3-card">
-		          <GamesList games={this.state.myGames} username={this.state.username} frname={this.state.frname}/>
+		          <GamesList
+								user={this.props.user}
+								games={this.state.myGames}
+								username={this.state.username}
+								frname={this.state.frname}
+								teams={this.state.myTeams}
+								teamgames={this.state.myTeamGames}/>
 							<div id="gamesText">
 								Friends:<br></br>
 								{this.friendsList()}
@@ -274,11 +280,25 @@ class GamesList extends React.Component
 		constructor(props){
 			super(props);
 			this.joinGame=this.joinGame.bind(this);
+			this.joinTeam=this.joinTeam.bind(this);
+
+			this.state={
+				teamselected:null,
+			}
 		}
 		joinGame(game)
 		{
 		  axios.post('/join', {uid:this.props.user, gid:game.id});
 		}
+		joinTeamGame(game){
+
+		}
+		joinTeam(team){
+			axios.post('/jointeam', {user:this.props.user, teamId:team._id});
+		}
+
+
+
     displayGame(game)
     {
 			if(game["isprivate"]==false){
@@ -304,7 +324,8 @@ class GamesList extends React.Component
     }
 		displayGamesMade(game)
     {
-			if(game["isprivate"]==false){
+			if(game["isprivate"]==false||
+			(game["isprivate"]==true&&this.props.frname=="Friends")){
         return(
 					<tr key={game.id}>
 	          <td >{game.sport}</td>
@@ -315,18 +336,6 @@ class GamesList extends React.Component
 	          <td><Link to={"/game:"+game.id}>Details</Link></td>
 	        </tr>
         );
-			}
-			else if(game["isprivate"]==true&&this.props.frname=="Friends"){
-				return(
-					<tr key={"p"+game.id}>
-						<td >{game.sport}</td>
-						<td >{game.name}</td>
-						<td >{game.location}</td>
-						<td><button className="btn btn-success"
-							onClick={()=>{this.joinGame(game)}}>Join</button></td>
-	          <td><Link to={"/game:"+game.id}>Details</Link></td>
-					</tr>
-				);
 			}
 			else{
 				return(
@@ -340,31 +349,142 @@ class GamesList extends React.Component
         );
 			}
     }
+		displayTeamGame(game)
+    {
+			if(game["isprivate"]==false){
+        return(
+					<tr key={game.id}>
+	          <td >{game.sport}</td>
+	          <td >{game.name}</td>
+	          <td >{game.location}</td>
+	          <td><Link to={"/tgame:"+game.id}>Details</Link></td>
+	        </tr>
+        );
+			}
+			else{
+				return(
+					<tr key={"p"+game.id}>
+	          <td >{game.sport}</td>
+	          <td >{game.name}</td>
+	          <td >private game, cannot view location</td>
+	          <td>private game, cannot view details</td>
+	        </tr>
+        );
+			}
+    }
+		displayTeamGamesMade(game)
+    {
+			if(game["isprivate"]==false||
+			(game["isprivate"]==true&&this.props.frname=="Friends")){
+        return(
+					<tr key={game.id}>
+	          <td >{game.sport}</td>
+	          <td >{game.name}</td>
+	          <td >{game.location}</td>
+						<td><button className="btn btn-success"
+							onClick={()=>{this.joinTeamGame(game)}}>Join</button></td>
+	          <td><Link to={"/tgame:"+game.id}>Details</Link></td>
+	        </tr>
+        );
+			}
+			else{
+				return(
+					<tr key={"p"+game.id}>
+	          <td >{game.sport}</td>
+	          <td >{game.name}</td>
+						<td>private game, cannot join</td>
+	          <td >private game, cannot view location</td>
+	          <td>private game, cannot view details</td>
+	        </tr>
+        );
+			}
+    }
+		displayTeam(team)
+		{
+				return(
+					<tr key={team.id}>
+						<td >{team.sport}</td>
+						<td >{team.name}</td>
+						<td >{team.location}</td>
+						<td><Link to={"/tgame:"+team._id}>Details</Link></td>
+					</tr>
+				);
+		}
+		displayTeamsMade(team)
+		{
 
+				return(
+					<tr key={team.id}>
+						<td >{team.sport}</td>
+						<td >{team.name}</td>
+						<td >{team.location}</td>
+						<td><button className="btn btn-success"
+							onClick={()=>{this.joinTeamGame(team)}}>Join</button></td>
+						<td><Link to={"/tgame:"+team._id}>Details</Link></td>
+					</tr>
+				);
+		}
     render()
     {
-        if (this.props.games==[]) return;
-				var gamesList = this.props.games.filter((game)=>{
-					{return game["owner"]!=this.props.username}
-				})
-        gamesList = gamesList.map((game) =>
-            {return this.displayGame(game)}
-        );
-				var gamesMade = this.props.games.filter((game)=>{
-					{return game["owner"]==this.props.username}
-				})
-				gamesMade = gamesMade.map((game) =>
-            {return this.displayGamesMade(game)}
-        );
+			//games
+			if (this.props.games==[]) return;
+			var gamesList = this.props.games.filter((game)=>{
+				{return game['owner']!=this.props.username}
+			})
+			gamesList = gamesList.map((game) =>
+					{return this.displayGame(game)}
+			);
+			var gamesMade = this.props.games.filter((game)=>{
+				{return game['owner']==this.props.username}
+			})
+			gamesMade = gamesMade.map((game) =>
+					{return this.displayGamesMade(game)}
+			);
+
+			//teamgames
+			if (this.props.teamgames==[]) return;
+			var teamGamesList = this.props.teamgames.filter((game)=>{
+				{return game['owner']!=this.props.username}
+			})
+			teamGamesList = teamGamesList.map((game) =>
+					{return this.displayTeamGame(game)}
+			);
+			var teamGamesMade = this.props.teamgames.filter((game)=>{
+				{return game['owner']==this.props.username}
+			})
+			teamGamesMade = teamGamesMade.map((game) =>
+					{return this.displayTeamGamesMade(game)}
+			);
+
+			//teams
+			if (this.props.teams==[]) return;
+			var teamsList = this.props.teams.filter((game)=>{
+				{return game['captain']!=this.props.username}
+			})
+			teamsList = teamsList.map((game) =>
+					{return this.displayTeam(game)}
+			);
+			var teamsMade = this.props.teams.filter((game)=>{
+				{return game['captain']==this.props.username}
+			})
+			teamsMade = teamsMade.map((game) =>
+					{return this.displayTeamsMade(game)}
+			);
 
         return (
             <div>
-                <h2 id="gamesText">Games Played:</h2>
-                <table className = "table table-bordered table-hover">
-									<tbody key="gamesList">{gamesList}</tbody></table>
-								<h2 id="gamesText">Games Made:</h2>
-								<table className = "table table-bordered table-hover">
-									<tbody key="gamesMadeList">{gamesMade}</tbody></table>
+							<h2 id='gamesText'>Games Played</h2>
+							<table><tbody key='gamesList'>{gamesList}</tbody></table>
+							<h2 id='gamesText'>Games Made</h2>
+							<table><tbody key='gamesMadeList'>{gamesMade}</tbody></table>
+							<h2 id='gamesText'>Team Games Played</h2>
+							<table><tbody key='teamGamesList'>{teamGamesList}</tbody></table>
+							<h2 id='gamesText'>Team Games Made</h2>
+							<table><tbody key='teamGamesMadeList'>{teamGamesMade}</tbody></table>
+							<h2 id='gamesText'>Teams Joined</h2>
+							<table><tbody key='teamsList'>{teamsList}</tbody></table>
+							<h2 id='gamesText'>Teams Made</h2>
+							<table><tbody key='teamsMadeList'>{teamsMade}</tbody></table>
 
             </div>
         );

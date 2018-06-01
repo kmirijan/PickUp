@@ -53,6 +53,7 @@ signIn(e){
         })
         this.refs.signin.removeAttribute("disabled");
         this.props.history.push("/signin");
+        location.reload(false);
 
       }
     });

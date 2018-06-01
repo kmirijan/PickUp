@@ -321,6 +321,7 @@ render(){
 						</div>
 
 						</form>
+						{this.friendsList()}
 				</div>
 		</div>
 	</div>
