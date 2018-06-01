@@ -35,7 +35,9 @@ class Routes extends React.Component{
     }
   }
   componentWillMount(){
-    console.log("router will mount");
+    this.readUser();
+  }
+  readUser = () => {
     const cookies = new Cookies();
     Login.verify(cookies.get("key"),(user)=>{
       console.log("the user",user);
@@ -57,6 +59,8 @@ class Routes extends React.Component{
     this.forceUpdate();
   }
     render(){
+      let updateUser = this.readUser.bind(this);
+      console.log(updateUser);
       console.log(this.state.loading)
       if(this.state.loading==true){
         return(<Loading/>)
@@ -76,9 +80,9 @@ class Routes extends React.Component{
                   <Route path="/map" render={(props)=><Map user={this.state.user} {...props}/>}/>
                   <Route path="/teams" render={(props)=><TeamPage user={this.state.user} {...props}/>}/>
                   <Route path="/teamgames" render={(props)=><CurrentTeamGames user={this.state.user} {...props}/>}/>
-                  <Route path="/signin" render={(props)=><SignIn user={this.state.user} {...props}/>}/>
-                  <Route path="/signup" render={(props)=><SignUpWrap user={this.state.user} {...props}/>}/>
-                  <Route path="/logout" render={(props)=><LogOut user={this.state.user} {...props}/>}/>
+                  <Route path="/signin" render={(props)=><SignIn updateUser={updateUser} user={this.state.user} {...props}/>}/>
+                  <Route path="/signup" render={(props)=><SignUpWrap updateUser={updateUser} user={this.state.user} {...props}/>}/>
+                  <Route path="/logout" render={(props)=><LogOut user={this.state.user} updateUser={updateUser} {...props}/>}/>
                   <Route path="/Loading" render={(props)=><Loading user={this.state.user} {...props}/>}/>
                   <Route path="/_404" render={(props)=><_404 user={this.state.user} {...props}/>}/>
                 </Switch>
@@ -92,7 +96,7 @@ class Routes extends React.Component{
                 <Switch>
                 	<Route exact path="/" component={NavBar} />
                 	<Route exact path="/home" component={Home} />
-                  <Route path="/signin" component={SignIn}/>
+                  <Route path="/signin" render={(props)=><SignIn updateUser={updateUser} user={this.state.user} {...props}/>}/>
 				          <Route path="/signup" component={SignUpWrap}/>
                   <Route component={_404} />
                 </Switch>
@@ -365,7 +369,9 @@ class LogOut extends React.Component{
       const cookies = new Cookies();
       cookies.set("key","",{path:"/"} );
       this.loading=false;
-
+      //location.reload(false);
+      //window.onload(this.props.history.push("/signin"));
+      this.props.updateUser(); // update the user value in Routes
       this.props.history.push("/signin");
       location.reload(false);
     })

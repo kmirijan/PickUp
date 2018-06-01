@@ -52,13 +52,12 @@ export class CurrentGames extends React.Component{
             isprivate:isprivate,
             location: location,
             user: this.props.user,
-            coords: {
-                lat: coords.lat(),
-                lng: coords.lng()
-            },
+            lat: coords.lat(),
+            lng: coords.lng(),
             startTime: startTime,
             gameLength: gameLength,
         };
+        console.log(game);
         axios.post('/postgames', game)
         axios.patch('/user:game', {uid: this.props.user, gid: game.id});
         this.refs.sport.clear();
@@ -114,7 +113,8 @@ export class CurrentGames extends React.Component{
               						</div>
 
               						<div>
-                            <input type="submit" className="btn btn-primary" value="Create"/>
+                            <input type="submit" className="btn btn-primary" data-toggle="collapse"
+                              data-target="#createSoloGames" value="Create"/>
             								<span></span>
             								<input type="reset" className="btn btn-default" value="Clear"/>
               						</div>
@@ -152,7 +152,7 @@ class GameInputField extends React.Component {
                 <div className="cols-sm-10">
         			<div className="input-group">
         				<span className="input-group-addon"></span>
-          				<input className='gameDetails form-control' type="text"  type="text"
+          				<input required className='gameDetails form-control' type="text"  type="text"
                                 ref="input"
                                 {...this.props}/>
         			</div>
