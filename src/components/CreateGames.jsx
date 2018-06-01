@@ -28,42 +28,57 @@ export class CurrentGames extends React.Component{
     }
 
 
-
-
-    getName()
-    {
-        return this.props.user;
-    }
-
     addGame(event) {
-        $('#createSoloGames').collapse('hide');
         event.preventDefault();
-        let sport = this.refs.sport.getInput();
-        let name = this.getName();
-        let location = this.refs.location.getInput();
-        let isprivate = this.state.isprivate;
-        let coords = this.autocomplete.getPlace().geometry.location;
+        let place = this.autocomplete.getPlace();
+        if (place == undefined)
+        {
+            this.refs.location.setError("Please select a location from the dropdown menu");
+            return;
+        }
+        let coords = place.geometry.location;
+
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let startTime = (new Date()).getTime();
-        let gameLength = this.refs.gameLength.value * 60*60*1000; // expected length of game in milliseconds
+        let gameLength = parseFloat(this.refs.gameLength.getInput()) * 60*60*1000; // expected length of game in milliseconds
         let game = {
             id: id,
-            sport: sport,
-            name: name,
-            isprivate:isprivate,
-            location: location,
+            sport: this.refs.sport.getInput(),
+            name: this.props.user,
+            isprivate: this.state.isprivate,
+            location: this.refs.location.getInput(),
             user: this.props.user,
             lat: coords.lat(),
             lng: coords.lng(),
             startTime: startTime,
             gameLength: gameLength,
         };
-        console.log(game);
-        axios.post('/postgames', game)
-        axios.patch('/user:game', {uid: this.props.user, gid: game.id});
-        this.refs.sport.clear();
-        this.refs.location.clear();
-        this.refs.gameLength.clear();
+
+        if (this.gameValidate(game) == true)
+        {
+            $('#createSoloGames').collapse('hide');
+            console.log(game);
+            axios.post('/postgames', game)
+            axios.patch('/user:game', {uid: this.props.user, gid: game.id});
+            this.refs.sport.clear();
+            this.refs.location.clear();
+            this.refs.gameLength.clear();
+        }
+    }
+    gameValidate(game)
+    {
+        let isValid = true;
+        if (game.sport.trim() == "")
+        {
+            isValid = false;
+            this.refs.sport.setError("Please give a non-empty name");
+        }
+        if ( isNaN(game.gameLength) || game.gameLength < 0 )
+        {
+            isValid = false;
+            this.refs.gameLength.setError("Please input a non-negative number");
+        }
+        return isValid;
     }
     togglePrivate(){
       if(this.state.isprivate==false){
@@ -98,23 +113,13 @@ export class CurrentGames extends React.Component{
                           onSubmit={this.addGame.bind(this)}>
 
 
-                          <GameInputField label="Activity" ref="sport" placeholder="Activity" />
-                          <GameInputField label="Location" ref="location" id='location' placeholder="Location" />
-
-
-                            <div className="form-group">
-                              <label className="cols-sm-2 control-label">{this.props.label}</label>
-                                    <div className="cols-sm-10">
-                                  <div className="input-group">
-                                    <span className="input-group-addon"></span>
-                                      <input required className='gameDetails form-control'
-                                        type="number" ref="number" min="0"
-                                        label="Game Length(Hours)"
-                                        ref="gameLength" placeholder="Hours"/>
-                                  </div>
-                                  </div>
-                            </div>
-
+                          <GameInputField label="Activity" type = "text" 
+                                ref="sport" placeholder="Activity" />
+                          <GameInputField label="Location" ref="location" type="text"
+                                id='location' placeholder="Location" />
+                          <GameInputField label="Game Length(Hours)" 
+                                ref="gameLength" placeholder="hours"
+                                type="number" min="0" />
 
                           <div className="form-group">
                             <p>Private</p>
@@ -157,6 +162,19 @@ class GameInputField extends React.Component {
         this.refs.input.value = "";
     }
 
+    setError(err)
+    {
+        this.refs.errorField.innerHTML = err;
+    }
+
+    clearError()
+    {
+        if (this.refs.errorField.innerHTML != "")
+        {
+            this.refs.errorField.innerHTML = "";
+        }
+    }
+
     render()
     {
         return (
@@ -165,10 +183,12 @@ class GameInputField extends React.Component {
                 <div className="cols-sm-10">
         			<div className="input-group">
         				<span className="input-group-addon"></span>
-          				<input required className='gameDetails form-control' type="text"  type="text"
+          				<input required className='gameDetails form-control' 
                                 ref="input"
+                                onChange={this.clearError.bind(this)}
                                 {...this.props}/>
         			</div>
+                    <div className="errorField" ref="errorField"></div>
             	</div>
         </div>
         );
