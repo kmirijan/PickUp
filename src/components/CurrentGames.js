@@ -2,6 +2,7 @@ import React from 'react';
 import '../css/App.css';
 var {Link}=require('react-router-dom');
 import axios from 'axios';
+import {CurrentGames} from './CreateGames';
 
 
 export class GameTable extends React.Component{
@@ -70,6 +71,16 @@ export class GameTable extends React.Component{
           onClick={this.retrieveGames.bind(this)}
           style={{margin:"auto"}}/>
     </div>
+
+
+    <div className="container">
+      <button type="button" className="btn btn-primary" data-toggle="collapse"
+        data-target="#createSoloGames">Create A Game</button>
+      <div id="createSoloGames" className="collapse">
+      <CurrentGames user={this.props.user}/>
+        </div>
+      </div>
+
 
 	   <table className="table table-bordered table-hover">
 	   <thead>
