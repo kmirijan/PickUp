@@ -2,7 +2,7 @@ import React from 'react';
 import NavBar from './NavBar';
 import axios from "axios"
 import {GameTable, Game} from './CurrentGames';
-import {CurrentGames} from './CreateGames';
+import {CreateGames} from './CreateGames';
 //import '../css/Map.css';
 
 
@@ -134,6 +134,15 @@ class Map extends React.Component {
 
     }
 
+    reload()
+    {
+        if (this.onNewGame != undefined)
+        {
+            this.onNewGame();
+        }
+        this.retrieveNearbyGames();
+    }
+
     render() {
 
     if (navigator.geolocation)
@@ -155,7 +164,7 @@ class Map extends React.Component {
                         onClick={this.retrieveNearbyGames.bind(this)} />
                 </div>
                   <div className = "gameTableInMap">
-                    <GameTable user={this.props.user}/>
+                    <GameTable onNewGame={this.reload.bind(this)} user={this.props.user}/>
                   </div>
             </div>
 

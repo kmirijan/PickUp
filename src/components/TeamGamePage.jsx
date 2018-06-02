@@ -49,7 +49,7 @@ class TeamGamePage extends React.Component{
               location
             </div>
             <div id="map">
-              <MapIndiv thisGame={this.state.game}/>
+              
             </div>
           </div>
           <div id="chat">

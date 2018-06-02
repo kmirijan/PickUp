@@ -33,6 +33,7 @@ class Routes extends React.Component{
       user:null,
       loading:true
     }
+    this.readUser=this.readUser.bind(this);
   }
   componentWillMount(){
     this.readUser();
@@ -45,7 +46,7 @@ class Routes extends React.Component{
         console.log("valid user")
       }
       else{
-        console.log("invalid user")
+        console.log("invalid user");
       }
 
       this.setState({
@@ -359,15 +360,16 @@ class LogOut extends React.Component{
     this.loading=true;
   }
 	componentDidMount(){
+    const cookies = new Cookies();
     axios({
       url:"/logout-test",
       method:"delete",
       data:{
-        key:localStorage.getItem("key")
+        key:cookies.get("key")
       }
     }).then(()=>{
       //localStorage.setItem("key","");
-      const cookies = new Cookies();
+
       cookies.set("key","",{path:"/"} );
       this.loading=false;
       //location.reload(false);
