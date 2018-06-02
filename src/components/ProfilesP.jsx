@@ -295,7 +295,7 @@ class GamesList extends React.Component
 			}
 		}
 
-		deleteGame(gameId){
+		deleteGame(gameId, players){
 			if(this.state.deleteGameClicked==false){
 				if(confirm('delete game?')){
 					axios({
@@ -303,7 +303,7 @@ class GamesList extends React.Component
 						url:'/games',
 						data:{
 							gid:gameId,
-							owner:this.props.user
+							players:players
 						}
 					})
 					.then(()=>{
@@ -385,7 +385,7 @@ class GamesList extends React.Component
 					<td >{game.location}</td>
 					<td><Link to={'/game:'+game.id}>Details</Link></td>
 					<td><button className='btn btn-danger'
-						onClick={()=>{this.deleteGame(game.id)}}>
+						onClick={()=>{this.deleteGame(game.id,game.players)}}>
 						Delete
 					</button></td>
 				</tr>

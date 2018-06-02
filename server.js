@@ -371,7 +371,7 @@ app.delete('/games', (req, res) => {
   Game.findOneAndRemove({'id': req.body.gid})
   .then((game) =>{
     User.findOneAndUpdate(
-      {'username': req.body.owner},
+      {'username': {$in:req.body.players}},
       {$pull: {games : req.body.gid}},
       {new: true}
     )
