@@ -2,7 +2,7 @@ import React from 'react';
 import '../css/App.css';
 var {Link}=require('react-router-dom');
 import axios from 'axios';
-import {CurrentGames} from './CreateGames';
+import {CreateGames} from './CreateGames';
 
 
 export class GameTable extends React.Component{
@@ -53,6 +53,16 @@ export class GameTable extends React.Component{
 
     }
 
+    reload()
+    {
+        console.log("Reloading Game table");
+        if (this.props.onNewGame != undefined)
+        {
+            console.log("Updating boss of GameTable");
+            this.props.onNewGame();
+        }
+        this.retrieveGames();
+    }
 
   render() {
     if (this.state.retrieving == true)
@@ -77,7 +87,7 @@ export class GameTable extends React.Component{
       <button type="button" className="btn btn-primary" data-toggle="collapse"
         data-target="#createSoloGames">Create A Game</button>
       <div id="createSoloGames" className="collapse">
-      <CurrentGames user={this.props.user}/>
+      <CreateGames onNewGame={this.reload.bind(this)} user={this.props.user}/>
         </div>
       </div>
 

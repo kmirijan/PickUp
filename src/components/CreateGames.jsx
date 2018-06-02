@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const GUEST = "guest";
 
-export class CurrentGames extends React.Component{
+export class CreateGames extends React.Component{
 
 
 
@@ -59,7 +59,14 @@ export class CurrentGames extends React.Component{
             $('#createSoloGames').collapse('hide');
             console.log(game);
             axios.post('/postgames', game)
-            axios.patch('/user:game', {uid: this.props.user, gid: game.id});
+            axios.patch('/user:game', {uid: this.props.user, gid: game.id}).then( () => {
+                    console.log("Game Created in create Games");
+                    if (this.props.onNewGame != undefined)
+                    {
+                        console.log("Running updates from CreateGames");
+                        this.props.onNewGame();
+                    }
+            });
             this.refs.sport.clear();
             this.refs.location.clear();
             this.refs.gameLength.clear();
