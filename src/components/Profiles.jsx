@@ -307,7 +307,7 @@ class GamesList extends React.Component
 	          <td >{game.sport}</td>
 	          <td >{game.name}</td>
 	          <td >{game.location}</td>
-	          <td><Link to={"/game:"+game.id}>Details</Link></td>
+	          <td><Link to={'/map:'+game.id}>Link</Link></td>
 	        </tr>
         );
 			}
@@ -333,7 +333,7 @@ class GamesList extends React.Component
 	          <td >{game.location}</td>
 						<td><button className="btn btn-success"
 							onClick={()=>{this.joinGame(game)}}>Join</button></td>
-	          <td><Link to={"/game:"+game.id}>Details</Link></td>
+	          <td><Link to={'/map:'+game.id}>Link</Link></td>
 	        </tr>
         );
 			}
