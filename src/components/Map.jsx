@@ -142,15 +142,6 @@ class Map extends React.Component {
         <div>
             <NavBar user={this.props.user}/>
 
-
-              <div className="container">
-                <button type="button" className="btn btn-primary" data-toggle="collapse"
-                  data-target="#createSoloGames">Create A Game</button>
-                <div id="createSoloGames" className="collapse">
-                <CurrentGames user={this.props.user}/>
-                  </div>
-                </div>
-
             <div className="Map">
                 <h1>Games near you</h1>
                 <div ref="mapContainer" style={{width: "30%", float: "left"}}>

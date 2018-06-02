@@ -215,6 +215,10 @@ exports.leaveTeam = function leaveTeam (req, res) {
                         console.log('[', (new Date()).toLocaleTimeString(), "] Deleting team");
                         res.sendStatus(200);
                     }
+                    while (team.members.length > 0)
+                    {
+                        users.update({"username":team.members.pop()}, {$pull: {"teams":ObjectID(req.body.teamId)}});
+                    }
                     client.close();
                 });
             }
