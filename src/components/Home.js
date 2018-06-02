@@ -80,13 +80,13 @@ class StartCount extends React.Component{
     }
     this.displayCounts=this.displayCounts.bind(this);
     this.height=window.innerHeight-NAVBARHEIGHT;
+    this.ismounted = false;
   }
-  isMounted = false;
   componentDidMount(){
-    this.isMounted = true;
+    this.ismounted = true;
   }
   componentWillReceiveProps(newprops){
-    if (this.isMounted){
+    if (this.ismounted){
       this.setState(newprops);
     }
   }
