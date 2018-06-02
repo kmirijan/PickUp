@@ -53,7 +53,7 @@ export class GameTable extends React.Component{
 
     }
 
-    reload()
+    reloadAll()
     {
         console.log("Reloading Game table");
         if (this.props.onNewGame != undefined)
@@ -61,6 +61,10 @@ export class GameTable extends React.Component{
             console.log("Updating boss of GameTable");
             this.props.onNewGame();
         }
+        this.retrieveGames();
+    }
+    reloadSelf()
+    {
         this.retrieveGames();
     }
 
@@ -87,7 +91,7 @@ export class GameTable extends React.Component{
       <button type="button" className="btn btn-primary" data-toggle="collapse"
         data-target="#createSoloGames">Create A Game</button>
       <div id="createSoloGames" className="collapse">
-      <CreateGames onNewGame={this.reload.bind(this)} user={this.props.user}/>
+      <CreateGames onNewGame={this.reloadAll.bind(this)} user={this.props.user}/>
         </div>
       </div>
 
@@ -98,8 +102,7 @@ export class GameTable extends React.Component{
 	  <th>Activity</th>
 	  <th>Name</th>
 	  <th>Location</th>
-	  <th>Join</th>
-    <th>Leave</th>
+    <th>Join/Leave</th>
     <th># Joined</th>
     <th></th>
 	</tr>
@@ -107,7 +110,8 @@ export class GameTable extends React.Component{
       <tbody>
 	      {
             this.state.filteredGames.map((game)=>{
-                return (<Game game = {game} user={this.props.user} key={game.id} />);
+                return (<Game game = {game} onParticipationChange={this.reloadSelf.bind(this)} 
+                            user={this.props.user} key={game.id} />);
             })
          }
 	  </tbody>
@@ -126,12 +130,38 @@ export class Game extends React.Component {
     // axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
     axios.patch('/game:user', {uid: this.props.user, gid: this.props.game.id});
     axios.patch('/user:game', {uid: this.props.user, gid: this.props.game.id});
-
+    if (this.props.onParticipationChange != undefined)
+    {
+        this.props.onParticipationChange();
+    }
   }
   leaveGame(){
     axios.patch('/leave:games', {uid:this.props.user, gid:this.props.game.id});
+    if (this.props.onParticipationChange != undefined)
+    {
+        this.props.onParticipationChange();
+    }
   }
 
+  getJoinLeaveButton()
+  {
+
+    if (this.props.game.players.includes(this.props.user)) {
+      return (
+        <input type="button"
+            className="btn btn-danger btn-md"
+            onClick={this.leaveGame.bind(this)} value="Leave"/>
+      );
+    }
+    else {
+      return (
+        <input  type="button"
+            className="btn btn-success btn-md"
+            onClick={this.joinGame.bind(this)} value="Join"/>
+      );
+    }
+
+  }
 
   render(){
     return(
@@ -139,12 +169,7 @@ export class Game extends React.Component {
           <td>{this.props.game.sport}</td>
           <td>{this.props.game.name}</td>
           <td>{this.props.game.location}</td>
-          <td><input  type="button"
-            className="btn btn-success btn-md"
-            onClick={this.joinGame.bind(this)} value="Join"/></td>
-          <td><input type="button"
-            className="btn btn-danger btn-md"
-            onClick={this.leaveGame.bind(this)} value="Leave"/></td>
+          <td>{this.getJoinLeaveButton()}</td>
           <td>{this.props.game.players.length}</td>
           <td><Link to={"/game:"+this.props.game.id}>Details</Link></td>
         </tr>
