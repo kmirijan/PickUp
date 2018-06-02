@@ -364,6 +364,7 @@ app.patch('/leave:games', (req, res) => {
   })
 })
 
+//change so it deletes for members as well
 app.delete('/games', (req, res) => {
   // console.log('deleting', req.body);
   console.log("testing games",req.body.gid)
