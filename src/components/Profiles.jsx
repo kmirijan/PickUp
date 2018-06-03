@@ -279,12 +279,7 @@ class GamesList extends React.Component
 {
 		constructor(props){
 			super(props);
-			this.joinGame=this.joinGame.bind(this);
-			this.joinTeam=this.joinTeam.bind(this);
 
-			this.state={
-				teamselected:null,
-			}
 		}
 
     displayGame(game)
@@ -315,7 +310,7 @@ class GamesList extends React.Component
 			if(game["isprivate"]==false||
 			(game["isprivate"]==true&&this.props.frname=="Friends")){
         return(
-					<tr key={game.id}>
+					<tr key={game.id+"m"}>
 	          <td >{game.sport}</td>
 	          <td >{game.name}</td>
 	          <td >{game.location}</td>
@@ -325,7 +320,7 @@ class GamesList extends React.Component
 			}
 			else{
 				return(
-					<tr key={"p"+game.id}>
+					<tr key={"p"+game.id+"m"}>
 	          <td >{game.sport}</td>
 	          <td >{game.name}</td>
 	          <td >private game, cannot view location</td>
@@ -362,7 +357,7 @@ class GamesList extends React.Component
 			if(game["isprivate"]==false||
 			(game["isprivate"]==true&&this.props.frname=="Friends")){
         return(
-					<tr key={game.id}>
+					<tr key={game.id+"m"}>
 	          <td >{game.sport}</td>
 	          <td >{game.name}</td>
 	          <td >{game.location}</td>
@@ -372,7 +367,7 @@ class GamesList extends React.Component
 			}
 			else{
 				return(
-					<tr key={"p"+game.id}>
+					<tr key={"p"+game.id+"m"}>
 	          <td >{game.sport}</td>
 	          <td >{game.name}</td>
 						<td>private game, cannot join</td>
@@ -385,7 +380,7 @@ class GamesList extends React.Component
 		displayTeam(team)
 		{
 				return(
-					<tr key={team.id}>
+					<tr key={team._id}>
 						<td >{team.sport}</td>
 						<td >{team.name}</td>
 						<td >{team.location}</td>
@@ -397,7 +392,7 @@ class GamesList extends React.Component
 		{
 
 				return(
-					<tr key={team.id}>
+					<tr key={team._id+"m"}>
 						<td >{team.sport}</td>
 						<td >{team.name}</td>
 						<td >{team.location}</td>

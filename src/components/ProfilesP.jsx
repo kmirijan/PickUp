@@ -379,7 +379,7 @@ class GamesList extends React.Component
     }
 		displayGamesMade(game){
 			return (
-				<tr key={game.id}>
+				<tr key={game.id+"m"}>
 					<td >{game.sport}</td>
 					<td >{game.name}</td>
 					<td >{game.location}</td>
@@ -404,7 +404,7 @@ class GamesList extends React.Component
     }
 		displayTeamGamesMade(game){
 			return (
-				<tr key={game.id}>
+				<tr key={game.id+"m"}>
 					<td >{game.sport}</td>
 					<td >{game.name}</td>
 					<td >{game.location}</td>
@@ -419,7 +419,7 @@ class GamesList extends React.Component
 		displayTeam(team)
     {
         return (
-					<tr key={team.id}>
+					<tr key={team._id}>
 						<td >{team.sport}</td>
 						<td >{team.name}</td>
 						<td >{team.location}</td>
@@ -429,11 +429,11 @@ class GamesList extends React.Component
     }
 		displayTeamsMade(team){
 			return (
-				<tr key={team.id}>
+				<tr key={team._id+"m"}>
 					<td >{team.sport}</td>
 					<td >{team.name}</td>
 					<td >{team.location}</td>
-					<td><Link to={'/teams:'+team.id}>Link</Link></td>
+					<td><Link to={'/teams:'+team._id}>Link</Link></td>
 					<td><button className='btn btn-danger'
 						onClick={()=>{this.deleteTeam(team._id,team.members)}}>
 						Delete

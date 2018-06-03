@@ -7,7 +7,6 @@ var {TeamPage}=require("./TeamPage.jsx");
 var {CurrentTeamGames}=require("./CurrentTeamGames.jsx");
 var {Users}=require("../helpers/Users.jsx");
 var{GamePage}=require("./GamePage.jsx");
-var{TeamGamePage}=require("./TeamGamePage.jsx");
 var{ProfileSettings}=require("./ProfilesSettings.jsx");
 var axios=require("axios");
 import loadImg from "../../dist/load.gif"
@@ -77,7 +76,6 @@ class Routes extends React.Component{
                   <Route path="/edit:username" render={(props)=><Edit user={this.state.user} {...props}/>}/>
                   <Route path="/settings:username" render={(props)=><Settings user={this.state.user} {...props}/>}/>
                   <Route path="/game:id" render={(props)=><RenderGamePage user={this.state.user} {...props}/>}/>
-                  <Route path="/tgame:id" render={(props)=><RenderTeamGamePage user={this.state.user} {...props}/>}/>
                   <Route path="/map:search" render={(props)=><Map user={this.state.user} {...props}/>}/>
                   <Route path="/teams:search" render={(props)=><TeamPage user={this.state.user} {...props}/>}/>
                   <Route path="/teamgames:search" render={(props)=><CurrentTeamGames user={this.state.user} {...props}/>}/>
@@ -315,44 +313,7 @@ class RenderGamePage extends React.Component{
     }
   }
 }
-class RenderTeamGamePage extends React.Component{
-  constructor(props){
-    super(props);
-    this.id=this.props.match.params.id;
-    console.log(this.id);
-    while(!(/[0-9]|[a-z]/i.test(this.id[0]))){
-			this.id=this.id.substring(1,this.id.length);
-		}
-    this.isGame=false;
-    this.loading=true;
-  }
-  componentWillMount(){
-    axios({
-      method:"post",
-      url:"/isgamet",
-      data:{
-        id:this.id
-      }
-    }).then((isGame)=>{
-      this.isGame=isGame.data;
-      this.loading=false;
-      this.forceUpdate();
-    })
-  }
-  render(){
-    console.log("gametrue",this.isGame);
-    if(this.isGame==true){
 
-      return(<TeamGamePage id={this.id} user={this.props.user}/>)
-    }
-    else if(this.loading==true){
-      return(<Loading/>)
-    }
-    else{
-      return(<_404/>)
-    }
-  }
-}
 
 class LogOut extends React.Component{
   constructor(props){
