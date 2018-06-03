@@ -7,6 +7,8 @@ import axios from 'axios';
 
 const GUEST = "guest";
 
+var refreshTable = () => {console.log("refreshTable unBound")};
+
 export class CurrentTeamGames extends React.Component{
 
     constructor(props) {
@@ -105,9 +107,8 @@ export class CurrentTeamGames extends React.Component{
                 game:game
               }
               }).then( () =>
-                    {alert("Game added. It will appear upon refreshing the games table")});
+                    {refreshTable()});
             this.refs.sport.clear();
-            this.refs.name.clear();
             this.refs.location.clear();
         }
         else
@@ -119,10 +120,6 @@ export class CurrentTeamGames extends React.Component{
     {
         let isValid = true;
         if (game.sport.trim() == "")
-        {
-            isValid = false;
-        }
-        if ( isNaN(game.gameLength) || game.gameLength < 0 )
         {
             isValid = false;
         }
@@ -141,10 +138,6 @@ export class CurrentTeamGames extends React.Component{
         if (game.location.trim() == "")
         {
             this.refs.location.setError("Please give a non-empty location");
-        }
-        if ( isNaN(game.gameLength) || game.gameLength < 0 )
-        {
-            this.refs.gameLength.setError("Please input a non-negative number");
         }
     }
     togglePrivate(){
@@ -285,8 +278,13 @@ class GameTable extends React.Component{
 
   componentDidMount()
   {
+    refreshTable = this.retrieveGames.bind(this);
     this.retrieveGames();
     this.userTeams();
+  }
+  componentWillUnmount()
+  {
+    refreshTable = () => {console.log("refreshTable unBound");}
   }
   userTeams(){
 
@@ -404,7 +402,7 @@ class Game extends React.Component {
           team:team,
           game:this.props.game
         }
-      })
+      }).then(refreshTable());
     }
   }
   selectTeamLeave(team){
@@ -416,7 +414,7 @@ class Game extends React.Component {
           team:team,
           game:this.props.game
         }
-      })
+      }).then(refreshTable());
     }
   }
   showTeamGamesLeave(){
