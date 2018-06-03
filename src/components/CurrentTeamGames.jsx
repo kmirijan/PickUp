@@ -312,7 +312,8 @@ class GameTable extends React.Component{
         this.setState({filteredGames : this.state.games.filter(
             (game) => { return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
             (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
-            (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1));
+            (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1))||
+            (String(game.id).indexOf(String(search))!==-1);
             })
         });
     }
