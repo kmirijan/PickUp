@@ -15,8 +15,8 @@ class NavBar extends React.Component {
             <ul className="NavBar">
               <li className="Nav"><Link to={'/home'}><img src="logo.png" style={{width:'50px'}}/></Link></li>
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/map:'}>Games</NavLink></li>
-              <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/teams'}>Join Teams</NavLink></li>
-              <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/teamgames'}>Team Games</NavLink></li>
+              <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/teams:'}>Join Teams</NavLink></li>
+              <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/teamgames:'}>Team Games</NavLink></li>
 
               <li className="Nav"><NavLink activeClassName='active' className = 'pages' to={'/list_users'}>Users</NavLink></li>
               <ul>

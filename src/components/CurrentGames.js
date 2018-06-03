@@ -14,7 +14,8 @@ export class GameTable extends React.Component{
   	this.state =
   	{
         games: [],
-  	     filteredGames: [],
+        allGames:[],
+  	    filteredGames: [],
         retrieving: false,
         defaultSearch:null,
   	}
@@ -42,6 +43,13 @@ export class GameTable extends React.Component{
           })
       });
   }
+  updateTableAll(search){
+    this.setState({filteredGames : this.state.allGames.filter(
+        (game) => { return(String(game.id).indexOf(String(search))!==-1)
+
+        })
+    });
+}
 
   retrieveGames() {
       this.setState({retrieving: true});
@@ -49,12 +57,12 @@ export class GameTable extends React.Component{
          let data = results.data.filter(game=>{
               return !game.isprivate
           });
-          this.setState({games: data, retrieving: false});
+          this.setState({games: data, allGames:results.data,retrieving: false});
           if(this.state.defaultSearch==null){
             this.updateTable(this.refs.search.value);
           }
           else{
-            this.updateTable(this.state.defaultSearch);
+            this.updateTableAll(this.state.defaultSearch);
             this.setState({defaultSearch:null});
           }
 

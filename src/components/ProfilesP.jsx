@@ -373,7 +373,7 @@ class GamesList extends React.Component
 						<td >{game.sport}</td>
 						<td >{game.name}</td>
 						<td >{game.location}</td>
-						<td><Link to={'/game:'+game.id}>Details</Link></td>
+						<td><Link to={'/map:'+game.id}>Link</Link></td>
 					</tr>
         )
     }
@@ -383,7 +383,7 @@ class GamesList extends React.Component
 					<td >{game.sport}</td>
 					<td >{game.name}</td>
 					<td >{game.location}</td>
-					<td><Link to={'/game:'+game.id}>Details</Link></td>
+					<td><Link to={'/map:'+game.id}>Link</Link></td>
 					<td><button className='btn btn-danger'
 						onClick={()=>{this.deleteGame(game.id,game.players)}}>
 						Delete
@@ -398,7 +398,7 @@ class GamesList extends React.Component
 						<td >{game.sport}</td>
 						<td >{game.name}</td>
 						<td >{game.location}</td>
-						<td><Link to={'/tgame:'+game.id}>Details</Link></td>
+						<td><Link to={'/teamgames:'+game.id}>Link</Link></td>
 					</tr>
         )
     }
@@ -408,7 +408,7 @@ class GamesList extends React.Component
 					<td >{game.sport}</td>
 					<td >{game.name}</td>
 					<td >{game.location}</td>
-					<td><Link to={'/tgame:'+game.id}>Details</Link></td>
+					<td><Link to={'/teamgames:'+game.id}>Link</Link></td>
 					<td><button className='btn btn-danger'
 						onClick={()=>{this.deleteTeamGame(game.id,game.teams)}}>
 						Delete
@@ -423,7 +423,7 @@ class GamesList extends React.Component
 						<td >{team.sport}</td>
 						<td >{team.name}</td>
 						<td >{team.location}</td>
-						<td><Link to={'/game:'+team._id}>Details</Link></td>
+						<td><Link to={'/teams:'+team._id}>Link</Link></td>
 					</tr>
         )
     }
@@ -433,7 +433,7 @@ class GamesList extends React.Component
 					<td >{team.sport}</td>
 					<td >{team.name}</td>
 					<td >{team.location}</td>
-					<td><Link to={'/game:'+team.id}>Details</Link></td>
+					<td><Link to={'/teams:'+team.id}>Link</Link></td>
 					<td><button className='btn btn-danger'
 						onClick={()=>{this.deleteTeam(team._id,team.members)}}>
 						Delete

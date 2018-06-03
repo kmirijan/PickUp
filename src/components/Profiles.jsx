@@ -286,18 +286,6 @@ class GamesList extends React.Component
 				teamselected:null,
 			}
 		}
-		joinGame(game)
-		{
-		  axios.post('/join', {uid:this.props.user, gid:game.id});
-		}
-		joinTeamGame(game){
-
-		}
-		joinTeam(team){
-			axios.post('/jointeam', {user:this.props.user, teamId:team._id});
-		}
-
-
 
     displayGame(game)
     {
@@ -331,8 +319,6 @@ class GamesList extends React.Component
 	          <td >{game.sport}</td>
 	          <td >{game.name}</td>
 	          <td >{game.location}</td>
-						<td><button className="btn btn-success"
-							onClick={()=>{this.joinGame(game)}}>Join</button></td>
 	          <td><Link to={'/map:'+game.id}>Link</Link></td>
 	        </tr>
         );
@@ -342,7 +328,6 @@ class GamesList extends React.Component
 					<tr key={"p"+game.id}>
 	          <td >{game.sport}</td>
 	          <td >{game.name}</td>
-						<td>private game, cannot join</td>
 	          <td >private game, cannot view location</td>
 	          <td>private game, cannot view details</td>
 	        </tr>
@@ -357,7 +342,7 @@ class GamesList extends React.Component
 	          <td >{game.sport}</td>
 	          <td >{game.name}</td>
 	          <td >{game.location}</td>
-	          <td><Link to={"/tgame:"+game.id}>Details</Link></td>
+	          <td><Link to={'/teamgames:'+game.id}>Link</Link></td>
 	        </tr>
         );
 			}
@@ -381,9 +366,7 @@ class GamesList extends React.Component
 	          <td >{game.sport}</td>
 	          <td >{game.name}</td>
 	          <td >{game.location}</td>
-						<td><button className="btn btn-success"
-							onClick={()=>{this.joinTeamGame(game)}}>Join</button></td>
-	          <td><Link to={"/tgame:"+game.id}>Details</Link></td>
+	          <td><Link to={'/teamgames:'+game.id}>Link</Link></td>
 	        </tr>
         );
 			}
@@ -406,7 +389,7 @@ class GamesList extends React.Component
 						<td >{team.sport}</td>
 						<td >{team.name}</td>
 						<td >{team.location}</td>
-						<td><Link to={"/tgame:"+team._id}>Details</Link></td>
+						<td><Link to={'/teams:'+team._id}>Link</Link></td>
 					</tr>
 				);
 		}
@@ -418,9 +401,7 @@ class GamesList extends React.Component
 						<td >{team.sport}</td>
 						<td >{team.name}</td>
 						<td >{team.location}</td>
-						<td><button className="btn btn-success"
-							onClick={()=>{this.joinTeamGame(team)}}>Join</button></td>
-						<td><Link to={"/tgame:"+team._id}>Details</Link></td>
+						<td><Link to={'/teams:'+team._id}>Link</Link></td>
 					</tr>
 				);
 		}

@@ -12,6 +12,13 @@ const MAX_TEAM_SIZE = 20;
 class TeamPage extends React.Component{
 constructor(props){
   super(props);
+  console.log("params",this.props.match.params);
+  this.search=this.props.match.params.search;
+  if(this.search!=null){
+    while(!(/[0-9]|[a-z]/i.test(this.search[0]))){
+      this.search=this.search.substring(1,this.search.length);
+    }
+  }
   console.log("USER",this.props.user);
 }
     render(){
@@ -19,7 +26,7 @@ constructor(props){
             <div>
                 <NavBar user={this.props.user}/>
                 <TeamCreate user={this.props.user }/>
-                <TeamTable user={this.props.user} />
+                <TeamTable user={this.props.user} defaultSearch={this.search}/>
             </div>
         );
 
@@ -132,7 +139,7 @@ class TeamCreate extends React.Component{
                 <div className="main-create main-center">
             <form className="form-horizontal"
               onSubmit={this.addTeam.bind(this)}>
-              
+
               <InputField label="Team Name" type="text" ref="name"
                     placeholder="Team Name" />
               <InputField label="Activity" type="text" ref="sport"
@@ -168,12 +175,16 @@ class TeamTable extends React.Component {
  constructor(props)
   {
     super(props);
-	this.state =
-	{
-      teams: [],
-	  filteredTeams: [],
-      retrieving: false,
-	}
+  	this.state =
+  	{
+        teams: [],
+  	  filteredTeams: [],
+        retrieving: false,
+        defaultSearch:null,
+  	}
+  if(this.props.defaultSearch!=null){
+    this.state.defaultSearch=this.props.defaultSearch;
+  }
   }
 
   componentDidMount()
@@ -194,13 +205,25 @@ class TeamTable extends React.Component {
             })
         });
     }
+    updateTableAll(search){
+      this.setState({filteredTeams : this.state.teams.filter(
+          (team) => { return(String(team._id).indexOf(String(search))!==-1)
+
+          })
+      });
+  }
 
     retrieveTeams() {
         this.setState({retrieving: true});
         axios.post('/retrieveteams').then((results)=>{
             this.setState({teams: results.data, retrieving: false});
-            this.updateTable(this.refs.search.value);
-
+            if(this.state.defaultSearch==null){
+              this.updateTable(this.refs.search.value);
+            }
+            else{
+              this.updateTableAll(this.state.defaultSearch);
+              this.setState({defaultSearch:null});
+            }
 
         });
 
