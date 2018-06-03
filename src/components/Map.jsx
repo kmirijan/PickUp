@@ -13,7 +13,15 @@ class Map extends React.Component {
     constructor(props)
     {
         super(props);
+        console.log("params",this.props.match.params);
+        this.search=this.props.match.params.search;
+        if(this.search!=null){
+          while(!(/[0-9]|[a-z]/i.test(this.search[0]))){
+      			this.search=this.search.substring(1,this.search.length);
+      		}
+        }
         console.log("USER",this.props.user);
+
         this.state = {
             userPosition : {lat: 37.758, lng: -122.473}, // San Francisco as default
             map : {},
@@ -164,7 +172,7 @@ class Map extends React.Component {
                         onClick={this.retrieveNearbyGames.bind(this)} />
                 </div>
                   <div className = "gameTableInMap">
-                    <GameTable onNewGame={this.reload.bind(this)} user={this.props.user}/>
+                    <GameTable onNewGame={this.reload.bind(this)} user={this.props.user} defaultSearch={this.search}/>
                   </div>
             </div>
 

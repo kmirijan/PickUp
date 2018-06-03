@@ -13,6 +13,13 @@ export class CurrentTeamGames extends React.Component{
 
     constructor(props) {
         super(props);
+        console.log("params",this.props.match.params);
+        this.search=this.props.match.params.search;
+        if(this.search!=null){
+          while(!(/[0-9]|[a-z]/i.test(this.search[0]))){
+      			this.search=this.search.substring(1,this.search.length);
+      		}
+        }
         console.log("USER",this.props.user);
         this.state = {
             game: {},
@@ -96,7 +103,7 @@ export class CurrentTeamGames extends React.Component{
             user: this.props.user,
             teams:[team._id],
         };
-        if (this.gameIsValid(game) == true) 
+        if (this.gameIsValid(game) == true)
         {
             $('#createTeamGames').collapse('hide');
             console.log(game);
@@ -255,7 +262,7 @@ export class CurrentTeamGames extends React.Component{
                 <h1 className="App-currentGames">
                   Below are the currently available games:
                 </h1>
-            <GameTable user={this.props.user} ownedteams={this.ownedteams}/>
+            <GameTable user={this.props.user} ownedteams={this.ownedteams} defaultSearch={this.search}/>
             </div>
         );
 
@@ -268,12 +275,17 @@ class GameTable extends React.Component{
     super(props);
   	this.state =
   	{
-        games: [],
+      games: [],
+      allGames:[],
   	  filteredGames: [],
       userTeams:[],
-        retrieving: false,
+      retrieving: false,
+      defaultSearch:null,
   	}
     this.userTeams=this.userTeams.bind(this);
+    if(this.props.defaultSearch!=null){
+      this.state.defaultSearch=this.props.defaultSearch;
+    }
   }
 
   componentDidMount()
@@ -298,25 +310,40 @@ class GameTable extends React.Component{
         this.setState({filteredGames : this.state.games.filter(
             (game) => { return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
             (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
-            (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1));
+            (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1))||
+            (String(game.id).indexOf(String(search))!==-1);
             })
         });
     }
+    updateTableAll(search){
+      this.setState({filteredGames : this.state.allGames.filter(
+          (game) => { return(String(game.id).indexOf(String(search))!==-1)
 
-    retrieveGames() {
-        this.setState({retrieving: true});
-        axios.post('/retrievegamesT').then((results)=>{
-           let data = results.data.filter(game=>{
-                return !game.isprivate
-            });
-            this.setState({games: data, retrieving: false});
+          })
+      });
+  }
+
+  retrieveGames() {
+      this.setState({retrieving: true});
+      axios.post('/retrievegamesT').then((results)=>{
+         let data = results.data.filter(game=>{
+              return !game.isprivate
+          });
+          this.setState({games: data, allGames:results.data,retrieving: false});
+          if(this.state.defaultSearch==null){
             this.updateTable(this.refs.search.value);
+          }
+          else{
+            this.updateTableAll(this.state.defaultSearch);
+            this.setState({defaultSearch:null});
+          }
 
 
-        });
+
+      });
 
 
-    }
+  }
 
 
   render() {
