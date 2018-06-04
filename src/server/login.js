@@ -14,9 +14,9 @@ exports.verifyLogin=(data,res)=>{
   mongo.connect(url,(err,client)=>{
     if(err) throw new Error(err);
     var loggedin=client.db("pickup").collection("loggedin");
-    if(data.key!=null && data.key.length==24){
+    if(data.key!=null){
       loggedin.find({
-        "_id":ObjectID(data.key)
+        "key":data.key
       },(err,ret)=>{
         if(err){
           res.json({
@@ -51,11 +51,12 @@ exports.verifyLogin=(data,res)=>{
   })
 }
 exports.logout=(data,res)=>{
+  console.log(data.key)
   mongo.connect(url,(err,client)=>{
     var loggedin=client.db("pickup").collection("loggedin");
-    if(data.key!=null&&data.key.length==24){
+    if(data.key!=null){
       loggedin.deleteOne({
-        "_id":ObjectID(data.key)
+        "key":data.key
       }).then(()=>{
         res.end();
       })
@@ -65,6 +66,18 @@ exports.logout=(data,res)=>{
     }
     client.close();
   })
+}
+var replaceAll=(string,char1,char2)=>{
+
+  if(string.indexOf(char1)==-1){
+    console.log("true")
+    console.log(string)
+    return string;
+  }
+  else{
+    console.log("false")
+    return replaceAll(string.replace(char1,char2),char1,char2)
+  }
 }
 exports.signIn=(data,res)=>{
 	mongo.connect(url,(err,client)=>{
@@ -76,14 +89,25 @@ exports.signIn=(data,res)=>{
 		.then((arr)=>{
 			const hash=arr[0]["password"];
       if(bcrypt.compareSync(data["password"],hash)){
-        loggedin.insertOne({
-          "user":arr[0]["username"]
-        },(err,ret)=>{
+        var salt=bcrypt.genSaltSync(10);
+        var key=String(bcrypt.hashSync(arr[0]["username"],salt));
+        //cannot have $ in cookies
+        var keyReturn=replaceAll(key,'$','0');
+        console.log(keyReturn);
+        loggedin.update(
+          {
+            "user":arr[0]["username"]
+          },
+          {
+            $set:{"key":keyReturn}
+          },
+          {upsert:true}
+          ,(err)=>{
           if(err) throw new Error(err);
           res.json({
             "success":true,
   					"user":arr[0]["username"],
-            "key":ret.insertedId
+            "key":keyReturn
           })
         })
 

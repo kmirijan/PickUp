@@ -1,15 +1,25 @@
 import React from 'react';
 import '../css/App.css';
+import InputField from '../helpers/InputField';
 var {Link}=require('react-router-dom');
 import NavBar from "./NavBar"
 import axios from 'axios';
 
 const GUEST = "guest";
 
+var refreshTable = () => {console.log("refreshTable unBound")};
+
 export class CurrentTeamGames extends React.Component{
 
     constructor(props) {
         super(props);
+        console.log("params",this.props.match.params);
+        this.search=this.props.match.params.search;
+        if(this.search!=null){
+          while(!(/[0-9]|[a-z]/i.test(this.search[0]))){
+      			this.search=this.search.substring(1,this.search.length);
+      		}
+        }
         console.log("USER",this.props.user);
         this.state = {
             game: {},
@@ -76,52 +86,66 @@ export class CurrentTeamGames extends React.Component{
     }
 
 
-    getName()
-    {
-        if (this.props.user != GUEST)
-        {
-            return this.props.user;
-        }
-        else
-        {
-            return this.refs.name.value;
-        }
-    }
-
     addGame(event) {
         event.preventDefault();
         if(this.state.teamselected==null){
           alert("Select a team");
           return;
         }
-        $('#createTeamGames').collapse('hide');
-        let sport = this.refs.sport.value;
-        let name = this.getName();
-        let location = this.refs.location.value;
-        let isprivate = this.state.isprivate;
         let team = this.state.teamselected;
         let id = Math.floor((Math.random()*(1 << 30))+1);
         let game = {
             gameId: id,
-            sport: sport,
-            name: name,
-            isprivate:isprivate,
-            location: location,
+            sport: this.refs.sport.getInput(),
+            name: this.props.user,
+            isprivate:this.state.isprivate,
+            location: this.refs.location.getInput(),
             user: this.props.user,
             teams:[team._id],
         };
-        console.log(game);
-        axios({
-          url:'/postgamesT',
-          method:"post",
-          data:{
-            game:game
-          }
-          }).then( () =>
-                {alert("Game added. It will appear upon refreshing the games table")});
-        this.refs.sport.value='';
-        this.refs.name.value='';
-        this.refs.location.value='';
+        if (this.gameIsValid(game) == true)
+        {
+            $('#createTeamGames').collapse('hide');
+            console.log(game);
+            axios({
+              url:'/postgamesT',
+              method:"post",
+              data:{
+                game:game
+              }
+              }).then( () =>
+                    {refreshTable()});
+            this.refs.sport.clear();
+            this.refs.location.clear();
+        }
+        else
+        {
+            this.displayInputErrors(game);
+        }
+    }
+    gameIsValid(game)
+    {
+        let isValid = true;
+        if (game.sport.trim() == "")
+        {
+            isValid = false;
+        }
+        if (game.location.trim() == "")
+        {
+            isValid = false;
+        }
+        return isValid;
+    }
+    displayInputErrors(game)
+    {
+        if (game.sport.trim() == "")
+        {
+            this.refs.sport.setError("Please give a non-empty name");
+        }
+        if (game.location.trim() == "")
+        {
+            this.refs.location.setError("Please give a non-empty location");
+        }
     }
     togglePrivate(){
       if(this.state.isprivate==false){
@@ -134,35 +158,6 @@ export class CurrentTeamGames extends React.Component{
           isprivate:false
         });
       }
-    }
-
-
-    displayNameInput()
-    {
-        if (this.props.user != GUEST)
-        {
-            return null;
-        }
-        else
-        {
-            return (
-              <div className="form-group">
-      <label className="cols-sm-2 control-label">Team Name</label>
-      <div className="cols-sm-10">
-        <div className="input-group">
-          <span className="input-group-addon"></span>
-            <input
-            className='gameDetails form-control'
-            type="text"
-            ref="name"
-            placeholder="Name"
-            />
-        </div>
-      </div>
-    </div>
-
-            );
-        }
     }
     teamSelected(){
       if(this.state.teamselected==null){
@@ -221,11 +216,6 @@ export class CurrentTeamGames extends React.Component{
                     <form className="form-horizontal"
                       onSubmit={this.addGame.bind(this)}>
 
-                      {this.displayNameInput()}
-
-
-
-
 
                     <div className="form-group">
                       <div className="cols-sm-10">
@@ -239,31 +229,10 @@ export class CurrentTeamGames extends React.Component{
 
 
 
-                      <div className="form-group">
-                        <label className="cols-sm-2 control-label">Activity</label>
-                        <div className="cols-sm-10">
-                          <div className="input-group">
-                            <span className="input-group-addon"></span>
-                            <input required className='gameDetails form-control' type="text"
-                            ref="sport"
-                            placeholder="Activity"/>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="form-group">
-                        <label className="cols-sm-2 control-label">City</label>
-                        <div className="cols-sm-10">
-                          <div className="input-group">
-                            <span className="input-group-addon"></span>
-                            <input required className='gameDetails form-control' type="text"
-                              id= 'location'
-                              ref="location"
-                              placeholder="Location"/>
-                          </div>
-                        </div>
-                      </div>
-
+                      <InputField label="Activity" type="text" ref="sport"
+                            placeholder="Activity" />
+                      <InputField label="City" type="text" id="location"
+                            ref="location" placeholder="Location" />
 
                       <div className="form-group">
                         <p>Private</p>
@@ -293,13 +262,12 @@ export class CurrentTeamGames extends React.Component{
                 <h1 className="App-currentGames">
                   Below are the currently available games:
                 </h1>
-            <GameTable user={this.props.user} ownedteams={this.ownedteams}/>
+            <GameTable user={this.props.user} ownedteams={this.ownedteams} defaultSearch={this.search}/>
             </div>
         );
 
     }
 }
-
 class GameTable extends React.Component{
 
   constructor(props)
@@ -307,18 +275,28 @@ class GameTable extends React.Component{
     super(props);
   	this.state =
   	{
-        games: [],
+      games: [],
+      allGames:[],
   	  filteredGames: [],
       userTeams:[],
-        retrieving: false,
+      retrieving: false,
+      defaultSearch:null,
   	}
     this.userTeams=this.userTeams.bind(this);
+    if(this.props.defaultSearch!=null){
+      this.state.defaultSearch=this.props.defaultSearch;
+    }
   }
 
   componentDidMount()
   {
+    refreshTable = this.retrieveGames.bind(this);
     this.retrieveGames();
     this.userTeams();
+  }
+  componentWillUnmount()
+  {
+    refreshTable = () => {console.log("refreshTable unBound");}
   }
   userTeams(){
 
@@ -332,25 +310,40 @@ class GameTable extends React.Component{
         this.setState({filteredGames : this.state.games.filter(
             (game) => { return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
             (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
-            (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1));
+            (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1))||
+            (String(game.id).indexOf(String(search))!==-1);
             })
         });
     }
+    updateTableAll(search){
+      this.setState({filteredGames : this.state.allGames.filter(
+          (game) => { return(String(game.id).indexOf(String(search))!==-1)
 
-    retrieveGames() {
-        this.setState({retrieving: true});
-        axios.post('/retrievegamesT').then((results)=>{
-           let data = results.data.filter(game=>{
-                return !game.isprivate
-            });
-            this.setState({games: data, retrieving: false});
+          })
+      });
+  }
+
+  retrieveGames() {
+      this.setState({retrieving: true});
+      axios.post('/retrievegamesT').then((results)=>{
+         let data = results.data.filter(game=>{
+              return !game.isprivate
+          });
+          this.setState({games: data, allGames:results.data,retrieving: false});
+          if(this.state.defaultSearch==null){
             this.updateTable(this.refs.search.value);
+          }
+          else{
+            this.updateTableAll(this.state.defaultSearch);
+            this.setState({defaultSearch:null});
+          }
 
 
-        });
+
+      });
 
 
-    }
+  }
 
 
   render() {
@@ -436,7 +429,7 @@ class Game extends React.Component {
           team:team,
           game:this.props.game
         }
-      })
+      }).then(refreshTable());
     }
   }
   selectTeamLeave(team){
@@ -448,7 +441,7 @@ class Game extends React.Component {
           team:team,
           game:this.props.game
         }
-      })
+      }).then(refreshTable());
     }
   }
   showTeamGamesLeave(){

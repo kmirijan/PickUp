@@ -1,17 +1,24 @@
 import React from 'react';
 import '../css/App.css';
+import InputField from '../helpers/InputField';
 import NavBar from "./NavBar"
 var {Link}=require('react-router-dom');
 
 
 import axios from 'axios';
 
-const GUEST = "guest";
-
+const MAX_TEAM_SIZE = 20;
 
 class TeamPage extends React.Component{
 constructor(props){
   super(props);
+  console.log("params",this.props.match.params);
+  this.search=this.props.match.params.search;
+  if(this.search!=null){
+    while(!(/[0-9]|[a-z]/i.test(this.search[0]))){
+      this.search=this.search.substring(1,this.search.length);
+    }
+  }
   console.log("USER",this.props.user);
 }
     render(){
@@ -19,7 +26,7 @@ constructor(props){
             <div>
                 <NavBar user={this.props.user}/>
                 <TeamCreate user={this.props.user }/>
-                <TeamTable user={this.props.user} />
+                <TeamTable user={this.props.user} defaultSearch={this.search}/>
             </div>
         );
 
@@ -46,12 +53,11 @@ class TeamCreate extends React.Component{
     }
 
     addTeam(event) {
-          $('#createTeams').collapse('hide');
         event.preventDefault();
-        let sport = this.refs.sport.value;
-        let name = this.refs.name.value;
-        let city = this.refs.city.value;
-        let maxPlayers = parseInt(this.refs.maxPlayers.value);
+        let sport = this.refs.sport.getInput();
+        let name = this.refs.name.getInput();
+        let city = this.refs.city.getInput();
+        let maxPlayers = parseInt(this.refs.maxPlayers.getInput());
         let team = {
             sport: sport,
             name: name,
@@ -59,26 +65,59 @@ class TeamCreate extends React.Component{
             captain: this.props.user,
             maxPlayers: maxPlayers
         };
-        axios.post('/postteam', team);
-        this.refs.sport.value='';
-        this.refs.name.value='';
-        this.refs.city.value='';
-        this.refs.maxPlayers.value='';
+        if (this.teamValidate == true)
+        {
+            $('#createTeams').collapse('hide');
+            axios.post('/postteam', team);
+            this.refs.sport.clear();
+            this.refs.name.clear();
+            this.refs.city.clear();
+            this.refs.maxPlayers.clear();
+        }
+        else
+        {
+            this.displayInputErrors();
+        }
     }
-
-
-    displayNameInput()
+    teamValidate(team)
     {
-            return (
-                <input
-                  required
-                className='teamDetails form-control'
-                type="text"
-                ref="name"
-                placeholder="Name"
-                />
-
-            );
+        let isValid = true;
+        if (team.name.trim() == "")
+        {
+            isValid = false;
+        }
+        if (team.city.trim() == "")
+        {
+            isValid = false;
+        }
+        if (team.sport.trim() == "")
+        {
+            isValid = false;
+        }
+        if ( isNaN(team.maxPlayers) || team.maxPlayers < 1 )
+        {
+            isValid = false;
+        }
+        return isValid;
+    }
+    displayInputErrors(team)
+    {
+        if (team.sport.trim() == "")
+        {
+            this.refs.sport.setError("Please give a non-empty value");
+        }
+        if (team.city.trim() == "")
+        {
+            this.refs.city.setError("Please give a non-empty value");
+        }
+        if (team.name.trim() == "")
+        {
+            this.refs.name.setError("Please give a non-empty value");
+        }
+        if ( isNaN(team.maxPlayers) || game.gameLength < 1 )
+        {
+            this.refs.gameLength.setError("Please input a positive number");
+        }
     }
 
     render(){
@@ -100,55 +139,15 @@ class TeamCreate extends React.Component{
                 <div className="main-create main-center">
             <form className="form-horizontal"
               onSubmit={this.addTeam.bind(this)}>
-                        <div className="form-group">
-                <label className="cols-sm-2 control-label">Team Name</label>
-                <div className="cols-sm-10">
-                  <div className="input-group">
-                    <span className="input-group-addon"></span>
-                                    {this.displayNameInput()}
-                  </div>
-                </div>
-              </div>
 
-              <div className="form-group">
-                <label className="cols-sm-2 control-label">Activity</label>
-                <div className="cols-sm-10">
-                  <div className="input-group">
-                    <span className="input-group-addon"></span>
-                    <input required className='teamDetails form-control' type="text"
-                    ref="sport"
-                    placeholder="Activity"/>
-                  </div>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="cols-sm-2 control-label">City</label>
-                <div className="cols-sm-10">
-                  <div className="input-group">
-                    <span className="input-group-addon"></span>
-                    <input required className='teamDetails form-control' type="text"
-                      id= 'city'
-                      ref="city"
-                      placeholder="City"/>
-                  </div>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="cols-sm-2 control-label">Max # Players</label>
-                <div className="cols-sm-10">
-                  <div className="input-group">
-                    <span className="input-group-addon"></span>
-                    <input required className='teamDetails form-control' type="number"
-                      id='maxPlayers'
-                      ref="maxPlayers"
-                      min="0"
-                      max="10"
-                      placeholder="Max # Players"/>
-                  </div>
-                </div>
-              </div>
+              <InputField label="Team Name" type="text" ref="name"
+                    placeholder="Team Name" />
+              <InputField label="Activity" type="text" ref="sport"
+                    placeholder="Activity" />
+              <InputField label="City" type="text" ref="location" id="location"
+                    placeholder="Location" />
+              <InputField label="Max # Players" type="number" ref="maxPlayers"
+                    placeholder="Max # Players" min="0" max={MAX_TEAM_SIZE} />
 
               <div className="form-group">
 
@@ -171,19 +170,21 @@ class TeamCreate extends React.Component{
 
     }
 }
-
-
 class TeamTable extends React.Component {
 
  constructor(props)
   {
     super(props);
-	this.state =
-	{
-      teams: [],
-	  filteredTeams: [],
-      retrieving: false,
-	}
+  	this.state =
+  	{
+        teams: [],
+  	  filteredTeams: [],
+        retrieving: false,
+        defaultSearch:null,
+  	}
+  if(this.props.defaultSearch!=null){
+    this.state.defaultSearch=this.props.defaultSearch;
+  }
   }
 
   componentDidMount()
@@ -204,13 +205,25 @@ class TeamTable extends React.Component {
             })
         });
     }
+    updateTableAll(search){
+      this.setState({filteredTeams : this.state.teams.filter(
+          (team) => { return(String(team._id).indexOf(String(search))!==-1)
+
+          })
+      });
+  }
 
     retrieveTeams() {
         this.setState({retrieving: true});
         axios.post('/retrieveteams').then((results)=>{
             this.setState({teams: results.data, retrieving: false});
-            this.updateTable(this.refs.search.value);
-
+            if(this.state.defaultSearch==null){
+              this.updateTable(this.refs.search.value);
+            }
+            else{
+              this.updateTableAll(this.state.defaultSearch);
+              this.setState({defaultSearch:null});
+            }
 
         });
 
@@ -251,7 +264,7 @@ class TeamTable extends React.Component {
       <tbody>
 	      {
             this.state.filteredTeams.map((team)=>{
-                return (<TeamRow team = {team} user={this.props.user} key={team.name}/>);
+                return (<TeamRow team = {team} user={this.props.user} key={team._id}/>);
             })
          }
 	  </tbody>
