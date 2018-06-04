@@ -130,7 +130,7 @@ export class GameTable extends React.Component{
       <tbody>
 	      {
             this.state.filteredGames.map((game)=>{
-                return (<Game game = {game} onParticipationChange={this.reloadSelf.bind(this)} 
+                return (<Game game = {game} onParticipationChange={this.reloadSelf.bind(this)}
                             user={this.props.user} key={game.id} />);
             })
          }
@@ -147,7 +147,6 @@ export class Game extends React.Component {
 
   joinGame()
   {
-    // axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
     axios.patch('/game:user', {uid: this.props.user, gid: this.props.game.id});
     axios.patch('/user:game', {uid: this.props.user, gid: this.props.game.id});
     if (this.props.onParticipationChange != undefined)
