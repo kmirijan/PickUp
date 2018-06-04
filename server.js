@@ -318,7 +318,7 @@ app.post("/retrievegames", (req, res) =>
   });
 });
 
-
+// User leaves a game, deletes game if last user
 app.patch('/leave:games', (req, res) => {
   // console.log('patch: ', req.body);
   Game.findOneAndUpdate(
