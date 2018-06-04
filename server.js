@@ -188,32 +188,6 @@ app.post("/isgamet",(req,res)=>{
 const makeValid = (obj) => {return obj != null ? obj : "";};
 var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
-app.post("/join", (req, res) =>
-{
-  console.log('[', (new Date()).toLocaleTimeString(), "] Game joined");
-
-  mongo.connect(mongoUrl, (err, client) =>
-  {
-    var collection = client.db("pickup").collection("games");
-    var query = {id: req.body.gid, players: { $nin: [req.body.uid] } };
-    var newPlayer = { $push: {players: req.body.uid} };
-
-    console.log("user: ", req.body.uid);
-    var userQuery = {username: req.body.uid, games: {$nin: [req.body.gid]}};
-    var joinedGame = {$push: {games: req.body.gid}};
-    client.db("pickup").collection("users").update(userQuery, joinedGame);
-
-    collection.update(query, newPlayer, (err) =>
-    {
-      if (err) throw err;
-      client.close();
-    });
-
-  });
-
-});
-
-
 app.post("/nearbygames", (req, res) => {
     console.log('[', (new Date()).toLocaleTimeString(), "] Nearby games sending");
 
@@ -344,7 +318,7 @@ app.post("/retrievegames", (req, res) =>
   });
 });
 
-
+// User leaves a game, deletes game if last user
 app.patch('/leave:games', (req, res) => {
   // console.log('patch: ', req.body);
   Game.findOneAndUpdate(
@@ -371,7 +345,7 @@ app.delete('/games', (req, res) => {
   Game.findOneAndRemove({'id': req.body.gid})
   .then((game) =>{
     User.findOneAndUpdate(
-      {'username': req.body.owner},
+      {'username': {$in:req.body.players}},
       {$pull: {games : req.body.gid}},
       {new: true}
     )

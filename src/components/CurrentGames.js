@@ -11,47 +11,67 @@ export class GameTable extends React.Component{
   {
     super(props);
     console.log("USER",this.props.user);
-	this.state =
-	{
-      games: [],
-	  filteredGames: [],
-      retrieving: false,
-	}
+  	this.state =
+  	{
+        games: [],
+        allGames:[],
+  	    filteredGames: [],
+        retrieving: false,
+        defaultSearch:null,
+  	}
+    if(this.props.defaultSearch!=null){
+      this.state.defaultSearch=this.props.defaultSearch;
+    }
   }
 
   componentDidMount()
   {
-    this.retrieveGames();
+      this.retrieveGames();
   }
 
 
-    updateSearch(event){
-      this.updateTable(event.target.value);
-    }
+  updateSearch(event){
+    this.updateTable(event.target.value);
+  }
 
-    updateTable(search) {
-        this.setState({filteredGames : this.state.games.filter(
-            (game) => { return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
-            (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
-            (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1));
-            })
-        });
-    }
+  updateTable(search) {
+      this.setState({filteredGames : this.state.games.filter(
+          (game) => { return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
+          (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
+          (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1))||
+          (String(game.id).indexOf(String(search))!==-1);
+          })
+      });
+  }
+  updateTableAll(search){
+    this.setState({filteredGames : this.state.allGames.filter(
+        (game) => { return(String(game.id).indexOf(String(search))!==-1)
 
-    retrieveGames() {
-        this.setState({retrieving: true});
-        axios.post('/retrievegames').then((results)=>{
-           let data = results.data.filter(game=>{
-                return !game.isprivate
-            });
-            this.setState({games: data, retrieving: false});
+        })
+    });
+}
+
+  retrieveGames() {
+      this.setState({retrieving: true});
+      axios.post('/retrievegames').then((results)=>{
+         let data = results.data.filter(game=>{
+              return !game.isprivate
+          });
+          this.setState({games: data, allGames:results.data,retrieving: false});
+          if(this.state.defaultSearch==null){
             this.updateTable(this.refs.search.value);
+          }
+          else{
+            this.updateTableAll(this.state.defaultSearch);
+            this.setState({defaultSearch:null});
+          }
 
 
-        });
+
+      });
 
 
-    }
+  }
 
     reloadAll()
     {
@@ -110,7 +130,7 @@ export class GameTable extends React.Component{
       <tbody>
 	      {
             this.state.filteredGames.map((game)=>{
-                return (<Game game = {game} onParticipationChange={this.reloadSelf.bind(this)} 
+                return (<Game game = {game} onParticipationChange={this.reloadSelf.bind(this)}
                             user={this.props.user} key={game.id} />);
             })
          }
@@ -127,7 +147,6 @@ export class Game extends React.Component {
 
   joinGame()
   {
-    // axios.post('/join', {uid:this.props.user, gid:this.props.game.id});
     axios.patch('/game:user', {uid: this.props.user, gid: this.props.game.id});
     axios.patch('/user:game', {uid: this.props.user, gid: this.props.game.id});
     if (this.props.onParticipationChange != undefined)

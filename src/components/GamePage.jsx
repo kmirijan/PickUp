@@ -17,11 +17,12 @@ class GamePage extends React.Component{
       game:null
     }
 
+
   }
   componentWillMount(){
     axios({
       method:"post",
-      url:"/retrievespecificgames",
+      url:"/retrievespecificgamesT",
       data:{
         id:this.props.id
       }
@@ -48,7 +49,7 @@ class GamePage extends React.Component{
               location
             </div>
             <div id="map">
-              <MapIndiv thisGame={this.state.game}/>
+
             </div>
           </div>
           <div id="chat">
