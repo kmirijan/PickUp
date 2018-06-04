@@ -15,7 +15,6 @@ const busboy=require("connect-busboy");
 const util = require('util')
 const app=express();
 const http=require("http").Server(app);
-var cors = require('cors');
 
 //deploy app
 const port=process.env.PORT;
@@ -51,7 +50,6 @@ var {User} = require('./db/User.js');
 
 
 /*configurations*/
-app.use(cors());
 app.use(express.static("./dist"));
 app.use(bodyParser.json());
 app.use(busboy());
@@ -82,6 +80,7 @@ app.post("/postteam", teams.createTeam);
 app.post("/retrieveteams", teams.getTeams);
 app.post("/jointeam", teams.joinTeam);
 app.patch("/team", teams.leaveTeam);
+app.post("/deleteteam",teams.deleteTeam);
 
 //-------------==homepage-------------------------------
 app.post("/get-players-and-games-count",(req,res)=>{
@@ -188,32 +187,6 @@ app.post("/isgamet",(req,res)=>{
 /*----------------------------------------------------------------------------------------*/
 const makeValid = (obj) => {return obj != null ? obj : "";};
 var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
-
-app.post("/join", (req, res) =>
-{
-  console.log('[', (new Date()).toLocaleTimeString(), "] Game joined");
-
-  mongo.connect(mongoUrl, (err, client) =>
-  {
-    var collection = client.db("pickup").collection("games");
-    var query = {id: req.body.gid, players: { $nin: [req.body.uid] } };
-    var newPlayer = { $push: {players: req.body.uid} };
-
-    console.log("user: ", req.body.uid);
-    var userQuery = {username: req.body.uid, games: {$nin: [req.body.gid]}};
-    var joinedGame = {$push: {games: req.body.gid}};
-    client.db("pickup").collection("users").update(userQuery, joinedGame);
-
-    collection.update(query, newPlayer, (err) =>
-    {
-      if (err) throw err;
-      client.close();
-    });
-
-  });
-
-});
-
 
 app.post("/nearbygames", (req, res) => {
     console.log('[', (new Date()).toLocaleTimeString(), "] Nearby games sending");
@@ -345,7 +318,7 @@ app.post("/retrievegames", (req, res) =>
   });
 });
 
-
+// User leaves a game, deletes game if last user
 app.patch('/leave:games', (req, res) => {
   // console.log('patch: ', req.body);
   Game.findOneAndUpdate(
@@ -365,12 +338,24 @@ app.patch('/leave:games', (req, res) => {
   })
 })
 
+//change so it deletes for members as well
 app.delete('/games', (req, res) => {
   // console.log('deleting', req.body);
+  console.log("testing games",req.body.gid)
   Game.findOneAndRemove({'id': req.body.gid})
   .then((game) =>{
+    User.findOneAndUpdate(
+      {'username': {$in:req.body.players}},
+      {$pull: {games : req.body.gid}},
+      {new: true}
+    )
+    .then(()=>{
+      res.status(200).send({game});
+    }).catch((e) => {
+      res.status(400).send(e);
+    })
   // console.log("Deleting", game);
-  res.status(200).send({game});
+
   }).catch((e) => {
     res.status(400).send(e);
   })
@@ -389,7 +374,7 @@ app.post("/retrievespecificgames", (req,res)=>{
   })
 
 })
-app.patch("/joinT", (req, res) =>{
+app.post("/joinT", (req, res) =>{
   teamgames.joinT(req,res);
 });
 app.post("/nearbygamesT", (req, res) => {
@@ -407,7 +392,7 @@ app.post("/retrievegamesT", (req, res) =>{
 app.post("/retrievespecificgamesT",(req,res)=>{
   teamgames.retrieveSpecificGamesT(req,res);
 })
-app.patch('/leavegameT', (req, res) => {
+app.post('/leavegameT', (req, res) => {
   teamgames.leaveGameT(req,res);
 })
 app.post("/deletegameT",(req,res)=>{

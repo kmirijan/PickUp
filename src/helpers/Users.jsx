@@ -10,7 +10,7 @@ class Users extends React.Component{
 		super(props);
 		this.state={
 			users:[],
-			fliteredUsers:[]
+			filteredUsers:[]
 		}
 	}
 	componentDidMount(){
@@ -19,11 +19,12 @@ class Users extends React.Component{
 			method:"post",
 		}).then((res)=>{
 			this.setState({users:res.data});
+            this.updateUsers(this.refs.search.value);
 		})
 	}
 
 	usersList(){
-		const usersList=this.state.users.map((user)=>
+		const usersList=this.state.filteredUsers.map((user)=>
 			<li key={user}>
 				<NavLink to={"./user="+user}>
 					{user}
@@ -41,7 +42,7 @@ class Users extends React.Component{
 
 	updateUsers(search) {
 			this.setState({filteredUsers : this.state.users.filter(
-					(user) => { return ((users.user.toLowerCase().indexOf(search.toLowerCase()) !== -1))
+					(user) => { return ((user.toLowerCase().indexOf(search.toLowerCase()) !== -1))
 					})
 				});
 	}

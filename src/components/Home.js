@@ -8,8 +8,7 @@ import SignUp from "./SignUp.jsx";
 import CountUp from "react-countup";
 import Welcome from "./Welcome.jsx";
 
-
-
+const NAVBARHEIGHT=50;
 class Home extends React.Component {
   constructor(props){
     super(props);
@@ -18,6 +17,7 @@ class Home extends React.Component {
       usersCount:0,
       gamesCount:0
     }
+    this.height=window.innerHeight-NAVBARHEIGHT;
     this.scroll=this.scroll.bind(this);
   }
   componentDidMount(){
@@ -34,31 +34,35 @@ class Home extends React.Component {
     })
   }
   scroll(){
-    /*if(window.pageYOffset>=100){
-      window.scrollBy(0,100);
-      if(window.pageYOffset>=1000){
-        window.scrollBy(0,0);
-      }
-    }*/
+    /*if(window.pageYOffset<this.height){
+      this.refs.second.scrollIntoView();
+    }
+    else if(window.pageYOffset<this.height*2){
+      this.refs.third.scrollIntoView();
+    }
+    else{}*/
+
+
   }
   render() {
+    var height=window.innerHeight-NAVBARHEIGHT;
     return (
-      <div className="home">
+      <div className="home" ref="home">
         <NavBar user={this.props.user}/>
-          <div className="first">
+          <div className="first" ref="first" style={{height:height}}>
 
-            <div className='centerText'>
-              <h1 className='HomepageText'>Scroll Down to Discover, Connect, Play</h1>
+            <div className='centerText' ref="centerText">
+              <h1 className='HomepageText' ref="HomepageText" style={{height:height/2}}>Scroll Down to Discover, Connect, Play</h1>
               <p>PickUp is the easiest way to find members in your community interested in the same sports as you!</p>
             </div>
           </div>
-          <div className="second">
-            <div className="secondHeader">
+          <div className="second" ref="second" style={{height:height}}>
+            <div className="secondHeader" ref="secondHeader" style={{height:height/2}}>
               The most popular platform for sports fans
             </div>
             <StartCount usersCount={this.state.usersCount} gamesCount={this.state.gamesCount}/>
           </div>
-          <div className="third">
+          <div className="third" ref="third" style={{height:height}}>
             <SignUpHome user={this.props.user}/>
           </div>
       </div>
@@ -75,12 +79,19 @@ class StartCount extends React.Component{
       displayGamesCount:0
     }
     this.displayCounts=this.displayCounts.bind(this);
+    this.height=window.innerHeight-NAVBARHEIGHT;
+    this.ismounted = false;
+  }
+  componentDidMount(){
+    this.ismounted = true;
   }
   componentWillReceiveProps(newprops){
-    this.setState(newprops);
+    if (this.ismounted){
+      this.setState(newprops);
+    }
   }
   displayCounts(){
-    if(window.pageYOffset>=700){{
+    if(window.pageYOffset>=this.height){{
       this.setState({
         displayUsersCount:this.state.usersCount,
         displayGamesCount:this.state.gamesCount
@@ -92,8 +103,9 @@ class StartCount extends React.Component{
      window.addEventListener('scroll',this.displayCounts);
   }
   render(){
+    var height=window.innerHeight-NAVBARHEIGHT;
     return(
-      <div className="startCount">
+      <div className="startCount" style={{height:height/2}}>
         <div className="usersCount">
           <CountUp className="count" start={0} end={this.state.displayUsersCount}/>
           <h1 className="title">Users Playing</h1>
@@ -108,10 +120,11 @@ class StartCount extends React.Component{
 }
 class SignUpHome extends React.Component{
   render(){
+    var height=window.innerHeight-NAVBARHEIGHT;
     if(this.props.user!=null){
       return(
-        <div>
-          <div className="thirdHeader">
+        <div >
+          <div className="thirdHeader" style={{height:height/2}}>
             Welcome
           </div>
         <div className="signUpHome">
@@ -122,7 +135,7 @@ class SignUpHome extends React.Component{
     }else {
       return(
         <div>
-          <div className="thirdHeader">
+          <div className="thirdHeader" style={{height:height/2}}>
             Sign Up Now
           </div>
           <div className="signUpHome">

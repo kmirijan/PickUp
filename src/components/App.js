@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-import {CurrentGames} from './CreateGames.jsx';
+import {CreateGames} from './CreateGames.jsx';
 import NavBar from './NavBar';
 
 

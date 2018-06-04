@@ -52,7 +52,7 @@ class ProfileEdit extends React.Component{
 		}
 
 	removeFriend(friend){
-		this.refs.removefriend.setAttribute("disabled","disabled");
+		console.log("remove friend", friend)
 		if(confirm("remove "+friend+" ?")){
 			axios({
 				method:"post",
@@ -63,11 +63,9 @@ class ProfileEdit extends React.Component{
 				}
 			}).then((res)=>{
 				this.setState(res.data);
-				this.refs.removefriend.removeAttribute("disabled");
 			})
 		}
 		else{
-			this.refs.removefriend.removeAttribute("disabled");
 			return;
 		}
 	}
@@ -321,6 +319,7 @@ render(){
 						</div>
 
 						</form>
+						{this.friendsList()}
 				</div>
 		</div>
 	</div>
