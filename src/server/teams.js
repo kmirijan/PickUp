@@ -103,11 +103,9 @@ exports.makeTeam = (req, res) => {
     games: [],
     maxPlayers: req.body.maxPlayers
   });
-  console.log(team);
   team.save().then((team) => {
       res.status(200).send({team});
     }, (e) => {
-      console.log(e);
       res.status(400).send(e);
   });
 }
@@ -120,14 +118,13 @@ exports.addTeamToUser = (req, res) => {
     {$push: {teams: req.body.tid}},
     {new: true}
   ).then((user) => {
-    console.log(user);
     res.status(200).send({user})
   }, (e) => {
     res.status(400).send(e);
   })
 }
 
-// adds the member to the team
+//adds the member to the team
 exports.joinTeam = function joinTeam(req,res) {
 
     mongo.connect(mongourl, (err, client) => {
@@ -171,12 +168,21 @@ exports.joinTeam = function joinTeam(req,res) {
             }
             client.close();
         });
-
     });
-
-
 }
 
+// Add user to team's member list
+exports.addUserToTeam = (req, res) => {
+  Team.findOneAndUpdate(
+    {_id : req.body.teamId, members: { $nin: [req.body.user]} },
+    {$push: {members: req.body.user}},
+    {new: true}
+  ).then((team) => {
+    res.status(200).send({team})
+  }, (e) => {
+    res.status(400).send(e);
+  })
+}
 /*
   req.body = teamId, teamMembers
 */

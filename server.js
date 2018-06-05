@@ -76,11 +76,10 @@ app.delete("/logout-test",(req,res)=>{
 })
 
 // --------------- Team related requests --------------
-//app.post("/postteam", teams.createTeam);
 app.post('/maketeam', teams.makeTeam);
 app.patch('/maketeam', teams.addTeamToUser);
+app.patch('/team:user', teams.addUserToTeam);
 app.post("/retrieveteams", teams.getTeams);
-app.post("/jointeam", teams.joinTeam);
 app.patch("/team", teams.leaveTeam);
 app.post("/deleteteam",teams.deleteTeam);
 

@@ -5,8 +5,9 @@ const {ObjectID} = require('mongodb');
 const {app} = require('./../server.js');
 const {Team} = require('./../db/team.js');
 
+const specId = new ObjectID();
 const teams = [{
-	_id: new ObjectID(),
+	_id: specId,
   sport: 'Sport',
   name: 'Jan Team',
   city: 'San Jose',
@@ -61,4 +62,49 @@ describe('All Team tests', () => {
 			});
 		});
 	});
+
+	describe('PATCH /team:user', () => {
+		it('should add a user to a team', (done) => {
+			request(app)
+			.patch('/team:user')
+			.send({
+				teamId: specId,
+				user: 'Khach'
+			})
+			.expect(200)
+			.expect((res) => {
+				expect(res.body.team.members).toEqual(['Jan', 'Jeff', 'Khach'])
+			})
+			.end((err, res) => {
+				if(err){
+					return done(err);
+				}
+
+				Team.find().then((games) => {
+					expect(teams.length).toBe(1);
+					done();
+				}).catch((e) => done(e));
+			});
+		});
+		// it('should not add a redundant user to a game', (done) => {
+		// 	request(app)
+		// 	.patch('/game:user')
+		// 	.send({
+		// 		gid: 12345,
+		// 		uid: 'Jeff'
+		// 	})
+		// 	.expect(200)
+		// 	.end((err, res) => {
+		// 		if(err){
+		// 			return done(err);
+		// 		}
+		//
+		// 		Game.find().then((games) => {
+		// 			expect(games.length).toBe(3);
+		// 			expect(JSON.stringify(games[0].players)).toEqual(JSON.stringify(['Jan', 'Jeff']));
+		// 			done();
+		// 		}).catch((e) => done(e));
+		// 	});
+		// });
+	})
 })

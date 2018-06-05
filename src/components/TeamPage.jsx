@@ -258,7 +258,9 @@ class TeamTable extends React.Component {
 export class TeamRow extends React.Component {
 
   joinTeam() {
-    axios.post('/jointeam', {user:this.props.user, teamId:this.props.team._id});
+    //axios.post('/jointeam', {user:this.props.user, teamId:this.props.team._id});
+    axios.patch('/maketeam', {uid: this.props.user, tid: this.props.team.name});
+    axios.patch('/team:user', {user:this.props.user, teamId:this.props.team._id});
   }
   leaveTeam(){
     axios.patch('/team', {user:this.props.user, teamId:this.props.team._id});
