@@ -162,29 +162,29 @@ describe('All Team Game tests', () => {
 	// 	})
 	// })
 	//
-	// describe('PATCH /game:user', () => {
-	// 	it('should add a user to a game', (done) => {
-	// 		request(app)
-	// 		.patch('/game:user')
-	// 		.send({
-	// 			gid: 12345,
-	// 			uid: 'Khach'
-	// 		})
-	// 		.expect(200)
-	// 		.expect((res) => {
-	// 			expect(res.body.game.players).toEqual(['Jan', 'Jeff', 'Khach'])
-	// 		})
-	// 		.end((err, res) => {
-	// 			if(err){
-	// 				return done(err);
-	// 			}
-	//
-	// 			Game.find().then((games) => {
-	// 				expect(games.length).toBe(3);
-	// 				done();
-	// 			}).catch((e) => done(e));
-	// 		});
-	// 	});
+	describe('PATCH /addTeamtoTG', () => {
+		it('should add a team to a team game', (done) => {
+			request(app)
+			.patch('/addTeamtoTG')
+			.send({
+				tgid: 12345,
+				tid: '345'
+			})
+			.expect(200)
+			.expect((res) => {
+				expect(res.body.teamgame.teams).toEqual(['44444', '44445', '345']);
+			})
+			.end((err, res) => {
+				if(err){
+					return done(err);
+				}
+
+				TeamGame.find({}).then((teamGames) => {
+					expect(teamGames.length).toBe(1);
+					done();
+				}).catch((e) => done(e));
+			});
+		});
 	// 	it('should not add a redundant user to a game', (done) => {
 	// 		request(app)
 	// 		.patch('/game:user')
@@ -205,7 +205,7 @@ describe('All Team Game tests', () => {
 	// 			}).catch((e) => done(e));
 	// 		});
 	// 	});
-	// })
+	})
 	//
 	// describe('DELETE /games', () => {
 	// 	it('should remove a game', (done) => {

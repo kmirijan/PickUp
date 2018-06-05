@@ -40,6 +40,18 @@ exports.joinT=(req, res) =>
 
 };
 
+exports.addTeamtoTG = (req, res) => {
+  TeamGame.findOneAndUpdate(
+    {id : req.body.tgid, teams: { $nin: [req.body.tid]} },
+    {$push: {teams: req.body.tid}},
+    {new: true}
+  ).then((teamgame) => {
+    res.status(200).send({teamgame})
+  }, (e) => {
+    res.status(400).send(e);
+  })
+}
+
 
 exports.nearbyGamesT=(req, res) => {
     console.log('[', (new Date()).toLocaleTimeString(), "] Nearby games sending");

@@ -372,6 +372,7 @@ app.post("/usergamesT", (req, res) => {
 // });
 app.post('/postTeamGame', teamgames.postTeamGame);
 app.patch('/postTeamGame', teamgames.addTGtoUser);
+app.patch('/addTeamtoTG', teamgames.addTeamtoTG);
 app.post("/retrievegamesT", (req, res) =>{
   teamgames.retrieveGamesT(req,res);
 });
