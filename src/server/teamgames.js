@@ -6,6 +6,7 @@ const cheerio=require("cheerio");
 const url="mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup";
 const mongoose=require("mongoose");
 const bcrypt=require("bcrypt");
+var {TeamGame} = require('./../../db/teamgame.js');
 //mongoose.connect("mongodb://localhost:27017");
 
 /*----------------------------------------------------------------------------------------*/
@@ -125,6 +126,23 @@ exports.postGamesT= (req, res) =>
   })
   */
 };
+
+exports.postTeamGame = (req,res) => {
+  var teamGame = new TeamGame({
+    sport: req.body.sport,
+    name: req.body.name,
+    location: req.body.location,
+    isprivate:req.body.isprivate,
+    id: req.body.gameId,
+    owner: req.body.user,
+    teams: [req.body.teamId,]
+  });
+  teamGame.save().then((teamGame) => {
+    res.status(200).send({teamGame});
+  }, (e) => {
+    res.status(400).send(e);
+  })
+}
 
 exports.retrieveGamesT=(req, res) =>
 {

@@ -370,6 +370,7 @@ app.post("/usergamesT", (req, res) => {
 app.post("/postgamesT", (req, res) =>{
   teamgames.postGamesT(req,res);
 });
+app.post('/postTeamGame', teamgames.postTeamGame);
 app.post("/retrievegamesT", (req, res) =>{
   teamgames.retrieveGamesT(req,res);
 });
