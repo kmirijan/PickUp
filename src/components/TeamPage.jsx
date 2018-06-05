@@ -4,7 +4,6 @@ import InputField from '../helpers/InputField';
 import NavBar from "./NavBar"
 var {Link}=require('react-router-dom');
 
-
 import axios from 'axios';
 
 const MAX_TEAM_SIZE = 20;
@@ -67,8 +66,11 @@ class TeamCreate extends React.Component{
     };
     if (this.teamValidate(team) == true) {
       $('#createTeams').collapse('hide');
-      axios.post('maketeam', team);
-      axios.patch('maketeam', {uid: this.props.user, tid: team.name}).then(this.props.onNewTeam);
+      axios.post('maketeam', team).then((doc) => {
+        axios.patch('maketeam', {uid: this.props.user, tid: doc.data.team._id});
+        console.log(doc)
+      }).then(this.props.onNewTeam);
+      //axios.patch('maketeam', {uid: this.props.user, tid: team.name}).then(this.props.onNewTeam);
       this.refs.sport.clear();
       this.refs.name.clear();
       this.refs.city.clear();
@@ -259,7 +261,7 @@ class TeamTable extends React.Component {
 export class TeamRow extends React.Component {
 
   joinTeam() {
-    axios.patch('/maketeam', {uid: this.props.user, tid: this.props.team.name});
+    axios.patch('/maketeam', {uid: this.props.user, tid: this.props.team._id});
     axios.patch('/team:user', {user:this.props.user, teamId:this.props.team._id});
   }
   leaveTeam(){
