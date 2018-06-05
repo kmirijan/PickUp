@@ -2,7 +2,6 @@ import React from 'react';
 import InputField from '../helpers/InputField';
 import '../css/App.css';
 
-
 import axios from 'axios';
 
 const GUEST = "guest";

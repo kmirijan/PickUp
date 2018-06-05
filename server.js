@@ -39,24 +39,15 @@ io.on('connection',(socket)=>{
   })
 });
 
-
-
 var {Game} = require('./db/game.js');
 var {User} = require('./db/User.js');
 var {Team} = require('./db/team.js');
-//var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
-
-
-
 
 /*configurations*/
 app.use(express.static("./dist"));
 app.use(bodyParser.json());
 app.use(busboy());
 app.use("/profilepictures",express.static("./dist/profilePictures"));
-/*app.use(bodyParser.urlencoded({
-  extended: true
-}));*/
 
 /*sends index.html to any link*/
 app.get("*",(req,res)=>{
@@ -190,38 +181,36 @@ const makeValid = (obj) => {return obj != null ? obj : "";};
 var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
 app.post("/nearbygames", (req, res) => {
-    console.log('[', (new Date()).toLocaleTimeString(), "] Nearby games sending");
+  console.log('[', (new Date()).toLocaleTimeString(), "] Nearby games sending");
 
-    let range = req.body.range;
-    let center = req.body.center;
+  let range = req.body.range;
+  let center = req.body.center;
 
-    mongo.connect(mongoUrl, (err, client) =>{
-        if (err) throw err;
+  mongo.connect(mongoUrl, (err, client) =>{
+    if (err) throw err;
 
-        let collection = client.db("pickup").collection("games");
+    let collection = client.db("pickup").collection("games");
 
-        let query = {coords:
-                        {$near:
-                            {
-                                $geometry: {
-                                    type: "Point",
-                                    coordinates: [center.lng, center.lat]
-                                },
-                                $maxDistance: range * 1000,
-                            }
-                        },
-                    isprivate: false
-        };
-        collection.find(query).toArray((err, result) => {
-            if (err) throw err;
-            res.json(result);
-            res.end();
-            client.close();
-        });
-
+    let query = {coords:
+                    {$near:
+                        {
+                            $geometry: {
+                                type: "Point",
+                                coordinates: [center.lng, center.lat]
+                            },
+                            $maxDistance: range * 1000,
+                        }
+                    },
+                isprivate: false
+    };
+    collection.find(query).toArray((err, result) => {
+      if (err) throw err;
+      res.json(result);
+      res.end();
+      client.close();
     });
+  });
 });
-
 
 // return the games that the user has played
 app.post("/usergames", (req, res) => {
@@ -242,7 +231,6 @@ app.post("/usergames", (req, res) => {
                 client.close();
             });
         });
-
     });
 });
 
