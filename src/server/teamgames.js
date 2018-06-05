@@ -31,6 +31,7 @@ exports.joinT=(req, res) =>
     collection.update(query, newTeam, (err) =>
     {
       if (err) throw err;
+      else res.sendStatus(200);
       client.close();
     });
 
@@ -164,11 +165,33 @@ exports.leaveGameT=(req, res) => {
   mongo.connect(mongoUrl,(err,client)=>{
     if(err) throw new Error(err);
     var db=client.db("pickup");
-    db.collection("teamgames").update({id:req.body.game.id},{
+    db.collection("teamgames").findOneAndUpdate({id:req.body.game.id},{
         $pull:{
           teams:req.body.team._id
         }
-    })
+    }, (err, result) => {
+      console.log("result:",result);
+      if (err) {
+        res.sendStatus(500);
+        throw err;
+      }
+      // testing if equal to 1 because the result is from before the team is removed
+      else if (result.value != null && result.value.teams.length == 1){
+        db.collection("teamgames").remove({id:req.body.game.id}, (err) => {
+          if (err) {
+            res.sendStatus(500);
+            throw err;
+          }
+          else {
+            res.sendStatus(200);
+          }
+        });
+      }
+      else{
+        res.sendStatus(200);
+      }
+      client.close();
+    });
     db.collection("users").update({"username":{$in:req.body.team.members}},{
       $pull:{
         teamgames:req.body.game.id
