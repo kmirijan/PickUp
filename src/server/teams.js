@@ -2,6 +2,9 @@ const mongo = require("mongodb").MongoClient;
 const mongourl = "mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup"
 const ObjectID = require('mongodb').ObjectID;
 
+var {Team} = require('./../../db/team.js');
+var {User} = require('./../../db/User.js');
+
 function printErr(err, message)
 {
     console.log("Error: ", message);
@@ -39,108 +42,147 @@ exports.getTeams = function getTeams(req, res) {
     });
 }
 
-exports.createTeam = function createTeam(req, res) {
-    console.log('[', (new Date()).toLocaleTimeString(), "] Team creating");
+// exports.createTeam = function createTeam(req, res) {
+//     console.log('[', (new Date()).toLocaleTimeString(), "] Team creating");
+//
+//     let team = {
+//         sport: req.body.sport,
+//         name: req.body.name,
+//         city: req.body.city,
+//         captain: req.body.captain,
+//         members: [req.body.captain],
+//         games: [],
+//         maxPlayers: req.body.maxPlayers
+//     }
+//
+//     mongo.connect(mongourl, (err, client) => {
+//         if (err) {
+//             printErr(err, "Connection to mongo failed for creating Team");
+//             client.close();
+//             res.sendStatus(500);
+//             return;
+//         }
+//
+//         let teams = client.db("pickup").collection("teams");
+//         let users=client.db("pickup").collection("users");
+//         teams.insertOne(team, (err,ret) => {
+//             if (err)
+//             {
+//                 printErr(err, "Adding team failed");
+//                 res.sendStatus(500);
+//             }
+//             else
+//             {
+//               console.log("insertedId",ret.insertedId)
+//                 users.update({"username":{$in:team["members"]}},{
+//                     $push:{"teams":ret.insertedId}
+//                 },(err)=>{
+//                   if(err){
+//                     printErr(err);
+//                     res.sendStatus(500);
+//                   }
+//                   else{
+//                     res.sendStatus(200);
+//                   }
+//                 })
+//
+//             }
+//         });
+//
+//     });
+// }
 
-    let team = {
-        sport: req.body.sport,
-        name: req.body.name,
-        city: req.body.city,
-        captain: req.body.captain,
-        members: [req.body.captain],
-        games: [],
-        maxPlayers: req.body.maxPlayers
-    }
-
-    mongo.connect(mongourl, (err, client) => {
-        if (err) {
-            printErr(err, "Connection to mongo failed for creating Team");
-            client.close();
-            res.sendStatus(500);
-            return;
-        }
-
-        let teams = client.db("pickup").collection("teams");
-        let users=client.db("pickup").collection("users");
-        teams.insertOne(team, (err,ret) => {
-            if (err)
-            {
-                printErr(err, "Adding team failed");
-                res.sendStatus(500);
-            }
-            else
-            {
-              console.log("insertedId",ret.insertedId)
-                users.update({"username":{$in:team["members"]}},{
-                    $push:{"teams":ret.insertedId}
-                },(err)=>{
-                  if(err){
-                    printErr(err);
-                    res.sendStatus(500);
-                  }
-                  else{
-                    res.sendStatus(200);
-                  }
-                })
-
-            }
-        });
-
-    });
-
+//Adds a team to the teams database
+exports.makeTeam = (req, res) => {
+  var team =  new Team({
+    sport: req.body.sport,
+    name: req.body.name,
+    city: req.body.city,
+    captain: req.body.captain,
+    members: [req.body.captain],
+    games: [],
+    maxPlayers: req.body.maxPlayers
+  });
+  team.save().then((team) => {
+      res.status(200).send({team});
+    }, (e) => {
+      res.status(400).send(e);
+  });
 }
 
-
-// adds the member to the team
-exports.joinTeam = function joinTeam(req,res) {
-
-    mongo.connect(mongourl, (err, client) => {
-        if (err) {
-            printErr(err, "Connection to mongo failed for joining Team");
-            client.close();
-            res.sendStatus(500);
-            return;
-        }
-        // let teamQuery = {$expr: { $eq: ["$name", {$literal: req.body.teamName} ], $gt: ["$maxPlayers", "$members.length"] } };
-        let teamQuery = { _id: ObjectID(req.body.teamId), $where: "this.members.length < this.maxPlayers" };
-        let newMember = { $addToSet: {members: req.body.user} }
-
-        let teams = client.db("pickup").collection("teams");
-        let users=client.db("pickup").collection("users");
-        teams.updateOne(teamQuery, newMember, (err, result) => {
-            if (err)
-            {
-                printErr(err, "Joining team failed");
-                res.sendStatus(500);
-            }
-            else if (result.matchedCount > 0)
-            {
-              users.updateOne({"username":req.body.user},{
-                  $addToSet:{"teams":ObjectID(req.body.teamId)}
-              },(err)=>{
-                if(err){
-                  printErr(err);
-                  res.sendStatus(500);
-                }
-                else{
-                  console.log('[', (new Date()).toLocaleTimeString(), "] Team joined");
-                  res.sendStatus(200);
-                }
-              })
-
-            }
-            else
-            {
-                console.log('[', (new Date()).toLocaleTimeString(), "] Team full: join failed");
-            }
-            client.close();
-        });
-
-    });
-
-
+// Adds a team to a user's teams list
+exports.addTeamToUser = (req, res) => {
+  console.log('Adding team to user');
+  User.findOneAndUpdate(
+    {username : req.body.uid},
+    {$push: {teams: req.body.tid}},
+    {new: true}
+  ).then((user) => {
+    res.status(200).send({user})
+  }, (e) => {
+    res.status(400).send(e);
+  })
 }
 
+//adds the member to the team
+// exports.joinTeam = function joinTeam(req,res) {
+//
+//     mongo.connect(mongourl, (err, client) => {
+//         if (err) {
+//             printErr(err, "Connection to mongo failed for joining Team");
+//             client.close();
+//             res.sendStatus(500);
+//             return;
+//         }
+//         // let teamQuery = {$expr: { $eq: ["$name", {$literal: req.body.teamName} ], $gt: ["$maxPlayers", "$members.length"] } };
+//         let teamQuery = { _id: ObjectID(req.body.teamId), $where: "this.members.length < this.maxPlayers" };
+//         let newMember = { $addToSet: {members: req.body.user} }
+//
+//         let teams = client.db("pickup").collection("teams");
+//         let users=client.db("pickup").collection("users");
+//         teams.updateOne(teamQuery, newMember, (err, result) => {
+//             if (err)
+//             {
+//                 printErr(err, "Joining team failed");
+//                 res.sendStatus(500);
+//             }
+//             else if (result.matchedCount > 0)
+//             {
+//               users.updateOne({"username":req.body.user},{
+//                   $addToSet:{"teams":ObjectID(req.body.teamId)}
+//               },(err)=>{
+//                 if(err){
+//                   printErr(err);
+//                   res.sendStatus(500);
+//                 }
+//                 else{
+//                   console.log('[', (new Date()).toLocaleTimeString(), "] Team joined");
+//                   res.sendStatus(200);
+//                 }
+//               })
+//
+//             }
+//             else
+//             {
+//                 console.log('[', (new Date()).toLocaleTimeString(), "] Team full: join failed");
+//             }
+//             client.close();
+//         });
+//     });
+// }
+//
+// Add user to team's member list
+exports.addUserToTeam = (req, res) => {
+  Team.findOneAndUpdate(
+    {_id : req.body.teamId, members: { $nin: [req.body.user]} },
+    {$push: {members: req.body.user}},
+    {new: true}
+  ).then((team) => {
+    res.status(200).send({team})
+  }, (e) => {
+    res.status(400).send(e);
+  })
+}
 /*
   req.body = teamId, teamMembers
 */
@@ -168,69 +210,79 @@ exports.deleteTeam = (req,res)=>{
   })
 }
 // removes a user from the members list, deletes the team if it
-exports.leaveTeam = function leaveTeam (req, res) {
-    console.log('[', (new Date()).toLocaleTimeString(), "] Team leaving");
+// exports.leaveTeam = function leaveTeam (req, res) {
+//     console.log('[', (new Date()).toLocaleTimeString(), "] Team leaving");
+//
+//     mongo.connect(mongourl, (err, client) => {
+//         if (err) {
+//             printErr(err, "Connection to mongo failed for leaving Team");
+//             client.close();
+//             res.sendStatus(500);
+//             return;
+//         }
+//
+//         let teamQuery = {_id: ObjectID(req.body.teamId)};
+//         let newMember = { $pull: {members: req.body.user} }
+//         let users =client.db("pickup").collection("users");
+//
+//         let teams = client.db("pickup").collection("teams");
+//         teams.findOneAndUpdate(teamQuery, newMember, (err, result) => {
+//             if (err)
+//             {
+//                 printErr(err, "Leaving team failed");
+//                 res.sendStatus(500);
+//                 client.close();
+//                 return;
+//             }
+//             if (result == null)
+//             {
+//                 console.log ("Team \"",ObjectID(req.body.teamId), "\" not found. Unable to leave");
+//             }
+//
+//             users.update({"username":req.body.user},{
+//               $pull:{"teams":ObjectID(req.body.teamId)}
+//             })
+//
+//             let team = result.value;
+//             if (team.captain == req.body.user) {
+//                 teams.deleteOne(teamQuery, (err) => {
+//                     if (err)
+//                     {
+//                         printErr(err, "Deleting captainless team failed");
+//                         res.sendStatus(500);
+//                     }
+//                     else
+//                     {
+//                         console.log('[', (new Date()).toLocaleTimeString(), "] Deleting team");
+//                         res.sendStatus(200);
+//                     }
+//                     while (team.members.length > 0)
+//                     {
+//                         users.update({"username":team.members.pop()}, {$pull: {"teams":ObjectID(req.body.teamId)}});
+//                     }
+//                     client.close();
+//                 });
+//             }
+//             else {
+//                 res.sendStatus(200);
+//                 client.close();
+//             }
+//         })
+//     });
+// }
 
-    mongo.connect(mongourl, (err, client) => {
-        if (err) {
-            printErr(err, "Connection to mongo failed for leaving Team");
-            client.close();
-            res.sendStatus(500);
-            return;
-        }
-
-        let teamQuery = {_id: ObjectID(req.body.teamId)};
-        let newMember = { $pull: {members: req.body.user} }
-        let users =client.db("pickup").collection("users");
-
-        let teams = client.db("pickup").collection("teams");
-        teams.findOneAndUpdate(teamQuery, newMember, (err, result) => {
-            if (err)
-            {
-                printErr(err, "Leaving team failed");
-                res.sendStatus(500);
-                client.close();
-                return;
-            }
-            if (result == null)
-            {
-                console.log ("Team \"",ObjectID(req.body.teamId), "\" not found. Unable to leave");
-            }
-
-            users.update({"username":req.body.user},{
-              $pull:{"teams":ObjectID(req.body.teamId)}
-            })
-
-
-            let team = result.value;
-            if (team.captain == req.body.user) {
-                teams.deleteOne(teamQuery, (err) => {
-                    if (err)
-                    {
-                        printErr(err, "Deleting captainless team failed");
-                        res.sendStatus(500);
-                    }
-                    else
-                    {
-                        console.log('[', (new Date()).toLocaleTimeString(), "] Deleting team");
-                        res.sendStatus(200);
-                    }
-                    while (team.members.length > 0)
-                    {
-                        users.update({"username":team.members.pop()}, {$pull: {"teams":ObjectID(req.body.teamId)}});
-                    }
-                    client.close();
-                });
-            }
-            else {
-                res.sendStatus(200);
-                client.close();
-            }
-
-        })
-
-
-    });
-
-
+exports.teamLeave = (req, res) => {
+  Team.findOneAndUpdate(
+    {_id: req.body.teamId},
+    {$pull: {members : req.body.user}},
+    {new: true}
+  )
+  .then((team) =>{
+    if(team.captain === req.body.user){
+      team.remove();
+    }
+    res.status(200).send({team});
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
 }
