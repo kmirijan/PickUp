@@ -80,7 +80,7 @@ app.post('/maketeam', teams.makeTeam);
 app.patch('/maketeam', teams.addTeamToUser);
 app.patch('/team:user', teams.addUserToTeam);
 app.post("/retrieveteams", teams.getTeams);
-app.patch("/team", teams.leaveTeam);
+app.patch('/remove:team', teams.teamLeave);
 app.post("/deleteteam",teams.deleteTeam);
 
 //-------------==homepage-------------------------------

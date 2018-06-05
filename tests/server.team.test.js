@@ -26,7 +26,7 @@ beforeEach((done) => {
 })
 
 describe('All Team tests', () => {
-	describe('POST /createTeam', () => {
+	describe('POST /maketeam', () => {
 		it('should create new game and add to database', (done) => {
 
 			var teamData= {
@@ -61,6 +61,40 @@ describe('All Team tests', () => {
 				}).catch((e) => done(e));
 			});
 		});
+
+		it('should not create a team with invalid body data', (done) => {
+			request(app)
+			.post('/maketeam')
+			.send({sport: 'sport'})
+			.expect(400)
+			.end((err, res) => {
+				if(err){
+					return done(err);
+				}
+
+				Team.find().then((teams) => {
+					expect(teams.length).toBe(1);
+					done();
+				}).catch((e) => done(e));
+			});
+		});
+
+		it('should not create team with no body data', (done) => {
+			request(app)
+			.post('/maketeam')
+			.send({})
+			.expect(400)
+			.end((err, res) => {
+				if(err){
+					return done(err);
+				}
+
+				Team.find().then((teams) => {
+					expect(teams.length).toBe(1);
+					done();
+				}).catch((e) => done(e));
+			});
+		});
 	});
 
 	describe('PATCH /team:user', () => {
@@ -86,25 +120,91 @@ describe('All Team tests', () => {
 				}).catch((e) => done(e));
 			});
 		});
-		// it('should not add a redundant user to a game', (done) => {
-		// 	request(app)
-		// 	.patch('/game:user')
-		// 	.send({
-		// 		gid: 12345,
-		// 		uid: 'Jeff'
-		// 	})
-		// 	.expect(200)
-		// 	.end((err, res) => {
-		// 		if(err){
-		// 			return done(err);
-		// 		}
-		//
-		// 		Game.find().then((games) => {
-		// 			expect(games.length).toBe(3);
-		// 			expect(JSON.stringify(games[0].players)).toEqual(JSON.stringify(['Jan', 'Jeff']));
-		// 			done();
-		// 		}).catch((e) => done(e));
-		// 	});
-		// });
+
+		it('should not add a redundant user to a team', (done) => {
+			request(app)
+			.patch('/team:user')
+			.send({
+				tid: specId,
+				uid: 'Jeff'
+			})
+			.expect(200)
+			.end((err, res) => {
+				if(err){
+					return done(err);
+				}
+
+				Team.find().then((teams) => {
+					expect(teams.length).toBe(1);
+					expect(JSON.stringify(teams[0].members)).toEqual(JSON.stringify(['Jan', 'Jeff']));
+					done();
+				}).catch((e) => done(e));
+			});
+		});
+	})
+
+	describe('PATCH /remove:team', () => {
+		it('should update and remove a member in a team', (done) => {
+			request(app)
+			.patch('/remove:team')
+			.send({
+				teamId: specId,
+				user: 'Jeff'
+			})
+			.expect(200)
+			.expect((res) => {
+				expect(res.body.team.members).toEqual(['Jan'])
+			})
+			.end((err, res) => {
+				if(err){
+					return done(err);
+				}
+
+				Team.find({}).then((teams) => {
+					expect(teams.length).toBe(1);
+					done();
+				}).catch((e) => done(e));
+			});
+		})
+
+		it('should remove the game when the captain leaves', (done) => {
+			request(app)
+			.patch('/remove:team')
+			.send({
+				teamId: specId,
+				user: 'Jan'
+			})
+			.expect(200)
+			.end((err, res) => {
+				if(err){
+					return done(err);
+				}
+
+				Team.find({}).then((teams) => {
+					expect(teams.length).toBe(0);
+					done();
+				}).catch((e) => done(e));
+			});
+		})
+
+		it('should return normally but not remove anything if member leaving is not a team member', (done) => {
+			request(app)
+			.patch('/remove:team')
+			.send({
+				teamId: specId,
+				user: 'Jordan'
+			})
+			.expect(200)
+			.end((err, res) => {
+				if(err){
+					return done(err);
+				}
+
+				Team.find({}).then((teams) => {
+					expect(teams.length).toBe(1);
+					done();
+				}).catch((e) => done(e));
+			});
+		})
 	})
 })
