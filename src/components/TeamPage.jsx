@@ -21,12 +21,18 @@ constructor(props){
   }
   console.log("USER",this.props.user);
 }
+
+    reloadTable()
+    {
+        this.refs.table.reload();
+    }
+
     render(){
         return(
             <div>
                 <NavBar user={this.props.user}/>
-                <TeamCreate user={this.props.user }/>
-                <TeamTable user={this.props.user} defaultSearch={this.search}/>
+                <TeamCreate onNewTeam={this.reloadTable.bind(this)} user={this.props.user }/>
+                <TeamTable ref="table" user={this.props.user} defaultSearch={this.search}/>
             </div>
         );
 
@@ -65,10 +71,10 @@ class TeamCreate extends React.Component{
             captain: this.props.user,
             maxPlayers: maxPlayers
         };
-        if (this.teamValidate == true)
+        if (this.teamValidate(team) == true)
         {
             $('#createTeams').collapse('hide');
-            axios.post('/postteam', team);
+            axios.post('/postteam', team).then(this.props.onNewTeam);
             this.refs.sport.clear();
             this.refs.name.clear();
             this.refs.city.clear();
@@ -76,7 +82,7 @@ class TeamCreate extends React.Component{
         }
         else
         {
-            this.displayInputErrors();
+            this.displayInputErrors(team);
         }
     }
     teamValidate(team)
@@ -144,7 +150,7 @@ class TeamCreate extends React.Component{
                     placeholder="Team Name" />
               <InputField label="Activity" type="text" ref="sport"
                     placeholder="Activity" />
-              <InputField label="City" type="text" ref="location" id="location"
+              <InputField label="City" type="text" ref="city" id="location"
                     placeholder="Location" />
               <InputField label="Max # Players" type="number" ref="maxPlayers"
                     placeholder="Max # Players" min="0" max={MAX_TEAM_SIZE} />
@@ -229,6 +235,11 @@ class TeamTable extends React.Component {
 
 
     }
+    reload()
+    {
+        this.retrieveTeams();
+    }
+
 
 
   render() {
