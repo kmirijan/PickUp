@@ -215,23 +215,23 @@ app.post("/nearbygames", (req, res) => {
 // return the games that the user has played
 app.post("/usergames", (req, res) => {
   console.log(req.body.user)
-    console.log('[', (new Date()).toLocaleTimeString(), "] Sending ", req.body.user.trim(), "'s games");
+  console.log('[', (new Date()).toLocaleTimeString(), "] Sending ", req.body.user.trim(), "'s games");
 
-    mongo.connect(mongoUrl, (err, client) => {
+  mongo.connect(mongoUrl, (err, client) => {
+    if (err) throw err;
+    let username = {username: req.body.user.trim()};
+    let users = client.db("pickup").collection("users");
+    let games = client.db("pickup").collection("games");
+    users.findOne(username, (err, user) => {
+      let userGames = {id: {$in: (user.games != null ? user.games : [])} };
+      games.find(userGames).toArray((err, results) => {
         if (err) throw err;
-        let username = {username: req.body.user.trim()};
-        let users = client.db("pickup").collection("users");
-        let games = client.db("pickup").collection("games");
-        users.findOne(username, (err, user) => {
-            let userGames = {id: {$in: (user.games != null ? user.games : [])} };
-            games.find(userGames).toArray((err, results) => {
-                if (err) throw err;
-                res.json(results);
-                res.end();
-                client.close();
-            });
-        });
+        res.json(results);
+        res.end();
+        client.close();
+      });
     });
+  });
 });
 
 // add a game to the data base
