@@ -28,7 +28,7 @@ var TeamGame = mongoose.model('TeamGame', {
 		trim: true
 	},
   teams: [{
-		type: Number,
+		type: String,
 		trim: true
 	}],
 	isprivate:{

@@ -367,10 +367,11 @@ app.post("/nearbygamesT", (req, res) => {
 app.post("/usergamesT", (req, res) => {
   teamgames.userGamesT(req,res);
 });
-app.post("/postgamesT", (req, res) =>{
-  teamgames.postGamesT(req,res);
-});
+// app.post("/postgamesT", (req, res) =>{
+//   teamgames.postGamesT(req,res);
+// });
 app.post('/postTeamGame', teamgames.postTeamGame);
+app.patch('/postTeamGame', teamgames.addTGtoUser);
 app.post("/retrievegamesT", (req, res) =>{
   teamgames.retrieveGamesT(req,res);
 });

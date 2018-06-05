@@ -7,6 +7,7 @@ const url="mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup";
 const mongoose=require("mongoose");
 const bcrypt=require("bcrypt");
 var {TeamGame} = require('./../../db/teamgame.js');
+var {User} = require('./../../db/User.js');
 //mongoose.connect("mongodb://localhost:27017");
 
 /*----------------------------------------------------------------------------------------*/
@@ -90,44 +91,35 @@ exports.userGamesT=(req, res) => {
 };
 
 // add a game to the data base
-exports.postGamesT= (req, res) =>
-{
-  console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
-  var game = {
-    sport: makeValid(req.body.game.sport),
-    name: makeValid(req.body.game.name),
-    location: makeValid(req.body.game.location),
-    isprivate:makeValid(req.body.game.isprivate),
-    id: makeValid(req.body.game.gameId),
-    owner: makeValid(req.body.game.user),
-    teams: makeValid(req.body.game.teams),
-  };
-
-
-  mongo.connect(mongoUrl, (err, db) => {
-    if (err) throw err;
-
-    db.db("pickup").collection("teamgames").insertOne(game,() => {
-      db.db("pickup").collection("users").update({"username":game["owner"]},{
-        $push: {teamgames: game["id"]}
-      }).then(()=>{
-        res.sendStatus(200);
-        db.close();
-      })
-    });
-
-   });
-
-  /*
-  game.save().then((doc) => {
-      res.send(doc);
-    }, (e) => {
-      res.status(400).send(e);
-  })
-  */
-};
+// exports.postGamesT= (req, res) =>
+// {
+//   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
+//   var game = {
+//     sport: makeValid(req.body.game.sport),
+//     name: makeValid(req.body.game.name),
+//     location: makeValid(req.body.game.location),
+//     isprivate:makeValid(req.body.game.isprivate),
+//     id: makeValid(req.body.game.gameId),
+//     owner: makeValid(req.body.game.user),
+//     teams: makeValid(req.body.game.teams),
+//   };
+//
+//   mongo.connect(mongoUrl, (err, db) => {
+//     if (err) throw err;
+//
+//     db.db("pickup").collection("teamgames").insertOne(game,() => {
+//       db.db("pickup").collection("users").update({"username":game["owner"]},{
+//         $push: {teamgames: game["id"]}
+//       }).then(()=>{
+//         res.sendStatus(200);
+//         db.close();
+//       })
+//     });
+//    });
+// };
 
 exports.postTeamGame = (req,res) => {
+  console.log('Posting a new team game');
   var teamGame = new TeamGame({
     sport: req.body.sport,
     name: req.body.name,
@@ -139,6 +131,20 @@ exports.postTeamGame = (req,res) => {
   });
   teamGame.save().then((teamGame) => {
     res.status(200).send({teamGame});
+  }, (e) => {
+    res.status(400).send(e);
+  })
+}
+
+exports.addTGtoUser = (req, res) => {
+  console.log('adding team game to user');
+  User.findOneAndUpdate(
+    {username : req.body.uid},
+    {$push: {teamgames: req.body.tgid}},
+    {new: true}
+  ).then((user) => {
+    console.log(user);
+    res.status(200).send({user})
   }, (e) => {
     res.status(400).send(e);
   })

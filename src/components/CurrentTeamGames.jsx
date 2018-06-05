@@ -101,20 +101,14 @@ export class CurrentTeamGames extends React.Component{
             isprivate:this.state.isprivate,
             location: this.refs.location.getInput(),
             user: this.props.user,
-            teams:[team._id],
+            teamId:team._id
         };
         if (this.gameIsValid(game) == true)
         {
             $('#createTeamGames').collapse('hide');
             console.log(game);
-            axios({
-              url:'/postgamesT',
-              method:"post",
-              data:{
-                game:game
-              }
-              }).then( () =>
-                    {refreshTable()});
+            axios.post('/postTeamGame', game);
+            axios.patch('/postTeamGame', {uid:this.props.user, tgid: game.gameId}).then( () =>{refreshTable()});
             this.refs.sport.clear();
             this.refs.location.clear();
         }

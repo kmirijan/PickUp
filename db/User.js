@@ -36,7 +36,7 @@ var User = mongoose.model('User', {
     type: String
   }],
   teamgames: [{
-    type: String
+    type: Number
   }]
 });
 

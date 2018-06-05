@@ -28,6 +28,7 @@ describe('All Team Game tests', () => {
 	describe('POST /postTeamGame', () => {
 		it('should create new game and add to database', (done) => {
 
+			spectId = new ObjectID();
 			var teamGameData= {
 				sport: 'sport',
 				location: 'location',
@@ -35,7 +36,7 @@ describe('All Team Game tests', () => {
 				user: 'user',
 				isprivate: false,
 				gameId: 517381293891,
-				teamId: 777777
+				teamId: spectId
 			}
 
 			request(app)
@@ -48,7 +49,6 @@ describe('All Team Game tests', () => {
 				expect(res.body.teamGame.name).toBe('team game name');
 				expect(res.body.teamGame.id).toBe(517381293891);
 				expect(res.body.teamGame.owner).toBe('user');
-				expect(res.body.teamGame.teams).toEqual([777777]);
 			})
 			.end((err, res) => {
 				if(err){
