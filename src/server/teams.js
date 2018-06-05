@@ -2,6 +2,9 @@ const mongo = require("mongodb").MongoClient;
 const mongourl = "mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup"
 const ObjectID = require('mongodb').ObjectID;
 
+var {Team} = require('./../../db/team.js');
+var {User} = require('./../../db/User.js');
+
 function printErr(err, message)
 {
     console.log("Error: ", message);
@@ -39,56 +42,90 @@ exports.getTeams = function getTeams(req, res) {
     });
 }
 
-exports.createTeam = function createTeam(req, res) {
-    console.log('[', (new Date()).toLocaleTimeString(), "] Team creating");
+// exports.createTeam = function createTeam(req, res) {
+//     console.log('[', (new Date()).toLocaleTimeString(), "] Team creating");
+//
+//     let team = {
+//         sport: req.body.sport,
+//         name: req.body.name,
+//         city: req.body.city,
+//         captain: req.body.captain,
+//         members: [req.body.captain],
+//         games: [],
+//         maxPlayers: req.body.maxPlayers
+//     }
+//
+//     mongo.connect(mongourl, (err, client) => {
+//         if (err) {
+//             printErr(err, "Connection to mongo failed for creating Team");
+//             client.close();
+//             res.sendStatus(500);
+//             return;
+//         }
+//
+//         let teams = client.db("pickup").collection("teams");
+//         let users=client.db("pickup").collection("users");
+//         teams.insertOne(team, (err,ret) => {
+//             if (err)
+//             {
+//                 printErr(err, "Adding team failed");
+//                 res.sendStatus(500);
+//             }
+//             else
+//             {
+//               console.log("insertedId",ret.insertedId)
+//                 users.update({"username":{$in:team["members"]}},{
+//                     $push:{"teams":ret.insertedId}
+//                 },(err)=>{
+//                   if(err){
+//                     printErr(err);
+//                     res.sendStatus(500);
+//                   }
+//                   else{
+//                     res.sendStatus(200);
+//                   }
+//                 })
+//
+//             }
+//         });
+//
+//     });
+// }
 
-    let team = {
-        sport: req.body.sport,
-        name: req.body.name,
-        city: req.body.city,
-        captain: req.body.captain,
-        members: [req.body.captain],
-        games: [],
-        maxPlayers: req.body.maxPlayers
-    }
-
-    mongo.connect(mongourl, (err, client) => {
-        if (err) {
-            printErr(err, "Connection to mongo failed for creating Team");
-            client.close();
-            res.sendStatus(500);
-            return;
-        }
-
-        let teams = client.db("pickup").collection("teams");
-        let users=client.db("pickup").collection("users");
-        teams.insertOne(team, (err,ret) => {
-            if (err)
-            {
-                printErr(err, "Adding team failed");
-                res.sendStatus(500);
-            }
-            else
-            {
-              console.log("insertedId",ret.insertedId)
-                users.update({"username":{$in:team["members"]}},{
-                    $push:{"teams":ret.insertedId}
-                },(err)=>{
-                  if(err){
-                    printErr(err);
-                    res.sendStatus(500);
-                  }
-                  else{
-                    res.sendStatus(200);
-                  }
-                })
-
-            }
-        });
-
-    });
+//Adds a team to the teams database
+exports.makeTeam = (req, res) => {
+  var team =  new Team({
+    sport: req.body.sport,
+    name: req.body.name,
+    city: req.body.city,
+    captain: req.body.captain,
+    members: [req.body.captain],
+    games: [],
+    maxPlayers: req.body.maxPlayers
+  });
+  console.log(team);
+  team.save().then((team) => {
+      res.status(200).send({team});
+    }, (e) => {
+      console.log(e);
+      res.status(400).send(e);
+  });
 }
 
+// Adds a team to a user's teams list
+exports.addTeamToUser = (req, res) => {
+  console.log('Adding team to user');
+  User.findOneAndUpdate(
+    {username : req.body.uid},
+    {$push: {teams: req.body.tid}},
+    {new: true}
+  ).then((user) => {
+    console.log(user);
+    res.status(200).send({user})
+  }, (e) => {
+    res.status(400).send(e);
+  })
+}
 
 // adds the member to the team
 exports.joinTeam = function joinTeam(req,res) {

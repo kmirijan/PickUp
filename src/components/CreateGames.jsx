@@ -133,11 +133,11 @@ export class CreateGames extends React.Component{
                           onSubmit={this.addGame.bind(this)}>
 
 
-                          <InputField label="Activity" type = "text" 
+                          <InputField label="Activity" type = "text"
                                 ref="sport" placeholder="Activity" />
                           <InputField label="Location" ref="location" type="text"
                                 id='location' placeholder="Location" />
-                          <InputField label="Game Length(Hours)" 
+                          <InputField label="Game Length(Hours)"
                                 ref="gameLength" placeholder="hours"
                                 type="number" min="0" />
 

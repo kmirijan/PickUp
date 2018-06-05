@@ -43,7 +43,7 @@ io.on('connection',(socket)=>{
 
 var {Game} = require('./db/game.js');
 var {User} = require('./db/User.js');
-
+var {Team} = require('./db/team.js');
 //var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
 
@@ -76,7 +76,9 @@ app.delete("/logout-test",(req,res)=>{
 })
 
 // --------------- Team related requests --------------
-app.post("/postteam", teams.createTeam);
+//app.post("/postteam", teams.createTeam);
+app.post('/maketeam', teams.makeTeam);
+app.patch('/maketeam', teams.addTeamToUser);
 app.post("/retrieveteams", teams.getTeams);
 app.post("/jointeam", teams.joinTeam);
 app.patch("/team", teams.leaveTeam);
@@ -248,7 +250,7 @@ app.post("/usergames", (req, res) => {
 // add a game to the data base
 app.post("/postgames", (req, res) =>
 {
-  console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
+  //console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
 
   var game = new Game({
     sport: makeValid(req.body.sport),
@@ -263,11 +265,11 @@ app.post("/postgames", (req, res) =>
     endTime: req.body.startTime + req.body.gameLength
   });
 
-  console.log(game);
+  //console.log(game);
   game.save().then((game) => {
       res.status(200).send({game});
     }, (e) => {
-      console.log(e);
+      //console.log(e);
       res.status(400).send(e);
   })
 });

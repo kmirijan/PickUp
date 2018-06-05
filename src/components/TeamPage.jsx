@@ -74,7 +74,8 @@ class TeamCreate extends React.Component{
         if (this.teamValidate(team) == true)
         {
             $('#createTeams').collapse('hide');
-            axios.post('/postteam', team).then(this.props.onNewTeam);
+            axios.post('maketeam', team);
+            axios.patch('maketeam', {uid: this.props.user, tid: team.name}).then(this.props.onNewTeam);
             this.refs.sport.clear();
             this.refs.name.clear();
             this.refs.city.clear();
