@@ -290,7 +290,7 @@ class GamesList extends React.Component
 	          <td >{game.sport}</td>
 	          <td >{game.name}</td>
 	          <td >{game.location}</td>
-	          <td><Link to={'/map:'+game.id}>Link</Link></td>
+	          <td ><Link to={'/map:'+game.id}>Link</Link></td>
 	        </tr>
         );
 			}
@@ -449,17 +449,17 @@ class GamesList extends React.Component
 
         return (
             <div>
-							<h2 id='gamesText'>Games Played</h2>
+							<h2 id='gamesText'>Games Played:</h2>
 							<table><tbody key='gamesList'>{gamesList}</tbody></table>
-							<h2 id='gamesText'>Games Made</h2>
+							<h2 id='gamesText'>Games Made:</h2>
 							<table><tbody key='gamesMadeList'>{gamesMade}</tbody></table>
-							<h2 id='gamesText'>Team Games Played</h2>
+							<h2 id='gamesText'>Team Games Played:</h2>
 							<table><tbody key='teamGamesList'>{teamGamesList}</tbody></table>
-							<h2 id='gamesText'>Team Games Made</h2>
+							<h2 id='gamesText'>Team Games Made:</h2>
 							<table><tbody key='teamGamesMadeList'>{teamGamesMade}</tbody></table>
-							<h2 id='gamesText'>Teams Joined</h2>
+							<h2 id='gamesText'>Teams Joined:</h2>
 							<table><tbody key='teamsList'>{teamsList}</tbody></table>
-							<h2 id='gamesText'>Teams Made</h2>
+							<h2 id='gamesText'>Teams Made:</h2>
 							<table><tbody key='teamsMadeList'>{teamsMade}</tbody></table>
 
             </div>
