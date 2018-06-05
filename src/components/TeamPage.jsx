@@ -36,6 +36,7 @@ class TeamPage extends React.Component{
       );
   }
 }
+
 class TeamCreate extends React.Component{
 
   constructor(props) {

@@ -10,6 +10,7 @@ const teams=require("./src/server/teams.js");
 const timedRemove=require("./src/server/timedRemove.js");
 const teamgames=require("./src/server/teamgames.js");
 const login=require("./src/server/login.js")
+const weather = require('./src/server/weather.js');
 const fs=require("fs");
 const busboy=require("connect-busboy");
 const util = require('util')
@@ -235,10 +236,7 @@ app.post("/usergames", (req, res) => {
 });
 
 // add a game to the data base
-app.post("/postgames", (req, res) =>
-{
-  //console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
-
+app.post("/postgames", (req, res) => {
   var game = new Game({
     sport: makeValid(req.body.sport),
     name: makeValid(req.body.name),
@@ -252,25 +250,29 @@ app.post("/postgames", (req, res) =>
     endTime: req.body.startTime + req.body.gameLength
   });
 
-  //console.log(game);
+  // weather.getWeather(req.body.lat, req.body.lng, (errorMessage, weatherResults) => {
+	// 		if(errorMessage){
+	// 			console.log(errorMessage);
+	// 		}
+	// 		else{
+	// 			console.log(`It is currently ${weatherResults.temperature}`);
+	// 			console.log(`It feels like ${weatherResults.apparentTemperature}`);
+	// 		}
+	// })
   game.save().then((game) => {
       res.status(200).send({game});
     }, (e) => {
-      //console.log(e);
       res.status(400).send(e);
   })
 });
 
 // add user to game
 app.patch('/game:user', (req, res) => {
-  //console.log('Adding user to game');
-  //console.log(req.body);
   Game.findOneAndUpdate(
     {id : req.body.gid, players: { $nin: [req.body.uid]} },
     {$push: {players: req.body.uid}},
     {new: true}
   ).then((game) => {
-    //console.log(game);
     res.status(200).send({game})
   }, (e) => {
     res.status(400).send(e);
@@ -309,15 +311,12 @@ app.post("/retrievegames", (req, res) =>
 
 // User leaves a game, deletes game if last user
 app.patch('/leave:games', (req, res) => {
-  // console.log('patch: ', req.body);
   Game.findOneAndUpdate(
     {'id': req.body.gid},
     {$pull: {players : req.body.uid}},
     {new: true}
   )
   .then((game) =>{
-    // console.log('length: ', game.players.length)
-    // console.log('req: ', req.body);
     if(game.players.length === 0){
       game.remove();
     }
@@ -329,7 +328,6 @@ app.patch('/leave:games', (req, res) => {
 
 //change so it deletes for members as well
 app.delete('/games', (req, res) => {
-  // console.log('deleting', req.body);
   console.log("testing games",req.body.gid)
   Game.findOneAndRemove({'id': req.body.gid})
   .then((game) =>{
@@ -343,13 +341,10 @@ app.delete('/games', (req, res) => {
     }).catch((e) => {
       res.status(400).send(e);
     })
-  // console.log("Deleting", game);
-
   }).catch((e) => {
     res.status(400).send(e);
   })
 })
-
 
 app.post("/retrievespecificgames", (req,res)=>{
   mongo.connect(mongoUrl,(err,client)=>{
@@ -390,7 +385,6 @@ app.post("/deletegameT",(req,res)=>{
 app.post("/retrieveplayerteams",(req,res)=>{
   teamgames.retrievePlayerTeams(req,res);
 })
-
 
 // interval in milliseconds
 var removeInterval = 60*1000;
