@@ -87,7 +87,6 @@ exports.createTeam = function createTeam(req, res) {
         });
 
     });
-
 }
 
 
