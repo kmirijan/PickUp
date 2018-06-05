@@ -14,31 +14,31 @@ var {User} = require('./../../db/User.js');
 const makeValid = (obj) => {return obj != null ? obj : "";};
 var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
-exports.joinT=(req, res) =>
-{
-  console.log('[', (new Date()).toLocaleTimeString(), "] Game joined");
-
-  mongo.connect(mongoUrl, (err, client) =>
-  {
-    var collection = client.db("pickup").collection("teamgames");
-    var query = {id: req.body.game.id, teams: { $nin: [req.body.team] } };
-    var newTeam = { $addToSet: {teams: req.body.team._id} };
-    console.log("team id",req.body.team._id);
-
-    console.log("team: ", req.body.team.name);
-    var userQuery = {username: {$in:req.body.team.members}};
-    var joinedGame = {$addToSet: {teamgames: req.body.game.id}};
-    client.db("pickup").collection("users").update(userQuery, joinedGame);
-
-    collection.update(query, newTeam, (err) =>
-    {
-      if (err) throw err;
-      client.close();
-    });
-
-  });
-
-};
+// exports.joinT=(req, res) =>
+// {
+//   console.log('[', (new Date()).toLocaleTimeString(), "] Game joined");
+//
+//   mongo.connect(mongoUrl, (err, client) =>
+//   {
+//     var collection = client.db("pickup").collection("teamgames");
+//     var query = {id: req.body.game.id, teams: { $nin: [req.body.team] } };
+//     var newTeam = { $addToSet: {teams: req.body.team._id} };
+//     console.log("team id",req.body.team._id);
+//
+//     console.log("team: ", req.body.team.name);
+//     var userQuery = {username: {$in:req.body.team.members}};
+//     var joinedGame = {$addToSet: {teamgames: req.body.game.id}};
+//     client.db("pickup").collection("users").update(userQuery, joinedGame);
+//
+//     collection.update(query, newTeam, (err) =>
+//     {
+//       if (err) throw err;
+//       client.close();
+//     });
+//
+//   });
+//
+// };
 
 exports.addTeamtoTG = (req, res) => {
   TeamGame.findOneAndUpdate(
@@ -131,7 +131,6 @@ exports.userGamesT=(req, res) => {
 // };
 
 exports.postTeamGame = (req,res) => {
-  console.log('Posting a new team game');
   var teamGame = new TeamGame({
     sport: req.body.sport,
     name: req.body.name,

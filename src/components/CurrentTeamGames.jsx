@@ -410,14 +410,10 @@ class Game extends React.Component {
   selectTeamJoin(team){
     console.log("joining with team")
     if(confirm("join with "+team["name"]+"?")){
-      axios({
-        url:"/joinT",
-        method:"post",
-        data:{
-          team:team,
-          game:this.props.game
-        }
-      }).then(refreshTable());
+      console.log(this.props);
+      console.log(team);
+      axios.patch('/addTeamtoTG', {tid: team._id, tgid: this.props.game.id});
+      axios.patch('/postTeamGame', {uid:this.props.user, tgid: this.props.game.id}).then( () =>{refreshTable()});
     }
   }
   selectTeamLeave(team){

@@ -62,39 +62,39 @@ describe('All Team Game tests', () => {
 			});
 		});
 
-	// 	it('should not create a game with invalid body data', (done) => {
-	// 		request(app)
-	// 		.post('/postgames')
-	// 		.send({sport: 'sport'})
-	// 		.expect(400)
-	// 		.end((err, res) => {
-	// 			if(err){
-	// 				return done(err);
-	// 			}
-	//
-	// 			Game.find().then((games) => {
-	// 				expect(games.length).toBe(3);
-	// 				done();
-	// 			}).catch((e) => done(e));
-	// 		});
-	// 	});
-	//
-	// 	it('should not create game with no body data', (done) => {
-	// 		request(app)
-	// 		.post('/postgames')
-	// 		.send({})
-	// 		.expect(400)
-	// 		.end((err, res) => {
-	// 			if(err){
-	// 				return done(err);
-	// 			}
-	//
-	// 			Game.find().then((games) => {
-	// 				expect(games.length).toBe(3);
-	// 				done();
-	// 			}).catch((e) => done(e));
-	// 		});
-	// 	});
+		it('should not create a game with invalid body data', (done) => {
+			request(app)
+			.post('/postTeamGame')
+			.send({sport: 'sport'})
+			.expect(400)
+			.end((err, res) => {
+				if(err){
+					return done(err);
+				}
+
+				TeamGame.find().then((teamGames) => {
+					expect(teamGames.length).toBe(1);
+					done();
+				}).catch((e) => done(e));
+			});
+		});
+
+		it('should not create game with no body data', (done) => {
+			request(app)
+			.post('/postTeamGame')
+			.send({})
+			.expect(400)
+			.end((err, res) => {
+				if(err){
+					return done(err);
+				}
+
+				TeamGame.find().then((teamGames) => {
+					expect(teamGames.length).toBe(1);
+					done();
+				}).catch((e) => done(e));
+			});
+		});
 	});
 
 	// describe('PATCH /leave:games', () => {
