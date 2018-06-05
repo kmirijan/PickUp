@@ -4,247 +4,220 @@ import InputField from '../helpers/InputField';
 import NavBar from "./NavBar"
 var {Link}=require('react-router-dom');
 
-
 import axios from 'axios';
 
 const MAX_TEAM_SIZE = 20;
 
 class TeamPage extends React.Component{
-constructor(props){
-  super(props);
-  console.log("params",this.props.match.params);
-  this.search=this.props.match.params.search;
-  if(this.search!=null){
-    while(!(/[0-9]|[a-z]/i.test(this.search[0]))){
-      this.search=this.search.substring(1,this.search.length);
+  constructor(props){
+    super(props);
+    console.log("params",this.props.match.params);
+    this.search=this.props.match.params.search;
+    if(this.search!=null){
+      while(!(/[0-9]|[a-z]/i.test(this.search[0]))){
+        this.search=this.search.substring(1,this.search.length);
+      }
     }
+    console.log("USER",this.props.user);
   }
-  console.log("USER",this.props.user);
+
+  reloadTable() {
+      this.refs.table.reload();
+  }
+
+  render(){
+      return(
+          <div>
+              <NavBar user={this.props.user}/>
+              <TeamCreate onNewTeam={this.reloadTable.bind(this)} user={this.props.user }/>
+              <TeamTable ref="table" user={this.props.user} defaultSearch={this.search}/>
+          </div>
+      );
+  }
 }
 
-    reloadTable()
-    {
-        this.refs.table.reload();
-    }
-
-    render(){
-        return(
-            <div>
-                <NavBar user={this.props.user}/>
-                <TeamCreate onNewTeam={this.reloadTable.bind(this)} user={this.props.user }/>
-                <TeamTable ref="table" user={this.props.user} defaultSearch={this.search}/>
-            </div>
-        );
-
-    }
-}
 class TeamCreate extends React.Component{
 
+  constructor(props) {
+    super(props);
+  }
 
-
-    constructor(props) {
-        super(props);
+  getName() {
+    if (this.props.user != GUEST) {
+      return this.props.user;
     }
-
-    getName()
-    {
-        if (this.props.user != GUEST)
-        {
-            return this.props.user;
-        }
-        else
-        {
-            return this.refs.name.value;
-        }
+    else {
+      return this.refs.name.value;
     }
+  }
 
-    addTeam(event) {
-        event.preventDefault();
-        let sport = this.refs.sport.getInput();
-        let name = this.refs.name.getInput();
-        let city = this.refs.city.getInput();
-        let maxPlayers = parseInt(this.refs.maxPlayers.getInput());
-        let team = {
-            sport: sport,
-            name: name,
-            city: city,
-            captain: this.props.user,
-            maxPlayers: maxPlayers
-        };
-        if (this.teamValidate(team) == true)
-        {
-            $('#createTeams').collapse('hide');
-            axios.post('/postteam', team).then(this.props.onNewTeam);
-            this.refs.sport.clear();
-            this.refs.name.clear();
-            this.refs.city.clear();
-            this.refs.maxPlayers.clear();
-        }
-        else
-        {
-            this.displayInputErrors(team);
-        }
+  addTeam(event) {
+    event.preventDefault();
+    let sport = this.refs.sport.getInput();
+    let name = this.refs.name.getInput();
+    let city = this.refs.city.getInput();
+    let maxPlayers = parseInt(this.refs.maxPlayers.getInput());
+    let team = {
+      sport: sport,
+      name: name,
+      city: city,
+      captain: this.props.user,
+      maxPlayers: maxPlayers
+    };
+    if (this.teamValidate(team) == true) {
+      $('#createTeams').collapse('hide');
+      axios.post('maketeam', team).then((doc) => {
+        axios.patch('maketeam', {uid: this.props.user, tid: doc.data.team._id});
+        console.log(doc)
+      }).then(this.props.onNewTeam);
+      //axios.patch('maketeam', {uid: this.props.user, tid: team.name}).then(this.props.onNewTeam);
+      this.refs.sport.clear();
+      this.refs.name.clear();
+      this.refs.city.clear();
+      this.refs.maxPlayers.clear();
     }
-    teamValidate(team)
-    {
-        let isValid = true;
-        if (team.name.trim() == "")
-        {
-            isValid = false;
-        }
-        if (team.city.trim() == "")
-        {
-            isValid = false;
-        }
-        if (team.sport.trim() == "")
-        {
-            isValid = false;
-        }
-        if ( isNaN(team.maxPlayers) || team.maxPlayers < 1 )
-        {
-            isValid = false;
-        }
-        return isValid;
+    else {
+      this.displayInputErrors(team);
     }
-    displayInputErrors(team)
-    {
-        if (team.sport.trim() == "")
-        {
-            this.refs.sport.setError("Please give a non-empty value");
-        }
-        if (team.city.trim() == "")
-        {
-            this.refs.city.setError("Please give a non-empty value");
-        }
-        if (team.name.trim() == "")
-        {
-            this.refs.name.setError("Please give a non-empty value");
-        }
-        if ( isNaN(team.maxPlayers) || game.gameLength < 1 )
-        {
-            this.refs.gameLength.setError("Please input a positive number");
-        }
+  }
+  teamValidate(team) {
+    let isValid = true;
+    if (team.name.trim() == "") {
+      isValid = false;
     }
+    if (team.city.trim() == "") {
+      isValid = false;
+    }
+    if (team.sport.trim() == "") {
+      isValid = false;
+    }
+    if ( isNaN(team.maxPlayers) || team.maxPlayers < 1 ) {
+      isValid = false;
+    }
+    return isValid;
+  }
+  displayInputErrors(team) {
+    if (team.sport.trim() == "") {
+      this.refs.sport.setError("Please give a non-empty value");
+    }
+    if (team.city.trim() == "") {
+      this.refs.city.setError("Please give a non-empty value");
+    }
+    if (team.name.trim() == "") {
+      this.refs.name.setError("Please give a non-empty value");
+    }
+    if ( isNaN(team.maxPlayers) || game.gameLength < 1 ) {
+      this.refs.gameLength.setError("Please input a positive number");
+    }
+  }
 
-    render(){
+  render() {
 
-        return(
-          <div className="container">
-            <button type="button" className="btn btn-primary" data-toggle="collapse"
-              data-target="#createTeams">Create A Team</button>
+      return(
+        <div className="container">
+          <button type="button" className="btn btn-primary" data-toggle="collapse"
+            data-target="#createTeams">Create A Team</button>
 
 
-            <div id="createTeams" className="collapse">
-                <div className="row main">
-                  <div className="panel-heading">
-                   <div className="panel-title text-center">
-                      <h1 className="collapseTitle">Create a team below:</h1>
-                      <hr />
-                    </div>
-                </div>
-                <div className="main-create main-center">
-            <form className="form-horizontal"
-              onSubmit={this.addTeam.bind(this)}>
-
-              <InputField label="Team Name" type="text" ref="name"
-                    placeholder="Team Name" />
-              <InputField label="Activity" type="text" ref="sport"
-                    placeholder="Activity" />
-              <InputField label="City" type="text" ref="city" id="location"
-                    placeholder="Location" />
-              <InputField label="Max # Players" type="number" ref="maxPlayers"
-                    placeholder="Max # Players" min="0" max={MAX_TEAM_SIZE} />
-
-              <div className="form-group">
-
-              <div>
-                <input type="submit" className="btn btn-primary"
-                    value="Create"/>
-                <span></span>
-                <input type="reset" className="btn btn-default" value="Clear"/>
+          <div id="createTeams" className="collapse">
+              <div className="row main">
+                <div className="panel-heading">
+                 <div className="panel-title text-center">
+                    <h1 className="collapseTitle">Create a team below:</h1>
+                    <hr />
+                  </div>
               </div>
-              </div>
-            </form>
-          </div>
+              <div className="main-create main-center">
+          <form className="form-horizontal"
+            onSubmit={this.addTeam.bind(this)}>
+
+            <InputField label="Team Name" type="text" ref="name"
+                  placeholder="Team Name" />
+            <InputField label="Activity" type="text" ref="sport"
+                  placeholder="Activity" />
+            <InputField label="City" type="text" ref="city" id="location"
+                  placeholder="Location" />
+            <InputField label="Max # Players" type="number" ref="maxPlayers"
+                  placeholder="Max # Players" min="0" max={MAX_TEAM_SIZE} />
+
+            <div className="form-group">
+
+            <div>
+              <input type="submit" className="btn btn-primary"
+                  value="Create"/>
+              <span></span>
+              <input type="reset" className="btn btn-default" value="Clear"/>
+            </div>
+            </div>
+          </form>
         </div>
+      </div>
 
-</div>
-</div>
-
-
-        );
-
-    }
+      </div>
+      </div>
+      );
+  }
 }
 class TeamTable extends React.Component {
 
- constructor(props)
-  {
+  constructor(props) {
     super(props);
-  	this.state =
+    this.state =
   	{
-        teams: [],
+      teams: [],
   	  filteredTeams: [],
-        retrieving: false,
-        defaultSearch:null,
+      retrieving: false,
+      defaultSearch:null,
   	}
-  if(this.props.defaultSearch!=null){
-    this.state.defaultSearch=this.props.defaultSearch;
-  }
+
+    if(this.props.defaultSearch!=null){
+      this.state.defaultSearch=this.props.defaultSearch;
+    }
   }
 
-  componentDidMount()
-  {
+  componentDidMount() {
     this.retrieveTeams();
   }
 
 
-    updateSearch(event){
-      this.updateTable(event.target.value);
-    }
-
-    updateTable(search) {
-        this.setState({filteredTeams : this.state.teams.filter(
-            (team) => { return ((team.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
-            (team.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
-            (team.city.toLowerCase().indexOf(search.toLowerCase()) !== -1));
-            })
-        });
-    }
-    updateTableAll(search){
-      this.setState({filteredTeams : this.state.teams.filter(
-          (team) => { return(String(team._id).indexOf(String(search))!==-1)
-
-          })
-      });
+  updateSearch(event) {
+    this.updateTable(event.target.value);
   }
 
-    retrieveTeams() {
-        this.setState({retrieving: true});
-        axios.post('/retrieveteams').then((results)=>{
-            this.setState({teams: results.data, retrieving: false});
-            if(this.state.defaultSearch==null){
-              this.updateTable(this.refs.search.value);
-            }
-            else{
-              this.updateTableAll(this.state.defaultSearch);
-              this.setState({defaultSearch:null});
-            }
+  updateTable(search) {
+    this.setState({filteredTeams : this.state.teams.filter(
+        (team) => { return ((team.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
+        (team.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
+        (team.city.toLowerCase().indexOf(search.toLowerCase()) !== -1));
+        })
+    });
+  }
+  updateTableAll(search){
+    this.setState({filteredTeams : this.state.teams.filter(
+      (team) => { return(String(team._id).indexOf(String(search))!==-1)})
+    });
+  }
 
-        });
+  retrieveTeams() {
+    this.setState({retrieving: true});
+    axios.post('/retrieveteams').then((results)=>{
+        this.setState({teams: results.data, retrieving: false});
+        if(this.state.defaultSearch==null){
+          this.updateTable(this.refs.search.value);
+        }
+        else{
+          this.updateTableAll(this.state.defaultSearch);
+          this.setState({defaultSearch:null});
+        }
+    });
+  }
 
-
-    }
-    reload()
-    {
-        this.retrieveTeams();
-    }
-
-
+  reload() {
+      this.retrieveTeams();
+  }
 
   render() {
-    if (this.state.retrieving == true)
-    {
+    if (this.state.retrieving == true) {
         return (<h2 className="retrieving">Retrieving Teams...</h2>);
     }
     else return (
@@ -281,25 +254,21 @@ class TeamTable extends React.Component {
 	  </tbody>
       </table>
       </div>
-	);
-
+	   );
   }
-
 }
 
 export class TeamRow extends React.Component {
 
-  joinTeam()
-  {
-    axios.post('/jointeam', {user:this.props.user, teamId:this.props.team._id});
+  joinTeam() {
+    axios.patch('/maketeam', {uid: this.props.user, tid: this.props.team._id});
+    axios.patch('/team:user', {user:this.props.user, teamId:this.props.team._id});
   }
   leaveTeam(){
-    axios.patch('/team', {user:this.props.user, teamId:this.props.team._id});
+    axios.patch('/remove:team', {user:this.props.user, teamId:this.props.team._id});
   }
 
-  getJoinLeaveButton()
-  {
-
+  getJoinLeaveButton() {
     if (this.props.team.members.includes(this.props.user)) {
       return (
         <input type="button"
@@ -317,7 +286,6 @@ export class TeamRow extends React.Component {
             onClick={this.joinTeam.bind(this)} value="Join"/>
       );
     }
-
   }
 
   render(){
