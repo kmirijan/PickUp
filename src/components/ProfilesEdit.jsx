@@ -53,7 +53,7 @@ class ProfileEdit extends React.Component{
 				this.props.history.push("/user"+this.props.username);
 			});
 		}
-
+//remove friend from friend list
 	removeFriend(friend){
 		console.log("remove friend", friend)
 		if(confirm("remove "+friend+" ?")){
@@ -72,6 +72,7 @@ class ProfileEdit extends React.Component{
 			return;
 		}
 	}
+	//generates friends list
 	processFriends(f){
 		return(
 			<div>
@@ -88,6 +89,7 @@ class ProfileEdit extends React.Component{
 			</div>
 		)
 	}
+	//generates friends list
 	friendsList(){
 		if(this.state.friends==undefined){return}
 		var friends=this.state.friends.filter(
@@ -107,8 +109,8 @@ class ProfileEdit extends React.Component{
 	)
 }
 
+//set password prompt
 changePasswordPrompt(){
-//  this.refs.changepassword.setAttribute("disabled","disabled");
 	this.setState({
 		passwordPrompt:[
 			<div className="passwordChange">
@@ -146,6 +148,7 @@ changePasswordPrompt(){
 //  this.refs.changepassword.removeAttribute("disabled");
 }
 
+//change password
 changePassword(oldPassword,newPassword){
 	if(newPassword.length<8){
 		this.setState({passwordError:"Password must be at least 8 characters long"})
@@ -171,7 +174,7 @@ changePassword(oldPassword,newPassword){
 	}
 
 }
-
+//get user values
 componentDidMount(){
 	var usrnm=this.props.username;
 	while(!(/[a-z]/i.test(usrnm[0]))){
@@ -198,8 +201,8 @@ componentDidMount(){
 	});
 
 }
-componentDidUpdate(prevProps,prevState){
-}
+
+//change picture, only accepts jpg and png
 changePicture(e){
 	const img=e.target.files[0];
 	var type =""
@@ -212,6 +215,7 @@ changePicture(e){
 		console.log("png")
 	}
 	else{
+		alert("jpg and png only");
 		console.log("err")
 	}
 	var data=new FormData();

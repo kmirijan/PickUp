@@ -105,7 +105,7 @@ class Routes extends React.Component{
     }
 }
 
-
+//deprecated
 function getCurrentUser()
 {
     let user = localStorage.getItem("user");
@@ -120,6 +120,7 @@ function getCurrentUser()
     }
 }
 
+//wrapper around signup component to display navbar
 class SignUpWrap extends React.Component{
   render(){
     return(
@@ -130,6 +131,10 @@ class SignUpWrap extends React.Component{
     )
   }
 }
+
+//if requested user is valid, load the page. Otherwise, redirect to 404
+//if it is your own user, direct to personal profile pages
+//otherwise, direct to public
 class User extends React.Component{
 	constructor(props){
 		super(props);
@@ -247,7 +252,7 @@ class Edit extends React.Component{
 	}
 }
 
-
+//render game page
 class RenderGamePage extends React.Component{
   constructor(props){
     super(props);
@@ -260,7 +265,6 @@ class RenderGamePage extends React.Component{
     this.loading=true;
   }
   componentWillMount(){
-    console.log("hello")
     axios({
       method:"post",
       url:"/isgame",
@@ -274,6 +278,7 @@ class RenderGamePage extends React.Component{
     })
   }
   render(){
+    //checks if it's a valid game
     console.log("gametrue",this.isGame);
     if(this.isGame==true){
 
@@ -296,6 +301,7 @@ class LogOut extends React.Component{
   }
 	componentDidMount(){
     const cookies = new Cookies();
+    //delete key from browser
     axios({
       url:"/logout-test",
       method:"delete",
@@ -303,12 +309,10 @@ class LogOut extends React.Component{
         key:cookies.get("key")
       }
     }).then(()=>{
-      //localStorage.setItem("key","");
 
       cookies.set("key","",{path:"/"} );
       this.loading=false;
-      //location.reload(false);
-      //window.onload(this.props.history.push("/signin"));
+
       this.props.updateUser(); // update the user value in Routes
       this.props.history.push("/signin");
       location.reload(false);
