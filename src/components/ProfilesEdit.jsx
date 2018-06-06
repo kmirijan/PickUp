@@ -7,6 +7,7 @@ class ProfileEdit extends React.Component{
 	constructor(props){
 		super(props);
 		console.log("USER",this.props.user);
+		//function binding
 		this.save=this.save.bind(this);
 		this.profile=this.profile.bind(this);
 		this.friendsList=this.friendsList.bind(this);
@@ -30,10 +31,12 @@ class ProfileEdit extends React.Component{
       showPasswordBox:[]
 		}
 	}
+	//redirects to profile
 	profile(){
 		this.props.history.push("/user:"+this.props.username);
 	}
 
+	//save profile after changing
 	save(){
 			axios({
 				url:"/saveprofile",

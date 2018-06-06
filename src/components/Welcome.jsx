@@ -13,10 +13,10 @@ class Welcome extends React.Component{
 
   render(){
     return(
-    <div>
-      <h1>Welcome, {this.props.user},!</h1>
-      <div><Link to={'/map:'}>BEGIN PLAYING</Link></div>
-  </div>
+      <div>
+        <h1>Welcome, {this.props.user},!</h1>
+        <div><Link to={'/map:'}>BEGIN PLAYING</Link></div>
+      </div>
     );
   }
 }

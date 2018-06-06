@@ -7,7 +7,6 @@ var {TeamPage}=require("./TeamPage.jsx");
 var {CurrentTeamGames}=require("./CurrentTeamGames.jsx");
 var {Users}=require("../helpers/Users.jsx");
 var{GamePage}=require("./GamePage.jsx");
-var{ProfileSettings}=require("./ProfilesSettings.jsx");
 var axios=require("axios");
 import loadImg from "../../dist/load.gif"
 require("../css/App.css");
@@ -247,32 +246,7 @@ class Edit extends React.Component{
 		}
 	}
 }
-class Settings extends React.Component{
-  constructor(props){
-    super(props);
-  }
-	render(){
-		var usrnm=this.props.match.params.username;
-		while(!(/[a-z]/i.test(usrnm[0]))){
-			usrnm=usrnm.substring(1,usrnm.length);
-		}
-		if(this.props.user==usrnm)
-		{
-			return(
-				<div>
-					<NavBar user={this.props.user}/>
-					<ProfileSettings
-						username={usrnm}
-						history={this.props.history}
-            user={this.props.user}
-					/>
-				</div>
-			)}
-		else{
-			return(<_404/>)
-		}
-	}
-}
+
 
 class RenderGamePage extends React.Component{
   constructor(props){
