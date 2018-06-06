@@ -131,7 +131,6 @@ export class GameTable extends React.Component{
 }
 
 export class Game extends React.Component {
-
   joinGame() {
     axios.patch('/game:user', {uid: this.props.user, gid: this.props.game.id});
     axios.patch('/user:game', {uid: this.props.user, gid: this.props.game.id});
@@ -163,7 +162,25 @@ export class Game extends React.Component {
       );
     }
   }
-
+  getWeather(lat,lng){
+    console.log("lat",lat,"lng",lng)
+    axios({
+      url:"/getweather",
+      method:"post",
+      data:{
+        lat:lat,
+        lng:lng
+      }
+    }).then((res)=>{
+      if(res.data.error!="none"){
+        alert(res.data.error);
+      }
+      else{
+        let message=res.data.summary+", "+res.data.temperature+" degrees"
+        alert(message)
+      }
+    })
+  }
   render(){
     return(
         <tr>
@@ -172,6 +189,19 @@ export class Game extends React.Component {
           <td>{this.props.game.location}</td>
           <td>{this.getJoinLeaveButton()}</td>
           <td>{this.props.game.players.length}</td>
+          <td>
+            <input
+              type="button"
+              className="btn btn-danger btn-md"
+              onClick={
+                ()=>{
+                  this.getWeather(this.props.game.coords.coordinates[0],this.props.game.coords.coordinates[1])
+                }
+              }
+              value="raincheck"
+            />
+          </td>
+
           <td><Link to={"/game:"+this.props.game.id}>Details</Link></td>
         </tr>
     );

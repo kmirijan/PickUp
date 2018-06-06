@@ -247,22 +247,30 @@ app.post("/postgames", (req, res) => {
     endTime: req.body.startTime + req.body.gameLength
   });
 
-  // weather.getWeather(req.body.lat, req.body.lng, (errorMessage, weatherResults) => {
-	// 		if(errorMessage){
-	// 			console.log(errorMessage);
-	// 		}
-	// 		else{
-	// 			console.log(`It is currently ${weatherResults.temperature}`);
-	// 			console.log(`It feels like ${weatherResults.apparentTemperature}`);
-	// 		}
-	// })
+
   game.save().then((game) => {
       res.status(200).send({game});
     }, (e) => {
       res.status(400).send(e);
   })
 });
-
+app.post("/getweather",(req,res)=>{
+  console.log("request");
+  weather.getWeather(req.body.lat, req.body.lng, (errorMessage, summary, temperature) => {
+		if(errorMessage){
+		  res.json({
+        error:"raincheck unavailable"
+      })
+ 		}
+		else{
+			res.json({
+        error:"none",
+        summary:summary,
+        temperature:temperature
+      })
+		}
+  })
+})
 // add user to game
 app.patch('/game:user', (req, res) => {
   Game.findOneAndUpdate(

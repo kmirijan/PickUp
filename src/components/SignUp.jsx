@@ -64,7 +64,7 @@ signUp(e){
           "password":password,
           "alias": username,
           "bio":"",
-          "pic":"",
+          "pic":"/profilepictures/0default.png",
           "games":[],
           "teamgames":[],
           "teams":[],
