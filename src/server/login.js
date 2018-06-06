@@ -91,7 +91,7 @@ exports.signIn=(data,res)=>{
       if(bcrypt.compareSync(data["password"],hash)){
         var salt=bcrypt.genSaltSync(10);
         var key=String(bcrypt.hashSync(arr[0]["username"],salt));
-        //cannot have $ in cookies
+        //removes $ in cookies. may not be needed
         var keyReturn=replaceAll(key,'$','0');
         console.log(keyReturn);
         loggedin.update(

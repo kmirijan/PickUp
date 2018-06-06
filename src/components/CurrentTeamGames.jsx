@@ -14,7 +14,9 @@ export class CurrentTeamGames extends React.Component{
     constructor(props) {
         super(props);
         console.log("params",this.props.match.params);
+        //get search parameters
         this.search=this.props.match.params.search;
+        //trim search parameters to get rid of : or =
         if(this.search!=null) {
           while(!(/[0-9]|[a-z]/i.test(this.search[0]))){
       			this.search=this.search.substring(1,this.search.length);
@@ -393,6 +395,7 @@ class Game extends React.Component {
     return teams;
   }
 
+//show drop down for teams when join button is pressed
   selectTeamJoin(team) {
     console.log("joining with team")
     if(confirm("join with "+team["name"]+"?")){
@@ -416,6 +419,7 @@ class Game extends React.Component {
     }
   }
 
+//show drop down for teams when leave button is pressed
   showTeamGamesLeave() {
     if(this.props.ownedteams.length==0){
       return(<div>You have no teams</div>);

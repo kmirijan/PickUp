@@ -109,8 +109,8 @@ class ProfileEdit extends React.Component{
 	)
 }
 
+//set password prompt
 changePasswordPrompt(){
-//  this.refs.changepassword.setAttribute("disabled","disabled");
 	this.setState({
 		passwordPrompt:[
 			<div className="passwordChange">
@@ -148,6 +148,7 @@ changePasswordPrompt(){
 //  this.refs.changepassword.removeAttribute("disabled");
 }
 
+//change password
 changePassword(oldPassword,newPassword){
 	if(newPassword.length<8){
 		this.setState({passwordError:"Password must be at least 8 characters long"})
@@ -173,7 +174,7 @@ changePassword(oldPassword,newPassword){
 	}
 
 }
-
+//get user values
 componentDidMount(){
 	var usrnm=this.props.username;
 	while(!(/[a-z]/i.test(usrnm[0]))){
@@ -200,8 +201,8 @@ componentDidMount(){
 	});
 
 }
-componentDidUpdate(prevProps,prevState){
-}
+
+//change picture, only accepts jpg and png
 changePicture(e){
 	const img=e.target.files[0];
 	var type =""
@@ -214,6 +215,7 @@ changePicture(e){
 		console.log("png")
 	}
 	else{
+		alert("jpg and png only");
 		console.log("err")
 	}
 	var data=new FormData();

@@ -5,7 +5,7 @@ import NavBar from "./NavBar"
 require("../css/gamePage.css")
 //https://medium.com/dailyjs/combining-react-with-socket-io-for-real-time-goodness-d26168429a34
 import io from 'socket.io-client';
-import MapIndiv from "./MapIndiv";
+
 
 
 
