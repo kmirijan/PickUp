@@ -8,6 +8,7 @@ const mongoose=require("mongoose");
 const bcrypt=require("bcrypt");
 const DEFAULT=0;
 //mongoose.connect("mongodb://localhost:27017");
+/*
 exports.reqFriend=(user,friend,res)=>{
 	mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -24,11 +25,11 @@ exports.reqFriend=(user,friend,res)=>{
 					break;
 				}
 			}
-			/*if(req=true){
+			if(req=true){
 				exports.acceptFriend(user,friend,res);
 				res.end();
 				client.close();
-			}*/
+			}
 //			else{
 				users.updateOne({"username":user},{
 					$push:{"friends":{"username":friend,"req":"pending"}}
@@ -43,7 +44,8 @@ exports.reqFriend=(user,friend,res)=>{
 
 	})
 }
-/*
+*/
+
 exports.reqFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -95,7 +97,7 @@ exports.reqFriend=(user,friend,res)=>{
 
 	});
 }
-*/
+/*
 exports.acceptFriend=(user,friend,res)=>{
 	mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -133,7 +135,8 @@ exports.acceptFriend=(user,friend,res)=>{
 
 	})
 }
-/*
+*/
+
 exports.acceptFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -177,8 +180,8 @@ exports.acceptFriend=(user,friend,res)=>{
 		});
 	});
 }
-*/
 
+/*
 exports.declineFriend=(user,friend,res)=>{
 	mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -200,7 +203,8 @@ exports.declineFriend=(user,friend,res)=>{
 
 	})
 }
-/*
+*/
+
 exports.declineFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -241,7 +245,7 @@ exports.declineFriend=(user,friend,res)=>{
 		});
 	});
 }
-*/
+/*
 exports.removeFriend=(user,friend,res)=>{
 	mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -269,7 +273,8 @@ exports.removeFriend=(user,friend,res)=>{
 
 	})
 }
-/*
+*/
+
 exports.removeFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -310,7 +315,7 @@ exports.removeFriend=(user,friend,res)=>{
 		});
 	});
 }
-*/
+
 exports.isFriend=(user,friend,res)=>{
 	var myUsers ={};
 	var tf=mongo.connect(url,(err,client)=>{
