@@ -1,4 +1,4 @@
-#profile{
+.profile{
 	width:100%;
 	display:table;
 	clear:both;
@@ -6,33 +6,33 @@
 	margin: auto;
 	text-align:center;
 }
-#panel{
+.panel{
 	width: 30%;
 	float: left;
 	margin-top: 20px;
 	margin-left: 10px;
 }
-#fpanel{
+.fpanel{
 	width: 65%;
 	float:right;
 	margin-top: 40px;
 	margin-right: 10px;
 }
 
-#card{
+.card{
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 	max-width: 350px;
 	padding-top: 10px;
 	padding-bottom: 20px;
 	margin-top: 20px;
 }
-#picture{
+.picture{
 	width: 185px;
 	height: 185px;
 	background-color:gray;
 }
 
-#gamesText{
+.gamesText{
 	padding-top: 20px;
 	text-align: left;
 	padding-left: 20px;
@@ -63,10 +63,10 @@
 	padding-bottom: 10px;
 }
 
-#leftEntry{
+.leftEntry{
 	padding-left: 30px;
 }
-#rightEntry{
+.rightEntry{
 	padding-right: 10px;
 }
 
@@ -74,30 +74,23 @@ td{
 	padding-left: 30px;
 }
 
-#headerPic{
+.headerPic{
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 	margin-top: 20;
 	margin-left: 10px;
 	margin-right: 10px;
 }
 
-#feedPic{
+.feedPic{
 	width: 700px;
 	height: 175px;
   padding: 7px 7px 7px 7px;
 }
 
-#mask:hover{
-	background-color:rgba(0, 0, 0, 0.4);
-}
-#mask:hover #changeimg{
-	visibility:visible;
-	color:white;
-}
-#edit{
+.edit{
 	text-align:center;
 }
-#settings{
+.settings{
 	text-align:center;
 }
 .infoHeader{
@@ -107,55 +100,61 @@ td{
 	padding-bottom: 10px;
 }
 
-#username{
+.friendsText{
+	font-size: 15px;
+}
+
+.username{
 	margin:auto;
 	text-align:left;
 	padding-left: 20px;
 }
-#email{
+.email{
 	margin:auto;
 	text-align:left;
 	padding-left: 20px;
 }
-#alias{
+.alias{
 	position: absolute;
 	bottom: 20px;
 	left: 240px;
 	color: white;
 	font-size: 30px;
 }
-#bio{
+.bio{
 	margin:auto;
 	text-align:left;
 	padding-left: 20px;
+	padding-right: 20px;
 	padding-bottom: 20px;
+	padding-top: 10px;
 }
-#expand{
+.expand{
 	width:111px;
 	margin:auto;
 }
-#gamesList{
+.gamesList{
 	font-size:20px;
 	text-align:center;
 }
 
-#friendsList{
+.friendsList{
 	font-size:20px;
 	text-align:center;
 }
 
-#feed{
+.feed{
 	text-align:center;
 }
 
-#friendslist{
+.friendslist{
 	width: 30%;
 	margin: auto;
 	text-align:center;
 }
-#addfriend{
+.addfriend{
 	text-align:center;
 }
-#gamesmade{
+.gamesmade{
 	width:100%;
 }
