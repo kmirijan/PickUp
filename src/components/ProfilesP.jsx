@@ -406,6 +406,8 @@ class GamesList extends React.Component
 					</tr>
         )
     }
+
+		//displays the team games that the user has made
 		displayTeamGamesMade(game){
 			return (
 				<tr key={game.id+"m"}>
@@ -420,6 +422,8 @@ class GamesList extends React.Component
 				</tr>
 			)
 		}
+
+		//displays the teams that the user is a part of
 		displayTeam(team)
     {
         return (
@@ -431,6 +435,8 @@ class GamesList extends React.Component
 					</tr>
         )
     }
+
+		//displays the teams that the user has made
 		displayTeamsMade(team){
 			return (
 				<tr key={team._id+"m"}>
