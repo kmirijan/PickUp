@@ -11,16 +11,15 @@ const MAX_TEAM_SIZE = 20;
 class TeamPage extends React.Component{
   constructor(props){
     super(props);
-    console.log("params",this.props.match.params);
     this.search=this.props.match.params.search;
     if(this.search!=null){
       while(!(/[0-9]|[a-z]/i.test(this.search[0]))){
         this.search=this.search.substring(1,this.search.length);
       }
     }
-    console.log("USER",this.props.user);
   }
-
+  
+  // helper to allow TeamCreate to force a refresh of TeamTable when a new game is made
   reloadTable() {
       this.refs.table.reload();
   }
@@ -29,7 +28,7 @@ class TeamPage extends React.Component{
       return(
           <div>
               <NavBar user={this.props.user}/>
-              <TeamCreate onNewTeam={this.reloadTable.bind(this)} user={this.props.user }/>
+              <TeamCreate onNewTeam={this.reloadTable.bind(this)} user={this.props.user}/>
               <TeamTable ref="table" user={this.props.user} defaultSearch={this.search}/>
           </div>
       );
@@ -42,15 +41,7 @@ class TeamCreate extends React.Component{
     super(props);
   }
 
-  getName() {
-    if (this.props.user != GUEST) {
-      return this.props.user;
-    }
-    else {
-      return this.refs.name.value;
-    }
-  }
-
+  // Add a team based on the given inputs
   addTeam(event) {
     event.preventDefault();
     let sport = this.refs.sport.getInput();
@@ -64,7 +55,10 @@ class TeamCreate extends React.Component{
       captain: this.props.user,
       maxPlayers: maxPlayers
     };
+
+    // Makes sure team is a valid team database object
     if (this.teamValidate(team) == true) {
+      // Hide the team creation area on succesful game creation
       $('#createTeams').collapse('hide');
       axios.post('maketeam', team).then((doc) => {
         axios.patch('maketeam', {uid: this.props.user, tid: doc.data.team._id});
@@ -79,6 +73,8 @@ class TeamCreate extends React.Component{
       this.displayInputErrors(team);
     }
   }
+
+  // Ensures that the user-selected fields of 'team' are valid
   teamValidate(team) {
     let isValid = true;
     if (team.name.trim() == "") {
@@ -95,6 +91,8 @@ class TeamCreate extends React.Component{
     }
     return isValid;
   }
+
+  // Displays requests for valid inputs for any invalid inputs
   displayInputErrors(team) {
     if (team.sport.trim() == "") {
       this.refs.sport.setError("Please give a non-empty value");
@@ -110,8 +108,8 @@ class TeamCreate extends React.Component{
     }
   }
 
+  // Draw the collapsible Create Team section
   render() {
-
       return(
         <div className="container">
           <button type="button" className="btn btn-primary" data-toggle="collapse"
@@ -174,15 +172,17 @@ class TeamTable extends React.Component {
     }
   }
 
+  // Retrieve teams for the table to display
   componentDidMount() {
     this.retrieveTeams();
   }
 
-
+  // update the table on a new search
   updateSearch(event) {
     this.updateTable(event.target.value);
   }
 
+  // Refilter the teams based on 'search'
   updateTable(search) {
     this.setState({filteredTeams : this.state.teams.filter(
         (team) => { return ((team.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
@@ -191,12 +191,16 @@ class TeamTable extends React.Component {
         })
     });
   }
+
+  // Allow the selection of a specific team by ID
+  // Used to display a single team from e.g. a user's profile
   updateTableAll(search){
     this.setState({filteredTeams : this.state.teams.filter(
       (team) => { return(String(team._id).indexOf(String(search))!==-1)})
     });
   }
 
+  // Retrieve all the teams from the server
   retrieveTeams() {
     this.setState({retrieving: true});
     axios.post('/retrieveteams').then((results)=>{
@@ -211,10 +215,12 @@ class TeamTable extends React.Component {
     });
   }
 
+  // Renaming for clarity to allow other React Components to reload the table
   reload() {
       this.retrieveTeams();
   }
 
+  // Display the table or "Retrieving" if it is currently retrieving the teams from server
   render() {
     if (this.state.retrieving == true) {
         return (<h2 className="retrieving">Retrieving Teams...</h2>);
@@ -230,27 +236,27 @@ class TeamTable extends React.Component {
         <input className = "btn btn-primary" type="button" value="Refresh"
           onClick={this.retrieveTeams.bind(this)}
           style={{margin:"auto"}}/>
-    </div>
+     </div>
 
 	   <table className="table table-bordered table-hover">
-	   <thead>
-       <tr>
-	  <th>Team</th>
-      <th>Sport</th>
-	  <th>City</th>
-      <th>Captain</th>
-	  <th>Join</th>
-    <th>Players</th>
-    <th></th>
-	</tr>
+	     <thead>
+         <tr>
+    	    <th>Team</th>
+          <th>Sport</th>
+      	  <th>City</th>
+          <th>Captain</th>
+    	    <th>Join</th>
+          <th>Players</th>
+          <th></th>
+	      </tr>
       </thead>
       <tbody>
-	      {
-            this.state.filteredTeams.map((team)=>{
-                return (<TeamRow team = {team} user={this.props.user} key={team._id}/>);
-            })
-         }
-	  </tbody>
+	        {
+              this.state.filteredTeams.map((team)=>{
+                  return (<TeamRow team = {team} user={this.props.user} key={team._id}/>);
+              })
+          }
+	      </tbody>
       </table>
       </div>
 	   );
@@ -259,14 +265,21 @@ class TeamTable extends React.Component {
 
 export class TeamRow extends React.Component {
 
+  // Allow a user to join a team
   joinTeam() {
     axios.patch('/maketeam', {uid: this.props.user, tid: this.props.team._id});
     axios.patch('/team:user', {user:this.props.user, teamId:this.props.team._id});
   }
+
+  // Allow a user to leave a team
+  // If the user is the captain, then the team is deleted
   leaveTeam(){
     axios.patch('/remove:team', {user:this.props.user, teamId:this.props.team._id});
   }
 
+  /*  Shows a Join button, Leave button, or "FULL" depending on if the user is in the team
+      or it is at capacity
+  */
   getJoinLeaveButton() {
     if (this.props.team.members.includes(this.props.user)) {
       return (
@@ -287,6 +300,7 @@ export class TeamRow extends React.Component {
     }
   }
 
+  // Display the team in the table
   render(){
     return(
         <tr>
