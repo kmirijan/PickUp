@@ -47,6 +47,7 @@ export class CurrentTeamGames extends React.Component{
         })
     }
 
+///////////set location  for game
     componentDidMount() {
        let input = document.getElementById('location');
        axios({
@@ -63,6 +64,8 @@ export class CurrentTeamGames extends React.Component{
        })
     }
 
+
+/////choose a team to make a game
     selectTeam(team){
       if(confirm("select "+team["name"]+"?")){
         this.setState({
@@ -71,6 +74,8 @@ export class CurrentTeamGames extends React.Component{
       }
     }
 
+
+/////Toggle dropdown for teams
     teamDropDown(){
       if(this.ownedteams.length==0){
         return(<div>You have no teams</div>);
