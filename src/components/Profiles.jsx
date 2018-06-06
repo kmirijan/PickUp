@@ -191,6 +191,8 @@ class Profile extends React.Component{
 </ul>
 		)
 	}
+
+	//Updates component
 	componentDidUpdate(prevProps,prevState){
 		if(this.state.expanded==true && this.state.expanded!=prevState.expanded)
 			this.refs.bio.innerHTML=this.state.long;
