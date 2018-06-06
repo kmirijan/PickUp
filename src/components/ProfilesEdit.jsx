@@ -53,7 +53,7 @@ class ProfileEdit extends React.Component{
 				this.props.history.push("/user"+this.props.username);
 			});
 		}
-
+//remove friend from friend list
 	removeFriend(friend){
 		console.log("remove friend", friend)
 		if(confirm("remove "+friend+" ?")){
@@ -72,6 +72,7 @@ class ProfileEdit extends React.Component{
 			return;
 		}
 	}
+	//generates friends list
 	processFriends(f){
 		return(
 			<div>
@@ -88,6 +89,7 @@ class ProfileEdit extends React.Component{
 			</div>
 		)
 	}
+	//generates friends list
 	friendsList(){
 		if(this.state.friends==undefined){return}
 		var friends=this.state.friends.filter(
