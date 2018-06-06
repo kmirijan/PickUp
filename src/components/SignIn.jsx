@@ -23,7 +23,7 @@ signIn(e){
   e.preventDefault();
   //this.refs.signin.setAttribute("disabled","disabled");
   console.log('this.state', this.state);
-
+  //gets email and password
   const{email, password}=this.state;
    axios({
       url:"/signin-test",
@@ -36,16 +36,17 @@ signIn(e){
       if(res.data["success"]==true){
         //https://www.robinwieruch.de/local-storage-react/
         //localStorage.setItem("key",res.data["key"]);
+        //store login key in cookies
         const cookies = new Cookies();
         cookies.set("key",res.data["key"],{path:"/"});
         this.props.updateUser(); // update the user value in Routes
         console.log("mykey",cookies.get("key"))
-      //  location.reload(false);
         this.props.history.push("/user:"+res.data["user"]);
       }
       else
       {
         console.log("sign in failed");
+        //sign in fail
         this.setState({
           error:{
             message:"sign in failed"
@@ -54,7 +55,6 @@ signIn(e){
         this.refs.signin.removeAttribute("disabled");
         this.props.history.push("/signin");
         location.reload(false);
-
       }
     });
 
