@@ -16,6 +16,7 @@ const busboy=require("connect-busboy");
 const util = require('util')
 const app=express();
 const http=require("http").Server(app);
+const expressStaticGzip = require("express-static-gzip");
 
 //deploy app
 const port=process.env.PORT;
@@ -45,10 +46,11 @@ var {User} = require('./db/User.js');
 var {Team} = require('./db/team.js');
 
 /*configurations*/
-app.use(express.static("./dist"));
+//app.use(express.static("./dist"));
 app.use(bodyParser.json());
 app.use(busboy());
 app.use("/profilepictures",express.static("./dist/profilePictures"));
+app.use(expressStaticGzip("dist"));
 
 /*sends index.html to any link*/
 app.get("*",(req,res)=>{
