@@ -23,10 +23,12 @@ class SignUp extends React.Component{
 
 signUp(e){
   e.preventDefault();
+  //prevent button from being clicked multiple times
   this.refs.signup.setAttribute("disabled","disabled");
   const{email, password, username}=this.state;
   this.refs.signup.setAttribute("disabled","disabled");
   /*http://codetheory.in/using-the-node-js-bcrypt-module-to-hash-and-safely-store-passwords/*/
+  //check for email format matching
   if(email.match(/.*@.*/)==null){
     this.refs.signup.removeAttribute("disabled");
     this.setState({
@@ -35,7 +37,7 @@ signUp(e){
       }
     })
     this.refs.signup.removeAttribute("disabled");
-  }
+  }//password length must be at least 8
   else if(password.length<8){
     this.refs.signup.removeAttribute("disabled");
     this.setState({
@@ -64,7 +66,7 @@ signUp(e){
           "password":password,
           "alias": username,
           "bio":"",
-          "pic":"",
+          "pic":"/profilepictures/0default.png",
           "games":[],
           "teamgames":[],
           "teams":[],

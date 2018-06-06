@@ -143,6 +143,7 @@ class ProfileP extends React.Component{
 				'friend':friend,
 			}
 		}).then((res)=>{
+			//updates state afterwards
 			this.setState(res.data);
 			this.refs.friendaccept.removeAttribute('disabled');
 		})
@@ -160,6 +161,7 @@ class ProfileP extends React.Component{
 			}
 		}).then((res)=>{
 			this.setState(res.data);
+			//updates state afterwards
 			this.refs.frienddecline.removeAttribute('disabled');
 		})
 	}
