@@ -184,7 +184,7 @@ exports.declineFriend=(user,friend,res)=>{
 		if(err)throw new Error(err);
 		var users=client.db("pickup").collection("users");
 		//checks if user is in friend's friend list
-		exports.removefriend(user,friend,res);
+		exports.removeFriend(user,friend,res);
 		users.updateOne({"username":user},{
 			$pull:{
 				"feed":{"type":"friendreq","sender":friend}
@@ -247,7 +247,6 @@ exports.removeFriend=(user,friend,res)=>{
 		if(err)throw new Error(err);
 		var users=client.db("pickup").collection("users");
 		//checks if user is in friend's friend list
-		exports.removefriend(user,friend,res);
 		users.updateOne({"username":user},{
 			$pull:{
 				"friends":{"username":friend}
