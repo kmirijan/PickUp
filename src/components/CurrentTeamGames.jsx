@@ -44,6 +44,7 @@ export class CurrentTeamGames extends React.Component{
           console.log(this.playerteams);
         })
     }
+
     componentDidMount() {
        let input = document.getElementById('location');
        axios({
@@ -59,6 +60,7 @@ export class CurrentTeamGames extends React.Component{
          console.log(this.playerteams);
        })
     }
+
     selectTeam(team){
       if(confirm("select "+team["name"]+"?")){
         this.setState({
@@ -85,7 +87,6 @@ export class CurrentTeamGames extends React.Component{
       return teams;
     }
 
-
     addGame(event) {
         event.preventDefault();
         if(this.state.teamselected==null){
@@ -103,46 +104,40 @@ export class CurrentTeamGames extends React.Component{
             user: this.props.user,
             teamId:team._id
         };
-        if (this.gameIsValid(game) == true)
-        {
+        if (this.gameIsValid(game) == true) {
             $('#createTeamGames').collapse('hide');
             console.log(game);
             axios.post('/postTeamGame', game);
             axios.patch('/postTeamGame', {uid:this.props.user, tgid: game.gameId}).then( () =>{refreshTable()});
             this.refs.sport.clear();
             this.refs.location.clear();
-        }
-        else
-        {
+        } else {
             this.displayInputErrors(game);
         }
     }
-    gameIsValid(game)
-    {
+
+    gameIsValid(game) {
         let isValid = true;
-        if (game.sport.trim() == "")
-        {
+        if (game.sport.trim() == "") {
             isValid = false;
         }
-        if (game.location.trim() == "")
-        {
+        if (game.location.trim() == "") {
             isValid = false;
         }
         return isValid;
     }
-    displayInputErrors(game)
-    {
-        if (game.sport.trim() == "")
-        {
+
+    displayInputErrors(game) {
+        if (game.sport.trim() == "") {
             this.refs.sport.setError("Please give a non-empty name");
         }
-        if (game.location.trim() == "")
-        {
+        if (game.location.trim() == "") {
             this.refs.location.setError("Please give a non-empty location");
         }
     }
+
     togglePrivate(){
-      if(this.state.isprivate==false){
+      if(this.state.isprivate==false) {
         this.setState({
           isprivate:true
         })
@@ -153,15 +148,17 @@ export class CurrentTeamGames extends React.Component{
         });
       }
     }
-    teamSelected(){
+
+    teamSelected() {
       if(this.state.teamselected==null){
         return(<h3>No team selected</h3>)
       }
-      else{
+      else {
         return(<h3>{this.state.teamselected.name}</h3>)
       }
     }
-    render(){
+
+    render() {
         this.ownedteams=this.state.playerteams.filter((team)=>{
           return(team["captain"]==this.props.user)
         })
@@ -291,29 +288,24 @@ class GameTable extends React.Component{
     refreshTable = () => {console.log("refreshTable unBound");}
   }
 
-  userTeams() {
-
+  updateSearch(event){
+    this.updateTable(event.target.value);
   }
 
-    updateSearch(event){
-      this.updateTable(event.target.value);
-    }
+  updateTable(search) {
+    this.setState({filteredGames : this.state.games.filter(
+      (game) => { return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
+        (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
+        (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1))||
+        (String(game.id).indexOf(String(search))!==-1);
+      })
+    });
+  }
 
-    updateTable(search) {
-        this.setState({filteredGames : this.state.games.filter(
-            (game) => { return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
-            (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
-            (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1))||
-            (String(game.id).indexOf(String(search))!==-1);
-            })
-        });
-    }
-    updateTableAll(search){
-      this.setState({filteredGames : this.state.allGames.filter(
-          (game) => { return(String(game.id).indexOf(String(search))!==-1)
-
-          })
-      });
+  updateTableAll(search){
+    this.setState({filteredGames : this.state.allGames.filter(
+      (game) => { return(String(game.id).indexOf(String(search))!==-1) })
+    });
   }
 
   retrieveGames() {
@@ -333,10 +325,8 @@ class GameTable extends React.Component{
       });
   }
 
-
   render() {
-    if (this.state.retrieving == true)
-    {
+    if (this.state.retrieving == true) {
         return (<h2 className="retrieving">Retrieving Games...</h2>);
     }
     else return (
@@ -376,13 +366,11 @@ class GameTable extends React.Component{
       </div>
 
 	);
-
   }
-
 }
 
 class Game extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.showTeamGamesJoin=this.showTeamGamesJoin.bind(this);
     this.showTeamGamesLeave=this.showTeamGamesLeave.bind(this);
@@ -391,7 +379,7 @@ class Game extends React.Component {
     this.ownedteams=[];
   }
 
-   showTeamGamesJoin(){
+   showTeamGamesJoin() {
     if(this.props.ownedteams.length==0){
       return(<div>You have no teams</div>);
     }
@@ -407,7 +395,8 @@ class Game extends React.Component {
     })
     return teams;
   }
-  selectTeamJoin(team){
+
+  selectTeamJoin(team) {
     console.log("joining with team")
     if(confirm("join with "+team["name"]+"?")){
       console.log(this.props);
@@ -416,7 +405,8 @@ class Game extends React.Component {
       axios.patch('/postTeamGame', {uid:this.props.user, tgid: this.props.game.id}).then( () =>{refreshTable()});
     }
   }
-  selectTeamLeave(team){
+
+  selectTeamLeave(team) {
     if(confirm("leave with "+team["name"]+"?")){
       axios({
         url:"/leavegameT",
@@ -428,7 +418,8 @@ class Game extends React.Component {
       }).then(refreshTable);
     }
   }
-  showTeamGamesLeave(){
+
+  showTeamGamesLeave() {
     if(this.props.ownedteams.length==0){
       return(<div>You have no teams</div>);
     }
@@ -447,22 +438,22 @@ class Game extends React.Component {
     return teams;
   }
 
-  joinButton(){
-  return(
-    <div>
-  <button className="btn btn-success"
-    data-toggle="collapse"
-     data-target={"#join"+this.props.game.id}>Join</button>
+  joinButton() {
+    return(
+      <div>
+    <button className="btn btn-success"
+      data-toggle="collapse"
+       data-target={"#join"+this.props.game.id}>Join</button>
 
 
-   <div id={"join"+this.props.game.id} className="collapse">
-    {this.showTeamGamesJoin()}
-  </div>
-  </div>
-);
-}
+     <div id={"join"+this.props.game.id} className="collapse">
+      {this.showTeamGamesJoin()}
+    </div>
+    </div>
+    );
+  }
 
-  leaveButton(){
+  leaveButton() {
     return(
       <div>
     <button className="btn btn-danger"
@@ -474,10 +465,10 @@ class Game extends React.Component {
       {this.showTeamGamesLeave()}
     </div>
     </div>
-  );
+    );
   }
 
-  render(){
+  render() {
     return(
       <tr>
        <td >{this.props.game.sport}</td>
