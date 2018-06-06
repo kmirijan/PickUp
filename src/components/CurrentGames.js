@@ -4,11 +4,9 @@ var {Link}=require('react-router-dom');
 import axios from 'axios';
 import {CreateGames} from './CreateGames';
 
-
 export class GameTable extends React.Component{
 
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
     console.log("USER",this.props.user);
   	this.state =
@@ -19,78 +17,69 @@ export class GameTable extends React.Component{
         retrieving: false,
         defaultSearch:null,
   	}
-    if(this.props.defaultSearch!=null){
+    if(this.props.defaultSearch!=null) {
       this.state.defaultSearch=this.props.defaultSearch;
     }
   }
 
-  componentDidMount()
-  {
-      this.retrieveGames();
+  componentDidMount() {
+    this.retrieveGames();
   }
 
-
-  updateSearch(event){
+  updateSearch(event) {
     this.updateTable(event.target.value);
   }
 
   updateTable(search) {
-      this.setState({filteredGames : this.state.games.filter(
-          (game) => { return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
-          (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
-          (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1))||
-          (String(game.id).indexOf(String(search))!==-1);
-          })
-      });
-  }
-  updateTableAll(search){
-    this.setState({filteredGames : this.state.allGames.filter(
-        (game) => { return(String(game.id).indexOf(String(search))!==-1)
-
-        })
+    this.setState({filteredGames : this.state.games.filter(
+      (game) => { return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
+      (game.name.toLowerCase().indexOf(search.toLowerCase())!== -1)||
+      (game.location.toLowerCase().indexOf(search.toLowerCase()) !== -1))||
+      (String(game.id).indexOf(String(search))!==-1);
+      })
     });
-}
+  }
+
+  updateTableAll(search) {
+    this.setState({filteredGames : this.state.allGames.filter(
+      (game) => { return(String(game.id).indexOf(String(search))!==-1)
+
+      })
+    });
+  }
 
   retrieveGames() {
-      this.setState({retrieving: true});
-      axios.post('/retrievegames').then((results)=>{
-         let data = results.data.filter(game=>{
-              return !game.isprivate
-          });
-          this.setState({games: data, allGames:results.data,retrieving: false});
-          if(this.state.defaultSearch==null){
-            this.updateTable(this.refs.search.value);
-          }
-          else{
-            this.updateTableAll(this.state.defaultSearch);
-            this.setState({defaultSearch:null});
-          }
-
-
-
+    this.setState({retrieving: true});
+    axios.post('/retrievegames').then((results)=>{
+     let data = results.data.filter(game=>{
+        return !game.isprivate
       });
-
-
+      this.setState({games: data, allGames:results.data,retrieving: false});
+      if(this.state.defaultSearch==null){
+        this.updateTable(this.refs.search.value);
+      }
+      else{
+        this.updateTableAll(this.state.defaultSearch);
+        this.setState({defaultSearch:null});
+      }
+    });
   }
 
-    reloadAll()
-    {
-        console.log("Reloading Game table");
-        if (this.props.onNewGame != undefined)
-        {
-            console.log("Updating boss of GameTable");
-            this.props.onNewGame();
-        }
-        this.retrieveGames();
+  reloadAll() {
+    console.log("Reloading Game table");
+    if (this.props.onNewGame != undefined) {
+      console.log("Updating boss of GameTable");
+      this.props.onNewGame();
     }
-    reloadSelf()
-    {
-        this.retrieveGames();
-    }
+    this.retrieveGames();
+  }
+
+  reloadSelf() {
+    this.retrieveGames();
+  }
 
   render() {
-    if (this.state.retrieving == true)
-    {
+    if (this.state.retrieving == true) {
         return (<h2 className="retrieving">Retrieving Games...</h2>);
     }
     else return (
@@ -130,56 +119,49 @@ export class GameTable extends React.Component{
       <tbody>
 	      {
             this.state.filteredGames.map((game)=>{
-                return (<Game game = {game} onParticipationChange={this.reloadSelf.bind(this)}
-                            user={this.props.user} key={game.id} />);
+              return (<Game game = {game} onParticipationChange={this.reloadSelf.bind(this)}
+                user={this.props.user} key={game.id} />);
             })
          }
 	  </tbody>
       </table>
       </div>
-	);
-
+	   );
   }
-
 }
 
 export class Game extends React.Component {
 
-  joinGame()
-  {
+  joinGame() {
     axios.patch('/game:user', {uid: this.props.user, gid: this.props.game.id});
     axios.patch('/user:game', {uid: this.props.user, gid: this.props.game.id});
-    if (this.props.onParticipationChange != undefined)
-    {
-        this.props.onParticipationChange();
+    if (this.props.onParticipationChange != undefined) {
+      this.props.onParticipationChange();
     }
   }
-  leaveGame(){
+
+  leaveGame() {
     axios.patch('/leave:games', {uid:this.props.user, gid:this.props.game.id});
-    if (this.props.onParticipationChange != undefined)
-    {
-        this.props.onParticipationChange();
+    if (this.props.onParticipationChange != undefined) {
+      this.props.onParticipationChange();
     }
   }
 
-  getJoinLeaveButton()
-  {
-
+  getJoinLeaveButton() {
     if (this.props.game.players.includes(this.props.user)) {
       return (
         <input type="button"
-            className="btn btn-danger btn-md"
-            onClick={this.leaveGame.bind(this)} value="Leave"/>
+          className="btn btn-danger btn-md"
+          onClick={this.leaveGame.bind(this)} value="Leave"/>
       );
     }
     else {
       return (
         <input  type="button"
-            className="btn btn-success btn-md"
-            onClick={this.joinGame.bind(this)} value="Join"/>
+          className="btn btn-success btn-md"
+          onClick={this.joinGame.bind(this)} value="Join"/>
       );
     }
-
   }
 
   render(){

@@ -54,10 +54,8 @@ describe('All Game tests', () => {
 				user: 'user',
 				isprivate: false,
 				id: 517381293891,
-				coords: {
-					lat: 32,
-					lng: 27
-				},
+				lat: 32,
+				lng: 27,
 				startTime: 123,
 				gameLength: 123
 			}
@@ -75,6 +73,7 @@ describe('All Game tests', () => {
 				expect(res.body.game.players).toEqual(['user']);
 				expect(res.body.game.startTime).toBe(123);
 				expect(res.body.game.endTime).toBe(123+123);
+				expect(res.body.game.coords.coordinates).toEqual([27,32]);
 			})
 			.end((err, res) => {
 				if(err){

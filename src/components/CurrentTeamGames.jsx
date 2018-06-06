@@ -15,7 +15,7 @@ export class CurrentTeamGames extends React.Component{
         super(props);
         console.log("params",this.props.match.params);
         this.search=this.props.match.params.search;
-        if(this.search!=null){
+        if(this.search!=null) {
           while(!(/[0-9]|[a-z]/i.test(this.search[0]))){
       			this.search=this.search.substring(1,this.search.length);
       		}
@@ -101,20 +101,14 @@ export class CurrentTeamGames extends React.Component{
             isprivate:this.state.isprivate,
             location: this.refs.location.getInput(),
             user: this.props.user,
-            teams:[team._id],
+            teamId:team._id
         };
         if (this.gameIsValid(game) == true)
         {
             $('#createTeamGames').collapse('hide');
             console.log(game);
-            axios({
-              url:'/postgamesT',
-              method:"post",
-              data:{
-                game:game
-              }
-              }).then( () =>
-                    {refreshTable()});
+            axios.post('/postTeamGame', game);
+            axios.patch('/postTeamGame', {uid:this.props.user, tgid: game.gameId}).then( () =>{refreshTable()});
             this.refs.sport.clear();
             this.refs.location.clear();
         }
@@ -270,8 +264,7 @@ export class CurrentTeamGames extends React.Component{
 }
 class GameTable extends React.Component{
 
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
   	this.state =
   	{
@@ -283,22 +276,22 @@ class GameTable extends React.Component{
       defaultSearch:null,
   	}
     this.userTeams=this.userTeams.bind(this);
-    if(this.props.defaultSearch!=null){
+    if(this.props.defaultSearch!=null) {
       this.state.defaultSearch=this.props.defaultSearch;
     }
   }
 
-  componentDidMount()
-  {
+  componentDidMount() {
     refreshTable = this.retrieveGames.bind(this);
     this.retrieveGames();
     this.userTeams();
   }
-  componentWillUnmount()
-  {
+
+  componentWillUnmount() {
     refreshTable = () => {console.log("refreshTable unBound");}
   }
-  userTeams(){
+
+  userTeams() {
 
   }
 
@@ -337,12 +330,7 @@ class GameTable extends React.Component{
             this.updateTableAll(this.state.defaultSearch);
             this.setState({defaultSearch:null});
           }
-
-
-
       });
-
-
   }
 
 
@@ -422,14 +410,10 @@ class Game extends React.Component {
   selectTeamJoin(team){
     console.log("joining with team")
     if(confirm("join with "+team["name"]+"?")){
-      axios({
-        url:"/joinT",
-        method:"post",
-        data:{
-          team:team,
-          game:this.props.game
-        }
-      }).then(refreshTable());
+      console.log(this.props);
+      console.log(team);
+      axios.patch('/addTeamtoTG', {tid: team._id, tgid: this.props.game.id});
+      axios.patch('/postTeamGame', {uid:this.props.user, tgid: this.props.game.id}).then( () =>{refreshTable()});
     }
   }
   selectTeamLeave(team){
@@ -514,6 +498,4 @@ class Game extends React.Component {
     );
   }
 }
-module.exports={
-  CurrentTeamGames
-}
+module.exports={CurrentTeamGames}
