@@ -81,6 +81,7 @@ app.patch('/remove:team', teams.teamLeave);
 app.post("/deleteteam",teams.deleteTeam);
 
 //-------------==homepage-------------------------------
+// Gets players and games count
 app.post("/get-players-and-games-count",(req,res)=>{
   var gamescount=0;
   var userscount=0;
