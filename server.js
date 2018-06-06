@@ -20,7 +20,7 @@ const expressStaticGzip = require("express-static-gzip");
 
 //deploy app
 const port=process.env.PORT;
-http.listen(port,()=>{
+http.listen(port || 8000,()=>{
     console.log(port);
     console.log(process.env.NODE_ENV);
     console.log(process.env.MONGODB_URI);
@@ -81,6 +81,7 @@ app.patch('/remove:team', teams.teamLeave);
 app.post("/deleteteam",teams.deleteTeam);
 
 //-------------==homepage-------------------------------
+// Gets players and games count
 app.post("/get-players-and-games-count",(req,res)=>{
   var gamescount=0;
   var userscount=0;
