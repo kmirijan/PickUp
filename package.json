@@ -12,7 +12,7 @@
     "compile": "babel public --out-dir dist",
     "server": "nodemon index.js",
     "build": "webpack --config webpack.config.js",
-    "prodbuild": "webpack --config webpack.config.js -p --optimize-dedupe --optimize-minimize --display-modules",
+    "prodbuild": "webpack --config webpack.config.js -p",
     "watch": "webpack --watch"
   },
   "repository": {
