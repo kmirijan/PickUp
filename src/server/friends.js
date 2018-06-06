@@ -17,17 +17,18 @@ exports.reqFriend=(user,friend,res)=>{
 			if(err)throw new Error(err);
 			let friends=arr[DEFAULT]["friends"];
 			var req=false;
+
 			for(i=0;i<friends.length;i++){
 				if(friends[i]["username"]==user){
 					req=true;
 					break;
 				}
 			}
-			if(req=true){
+			/*if(req=true){
 				exports.acceptFriend(user,friend,res);
 				res.end();
 				client.close();
-			}
+			}*/
 			else{
 				users.updateOne({"username":user},{
 					$push:{"friends":{"username":friend,"req":"pending"}}
