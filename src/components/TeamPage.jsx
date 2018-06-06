@@ -18,7 +18,7 @@ class TeamPage extends React.Component{
       }
     }
   }
-  
+
   // helper to allow TeamCreate to force a refresh of TeamTable when a new game is made
   reloadTable() {
       this.refs.table.reload();
@@ -167,7 +167,7 @@ class TeamTable extends React.Component {
       defaultSearch:null,
   	}
 
-    if(this.props.defaultSearch!=null){
+    if(this.props.defaultSearch!=null && this.props.defaultSearch!=""){
       this.state.defaultSearch=this.props.defaultSearch;
     }
   }

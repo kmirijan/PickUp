@@ -330,19 +330,28 @@ app.post("/retrievegames", (req, res) =>
 
 // User leaves a game, deletes game if last user
 app.patch('/leave:games', (req, res) => {
-  Game.findOneAndUpdate(
-    {'id': req.body.gid},
-    {$pull: {players : req.body.uid}},
+  User.findOneAndUpdate(
+    {'username': req.body.uid},
+    {$pull: {games : req.body.gid}},
     {new: true}
   )
-  .then((game) =>{
-    if(game.players.length === 0){
-      game.remove();
-    }
-    res.status(200).send({game});
-  }).catch((e) => {
-    res.status(400).send(e);
+  .then(()=>{
+    Game.findOneAndUpdate(
+      {'id': req.body.gid},
+      {$pull: {players : req.body.uid}},
+      {new: true}
+    )
+    .then((game) =>{
+      if(game.players.length === 0){
+        game.remove();
+      }
+        res.status(200).send({game});
+    }).catch((e) => {
+      res.status(400).send(e);
+    })
   })
+
+
 })
 
 //change so it deletes for members as well

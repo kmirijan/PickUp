@@ -17,7 +17,7 @@ export class GameTable extends React.Component{
         retrieving: false,
         defaultSearch:null,
   	}
-    if(this.props.defaultSearch!=null) {
+    if(this.props.defaultSearch!=null && this.props.defaultSearch!="") {
       this.state.defaultSearch=this.props.defaultSearch;
     }
   }

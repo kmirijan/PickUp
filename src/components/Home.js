@@ -64,7 +64,7 @@ class Home extends React.Component {
             <StartCount usersCount={this.state.usersCount} gamesCount={this.state.gamesCount}/>
           </div>
           <div className="third" ref="third" style={{height:height}}>
-            <SignUpHome user={this.props.user}/>
+            <SignUpHome user={this.props.user} history={this.props.history}/>
           </div>
       </div>
     );
@@ -92,12 +92,11 @@ class StartCount extends React.Component{
   }
 
   componentWillReceiveProps(newprops){
-    if (this.ismounted){
       this.setState(newprops);
-    }
   }
   //checks page location and display count when scrolled to, set state
   displayCounts(){
+    console.log("users count",this.state.usersCount)
     if(window.pageYOffset>=this.height){{
       this.setState({
         displayUsersCount:this.state.usersCount,
@@ -148,7 +147,7 @@ class SignUpHome extends React.Component{
             Sign Up Now
           </div>
           <div className="signUpHome">
-            <SignUp/>
+            <SignUp history={this.props.history}/>
           </div>
         </div>
       );

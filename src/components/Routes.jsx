@@ -93,8 +93,8 @@ class Routes extends React.Component{
 
             <BrowserRouter>
                 <Switch>
-                	<Route exact path="/" component={Home} />
-                	<Route exact path="/home" component={Home} />
+                  <Route exact path="/" render={(props)=><Home user={this.state.user} {...props}/>}/>
+                  <Route exact path="/home" render={(props)=><Home user={this.state.user} {...props}/>}/>
                   <Route path="/signin" render={(props)=><SignIn updateUser={updateUser} user={this.state.user} {...props}/>}/>
 				          <Route path="/signup" component={SignUpWrap}/>
                   <Route component={_404} />
