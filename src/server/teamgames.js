@@ -6,39 +6,51 @@ const cheerio=require("cheerio");
 const url="mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup";
 const mongoose=require("mongoose");
 const bcrypt=require("bcrypt");
+var {TeamGame} = require('./../../db/teamgame.js');
+var {User} = require('./../../db/User.js');
 //mongoose.connect("mongodb://localhost:27017");
 
 /*----------------------------------------------------------------------------------------*/
 const makeValid = (obj) => {return obj != null ? obj : "";};
 var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
-exports.joinT=(req, res) =>
-{
-  console.log('[', (new Date()).toLocaleTimeString(), "] Game joined");
+// exports.joinT=(req, res) =>
+// {
+//   console.log('[', (new Date()).toLocaleTimeString(), "] Game joined");
+//
+//   mongo.connect(mongoUrl, (err, client) =>
+//   {
+//     var collection = client.db("pickup").collection("teamgames");
+//     var query = {id: req.body.game.id, teams: { $nin: [req.body.team] } };
+//     var newTeam = { $addToSet: {teams: req.body.team._id} };
+//     console.log("team id",req.body.team._id);
+//
+//     console.log("team: ", req.body.team.name);
+//     var userQuery = {username: {$in:req.body.team.members}};
+//     var joinedGame = {$addToSet: {teamgames: req.body.game.id}};
+//     client.db("pickup").collection("users").update(userQuery, joinedGame);
+//
+//     collection.update(query, newTeam, (err) =>
+//     {
+//       if (err) throw err;
+//       client.close();
+//     });
+//
+//   });
+//
+// };
 
-  mongo.connect(mongoUrl, (err, client) =>
-  {
-    var collection = client.db("pickup").collection("teamgames");
-    var query = {id: req.body.game.id, teams: { $nin: [req.body.team] } };
-    var newTeam = { $addToSet: {teams: req.body.team._id} };
-    console.log("team id",req.body.team._id);
-
-    console.log("team: ", req.body.team.name);
-    var userQuery = {username: {$in:req.body.team.members}};
-    var joinedGame = {$addToSet: {teamgames: req.body.game.id}};
-    client.db("pickup").collection("users").update(userQuery, joinedGame);
-
-    collection.update(query, newTeam, (err) =>
-    {
-      if (err) throw err;
-      else res.sendStatus(200);
-      client.close();
-    });
-
-  });
-
-};
-
+exports.addTeamtoTG = (req, res) => {
+  TeamGame.findOneAndUpdate(
+    {id : req.body.tgid, teams: { $nin: [req.body.tid]} },
+    {$push: {teams: req.body.tid}},
+    {new: true}
+  ).then((teamgame) => {
+    res.status(200).send({teamgame})
+  }, (e) => {
+    res.status(400).send(e);
+  })
+}
 
 exports.nearbyGamesT=(req, res) => {
     console.log('[', (new Date()).toLocaleTimeString(), "] Nearby games sending");
@@ -90,42 +102,63 @@ exports.userGamesT=(req, res) => {
 };
 
 // add a game to the data base
-exports.postGamesT= (req, res) =>
-{
-  console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
-  var game = {
-    sport: makeValid(req.body.game.sport),
-    name: makeValid(req.body.game.name),
-    location: makeValid(req.body.game.location),
-    isprivate:makeValid(req.body.game.isprivate),
-    id: makeValid(req.body.game.gameId),
-    owner: makeValid(req.body.game.user),
-    teams: makeValid(req.body.game.teams),
-  };
+// exports.postGamesT= (req, res) =>
+// {
+//   console.log('[', (new Date()).toLocaleTimeString(), "] Game received");
+//   var game = {
+//     sport: makeValid(req.body.game.sport),
+//     name: makeValid(req.body.game.name),
+//     location: makeValid(req.body.game.location),
+//     isprivate:makeValid(req.body.game.isprivate),
+//     id: makeValid(req.body.game.gameId),
+//     owner: makeValid(req.body.game.user),
+//     teams: makeValid(req.body.game.teams),
+//   };
+//
+//   mongo.connect(mongoUrl, (err, db) => {
+//     if (err) throw err;
+//
+//     db.db("pickup").collection("teamgames").insertOne(game,() => {
+//       db.db("pickup").collection("users").update({"username":game["owner"]},{
+//         $push: {teamgames: game["id"]}
+//       }).then(()=>{
+//         res.sendStatus(200);
+//         db.close();
+//       })
+//     });
+//    });
+// };
 
-
-  mongo.connect(mongoUrl, (err, db) => {
-    if (err) throw err;
-
-    db.db("pickup").collection("teamgames").insertOne(game,() => {
-      db.db("pickup").collection("users").update({"username":game["owner"]},{
-        $push: {teamgames: game["id"]}
-      }).then(()=>{
-        res.sendStatus(200);
-        db.close();
-      })
-    });
-
-   });
-
-  /*
-  game.save().then((doc) => {
-      res.send(doc);
-    }, (e) => {
-      res.status(400).send(e);
+exports.postTeamGame = (req,res) => {
+  var teamGame = new TeamGame({
+    sport: req.body.sport,
+    name: req.body.name,
+    location: req.body.location,
+    isprivate:req.body.isprivate,
+    id: req.body.gameId,
+    owner: req.body.user,
+    teams: [req.body.teamId,]
+  });
+  teamGame.save().then((teamGame) => {
+    res.status(200).send({teamGame});
+  }, (e) => {
+    res.status(400).send(e);
   })
-  */
-};
+}
+
+exports.addTGtoUser = (req, res) => {
+  console.log('adding team game to user');
+  User.findOneAndUpdate(
+    {username : req.body.uid},
+    {$push: {teamgames: req.body.tgid}},
+    {new: true}
+  ).then((user) => {
+    console.log(user);
+    res.status(200).send({user})
+  }, (e) => {
+    res.status(400).send(e);
+  })
+}
 
 exports.retrieveGamesT=(req, res) =>
 {

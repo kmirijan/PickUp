@@ -1,6 +1,7 @@
 
 /*https://github.com/alanbsmith/react-node-example*/
 const webpack = require('webpack');
+const CompressionPlugin = require('compression-webpack-plugin');
 module.exports = {
   mode:'none',
   entry: [
@@ -37,7 +38,10 @@ module.exports = {
     historyApiFallback: true
   },
   plugins:[
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new CompressionPlugin({
+        algorithm: 'gzip'
+    })
   ]
 
 };

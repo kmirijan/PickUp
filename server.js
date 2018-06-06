@@ -16,6 +16,7 @@ const busboy=require("connect-busboy");
 const util = require('util')
 const app=express();
 const http=require("http").Server(app);
+const expressStaticGzip = require("express-static-gzip");
 
 //deploy app
 const port=process.env.PORT;
@@ -45,10 +46,11 @@ var {User} = require('./db/User.js');
 var {Team} = require('./db/team.js');
 
 /*configurations*/
-app.use(express.static("./dist"));
+//app.use(express.static("./dist"));
 app.use(bodyParser.json());
 app.use(busboy());
 app.use("/profilepictures",express.static("./dist/profilePictures"));
+app.use(expressStaticGzip("dist"));
 
 /*sends index.html to any link*/
 app.get("*",(req,res)=>{
@@ -63,6 +65,9 @@ app.post("/verify-login",(req,res)=>{
 app.post("/signin-test",(req,res)=>{
   login.signIn(req.body,res);
 })
+app.post("/signup",(req,res)=>{
+  login.signUp(req.body,res);
+});
 app.delete("/logout-test",(req,res)=>{
   login.logout(req.body,res);
 })
@@ -113,12 +118,6 @@ app.post("/isuser",(req,res)=>{
 })
 app.post("/saveprofile",(req,res)=>{
 	mkprofile.saveProfile(req.body,res);
-});
-app.post("/signup",(req,res)=>{
-	mkprofile.signUp(req.body,res);
-});
-app.post("/signin",(req,res)=>{
-	mkprofile.signIn(req.body,res);
 });
 app.post("/getallusers",(req,res)=>{
   mkprofile.getAllUsers(res);
@@ -367,9 +366,12 @@ app.post("/nearbygamesT", (req, res) => {
 app.post("/usergamesT", (req, res) => {
   teamgames.userGamesT(req,res);
 });
-app.post("/postgamesT", (req, res) =>{
-  teamgames.postGamesT(req,res);
-});
+// app.post("/postgamesT", (req, res) =>{
+//   teamgames.postGamesT(req,res);
+// });
+app.post('/postTeamGame', teamgames.postTeamGame);
+app.patch('/postTeamGame', teamgames.addTGtoUser);
+app.patch('/addTeamtoTG', teamgames.addTeamtoTG);
 app.post("/retrievegamesT", (req, res) =>{
   teamgames.retrieveGamesT(req,res);
 });

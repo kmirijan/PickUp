@@ -70,7 +70,6 @@ class TeamCreate extends React.Component{
         axios.patch('maketeam', {uid: this.props.user, tid: doc.data.team._id});
         console.log(doc)
       }).then(this.props.onNewTeam);
-      //axios.patch('maketeam', {uid: this.props.user, tid: team.name}).then(this.props.onNewTeam);
       this.refs.sport.clear();
       this.refs.name.clear();
       this.refs.city.clear();
