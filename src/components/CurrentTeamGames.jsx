@@ -425,7 +425,7 @@ class Game extends React.Component {
           team:team,
           game:this.props.game
         }
-      }).then(refreshTable());
+      }).then(refreshTable);
     }
   }
   showTeamGamesLeave(){
@@ -433,14 +433,16 @@ class Game extends React.Component {
       return(<div>You have no teams</div>);
     }
     const teams=this.props.ownedteams.map((team)=>{
-      return(
-        <div className="team" key={"teamleave:"+team["name"]}>
-          <div>{team["name"]}</div>
-          <button
-            className="btn btn-secondary btn-sm"
-            onClick={()=>{this.selectTeamLeave(team)}}>Select</button>
-        </div>
-      )
+      if(this.props.game.teams.includes(team._id)){
+        return(
+          <div className="team" key={"teamleave:"+team["name"]}>
+            <div>{team["name"]}</div>
+            <button
+              className="btn btn-secondary btn-sm"
+              onClick={()=>{this.selectTeamLeave(team)}}>Select</button>
+          </div>
+        );
+      }
     })
     return teams;
   }
