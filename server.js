@@ -181,6 +181,7 @@ app.post("/isgamet",(req,res)=>{
 const makeValid = (obj) => {return obj != null ? obj : "";};
 var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 
+// gets nearbygames within a range
 app.post("/nearbygames", (req, res) => {
   console.log('[', (new Date()).toLocaleTimeString(), "] Nearby games sending");
 
@@ -268,6 +269,8 @@ app.post("/postgames", (req, res) => {
       res.status(400).send(e);
   })
 });
+
+// gets weather data
 app.post("/getweather",(req,res)=>{
   console.log("request");
   weather.getWeather(req.body.lat, req.body.lng, (errorMessage, summary, temperature) => {
@@ -285,6 +288,7 @@ app.post("/getweather",(req,res)=>{
 		}
   })
 })
+
 // add user to game
 app.patch('/game:user', (req, res) => {
   Game.findOneAndUpdate(
@@ -313,6 +317,7 @@ app.patch('/user:game', (req, res) => {
   })
 })
 
+// Gets back the games for the games table
 app.post("/retrievegames", (req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Games sending");
@@ -365,6 +370,7 @@ app.delete('/games', (req, res) => {
   })
 })
 
+// Gets game data for specific games
 app.post("/retrievespecificgames", (req,res)=>{
   mongo.connect(mongoUrl,(err,client)=>{
     if(err)throw new Error(err);
@@ -377,33 +383,44 @@ app.post("/retrievespecificgames", (req,res)=>{
   })
 
 })
+
+//Join a team
 app.post("/joinT", (req, res) =>{
   teamgames.joinT(req,res);
 });
+
+// Show nearby team games
 app.post("/nearbygamesT", (req, res) => {
   teamgames.nearByGamesT(req,res);
 });
+
+// Get games near the user
 app.post("/usergamesT", (req, res) => {
   teamgames.userGamesT(req,res);
 });
 // app.post("/postgamesT", (req, res) =>{
 //   teamgames.postGamesT(req,res);
 // });
-app.post('/postTeamGame', teamgames.postTeamGame);
-app.patch('/postTeamGame', teamgames.addTGtoUser);
-app.patch('/addTeamtoTG', teamgames.addTeamtoTG);
+app.post('/postTeamGame', teamgames.postTeamGame); // Post a team game
+app.patch('/postTeamGame', teamgames.addTGtoUser); // Add team game to user
+app.patch('/addTeamtoTG', teamgames.addTeamtoTG); // Add team to team game
+//Retrieve team games
 app.post("/retrievegamesT", (req, res) =>{
   teamgames.retrieveGamesT(req,res);
 });
+//Retrive specific team games
 app.post("/retrievespecificgamesT",(req,res)=>{
   teamgames.retrieveSpecificGamesT(req,res);
 })
+// Leave a team game
 app.post('/leavegameT', (req, res) => {
   teamgames.leaveGameT(req,res);
 })
+// Delete a team game
 app.post("/deletegameT",(req,res)=>{
   teamgames.deleteGameT(req,res);
 });
+// Get back a player team
 app.post("/retrieveplayerteams",(req,res)=>{
   teamgames.retrievePlayerTeams(req,res);
 })

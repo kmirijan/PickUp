@@ -253,7 +253,7 @@ class TeamTable extends React.Component {
       <tbody>
 	        {
               this.state.filteredTeams.map((team)=>{
-                  return (<TeamRow team = {team} user={this.props.user} key={team._id}/>);
+                  return (<TeamRow team = {team} onParticipationChange={this.reload.bind(this)} user={this.props.user} key={team._id}/>);
               })
           }
 	      </tbody>
@@ -267,14 +267,14 @@ export class TeamRow extends React.Component {
 
   // Allow a user to join a team
   joinTeam() {
-    axios.patch('/maketeam', {uid: this.props.user, tid: this.props.team._id});
+    axios.patch('/maketeam', {uid: this.props.user, tid: this.props.team._id}).then(this.props.onParticipationChange);
     axios.patch('/team:user', {user:this.props.user, teamId:this.props.team._id});
   }
 
   // Allow a user to leave a team
   // If the user is the captain, then the team is deleted
   leaveTeam(){
-    axios.patch('/remove:team', {user:this.props.user, teamId:this.props.team._id});
+    axios.patch('/remove:team', {user:this.props.user, teamId:this.props.team._id}).then(this.props.onParticipationChange);
   }
 
   /*  Shows a Join button, Leave button, or "FULL" depending on if the user is in the team

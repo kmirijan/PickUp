@@ -211,6 +211,7 @@ class ProfileP extends React.Component{
 			'height':'185px'
 		}
 
+		//classNames
 		return(
 			<div className='profile'>
 

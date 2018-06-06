@@ -8,6 +8,7 @@ const mongoose=require("mongoose");
 const bcrypt=require("bcrypt");
 const DEFAULT=0;
 //mongoose.connect("mongodb://localhost:27017");
+/*
 exports.reqFriend=(user,friend,res)=>{
 	mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -17,6 +18,7 @@ exports.reqFriend=(user,friend,res)=>{
 			if(err)throw new Error(err);
 			let friends=arr[DEFAULT]["friends"];
 			var req=false;
+
 			for(i=0;i<friends.length;i++){
 				if(friends[i]["username"]==user){
 					req=true;
@@ -28,7 +30,7 @@ exports.reqFriend=(user,friend,res)=>{
 				res.end();
 				client.close();
 			}
-			else{
+//			else{
 				users.updateOne({"username":user},{
 					$push:{"friends":{"username":friend,"req":"pending"}}
 				})
@@ -37,12 +39,13 @@ exports.reqFriend=(user,friend,res)=>{
 				})
 				res.end();
 				client.close();
-			}
+		//	}
 		})
 
 	})
 }
-/*
+*/
+
 exports.reqFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -94,7 +97,7 @@ exports.reqFriend=(user,friend,res)=>{
 
 	});
 }
-*/
+/*
 exports.acceptFriend=(user,friend,res)=>{
 	mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -132,7 +135,8 @@ exports.acceptFriend=(user,friend,res)=>{
 
 	})
 }
-/*
+*/
+
 exports.acceptFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -176,14 +180,14 @@ exports.acceptFriend=(user,friend,res)=>{
 		});
 	});
 }
-*/
 
+/*
 exports.declineFriend=(user,friend,res)=>{
 	mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
 		var users=client.db("pickup").collection("users");
 		//checks if user is in friend's friend list
-		exports.removefriend(user,friend,res);
+		exports.removeFriend(user,friend,res);
 		users.updateOne({"username":user},{
 			$pull:{
 				"feed":{"type":"friendreq","sender":friend}
@@ -199,7 +203,8 @@ exports.declineFriend=(user,friend,res)=>{
 
 	})
 }
-/*
+*/
+
 exports.declineFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -240,13 +245,12 @@ exports.declineFriend=(user,friend,res)=>{
 		});
 	});
 }
-*/
+/*
 exports.removeFriend=(user,friend,res)=>{
 	mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
 		var users=client.db("pickup").collection("users");
 		//checks if user is in friend's friend list
-		exports.removefriend(user,friend,res);
 		users.updateOne({"username":user},{
 			$pull:{
 				"friends":{"username":friend}
@@ -269,7 +273,8 @@ exports.removeFriend=(user,friend,res)=>{
 
 	})
 }
-/*
+*/
+
 exports.removeFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -310,7 +315,7 @@ exports.removeFriend=(user,friend,res)=>{
 		});
 	});
 }
-*/
+
 exports.isFriend=(user,friend,res)=>{
 	var myUsers ={};
 	var tf=mongo.connect(url,(err,client)=>{
