@@ -16,6 +16,7 @@ const busboy=require("connect-busboy");
 const util = require('util')
 const app=express();
 const http=require("http").Server(app);
+const expressStaticGzip = require("express-static-gzip");
 
 //deploy app
 const port=process.env.PORT;
@@ -45,10 +46,11 @@ var {User} = require('./db/User.js');
 var {Team} = require('./db/team.js');
 
 /*configurations*/
-app.use(express.static("./dist"));
+//app.use(express.static("./dist"));
 app.use(bodyParser.json());
 app.use(busboy());
 app.use("/profilepictures",express.static("./dist/profilePictures"));
+app.use(expressStaticGzip("dist"));
 
 /*sends index.html to any link*/
 app.get("*",(req,res)=>{
@@ -234,6 +236,18 @@ app.post("/usergames", (req, res) => {
 
 // add a game to the data base
 app.post("/postgames", (req, res) => {
+  weather.getWeather(req.body.lat, req.body.lng, (errorMessage, weatherResults) => {
+			if(errorMessage){
+				console.log(errorMessage);
+			}
+			else{
+				console.log(`It is currently ${weatherResults.temperature}`);
+				console.log(`It feels like ${weatherResults.apparentTemperature}`);
+        var temp = weatherResults.temperature;
+        console.log('This is the temp: ', temp);
+			}
+	})
+
   var game = new Game({
     sport: makeValid(req.body.sport),
     name: makeValid(req.body.name),
@@ -246,7 +260,6 @@ app.post("/postgames", (req, res) => {
     startTime: req.body.startTime,
     endTime: req.body.startTime + req.body.gameLength
   });
-
 
   game.save().then((game) => {
       res.status(200).send({game});
