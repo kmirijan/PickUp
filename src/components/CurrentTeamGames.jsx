@@ -268,11 +268,9 @@ class GameTable extends React.Component{
       games: [],
       allGames:[],
   	  filteredGames: [],
-      userTeams:[],
       retrieving: false,
       defaultSearch:null,
   	}
-    this.userTeams=this.userTeams.bind(this);
     if(this.props.defaultSearch!=null) {
       this.state.defaultSearch=this.props.defaultSearch;
     }
@@ -281,7 +279,6 @@ class GameTable extends React.Component{
   componentDidMount() {
     refreshTable = this.retrieveGames.bind(this);
     this.retrieveGames();
-    this.userTeams();
   }
 
   componentWillUnmount() {
