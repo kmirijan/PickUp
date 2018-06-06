@@ -19,13 +19,11 @@ export class CreateGames extends React.Component{
     this.togglePrivate=this.togglePrivate.bind(this);
   }
 
-///implementation of the google maps autocomplete
   componentDidMount() {
    let input = document.getElementById('location');
    this.autocomplete = new google.maps.places.Autocomplete(input);
   }
 
-/////adds game to the database
   addGame(event) {
     event.preventDefault();
     let place = this.autocomplete.getPlace();
@@ -71,7 +69,6 @@ export class CreateGames extends React.Component{
       }
   }
 
-/////check that games are valid
   gameValidate(game) {
     let isValid = true;
     if (game.sport.trim() == "") {
