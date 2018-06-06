@@ -29,7 +29,7 @@ exports.reqFriend=(user,friend,res)=>{
 				res.end();
 				client.close();
 			}*/
-			else{
+//			else{
 				users.updateOne({"username":user},{
 					$push:{"friends":{"username":friend,"req":"pending"}}
 				})
@@ -38,7 +38,7 @@ exports.reqFriend=(user,friend,res)=>{
 				})
 				res.end();
 				client.close();
-			}
+		//	}
 		})
 
 	})
