@@ -7,7 +7,7 @@ exports.getWeather = (lat, long, callback) =>{
 		json: true
 	}, (error, response, body) => {
 		if(!error && response.statusCode === 200){
-			console.log(body);
+			callback(body);
 		} else {
 			callback('Unable to connect to servers');
 		}

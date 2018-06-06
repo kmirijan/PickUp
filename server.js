@@ -249,15 +249,15 @@ app.post("/postgames", (req, res) => {
     endTime: req.body.startTime + req.body.gameLength
   });
 
-  // weather.getWeather(req.body.lat, req.body.lng, (errorMessage, weatherResults) => {
-	// 		if(errorMessage){
-	// 			console.log(errorMessage);
-	// 		}
-	// 		else{
-	// 			console.log(`It is currently ${weatherResults.temperature}`);
-	// 			console.log(`It feels like ${weatherResults.apparentTemperature}`);
-	// 		}
-	// })
+  weather.getWeather(req.body.lat, req.body.lng, (errorMessage, weatherResults) => {
+			if(errorMessage){
+				console.log(errorMessage);
+			}
+			else{
+				console.log(`It is currently ${weatherResults.temperature}`);
+				console.log(`It feels like ${weatherResults.apparentTemperature}`);
+			}
+	})
   game.save().then((game) => {
       res.status(200).send({game});
     }, (e) => {
