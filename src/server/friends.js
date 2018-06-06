@@ -6,8 +6,43 @@ const cheerio=require("cheerio");
 const url="mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup";
 const mongoose=require("mongoose");
 const bcrypt=require("bcrypt");
+const DEFAULT=0;
 //mongoose.connect("mongodb://localhost:27017");
+exports.reqFriend=(user,friend,res)=>{
+	mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
+		var users=client.db("pickup").collection("users");
+		//checks if user is in friend's friend list
+		users.find({"username":friend}).toArray((err,arr)=>{
+			if(err)throw new Error(err);
+			let friends=arr[DEFAULT]["friends"];
+			var req=false;
+			for(i=0;i<friends.length;i++){
+				if(friends[i]["username"]==user){
+					req=true;
+					break;
+				}
+			}
+			if(req=true){
+				exports.acceptFriend(user,friend,res);
+				res.end();
+				client.close();
+			}
+			else{
+				users.updateOne({"username":user},{
+					$push:{"friends":{"username":friend,"req":"pending"}}
+				})
+				users.updateOne({"username":friend},{
+					$push:{"feed":{"type":"friendreq","sender":user}}
+				})
+				res.end();
+				client.close();
+			}
+		})
 
+	})
+}
+/*
 exports.reqFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -56,9 +91,48 @@ exports.reqFriend=(user,friend,res)=>{
 				});
 			}
 		}))
-		
+
 	});
 }
+*/
+exports.acceptFriend=(user,friend,res)=>{
+	mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
+		var users=client.db("pickup").collection("users");
+		//checks if user is in friend's friend list
+		users.find({"username":friend}).toArray((err,arr)=>{
+			if(err)throw new Error(err);
+			users.updateOne({"username":friend},{
+				$pull:{
+					"friends":{"username":user}
+				}
+			})
+			.then(()=>{
+				users.updateOne({"username":friend},{
+					$push:{
+						"friends":{"username":user,"req":"accepted"}
+					}
+				})
+			})
+			.then(()=>{
+				users.updateOne({"username":user},{
+					$push:{
+						"friends":{"username":friend,"req":"accepted"}
+					},
+					$pull:{
+						"feed":{"type":"friendreq","sender":friend}
+					}
+				})
+				.then(()=>{
+					res.json(arr[DEFAULT]);
+					client.close();
+				})
+			})
+		})
+
+	})
+}
+/*
 exports.acceptFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -102,6 +176,30 @@ exports.acceptFriend=(user,friend,res)=>{
 		});
 	});
 }
+*/
+
+exports.declineFriend=(user,friend,res)=>{
+	mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
+		var users=client.db("pickup").collection("users");
+		//checks if user is in friend's friend list
+		exports.removefriend(user,friend,res);
+		users.updateOne({"username":user},{
+			$pull:{
+				"feed":{"type":"friendreq","sender":friend}
+			}
+		})
+		.then(()=>{
+			users.find({"username":user}).toArray((err,arr)=>{
+				if(err)throw new Error(err);
+				res.json(arr[DEFAULT]);
+				client.close();
+			})
+		})
+
+	})
+}
+/*
 exports.declineFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -142,6 +240,36 @@ exports.declineFriend=(user,friend,res)=>{
 		});
 	});
 }
+*/
+exports.removeFriend=(user,friend,res)=>{
+	mongo.connect(url,(err,client)=>{
+		if(err)throw new Error(err);
+		var users=client.db("pickup").collection("users");
+		//checks if user is in friend's friend list
+		exports.removefriend(user,friend,res);
+		users.updateOne({"username":user},{
+			$pull:{
+				"friends":{"username":friend}
+			}
+		})
+		.then(()=>{
+			users.updateOne({"username":friend},{
+				$pull:{
+					"friends":{"username":user}
+				}
+			})
+		})
+		.then(()=>{
+			users.find({"username":user}).toArray((err,arr)=>{
+				if(err)throw new Error(err);
+				res.json(arr[DEFAULT]);
+				client.close();
+			})
+		})
+
+	})
+}
+/*
 exports.removeFriend=(user,friend,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -182,6 +310,7 @@ exports.removeFriend=(user,friend,res)=>{
 		});
 	});
 }
+*/
 exports.isFriend=(user,friend,res)=>{
 	var myUsers ={};
 	var tf=mongo.connect(url,(err,client)=>{
@@ -190,7 +319,7 @@ exports.isFriend=(user,friend,res)=>{
 		var db=client.db("pickup");
 		db.collection("users").find({"username":user}).toArray()
 		.then((arr)=>{
-			const friends=arr[0]["friends"];
+			const friends=arr[DEFAULT]["friends"];
 			var fr=false;
 			for(i=0;i<friends.length;i++){
 				if(friends[i]["username"]==friend){
