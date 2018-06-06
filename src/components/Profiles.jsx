@@ -36,6 +36,7 @@ class Profile extends React.Component{
 			myTeams:[],
 		}
 	}
+	//expands bio
 	expandBio(){
 		if(this.state.expanded==false){
 			this.setState({expanded:true});
@@ -46,7 +47,9 @@ class Profile extends React.Component{
 			this.setState({expname:"Expand"});
 		}
 	}
+	//adds friend
 	addFriend(){
+		//checks for pending request
 		if(this.state.frname=="Pending Request"||this.state.frname=="Friends"){
 			alert("you already sent a friend request");
 		}
@@ -120,17 +123,17 @@ class Profile extends React.Component{
 	}
 
 
-    componentWillMount() {
-        axios.post("/usergames", {user:this.props.username}).then( (results) => {
-            this.setState({myGames : results.data});
-        });
-				axios.post("/usergamest",{user:this.props.username}).then((results)=>{
-					this.setState({myTeamGames:results.data});
-				})
-				axios.post("/retrieveplayerteams",{user:this.props.username}).then((results)=>{
-					this.setState({myTeams:results.data});
-				})
-    }
+  componentWillMount() {
+      axios.post("/usergames", {user:this.props.username}).then( (results) => {
+          this.setState({myGames : results.data});
+      });
+			axios.post("/usergamest",{user:this.props.username}).then((results)=>{
+				this.setState({myTeamGames:results.data});
+			})
+			axios.post("/retrieveplayerteams",{user:this.props.username}).then((results)=>{
+				this.setState({myTeams:results.data});
+			})
+  }
 
 	gamesList(){
 		if(this.state.games==undefined){return}
@@ -200,22 +203,24 @@ class Profile extends React.Component{
 	}
 	render(){
 		const picStyle={
-			"width":"185px",
-			"height":"185px"
+			"maxWidth":"200px",
+			"maxHeight":"200px"
 		}
 		return(
-			<div className="profile">
+			<div id="profile">
 				<div className="container">
 					<img src="/feed.jpg" className="centerPic"/>
 						<div className="text-block">
 
-							<div className="picture">
+							<div id="picture">
 								<img src={this.state.pic} style={picStyle}></img>
+								<div id="mask"></div>
+								<p id="changeimg">change picture</p>
 							</div>
 
 						</div>
 
-						<div className="alias">
+						<div id="alias">
 							<div>
 								{this.state.alias}
 							</div>
@@ -223,22 +228,22 @@ class Profile extends React.Component{
 				</div>
 
 				<div className="container">
-					<div className="panel">
+					<div id="panel">
 
-						<div className = "card">
+						<div id = "card">
 							<div className="infoHeader">Info:</div>
-							<div className="username">
+							<div id="username">
 								{this.state.username}
 							</div>
 
-							<div className="email">
+							<div id="email">
 								{this.state.email}
 							</div>
 
-							<div className="bio" ref="bio">
+							<div id="bio" ref="bio">
 								{this.state.short}
 							</div>
-							<div className="edit">
+							<div id="edit">
 								<button className="btn btn-default btn-md" onClick={this.expandBio}>
 									{this.state.expname}
 								</button>
@@ -256,16 +261,14 @@ class Profile extends React.Component{
 								frname={this.state.frname}
 								teams={this.state.myTeams}
 								teamgames={this.state.myTeamGames}/>
-							<div className="gamesText">
+							<div id="gamesText">
 								Friends:<br></br>
-								<div className="friendsText">
-									{this.friendsList()}
-								</div>
+								{this.friendsList()}
 							</div>
 						</div>
 					</div>
-					<div className="fpanel">
-						<div className="feed">
+					<div id="fpanel">
+						<div id="feed">
 							{this.feed()}
 						</div>
 					</div>
@@ -449,17 +452,17 @@ class GamesList extends React.Component
 
         return (
             <div>
-							<h2 className='gamesText'>Games Played:</h2>
+							<h2 id='gamesText'>Games Played:</h2>
 							<table><tbody key='gamesList'>{gamesList}</tbody></table>
-							<h2 className='gamesText'>Games Made:</h2>
+							<h2 id='gamesText'>Games Made:</h2>
 							<table><tbody key='gamesMadeList'>{gamesMade}</tbody></table>
-							<h2 className='gamesText'>Team Games Played:</h2>
+							<h2 id='gamesText'>Team Games Played:</h2>
 							<table><tbody key='teamGamesList'>{teamGamesList}</tbody></table>
-							<h2 className='gamesText'>Team Games Made:</h2>
+							<h2 id='gamesText'>Team Games Made:</h2>
 							<table><tbody key='teamGamesMadeList'>{teamGamesMade}</tbody></table>
-							<h2 className='gamesText'>Teams Joined:</h2>
+							<h2 id='gamesText'>Teams Joined:</h2>
 							<table><tbody key='teamsList'>{teamsList}</tbody></table>
-							<h2 className='gamesText'>Teams Made:</h2>
+							<h2 id='gamesText'>Teams Made:</h2>
 							<table><tbody key='teamsMadeList'>{teamsMade}</tbody></table>
 
             </div>

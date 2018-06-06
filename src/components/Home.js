@@ -21,6 +21,7 @@ class Home extends React.Component {
     this.scroll=this.scroll.bind(this);
   }
   componentDidMount(){
+    //deprecated
     window.addEventListener('scroll',this.scroll);
     axios({
       url:"/get-players-and-games-count",
@@ -33,6 +34,8 @@ class Home extends React.Component {
       })
     })
   }
+
+  //deprecated
   scroll(){
     /*if(window.pageYOffset<this.height){
       this.refs.second.scrollIntoView();
@@ -41,8 +44,6 @@ class Home extends React.Component {
       this.refs.third.scrollIntoView();
     }
     else{}*/
-
-
   }
   render() {
     var height=window.innerHeight-NAVBARHEIGHT;
@@ -69,7 +70,10 @@ class Home extends React.Component {
     );
   }
 }
+
+//not working right now
 class StartCount extends React.Component{
+
   constructor(props){
     super(props);
     this.state={
@@ -82,26 +86,30 @@ class StartCount extends React.Component{
     this.height=window.innerHeight-NAVBARHEIGHT;
     this.ismounted = false;
   }
+
   componentDidMount(){
     this.ismounted = true;
   }
+
   componentWillReceiveProps(newprops){
     if (this.ismounted){
       this.setState(newprops);
     }
   }
+  //checks page location and display count when scrolled to, set state
   displayCounts(){
     if(window.pageYOffset>=this.height){{
       this.setState({
         displayUsersCount:this.state.usersCount,
         displayGamesCount:this.state.gamesCount
       })
-    }
+    }}
   }
-}
+
   componentDidMount(){
      window.addEventListener('scroll',this.displayCounts);
   }
+
   render(){
     var height=window.innerHeight-NAVBARHEIGHT;
     return(
@@ -118,6 +126,7 @@ class StartCount extends React.Component{
     )
   }
 }
+
 class SignUpHome extends React.Component{
   render(){
     var height=window.innerHeight-NAVBARHEIGHT;

@@ -177,7 +177,7 @@ export class Game extends React.Component {
       );
     }
   }
-  getWeather(lat,lng){
+  getWeather(lng,lat){
     console.log("lat",lat,"lng",lng)
     axios({
       url:"/getweather",

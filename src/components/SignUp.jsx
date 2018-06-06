@@ -46,7 +46,7 @@ signUp(e){
       }
     })
     this.refs.signup.removeAttribute("disabled");
-  }
+  }//first character of username must be letter
   else if(username[0].match(/[a-z]/i)==null){
     this.refs.signup.removeAttribute("disabled");
     this.setState({
@@ -56,7 +56,7 @@ signUp(e){
     })
     this.refs.signup.removeAttribute("disabled");
   }
-  else{
+  else{//signup
     axios({
         url:"/signup",
         method:"post",
@@ -74,7 +74,7 @@ signUp(e){
           "feed":[]
         }
       }).then((res)=>{
-        if(res.data==true){
+        if(res.data==true){//if succesful, go to sign in page
           console.log("signed up");
           this.props.history.push("/signin");
         }
@@ -93,7 +93,7 @@ signUp(e){
 
   render(){
     return(
-    <div>
+      <div>
         <form
           className="form-inline"
           style={{margin: '5%'}}

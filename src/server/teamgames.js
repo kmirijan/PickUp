@@ -40,6 +40,7 @@ var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
 //
 // };
 
+//add teams to team game
 exports.addTeamtoTG = (req, res) => {
   TeamGame.findOneAndUpdate(
     {id : req.body.tgid, teams: { $nin: [req.body.tid]} },
@@ -52,6 +53,7 @@ exports.addTeamtoTG = (req, res) => {
   })
 }
 
+//get near by games
 exports.nearbyGamesT=(req, res) => {
     console.log('[', (new Date()).toLocaleTimeString(), "] Nearby games sending");
 
@@ -129,6 +131,7 @@ exports.userGamesT=(req, res) => {
 //    });
 // };
 
+//post team game
 exports.postTeamGame = (req,res) => {
   var teamGame = new TeamGame({
     sport: req.body.sport,
@@ -146,6 +149,7 @@ exports.postTeamGame = (req,res) => {
   })
 }
 
+//add team game to user
 exports.addTGtoUser = (req, res) => {
   console.log('adding team game to user');
   User.findOneAndUpdate(
@@ -160,6 +164,7 @@ exports.addTGtoUser = (req, res) => {
   })
 }
 
+//retrieve games
 exports.retrieveGamesT=(req, res) =>
 {
   console.log('[', (new Date()).toLocaleTimeString(), "] Games sending");
@@ -179,6 +184,7 @@ exports.retrieveGamesT=(req, res) =>
   });
 
 };
+//retrieve specific games
 exports.retrieveSpecificGamesT=(req,res)=>{
   mongo.connect(mongoUrl,(err,client)=>{
     if(err)throw new Error(err);
@@ -275,6 +281,7 @@ exports.deleteGameT=(req,res)=>
   });
 
 };
+
 
 exports.retrievePlayerTeams=(req,res)=>{
   console.log("test body",req.body)
