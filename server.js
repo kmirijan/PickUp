@@ -71,6 +71,9 @@ app.post("/verify-login",(req,res)=>{
 app.post("/signin-test",(req,res)=>{
   login.signIn(req.body,res);
 })
+app.post("/signup",(req,res)=>{
+  login.signUp(req.body,res);
+});
 app.delete("/logout-test",(req,res)=>{
   login.logout(req.body,res);
 })
@@ -120,12 +123,6 @@ app.post("/isuser",(req,res)=>{
 })
 app.post("/saveprofile",(req,res)=>{
 	mkprofile.saveProfile(req.body,res);
-});
-app.post("/signup",(req,res)=>{
-	mkprofile.signUp(req.body,res);
-});
-app.post("/signin",(req,res)=>{
-	mkprofile.signIn(req.body,res);
 });
 app.post("/getallusers",(req,res)=>{
   mkprofile.getAllUsers(res);
