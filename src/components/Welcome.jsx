@@ -15,7 +15,7 @@ class Welcome extends React.Component{
     return(
     <div>
       <h1>Welcome, {this.props.user},!</h1>
-      <div><Link to={'/map'}>BEGIN PLAYING</Link></div>
+      <div><Link to={'/map:'}>BEGIN PLAYING</Link></div>
   </div>
     );
   }

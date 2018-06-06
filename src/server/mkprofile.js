@@ -8,9 +8,10 @@ const mongoose=require("mongoose");
 const bcrypt=require("bcrypt");
 //mongoose.connect("mongodb://localhost:27017");
 
+//get user info
 exports.getUsers=(user,res)=>{
 	var myUsers ={};
-	var tf=mongo.connect(url,(err,client)=>{
+	mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
 
 		var db=client.db("pickup");
@@ -24,6 +25,7 @@ exports.getUsers=(user,res)=>{
 	});
 }
 
+//checks if is valid user in database
 exports.isUser=(user,res)=>{
 	mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -40,6 +42,7 @@ exports.isUser=(user,res)=>{
 	})
 }
 
+//saves Profile changes
 exports.saveProfile=(data,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -60,44 +63,9 @@ exports.saveProfile=(data,res)=>{
 	});
 }
 
-/*http://codetheory.in/using-the-node-js-bcrypt-module-to-hash-and-safely-store-passwords/*/
-exports.signUp=async (data,res)=>{
-	var tf= mongo.connect(url,(err,client)=>{
-		if(err)throw new Error(err);
-
-		var db=client.db("pickup");
-
-		db.collection("users").count({"email":data["email"]})
-		.then((count)=>{
-			if(count>0){
-				res.json("email is already in use");
-			}
-			else
-			{
-				db.collection("users").count({"username":data["username"]})
-				.then((count)=>{
-					if(count>0){
-						res.json("username is already in use")
-					}
-					else{
-						var salt=bcrypt.genSaltSync(10);
-						var hash=bcrypt.hashSync(data["password"],salt);
-						data["password"]=hash;
-
-						db.collection("users").insertOne(data)
-						.then(()=>{
-							res.json(true);
-							client.close();
-						});
-					}
-				})
-			}
-		})
-	});
-}
 
 
-
+//returns the usernames of all users
 exports.getAllUsers=(res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -113,6 +81,8 @@ exports.getAllUsers=(res)=>{
 		})
 	})
 }
+
+//get user email
 exports.getEmail=(user,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -124,6 +94,8 @@ exports.getEmail=(user,res)=>{
 		})
 	})
 }
+
+//sets user email
 exports.setEmail=(user,email,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -145,6 +117,8 @@ exports.setEmail=(user,email,res)=>{
 		})
 	})
 }
+
+//sets password
 exports.setPassword=(user,oldPassword,newPassword,res)=>{
 	var tf=mongo.connect(url,(err,client)=>{
 		if(err)throw new Error(err);
@@ -169,6 +143,8 @@ exports.setPassword=(user,oldPassword,newPassword,res)=>{
 		})
 	})
 }
+
+//upload profile picture
 exports.uploadProfilePicture=(file,user,filetype,res)=>{
 
 	const filePath="./dist/profilePictures/"+user+filetype;

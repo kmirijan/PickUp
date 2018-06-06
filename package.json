@@ -8,9 +8,11 @@
     "test-watch": "nodemon --exec \"npm test\"",
     "dev": "webpack-dev-server --hot --inline",
     "start": "npm run build && node server.js",
+    "prod": "npm run prodbuild && node server.js",
     "compile": "babel public --out-dir dist",
     "server": "nodemon index.js",
     "build": "webpack --config webpack.config.js",
+    "prodbuild": "webpack --config webpack.config.js -p",
     "watch": "webpack --watch"
   },
   "repository": {
@@ -54,10 +56,12 @@
     "bootstrap": "^4.1.1",
     "cache-loader": "^1.2.2",
     "cheerio": "^1.0.0-rc.2",
+    "compression-webpack-plugin": "^1.1.11",
     "connect-busboy": "0.0.2",
     "cors": "^2.8.4",
     "css-loader": "^0.28.11",
     "express": "^4.16.3",
+    "express-static-gzip": "^0.3.2",
     "moment": "^2.22.1",
     "mongodb": "^3.0.7",
     "mongodb-core": "^3.0.7",
@@ -70,6 +74,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "reactstrap": "^6.0.1",
+    "request": "^2.87.0",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1",
     "universal-cookie": "^2.1.5"
