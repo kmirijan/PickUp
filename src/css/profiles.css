@@ -7,13 +7,13 @@
 	text-align:center;
 }
 .panel{
-	width: 30%;
+	width: 40%;
 	float: left;
 	margin-top: 20px;
 	margin-left: 10px;
 }
 .fpanel{
-	width: 65%;
+	width: 55%;
 	float:right;
 	margin-top: 40px;
 	margin-right: 10px;
@@ -21,7 +21,7 @@
 
 .card{
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-	max-width: 350px;
+	max-width: 450px;
 	padding-top: 10px;
 	padding-bottom: 20px;
 	margin-top: 20px;
@@ -44,7 +44,6 @@
     position: relative;
 }
 
-/* Bottom right text */
 .text-block {
     position: absolute;
     bottom: -30px;
@@ -58,7 +57,7 @@
 }
 
 .w3-card{
-	max-width: 350px;
+	max-width: 450px;
 	padding-right: 20px;
 	padding-bottom: 10px;
 }

@@ -19,20 +19,25 @@ export class CreateGames extends React.Component{
     this.togglePrivate=this.togglePrivate.bind(this);
   }
 
+  // Setup the location autocomplete
   componentDidMount() {
    let input = document.getElementById('location');
    this.autocomplete = new google.maps.places.Autocomplete(input);
   }
 
+  // Add a game to the database
   addGame(event) {
     event.preventDefault();
+
+    // Ensure that the user input a place that Google recognizes
     let place = this.autocomplete.getPlace();
     if (place == undefined) {
       this.refs.location.setError("Please select a location from the dropdown menu");
       return;
     }
-    let coords = place.geometry.location;
 
+    // Create the game
+    let coords = place.geometry.location;
     let id = Math.floor((Math.random()*(1 << 30))+1);
     let startTime = (new Date()).getTime();
     let gameLength = parseFloat(this.refs.gameLength.getInput()) * 60*60*1000; // expected length of game in milliseconds
@@ -49,6 +54,7 @@ export class CreateGames extends React.Component{
       gameLength: gameLength,
     };
 
+    // Ensure that 'game' is a legitimate game object
     if (this.gameValidate(game) == true) {
       $('#createSoloGames').collapse('hide');
       console.log(game);
@@ -69,6 +75,7 @@ export class CreateGames extends React.Component{
       }
   }
 
+  // Ensure that all fields are filled in with legitimate data
   gameValidate(game) {
     let isValid = true;
     if (game.sport.trim() == "") {
@@ -80,6 +87,7 @@ export class CreateGames extends React.Component{
     return isValid;
   }
 
+  // Display a message requesting valid input for each field
   displayInputErrors(game) {
     if (game.sport.trim() == "") {
       this.refs.sport.setError("Please give a non-empty name");
@@ -89,6 +97,7 @@ export class CreateGames extends React.Component{
     }
   }
 
+  // Toggle whether the game is visible to other users
   togglePrivate() {
     if(this.state.isprivate==false) {
       this.setState({
@@ -102,6 +111,7 @@ export class CreateGames extends React.Component{
     }
   }
 
+  // Display the game creation input fields
   render(){
     return(
         <div>

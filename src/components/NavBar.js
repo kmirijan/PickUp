@@ -7,6 +7,9 @@ class NavBar extends React.Component {
     super(props);
     console.log("USER",this.props.user);
   }
+
+  // Display a navbar that allows the user to go to different pages
+  // Different options are available depending on if the user is logged in or not
   render() {
     if(this.props.user!=null){
       return (

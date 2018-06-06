@@ -207,7 +207,7 @@ export class Game extends React.Component {
           <td>
             <input
               type="button"
-              className="btn btn-danger btn-md"
+              className="btn btn-primary"
               onClick={
                 ()=>{
                   this.getWeather(this.props.game.coords.coordinates[0],this.props.game.coords.coordinates[1])

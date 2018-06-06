@@ -297,6 +297,7 @@ class GamesList extends React.Component
 			}
 		}
 
+		//deletes game by gameId
 		deleteGame(gameId, players){
 			if(this.state.deleteGameClicked==false){
 				if(confirm('delete game?')){
@@ -318,6 +319,7 @@ class GamesList extends React.Component
 			}
 		}
 
+		//deletes team game by gameId
 		deleteTeamGame(gameId, teams){
 			if(confirm('delete team game?')){
 				axios({
@@ -335,7 +337,7 @@ class GamesList extends React.Component
 			}
 		}
 
-
+		//deletes team by teamid
 		deleteTeam(teamId,teamMembers){
 			if(confirm('delete team?')){
 				axios({
@@ -404,6 +406,8 @@ class GamesList extends React.Component
 					</tr>
         )
     }
+
+		//displays the team games that the user has made
 		displayTeamGamesMade(game){
 			return (
 				<tr key={game.id+"m"}>
@@ -418,6 +422,8 @@ class GamesList extends React.Component
 				</tr>
 			)
 		}
+
+		//displays the teams that the user is a part of
 		displayTeam(team)
     {
         return (
@@ -429,6 +435,8 @@ class GamesList extends React.Component
 					</tr>
         )
     }
+
+		//displays the teams that the user has made
 		displayTeamsMade(team){
 			return (
 				<tr key={team._id+"m"}>
