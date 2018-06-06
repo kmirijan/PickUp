@@ -5,7 +5,7 @@ import axios from 'axios';
 import {CreateGames} from './CreateGames';
 
 export class GameTable extends React.Component{
-
+  
   constructor(props) {
     super(props);
     console.log("USER",this.props.user);
@@ -22,14 +22,17 @@ export class GameTable extends React.Component{
     }
   }
 
+  // Obtain the games from the server after mounting
   componentDidMount() {
     this.retrieveGames();
   }
 
+  // Update the table when the search terms change
   updateSearch(event) {
     this.updateTable(event.target.value);
   }
 
+  // Refilter the games based on 'search'
   updateTable(search) {
     this.setState({filteredGames : this.state.games.filter(
       (game) => { return ((game.sport.toLowerCase().indexOf(search.toLowerCase()) !== -1)||
@@ -40,6 +43,8 @@ export class GameTable extends React.Component{
     });
   }
 
+  // Allow the table to pick out games by ID
+  // Used for obtaining a specific game, e.g. from a user's profile
   updateTableAll(search) {
     this.setState({filteredGames : this.state.allGames.filter(
       (game) => { return(String(game.id).indexOf(String(search))!==-1)
@@ -48,6 +53,7 @@ export class GameTable extends React.Component{
     });
   }
 
+  // Retrieves the games from the server then updates the table
   retrieveGames() {
     this.setState({retrieving: true});
     axios.post('/retrievegames').then((results)=>{
@@ -65,19 +71,22 @@ export class GameTable extends React.Component{
     });
   }
 
+  /* Retrieves the games from server and calls a function to alert the parent
+      that a new game has been created
+  */
   reloadAll() {
-    console.log("Reloading Game table");
     if (this.props.onNewGame != undefined) {
-      console.log("Updating boss of GameTable");
       this.props.onNewGame();
     }
     this.retrieveGames();
   }
 
+  // Only reloads the table, not anything else
   reloadSelf() {
     this.retrieveGames();
   }
 
+  // Displays the games in a table or a loading message if the games are being retrieved
   render() {
     if (this.state.retrieving == true) {
         return (<h2 className="retrieving">Retrieving Games...</h2>);
@@ -132,6 +141,7 @@ export class GameTable extends React.Component{
 
 export class Game extends React.Component {
 
+  // Joins the game with the active user and alerts the parent that it changed
   joinGame() {
     axios.patch('/game:user', {uid: this.props.user, gid: this.props.game.id});
     axios.patch('/user:game', {uid: this.props.user, gid: this.props.game.id});
@@ -140,6 +150,7 @@ export class Game extends React.Component {
     }
   }
 
+  // Leaves the game for the active user and alerts the parent that it changed
   leaveGame() {
     axios.patch('/leave:games', {uid:this.props.user, gid:this.props.game.id});
     if (this.props.onParticipationChange != undefined) {
@@ -147,6 +158,9 @@ export class Game extends React.Component {
     }
   }
 
+  /* Returns either a Join button or Leave button depending on 
+      if the active user is already in the game
+  */
   getJoinLeaveButton() {
     if (this.props.game.players.includes(this.props.user)) {
       return (
@@ -164,6 +178,7 @@ export class Game extends React.Component {
     }
   }
 
+  // Display the game's data and a join/leave button
   render(){
     return(
         <tr>
