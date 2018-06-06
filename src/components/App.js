@@ -6,8 +6,7 @@ import NavBar from './NavBar';
 
 class App extends React.Component {
 
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
     console.log("USER",this.props.user);
     console.log("props"); // DEBUG
@@ -15,8 +14,6 @@ class App extends React.Component {
   }
 
   render() {
-
-
     return (
       <div className="App">
         <NavBar user={this.props.user}/>
