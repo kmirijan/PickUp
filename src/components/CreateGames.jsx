@@ -126,7 +126,6 @@ export class CreateGames extends React.Component{
           				<div className="main-create main-center">
 
 
-///////////Form inside the collapsable button
           					<form className="form-horizontal"
                       onSubmit={this.addGame.bind(this)}>
 
@@ -154,7 +153,7 @@ export class CreateGames extends React.Component{
         								<input type="reset" className="btn btn-default" value="Clear"/>
           						</div>
           					</form>
-////////////////////////////////////////////
+
 
 
           				</div>
