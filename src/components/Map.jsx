@@ -35,13 +35,14 @@ class Map extends React.Component {
     }
 
 
+    // Try to obtain the user's position
     componentWillMount() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.setUserPosition);
         }
-
     }
 
+    // Create the map
     componentDidMount()
     {
 
@@ -53,15 +54,11 @@ class Map extends React.Component {
                     this.state.userPosition.lng);
             this.setState({map : new google.maps.Map(this.refs.map,
                             {center: center, zoom: this.DEFAULT_ZOOM})
-
             });
         }
-
-
-
-
     }
 
+    // Update the map to center on the user's position and get the nearby games
     setUserPosition(position) {
         this.setState({userPosition : {
             lat: position.coords.latitude,
@@ -80,7 +77,7 @@ class Map extends React.Component {
         this.retrieveNearbyGames();
     }
 
-
+    // Obtain the nearby games from the server then update the map
     retrieveNearbyGames() {
         let range = parseFloat(this.refs.range.value) * this.MI_TO_KM;
         console.log("Range:", range, "km");
@@ -90,9 +87,9 @@ class Map extends React.Component {
                 this.updateMap();
             }
         );
-
     }
 
+    // Display the nearby games as markers on the map
     updateMap() {
         this.clearMarkers();
         console.log("adding markers");
@@ -116,6 +113,7 @@ class Map extends React.Component {
         });
     }
 
+    // Remove all markers from the map
     clearMarkers()
     {
         while (this.markers.length > 0)
@@ -125,6 +123,7 @@ class Map extends React.Component {
         }
     }
 
+    // Return an informative window of a game for when the marker is clicked
     createInfoWindowContent(game)
     {
         return (
@@ -138,10 +137,9 @@ class Map extends React.Component {
             '</div>'
 
         );
-
-
     }
 
+    // Reload the map and alert the parent that a new game has been created
     reload()
     {
         if (this.onNewGame != undefined)
@@ -151,18 +149,18 @@ class Map extends React.Component {
         this.retrieveNearbyGames();
     }
 
+    // Display the map and CurrentGames object
     render() {
-
-    if (navigator.geolocation)
-    {
-    return (
-        <div>
+      if (navigator.geolocation)
+      {
+        return (
+          <div>
             <NavBar user={this.props.user}/>
 
             <div className="Map">
                 <h1>Games near you</h1>
                 <div ref="mapContainer" style={{width: "30%", float: "left"}}>
-                    <div ref="map" style={{height: "500px"}} />
+                  <div ref="map" style={{height: "500px"}} />
                     Distance(Miles):
                     <input type="text" ref="range"
                         defaultValue="5"
@@ -170,31 +168,27 @@ class Map extends React.Component {
                     <input type="button" value="Refresh Map"
                         className="btn btn-primary"
                         onClick={this.retrieveNearbyGames.bind(this)} />
-                </div>
+                  </div>
                   <div className = "gameTableInMap">
                     <GameTable onNewGame={this.reload.bind(this)} user={this.props.user} defaultSearch={this.search}/>
                   </div>
             </div>
-
-
-        </div>);
-    } else {
+          </div>
+        );
+      } else {
         return (
-        <div>
+          <div>
             <NavBar user={this.props.user}/>
             <div className="Map">
                 <h1>Location must be allowed to use this feature</h1>
+                  <div className = "gameTableInMap">
+                    <GameTable onNewGame={this.reload.bind(this)} user={this.props.user} defaultSearch={this.search}/>
+                  </div>
             </div>
-        </div>);
+          </div>
+        );
+      }
     }
-
-
-    }
-
 }
-
-
-
-
 
 export default Map;
