@@ -17,6 +17,7 @@ const util = require('util')
 const app=express();
 const http=require("http").Server(app);
 const expressStaticGzip = require("express-static-gzip");
+const DEFAULT=0;
 
 //deploy app
 const port=process.env.PORT;
@@ -24,21 +25,6 @@ http.listen(port || 8000,()=>{
     console.log(port);
     console.log(process.env.NODE_ENV);
     console.log(process.env.MONGODB_URI);
-});
-
-const io=require("socket.io")(http);
-//socket.io----------------------------------
-io.on('connection',(socket)=>{
-  console.log("someone joined");
-  socket.on("send",(m)=>{
-    console.log(m);
-    let messageWithTime={
-      sender:m["sender"],
-      message:m["message"],
-      time:(new Date()).toLocaleTimeString()
-    }
-    io.emit("message",messageWithTime)
-  })
 });
 
 var {Game} = require('./db/game.js');
@@ -51,6 +37,59 @@ app.use(bodyParser.json());
 app.use(busboy());
 app.use("/profilepictures",express.static("./dist/profilePictures"));
 app.use(expressStaticGzip("dist"));
+
+const makeValid = (obj) => {return obj != null ? obj : "";};
+var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
+
+const io=require("socket.io")(http);
+//socket.io----------------------------------
+io.on('connection',(socket)=>{
+  console.log("someone joined");
+  socket.on("send",(m)=>{
+    console.log(m);
+
+    saveMessage(m["id"],m,()=>{
+      let messageWithTime={
+        sender:m["sender"],
+        message:m["message"],
+        time:(new Date()).toLocaleTimeString()
+      }
+      io.emit("message",messageWithTime)
+    })
+
+  })
+});
+saveMessage=(gameID,message,fn)=>{
+  mongo.connect(mongoUrl,(err,client)=>{
+    if(err)throw new Error(err);
+    let groupchats=client.db("pickup").collection("groupchats");
+    groupchats.update({"id":gameID},{
+        $push:{"messages":message}
+    },{"upsert":true})
+    .then(()=>{
+      client.close();
+      fn();
+    })
+  })
+}
+app.post("/get-chats",(req,res)=>{
+  mongo.connect(mongoUrl,(err,client)=>{
+    if(err)throw new Error(err);
+    let groupchats=client.db("pickup").collection("groupchats");
+    groupchats.find({"id":req.body.id}).toArray((err,arr)=>{
+      if(err)throw new Error(err);
+      let messages=arr[DEFAULT]["messages"];
+      res.json({
+        "messages":messages,
+        "length":messages.length
+      })
+      client.close();
+    })
+  })
+})
+
+
+
 
 /*sends index.html to any link*/
 app.get("*",(req,res)=>{
@@ -178,8 +217,7 @@ app.post("/isgamet",(req,res)=>{
 
 
 /*----------------------------------------------------------------------------------------*/
-const makeValid = (obj) => {return obj != null ? obj : "";};
-var mongoUrl = 'mongodb://pickup:cs115@ds251819.mlab.com:51819/pickup';
+
 
 app.post("/nearbygames", (req, res) => {
   console.log('[', (new Date()).toLocaleTimeString(), "] Nearby games sending");

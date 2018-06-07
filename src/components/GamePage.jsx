@@ -5,6 +5,7 @@ import NavBar from "./NavBar"
 require("../css/gamePage.css")
 //https://medium.com/dailyjs/combining-react-with-socket-io-for-real-time-goodness-d26168429a34
 import io from 'socket.io-client';
+var {Link}=require('react-router-dom');
 
 
 
@@ -16,13 +17,13 @@ class GamePage extends React.Component{
     this.state={
       game:null
     }
-
+    this.playersList=this.playersList.bind(this);
 
   }
   componentWillMount(){
     axios({
       method:"post",
-      url:"/retrievespecificgamesT",
+      url:"/retrievespecificgames",
       data:{
         id:this.props.id
       }
@@ -32,6 +33,19 @@ class GamePage extends React.Component{
       })
     })
   }
+  playersList(){
+    if(this.state.game==null){return}
+    console.log("valid players list")
+    players=this.state.game.players.map((player)=>{
+      return(
+        <li key={player}>
+  				<Link to={"./user="+player}>{player}</Link>
+  			</li>
+      )
+    })
+    return(<ul key="players">{players}</ul>)
+  }
+
   render(){
     console.log("render",this.state.game);
     return(
@@ -40,20 +54,21 @@ class GamePage extends React.Component{
         <div id="entirePage">
           <div id="gamePage">
             <div id="players">
-              players
-            </div>
-            <div id="teams">
-              teams
+              <div>
+                PLAYERS:
+              </div>
+              <div>
+                {this.playersList()}
+              </div>
+
             </div>
             <div id="location">
-              location
             </div>
             <div id="map">
-
             </div>
           </div>
           <div id="chat">
-            <Chat user={this.props.user}/>
+            <Chat user={this.props.user} id={this.props.id}/>
           </div>
         </div>
       </div>
@@ -69,22 +84,51 @@ class Chat extends React.Component{
     this.socket = io();
     this.state={
       messages:[],
-      myMessage:""
+      numberOfMessages:0, //not currently used
+      myMessage:"",
+      loading:true,
     }
     this.socket.on("message",(m)=>{
       console.log("got message")
-      let messages=this.state.messages.slice();
-      messages.push(m);
-      console.log(messages);
+      //only update messages by socket after they've all been fetched from db
+      //to prevent duplicates in the case that a message is received
+      //while in the middle of fetching all messages
+      if(this.state.loading==false){
+        let messages=this.state.messages.slice();
+        messages.push(m);
+        console.log(messages);
+        this.setState({
+          messages:messages
+        })
+      }
+    })
+  }
+  /*need to test whether messages will stay up to date if someone sends
+  a messages and and someone refreshes the page in the middle of it, or if someone sends a message
+  while the messages are still being fetched*/
+  getAllMessages(){
+    axios({
+      url:"/get-chats",
+      method:"post",
+      data:{
+        id:this.props.id
+      }
+    }).then((res)=>{
       this.setState({
-        messages:messages
+        messages:res.data.messages,
+        numberOfMessages:res.data.length,
+        loading:false
       })
     })
+  }
+  componentWillReceiveProps(){
+    this.getAllMessages();
   }
   sendMessages(){
     this.socket.emit("send",{
       sender:this.props.user,
-      message:this.state.myMessage
+      message:this.state.myMessage,
+      id:this.props.id
     })
     this.setState({myMessage:""})
 
@@ -95,9 +139,11 @@ class Chat extends React.Component{
     }
   }
   showMessages(){
+    let messageCount=0;
     let messages=this.state.messages.map((message)=>{
+      messageCount=messageCount+1;
       return(
-        <div>
+        <div key={"message"+messageCount}>
           <div>
             {message["sender"]}
           </div>
@@ -110,7 +156,7 @@ class Chat extends React.Component{
         </div>
       )
     })
-    return(<div key="messages">{messages}</div>)
+    return(<div key={"messages"}>{messages}</div>)
   }
   render(){
     return(
