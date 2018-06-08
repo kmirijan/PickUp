@@ -22,6 +22,7 @@ class ProfileP extends React.Component{
 		this.processFeed=this.processFeed.bind(this);
 		this.acceptFriendreq=this.acceptFriendreq.bind(this);
 		this.declineFriendreq=this.declineFriendreq.bind(this);
+		this.retrieveData=this.retrieveData.bind(this);
 
 		//rids username of semicolons/equal signs
     var usrnm=this.props.username;
@@ -106,6 +107,10 @@ class ProfileP extends React.Component{
 	}
 
   componentWillMount(){
+		this.retrieveData();
+  }
+
+	retrieveData(){
 		/*retrieves user's games, team games, and teams, respectively*/
     axios.post('/usergames', {user:this.state.username}).then( (results) => {
         this.setState({myGames : results.data});
@@ -116,7 +121,7 @@ class ProfileP extends React.Component{
 		axios.post("/retrieveplayerteams",{user:this.props.username}).then((results)=>{
 			this.setState({myTeams:results.data});
 		})
-  }
+	}
 
 	//creates friends list
   friendsList(){
@@ -265,6 +270,7 @@ class ProfileP extends React.Component{
 								teamgames={this.state.myTeamGames}
 								teams={this.state.myTeams}
 								user={this.props.user}
+								retrieveData={this.retrieveData}
 							/>
 							<div className='gamesText'>
 								Friends:<br></br>
@@ -292,6 +298,8 @@ class GamesList extends React.Component
 			super(props);
 			//function binding
 			this.deleteGame=this.deleteGame.bind(this);
+			this.deleteTeamGame=this.deleteTeamGame.bind(this);
+			this.deleteTeam=this.deleteTeam.bind(this);
 			this.displayGame=this.displayGame.bind(this);
 			this.state={
 				deleteGameClicked:false
@@ -312,9 +320,7 @@ class GamesList extends React.Component
 					})
 					.then(()=>{
 						console.log('game deleted');
-						this.setState({
-							deleteGameClicked:true
-						})
+						this.props.retrieveData();
 					})
 				}
 			}
@@ -333,7 +339,7 @@ class GamesList extends React.Component
 				})
 				.then(()=>{
 					console.log('team game deleted');
-
+					this.props.retrieveData();
 				})
 			}
 		}
@@ -351,7 +357,7 @@ class GamesList extends React.Component
 				})
 				.then(()=>{
 					console.log('team deleted');
-
+					this.props.retrieveData();
 				})
 			}
 		}
