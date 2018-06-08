@@ -188,14 +188,14 @@ class Chat extends React.Component{
         </div>
 
         <div id="messageInput">
-          <input type="text"
+          <textarea id="messageInputBox" type="text"
             ref="inputMessage"
             value={this.state.myMessage}
             onChange={(e)=>this.setState({myMessage:e.target.value})}
             onKeyPress={(e)=>{this.sendMessageEnter(e)}}
             >
-          </input>
-          <button onClick={this.sendMessages}>
+          </textarea>
+          <button id="messageEnter" onClick={this.sendMessages}>
             Send
           </button>
         </div>

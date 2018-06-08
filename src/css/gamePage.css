@@ -24,6 +24,19 @@
 }
 #messageInput{
   background-color:#333;
+  width:600px;
+  height:50px;
+}
+#messageInputBox{
+  width:80%;
+  max-width:80%;
+
+  overflow-y:scroll;
+  overflow-x:hidden;
+}
+#messageEnter{
+  width:100px;
+  height:50px;
 }
 #players{
   margin-top:20px;
@@ -52,13 +65,18 @@
 }
 #message{
   background-color:orange;
-  margin-left:20px;
-  padding:5px;
+  margin-left:30px;
+  padding-left:15px;
+  padding-right:15px;
+  padding-top:5px;
+  padding-bottom:5px;
   border-radius:5px;
   display:block;
   max-width:500px;
   color:#111;
   white-space:pre-wrap;
+  display:inline-block;
+  word-wrap:break-word;
 }
 #messageText{
   color:#111;
