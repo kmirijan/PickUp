@@ -303,7 +303,7 @@ class GamesList extends React.Component
 			if(this.state.deleteGameClicked==false){
 				if(confirm('delete game?')){
 					axios({
-						method:'delete',
+						method:'post',
 						url:'/games',
 						data:{
 							gid:gameId,

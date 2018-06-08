@@ -78,11 +78,20 @@ app.post("/get-chats",(req,res)=>{
     let groupchats=client.db("pickup").collection("groupchats");
     groupchats.find({"id":req.body.id}).toArray((err,arr)=>{
       if(err)throw new Error(err);
-      let messages=arr[DEFAULT]["messages"];
-      res.json({
-        "messages":messages,
-        "length":messages.length
-      })
+      if(arr[DEFAULT]==undefined){
+        res.json({
+          "messages":[],
+          "length":0
+        })
+      }
+      else{
+        let messages=arr[DEFAULT]["messages"];
+        res.json({
+          "messages":messages,
+          "length":messages.length
+        })
+      }
+
       client.close();
     })
   })
@@ -398,22 +407,51 @@ app.patch('/leave:games', (req, res) => {
 })
 
 //change so it deletes for members as well
+/*
 app.delete('/games', (req, res) => {
-  console.log("testing games",req.body.gid)
-  Game.findOneAndRemove({'id': req.body.gid})
-  .then((game) =>{
-    User.findOneAndUpdate(
-      {'username': {$in:req.body.players}},
-      {$pull: {games : req.body.gid}},
-      {new: true}
-    )
-    .then(()=>{
-      res.status(200).send({game});
+
+    console.log("testing games",req.body.gid)
+    Game.findOneAndRemove({'id': req.body.gid})
+    .then((game) =>{
+      User.findOneAndUpdate(
+        {'username': {$in:req.body.players}},
+        {$pull: {games : req.body.gid}},
+        {new: true}
+      )
+      .then(()=>{
+        res.status(200).send({game});
+      }).catch((e) => {
+        res.status(400).send(e);
+      })
     }).catch((e) => {
       res.status(400).send(e);
     })
-  }).catch((e) => {
-    res.status(400).send(e);
+
+})
+*/
+
+app.post("/games",(req,res)=>{
+  mongo.connect(mongoUrl,(err,client)=>{
+    if(err)throw new Error(err);
+    let groupchats=client.db("pickup").collection("groupchats");
+    let users=client.db("pickup").collection("users");
+    let games=client.db("pickup").collection("games");
+    console.log("game id",req.body.gid)
+    groupchats.remove({"id":String(req.body.gid)})
+    .then(()=>{
+      users.update({"username":{$in:req.body.players}},{
+        $pull:{
+          games:req.body.gid
+        }
+      })
+    })
+    .then(()=>{
+      games.remove({"id":req.body.gid})
+    })
+    .then(()=>{
+      res.end();
+      client.close();
+    })
   })
 })
 

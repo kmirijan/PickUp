@@ -3,16 +3,25 @@
   height:100%;
 }
 #gamePage{
-  width:70%;
+  width:600px;
   height:100%;
   border-style:solid;
   float:left;
 }
 #chat{
-  width:30%;
-  height:100%;
+  background-color:#333;
+  width:600px;
+  height:700px;
   border-style:solid;
   float:right;
+
+}
+#allMessages{
+  height:650px;
+  overflow-y:scroll;
+}
+#messageInput{
+  background-color:#333;
 }
 #players{
   margin-top:20px;
@@ -35,4 +44,21 @@
   width:80%;
   height:500px;
   background-color:gray;
+}
+#sender{
+  color:white;
+}
+#message{
+  color:#111;
+  background-color:orange;
+  margin-left:20px;
+  padding:5px;
+  border-radius:5px;
+  display:block;
+  white-space:nowrap;
+}
+#time{
+  color:gray;
+  text-align:right;
+  font-size:small;
 }

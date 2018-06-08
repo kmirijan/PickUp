@@ -20,7 +20,7 @@ class GamePage extends React.Component{
     this.playersList=this.playersList.bind(this);
 
   }
-  componentWillMount(){
+  componentDidMount(){
     axios({
       method:"post",
       url:"/retrievespecificgames",
@@ -63,8 +63,10 @@ class GamePage extends React.Component{
 
             </div>
             <div id="location">
+              LOCATION IN MAP
             </div>
             <div id="map">
+              MAP NOT IMPLEMENTED
             </div>
           </div>
           <div id="chat">
@@ -87,6 +89,7 @@ class Chat extends React.Component{
       numberOfMessages:0, //not currently used
       myMessage:"",
       loading:true,
+      mounted:false,
     }
     this.socket.on("message",(m)=>{
       console.log("got message")
@@ -99,6 +102,11 @@ class Chat extends React.Component{
         console.log(messages);
         this.setState({
           messages:messages
+        },()=>{
+          /*https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div?utm
+          _medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa*/
+          let objDiv = document.getElementById("allMessages");
+          objDiv.scrollTop = objDiv.scrollHeight;
         })
       }
     })
@@ -118,11 +126,22 @@ class Chat extends React.Component{
         messages:res.data.messages,
         numberOfMessages:res.data.length,
         loading:false
+      },()=>{
+
+        let objDiv = document.getElementById("allMessages");
+        objDiv.scrollTop = objDiv.scrollHeight;
       })
+
     })
   }
+  componentDidMount(){
+    this.setState({mounted:true})
+  }
   componentWillReceiveProps(){
-    this.getAllMessages();
+    if(this.state.mounted==true){
+      this.getAllMessages();
+    }
+
   }
   sendMessages(){
     this.socket.emit("send",{
@@ -144,36 +163,41 @@ class Chat extends React.Component{
       messageCount=messageCount+1;
       return(
         <div key={"message"+messageCount}>
-          <div>
+          <div id="sender">
             {message["sender"]}
           </div>
-          <div>
+          <div id="message">
             {message["message"]}
           </div>
-          <div>
+          <div id="time">
             {message["time"]}
           </div>
         </div>
       )
     })
-    return(<div key={"messages"}>{messages}</div>)
+    return(<div id="messages" key={"messages"}>{messages}</div>)
   }
   render(){
     return(
-      <div className="chat">
-        <div className="messages">
+
+      <div className="chat" id="chat">
+        <div className="allMessages" id="allMessages">
           {this.showMessages()}
         </div>
-        <input type="text"
-          ref="inputMessage"
-          value={this.state.myMessage}
-          onChange={(e)=>this.setState({myMessage:e.target.value})}
-          onKeyPress={(e)=>{this.sendMessageEnter(e)}}
-          >
-        </input>
-        <button onClick={this.sendMessages}>
-          Send
-        </button>
+
+        <div id="messageInput">
+          <input type="text"
+            ref="inputMessage"
+            value={this.state.myMessage}
+            onChange={(e)=>this.setState({myMessage:e.target.value})}
+            onKeyPress={(e)=>{this.sendMessageEnter(e)}}
+            >
+          </input>
+          <button onClick={this.sendMessages}>
+            Send
+          </button>
+        </div>
+
       </div>
     )
   }
