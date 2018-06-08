@@ -167,7 +167,9 @@ class Chat extends React.Component{
             {message["sender"]}
           </div>
           <div id="message">
-            {message["message"]}
+            <p id="messageText">
+              {message["message"]}
+            </p>
           </div>
           <div id="time">
             {message["time"]}

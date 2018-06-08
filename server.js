@@ -48,12 +48,12 @@ io.on('connection',(socket)=>{
   socket.on("send",(m)=>{
     console.log(m);
 
-    saveMessage(m["id"],m,()=>{
-      let messageWithTime={
-        sender:m["sender"],
-        message:m["message"],
-        time:(new Date()).toLocaleTimeString()
-      }
+    let messageWithTime={
+      sender:m["sender"],
+      message:m["message"],
+      time:(new Date()).toLocaleTimeString()
+    }
+    saveMessage(m["id"],messageWithTime,()=>{
       io.emit("message",messageWithTime)
     })
 

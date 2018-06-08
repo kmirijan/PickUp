@@ -18,7 +18,9 @@
 }
 #allMessages{
   height:650px;
+  max-width:100%;
   overflow-y:scroll;
+  overflow-x:hidden;
 }
 #messageInput{
   background-color:#333;
@@ -49,13 +51,19 @@
   color:white;
 }
 #message{
-  color:#111;
   background-color:orange;
   margin-left:20px;
   padding:5px;
   border-radius:5px;
   display:block;
-  white-space:nowrap;
+  max-width:500px;
+  color:#111;
+  white-space:pre-wrap;
+}
+#messageText{
+  color:#111;
+  max-width:500px;
+
 }
 #time{
   color:gray;
